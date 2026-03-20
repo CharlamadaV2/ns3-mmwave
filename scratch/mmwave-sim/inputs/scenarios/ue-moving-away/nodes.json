@@ -1,0 +1,15 @@
+[
+  {
+    "id": "enb0",
+    "role": "enb",
+    "mobility": "fixed",
+    "position": {"x": 0.0, "y": 0.0, "z": 10.0}
+  },
+  {
+    "id": "ue0",
+    "role": "ue",
+    "mobility": "constant_velocity",
+    "position": {"x": 20.0, "y": 0.0, "z": 1.6},
+    "velocity": {"vx": 30.0, "vy": 0.0, "vz": 0.0}
+  }
+]
