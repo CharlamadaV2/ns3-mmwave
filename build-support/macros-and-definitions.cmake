@@ -235,6 +235,14 @@ macro(process_options)
       if(${NS3_WARNINGS_AS_ERRORS})
         add_compile_options(-Werror -Wno-error=deprecated-declarations)
       endif()
+      # Suppress warnings present in ns3-mmwave headers/sources that clang
+      # treats as errors on newer toolchains but are not our bugs to fix.
+      add_compile_options(
+        -Wno-inconsistent-missing-override
+        -Wno-unused-but-set-variable
+        -Wno-unused-variable
+        -Wno-unused-result
+      )
     endif()
   endif()
 
