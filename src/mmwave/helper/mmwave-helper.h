@@ -39,6 +39,7 @@
 #include "mmwave-phy-trace.h"
 
 #include <ns3/boolean.h>
+#include <ns3/channel-condition-model.h>
 #include <ns3/config.h>
 #include <ns3/core-network-stats-calculator.h>
 #include <ns3/epc-enb-s1-sap.h>
@@ -110,6 +111,8 @@ class MmWaveHelper : public Object
     NetDeviceContainer InstallLteEnbDevice(NodeContainer c);
     void SetChannelConditionModelType(std::string type);
     void SetPathlossModelType(std::string type);
+    /** Return the channel condition model used by the simulation (available after device installation). */
+    Ptr<ChannelConditionModel> GetChannelConditionModel() const;
     void SetChannelModelType(std::string type);
     void SetUePhasedArrayModelType(std::string type);
     void SetEnbPhasedArrayModelType(std::string type);
@@ -404,6 +407,7 @@ class MmWaveHelper : public Object
 
     std::string m_channelConditionModelType; //!< the type of the channel condition model to be used
                                              //!< (empty string means no channel condition model)
+    Ptr<ChannelConditionModel> m_channelConditionModel; //!< the CCM used by the simulation channel stack
 
     std::map<uint8_t, Ptr<Object>> m_pathlossModel;
     std::string m_pathlossModelType;

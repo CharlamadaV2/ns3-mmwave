@@ -421,6 +421,9 @@ MmWaveHelper::MmWaveChannelModelInitialization(void)
                     NS_LOG_DEBUG(
                         "ChannelConditionModel not set for ThreeGppSpectrumPropagationLossModel");
                 }
+                // Expose the final CCM for retrieval by external components (e.g. VizWriter)
+                m_channelConditionModel = ccm;
+
                 // set the propagation loss model in the channel
                 channel->AddPhasedArraySpectrumPropagationLossModel(threeGppSplm);
             }
@@ -525,6 +528,12 @@ MmWaveHelper::SetBeamformingModelType(std::string type)
 {
     NS_LOG_FUNCTION(this << type);
     m_bfModelFactory = ObjectFactory(type);
+}
+
+Ptr<ChannelConditionModel>
+MmWaveHelper::GetChannelConditionModel() const
+{
+    return m_channelConditionModel;
 }
 
 void
