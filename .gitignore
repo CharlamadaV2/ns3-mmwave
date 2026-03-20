@@ -53,3 +53,14 @@ cmake-build-release/
 
 # Ignore local cache used by e.g. clangd
 .cache/
+# mmwave-sim harness runtime outputs and generated traces
+scratch/mmwave-sim/outputs/
+# Legacy output location (outputs now live in scratch/mmwave-sim/outputs/)
+outputs/
+RxPacketTrace.txt
+UlPhyTransmissionTrace.txt
+DlPhyTransmissionTrace.txt
+MmWaveSinrTime.txt
+CellIdStats.txt
+summary.json
+stderr.txt
