@@ -1,75 +1,21 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Plain POD types shared across all simulation components.
- * No ns-3 headers included here — keeps compilation fast
- * and allows use in post-run IO code without ns-3 linkage.
+ * Top-level simulation configuration and runtime metadata POD types.
+ * No ns-3 headers included — keeps compilation fast and allows use in
+ * post-run IO code without ns-3 linkage.
  */
 #pragma once
 
+#include "channel-config.h"
+#include "node-spec.h"
+
+#include <chrono>
+#include <cstdint>
 #include <string>
 #include <vector>
 
 namespace mmwave_sim
 {
-
-// Coordinates are always stored as (x, y, z) triples in metres.
-// For 2D scenarios: set z to a constant height.
-// For 1D scenarios: additionally set y = 0 for all nodes.
-// The coordinate system is arbitrary; relative geometry is what matters.
-struct Position
-{
-    double x = 0.0;
-    double y = 0.0;
-    double z = 0.0;
-};
-
-struct Velocity
-{
-    double vx = 0.0;
-    double vy = 0.0;
-    double vz = 0.0;
-};
-
-struct RandomWalkParams
-{
-    double x_min = -100.0;
-    double x_max = 100.0;
-    double y_min = -100.0;
-    double y_max = 100.0;
-    double speed_mps = 1.5;
-};
-
-struct NodeSpec
-{
-    std::string id;
-    std::string role;      // "enb" or "ue"
-    std::string mobility;  // "fixed", "constant_velocity", "random_walk"
-    Position    position;
-    Velocity    velocity;
-    RandomWalkParams random_walk;
-};
-
-struct BuildingSpec
-{
-    std::string id;
-    double x_min = 0.0;
-    double x_max = 1.0;
-    double y_min = 0.0;
-    double y_max = 1.0;
-    double z_min = 0.0;
-    double z_max = 1.0;
-    std::string type      = "Residential";         // "Residential", "Office", "Commercial"
-    std::string ext_walls = "ConcreteWithWindows";  // see ns3::Building::ExtWallsType
-    int n_floors = 1;
-};
-
-struct ChannelConfig
-{
-    double      frequency_ghz    = 28.0;
-    double      tx_power_dbm     = 30.0;  // eNB transmit power (dBm)
-    std::string scenario         = "UMi";  // "UMi" or "UMa"
-    bool        blockage_enabled = true;
-};
 
 struct TrafficConfig
 {
@@ -92,6 +38,16 @@ struct NetworkConfig
     double      backhaul_delay_ms  = 10.0;        // one-way backhaul latency
 };
 
+// Runtime-only timing metadata (not loaded from config).
+// Populated by sim.cc after Simulator::Run() completes.
+// MetricsWriter converts the time_points to ISO-8601 when writing JSON.
+struct TimingInfo
+{
+    std::chrono::system_clock::time_point start;
+    std::chrono::system_clock::time_point end;
+    double elapsed_s = 0.0;
+};
+
 struct SimConfig
 {
     std::string scenario_name;
@@ -110,6 +66,10 @@ struct SimConfig
 
     // When true, PCAP captures are written to <output_dir>/pcap/
     bool pcap_enabled = false;
+
+    // Trace output level: "full" (all ns3 traces), "minimal" (PHY + RLC only),
+    // "none" (no file traces). "minimal" keeps what MetricsWriter needs.
+    std::string trace_level = "full";
 
     std::vector<NodeSpec>     nodes;
     std::vector<BuildingSpec> buildings;
