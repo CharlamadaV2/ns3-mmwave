@@ -4,6 +4,15 @@ mmWave 5G simulation harness built on ns3-mmwave.
 C++ for simulation orchestration; Python only for post-sim plotting.
 Entry point: `sim.cc`.
 
+## Commit guidelines
+
+- Use conventional commit format: `type(scope): short summary` (e.g. `feat(mmwave-sim):`, `refactor(mmwave-helper):`).
+- Keep the summary under 72 characters; use the body for the *why*, not the *what*.
+- Group changes into logical commits — one concern per commit. Prefer many focused commits over one monolithic commit.
+- Types: `feat` (new functionality), `fix` (bug fix), `refactor` (restructure, no behavior change), `docs` (docs only), `chore`/`build` (tooling/CI/build).
+- Scope should reflect the module being changed (e.g. `mmwave-sim`, `mmwave-helper`, `ns3`).
+- Never add `Co-Authored-By` or `Signed-off-by` lines.
+
 ## Code guidelines
 
 - **File scope awareness**: Understand what each directory owns before editing.
