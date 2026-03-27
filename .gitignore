@@ -42,6 +42,7 @@ version.cache
 .idea/
 cmake-cache/
 cmake-build-debug/
+cmake-build-lint/
 cmake-build-relwithdebinfo/
 cmake-build-minsizerel/
 cmake-build-release/
