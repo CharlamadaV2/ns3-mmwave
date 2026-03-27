@@ -1,19 +1,23 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-#include "ns3/core-module.h"
-#include "ns3/simulator.h"
-#include "ns3/string.h"
-#include "ns3/boolean.h"
-
 #include "src/config/config-loader.h"
-#include "src/sim/topology-builder.h"
-#include "src/sim/traffic-setup.h"
 #include "src/io/metrics-writer.h"
+#include "src/io/progress-logger.h"
 #include "src/io/viz-writer.h"
+#include "src/cli/cli-parser.h"
+#include "src/setup/ns3-defaults.h"
+#include "src/setup/topology-builder.h"
+#include "src/setup/traffic-setup.h"
 
+#include "ns3/core-module.h"
+#include "ns3/mmwave-mac-trace.h"
+#include "ns3/mmwave-phy-trace.h"
+#include "ns3/simulator.h"
+
+#include <chrono>
 #include <filesystem>
+#include <iomanip>
 #include <iostream>
-#include <stdexcept>
 
 using namespace ns3;
 using namespace ns3::mmwave;
@@ -24,153 +28,138 @@ NS_LOG_COMPONENT_DEFINE("MmWaveSim");
 int
 main(int argc, char* argv[])
 {
-    std::string runConfigPath;
-    std::string positionsOverridePath;
-
-    CommandLine cmd;
-    cmd.AddValue("run-config",
-                 "Path to run.ini scenario configuration file",
-                 runConfigPath);
-    cmd.AddValue("positions-override",
-                 "Optional JSON file overriding node positions (RL extension point). "
-                 "NOTE: positions are applied before the simulation starts only — "
-                 "real-time trajectory control is not yet supported. "
-                 "TODO (RL): implement waypoint mobility or step-based co-simulation "
-                 "for mid-run control. See docs/rl-extension.md.",
-                 positionsOverridePath);
-    cmd.Parse(argc, argv);
-
-    if (runConfigPath.empty())
-    {
-        std::cerr << "Error: --run-config=<path> is required.\n";
-        return 1;
-    }
-
+    auto args = mmwave_sim::ParseCommandLine(argc, argv);
     LogComponentEnable("MmWaveSim", LOG_LEVEL_INFO);
 
-    // -----------------------------------------------------------------------
-    // Load configuration
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Loading config: " << runConfigPath);
+    // Load configuration + apply CLI overrides
+    NS_LOG_INFO("Loading config: " << args.run_config_path);
     mmwave_sim::SimConfig cfg;
     try
     {
-        cfg = mmwave_sim::ConfigLoader::Load(runConfigPath, positionsOverridePath);
+        cfg = mmwave_sim::ConfigLoader::Load(args.run_config_path, args.positions_override_path);
     }
     catch (const std::exception& e)
     {
         std::cerr << "Error loading config: " << e.what() << "\n";
         return 1;
     }
-    NS_LOG_INFO("Scenario '" << cfg.scenario_name << "' seed=" << cfg.seed
+
+    if (args.run_id_override >= 0)
+    {
+        cfg.run_id = static_cast<uint32_t>(args.run_id_override);
+    }
+
+    auto seeds = mmwave_sim::ResolveSeeds(args, cfg);
+    NS_LOG_INFO("Scenario '" << cfg.scenario_name << "' seeds=" << seeds.size()
                              << " duration=" << cfg.duration_s << "s"
                              << " nodes=" << cfg.nodes.size()
                              << " buildings=" << cfg.buildings.size());
 
-    // -----------------------------------------------------------------------
-    // Ensure output directory exists (and pcap subdir if requested)
-    // -----------------------------------------------------------------------
+    const std::string baseOutputDir = cfg.output_dir;
+
     try
     {
-        fs::create_directories(cfg.output_dir);
-        if (cfg.pcap_enabled)
-        {
-            fs::create_directories(cfg.output_dir + "/pcap");
-        }
+        mmwave_sim::ArchiveScenarioInputs(baseOutputDir, args.run_config_path);
     }
     catch (const std::exception& e)
     {
-        std::cerr << "Error creating output directory '" << cfg.output_dir
-                  << "': " << e.what() << "\n";
+        std::cerr << "Error archiving inputs: " << e.what() << "\n";
         return 1;
     }
 
-    // -----------------------------------------------------------------------
-    // RNG seed / run ID
-    // -----------------------------------------------------------------------
-    RngSeedManager::SetSeed(cfg.seed);
-    RngSeedManager::SetRun(cfg.run_id);
+    // One-time ns3 defaults (must precede per-seed loop)
+    mmwave_sim::ApplyProtocolDefaults();
+    mmwave_sim::ApplyTuningDefaults(cfg);
 
-    // -----------------------------------------------------------------------
-    // Protocol defaults (not exposed to config — sensible fixed values)
-    // -----------------------------------------------------------------------
-    Config::SetDefault("ns3::MmWaveHelper::RlcAmEnabled",          BooleanValue(false));
-    Config::SetDefault("ns3::MmWaveHelper::HarqEnabled",           BooleanValue(true));
-    Config::SetDefault("ns3::MmWaveFlexTtiMacScheduler::HarqEnabled", BooleanValue(true));
-    Config::SetDefault("ns3::LteRlcUmLowLat::ReportBufferStatusTimer",
-                       TimeValue(MicroSeconds(100.0)));
+    // Per-seed simulation loop
+    double progressInterval = std::max(1.0, cfg.duration_s / 10.0);
 
-    // -----------------------------------------------------------------------
-    // Trace output file redirection (must be before EnableTraces())
-    // -----------------------------------------------------------------------
-    Config::SetDefault("ns3::MmWavePhyTrace::OutputFilename",
-                       StringValue(cfg.output_dir + "/RxPacketTrace.txt"));
-    Config::SetDefault("ns3::MmWavePhyTrace::UlPhyTransmissionFilename",
-                       StringValue(cfg.output_dir + "/UlPhyTransmissionTrace.txt"));
-    Config::SetDefault("ns3::MmWavePhyTrace::DlPhyTransmissionFilename",
-                       StringValue(cfg.output_dir + "/DlPhyTransmissionTrace.txt"));
-    Config::SetDefault("ns3::MmWaveBearerStatsCalculator::DlRlcOutputFilename",
-                       StringValue(cfg.output_dir + "/DlRlcStats.txt"));
-    Config::SetDefault("ns3::MmWaveBearerStatsCalculator::UlRlcOutputFilename",
-                       StringValue(cfg.output_dir + "/UlRlcStats.txt"));
-    Config::SetDefault("ns3::MmWaveBearerStatsCalculator::DlPdcpOutputFilename",
-                       StringValue(cfg.output_dir + "/DlPdcpStats.txt"));
-    Config::SetDefault("ns3::MmWaveBearerStatsCalculator::UlPdcpOutputFilename",
-                       StringValue(cfg.output_dir + "/UlPdcpStats.txt"));
-    Config::SetDefault("ns3::MmWaveMacTrace::SchedInfoOutputFilename",
-                       StringValue(cfg.output_dir + "/EnbSchedAllocTraces.txt"));
-    Config::SetDefault("ns3::MmWaveBearerStatsConnector::MmWaveSinrOutputFilename",
-                       StringValue(cfg.output_dir + "/MmWaveSinrTime.txt"));
+    for (size_t si = 0; si < seeds.size(); ++si)
+    {
+        uint32_t seed = seeds[si];
+        cfg.seed = seed;
+        cfg.output_dir = baseOutputDir + "/seed-" + std::to_string(seed);
 
-    // -----------------------------------------------------------------------
-    // Create helpers
-    // -----------------------------------------------------------------------
-    Ptr<MmWaveHelper> mmwH = CreateObject<MmWaveHelper>();
-    mmwH->SetSchedulerType("ns3::MmWaveFlexTtiMacScheduler");
+        NS_LOG_INFO("=== Seed " << seed << " (" << (si + 1) << "/" << seeds.size() << ") ===");
 
-    Ptr<MmWavePointToPointEpcHelper> epcHelper =
-        CreateObject<MmWavePointToPointEpcHelper>();
-    mmwH->SetEpcHelper(epcHelper);
+        try
+        {
+            fs::create_directories(cfg.output_dir);
+            if (cfg.pcap_enabled)
+            {
+                fs::create_directories(cfg.output_dir + "/pcap");
+            }
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "Error creating output directory '" << cfg.output_dir << "': " << e.what()
+                      << "\n";
+            return 1;
+        }
 
-    // -----------------------------------------------------------------------
-    // Build topology
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Building topology...");
-    mmwave_sim::TopologyBuilder topology(cfg, mmwH, epcHelper);
-    topology.Build();
+        RngSeedManager::SetSeed(seed);
+        RngSeedManager::SetRun(cfg.run_id);
 
-    // -----------------------------------------------------------------------
-    // Install traffic
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Installing traffic...");
-    mmwave_sim::TrafficSetup traffic(cfg, topology);
-    traffic.Install();
+        mmwave_sim::ApplyTraceFileDefaults(cfg.output_dir);
+        mmwave_sim::TopologyBuilder::ConfigureChannelDefaults(cfg);
+        auto [mmwH, epcH] = mmwave_sim::TopologyBuilder::CreateHelpers(cfg);
 
-    // -----------------------------------------------------------------------
-    // Start viz writer (schedules periodic CSV snapshots from t=0)
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Starting viz writer (tick=" << cfg.viz_tick_ms << " ms)...");
-    mmwave_sim::VizWriter vizWriter(cfg, topology.GetEnbNodes(), topology.GetUeNodes(),
-                                    topology.GetChannelConditionModel());
-    vizWriter.Start();
+        mmwave_sim::TopologyBuilder topology(cfg, mmwH, epcH);
+        topology.Build();
 
-    // -----------------------------------------------------------------------
-    // Enable traces and run
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Starting simulation (duration=" << cfg.duration_s << "s)...");
-    mmwH->EnableTraces();
+        mmwave_sim::TrafficSetup traffic(cfg, topology);
+        traffic.Install();
 
-    Simulator::Stop(Seconds(cfg.duration_s));
-    Simulator::Run();
-    NS_LOG_INFO("Simulation complete.");
+        mmwave_sim::VizWriter vizWriter(cfg,
+                                        topology.GetEnbNodes(),
+                                        topology.GetUeNodes(),
+                                        topology.GetChannelConditionModel());
+        vizWriter.Start();
 
-    // -----------------------------------------------------------------------
-    // Write metrics summary
-    // -----------------------------------------------------------------------
-    NS_LOG_INFO("Writing metrics to " << cfg.output_dir);
-    mmwave_sim::MetricsWriter writer(cfg);
-    writer.Write();
+        mmwave_sim::ProgressLogger logger{cfg.duration_s,
+                                          progressInterval,
+                                          seed,
+                                          std::chrono::steady_clock::now()};
+        Simulator::Schedule(Seconds(progressInterval), &mmwave_sim::ProgressLogger::Tick, &logger);
 
-    Simulator::Destroy();
+        if (cfg.trace_level == "full")
+        {
+            mmwH->EnableTraces();
+        }
+        else if (cfg.trace_level == "minimal")
+        {
+            mmwH->EnableDlPhyTrace();
+            mmwH->EnableUlPhyTrace();
+            mmwH->EnableRlcTraces();
+        }
+
+        auto wallStart = std::chrono::system_clock::now();
+        Simulator::Stop(Seconds(cfg.duration_s));
+        Simulator::Run();
+        auto wallEnd = std::chrono::system_clock::now();
+        double wallElapsed = std::chrono::duration<double>(wallEnd - wallStart).count();
+
+        NS_LOG_INFO("Simulation complete (seed=" << seed << ", wall=" << std::fixed
+                                                 << std::setprecision(1) << wallElapsed << "s).");
+
+        // Post-run: flush viz, write metrics, reset
+        vizWriter.Flush();
+
+        mmwave_sim::TimingInfo timing{wallStart, wallEnd, wallElapsed};
+        mmwave_sim::MetricsWriter writer(cfg);
+        writer.SetTiming(timing);
+        writer.Write();
+
+        Simulator::Destroy();
+        MmWavePhyTrace::ResetTraceFiles();
+        MmWaveMacTrace::ResetTraceFiles();
+    }
+
+    if (seeds.size() > 1)
+    {
+        NS_LOG_INFO("All " << seeds.size() << " seeds complete. "
+                           << "Output: " << baseOutputDir);
+    }
+
     return 0;
 }

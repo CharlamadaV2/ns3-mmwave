@@ -8,13 +8,19 @@
 # "scratch_mmwave-sim_sim". We construct the target name explicitly instead.
 
 # Add our own directory to include paths so that #include "src/..." resolves.
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+# Use target_include_directories below (after add_executable) instead of
+# include_directories, which may not propagate from subdirectory scope.
 
 set(MMWAVE_SIM_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/sim.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config-loader.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/topology-builder.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/traffic-setup.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/spec-parser.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/util/string-utils.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/util/ini-parser.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cli/cli-parser.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/setup/ns3-defaults.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/setup/topology-builder.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/setup/traffic-setup.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/metrics-writer.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/viz-writer.cc
 )
@@ -22,6 +28,7 @@ set(MMWAVE_SIM_SOURCES
 # Target name must match the ns3 script convention:
 #   scratch/mmwave-sim/sim  ->  scratch_mmwave-sim_sim
 add_executable(scratch_mmwave-sim_sim ${MMWAVE_SIM_SOURCES})
+target_include_directories(scratch_mmwave-sim_sim PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(${NS3_STATIC})
   target_link_libraries(
