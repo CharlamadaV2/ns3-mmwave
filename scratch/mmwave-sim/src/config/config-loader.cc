@@ -1,201 +1,21 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 #include "src/config/config-loader.h"
+#include "src/config/spec-parser.h"
+#include "src/util/ini-parser.h"
+#include "src/util/string-utils.h"
 #include "third_party/json.hpp"
 
-#include <algorithm>
+#include <ctime>
+#include <filesystem>
 #include <fstream>
-#include <map>
+#include <iomanip>
+#include <sstream>
 #include <stdexcept>
-#include <string>
 
 using json = nlohmann::json;
 
 namespace mmwave_sim
 {
-
-static std::string
-trimStr(const std::string& s)
-{
-    size_t b = s.find_first_not_of(" \t\r\n");
-    if (b == std::string::npos)
-    {
-        return "";
-    }
-    size_t e = s.find_last_not_of(" \t\r\n");
-    return s.substr(b, e - b + 1);
-}
-
-static std::map<std::string, std::map<std::string, std::string>>
-parseIni(const std::string& path)
-{
-    std::ifstream f(path);
-    if (!f.is_open())
-    {
-        throw std::runtime_error("Cannot open config file: " + path);
-    }
-
-    std::map<std::string, std::map<std::string, std::string>> sections;
-    std::string section;
-    std::string line;
-
-    while (std::getline(f, line))
-    {
-        // Strip inline comments
-        auto cpos = line.find('#');
-        if (cpos != std::string::npos)
-        {
-            line = line.substr(0, cpos);
-        }
-        cpos = line.find(';');
-        if (cpos != std::string::npos)
-        {
-            line = line.substr(0, cpos);
-        }
-
-        line = trimStr(line);
-        if (line.empty())
-        {
-            continue;
-        }
-
-        if (line.front() == '[' && line.back() == ']')
-        {
-            section = trimStr(line.substr(1, line.size() - 2));
-        }
-        else
-        {
-            auto eq = line.find('=');
-            if (eq == std::string::npos)
-            {
-                continue;
-            }
-            std::string key = trimStr(line.substr(0, eq));
-            std::string val = trimStr(line.substr(eq + 1));
-            sections[section][key] = val;
-        }
-    }
-    return sections;
-}
-
-static std::string
-iniGet(const std::map<std::string, std::map<std::string, std::string>>& ini,
-       const std::string& section,
-       const std::string& key,
-       const std::string& def = "")
-{
-    auto sit = ini.find(section);
-    if (sit == ini.end())
-    {
-        return def;
-    }
-    auto kit = sit->second.find(key);
-    if (kit == sit->second.end())
-    {
-        return def;
-    }
-    return kit->second;
-}
-
-static bool
-iniGetBool(const std::map<std::string, std::map<std::string, std::string>>& ini,
-           const std::string& section,
-           const std::string& key,
-           bool def)
-{
-    std::string v = iniGet(ini, section, key, def ? "true" : "false");
-    std::string lv = v;
-    std::transform(lv.begin(), lv.end(), lv.begin(), ::tolower);
-    return (lv == "true" || lv == "1" || lv == "yes");
-}
-
-static std::string
-resolvePath(const std::string& base_dir, const std::string& path)
-{
-    if (path.empty())
-    {
-        return path;
-    }
-    if (path.front() == '/')
-    {
-        return path;  // already absolute
-    }
-    return base_dir + "/" + path;
-}
-
-static std::string
-dirOf(const std::string& path)
-{
-    auto pos = path.rfind('/');
-    if (pos == std::string::npos)
-    {
-        return ".";
-    }
-    return path.substr(0, pos);
-}
-
-static NodeSpec
-parseNodeSpec(const json& j)
-{
-    NodeSpec n;
-    n.id       = j.at("id").get<std::string>();
-    n.role     = j.at("role").get<std::string>();
-    n.mobility = j.value("mobility", "fixed");
-
-    if (j.contains("position"))
-    {
-        const auto& p = j["position"];
-        n.position.x  = p.value("x", 0.0);
-        n.position.y  = p.value("y", 0.0);
-        n.position.z  = p.value("z", 0.0);
-    }
-
-    if (j.contains("velocity"))
-    {
-        const auto& v = j["velocity"];
-        n.velocity.vx = v.value("vx", 0.0);
-        n.velocity.vy = v.value("vy", 0.0);
-        n.velocity.vz = v.value("vz", 0.0);
-    }
-
-    if (j.contains("random_walk"))
-    {
-        const auto& rw = j["random_walk"];
-        if (rw.contains("bounds"))
-        {
-            const auto& b   = rw["bounds"];
-            n.random_walk.x_min = b.value("x_min", -100.0);
-            n.random_walk.x_max = b.value("x_max",  100.0);
-            n.random_walk.y_min = b.value("y_min", -100.0);
-            n.random_walk.y_max = b.value("y_max",  100.0);
-        }
-        n.random_walk.speed_mps = rw.value("speed_mps", 1.5);
-    }
-
-    return n;
-}
-
-static BuildingSpec
-parseBuildingSpec(const json& j)
-{
-    BuildingSpec b;
-    b.id = j.value("id", "");
-
-    if (j.contains("bounds"))
-    {
-        const auto& bnd = j["bounds"];
-        b.x_min = bnd.value("x_min", 0.0);
-        b.x_max = bnd.value("x_max", 1.0);
-        b.y_min = bnd.value("y_min", 0.0);
-        b.y_max = bnd.value("y_max", 1.0);
-        b.z_min = bnd.value("z_min", 0.0);
-        b.z_max = bnd.value("z_max", 1.0);
-    }
-
-    b.type      = j.value("type",      "Residential");
-    b.ext_walls = j.value("ext_walls", "ConcreteWithWindows");
-    b.n_floors  = j.value("n_floors",  1);
-    return b;
-}
 
 // ---------------------------------------------------------------------------
 // ConfigLoader::Load
@@ -205,6 +25,8 @@ SimConfig
 ConfigLoader::Load(const std::string& run_config_path,
                    const std::string& positions_override_path)
 {
+    namespace fs = std::filesystem;
+
     const std::string base_dir = dirOf(run_config_path);
 
     // --- Parse run.ini ---
@@ -220,16 +42,70 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.output_dir = iniGet(ini, "output", "dir", "");
     if (cfg.output_dir.empty())
     {
-        cfg.output_dir = "outputs/" + cfg.scenario_name
-                       + "/seed-" + std::to_string(cfg.seed)
-                       + "/run-"  + std::to_string(cfg.run_id);
+        // Auto-generate a timestamped output directory anchored to
+        // scratch/mmwave-sim/outputs/ regardless of cwd.
+        // base_dir points at the scenario dir (e.g. .../inputs/scenarios/foo)
+        // so we go up three levels to reach scratch/mmwave-sim/.
+        fs::path mmwave_sim_dir = fs::path(base_dir).parent_path()  // scenarios/
+                                                     .parent_path()  // inputs/
+                                                     .parent_path(); // mmwave-sim/
+        std::time_t now = std::time(nullptr);
+        std::tm* lt = std::localtime(&now);
+
+        std::ostringstream ts_month, ts_day, ts_time;
+        ts_month << std::put_time(lt, "%Y-%m");
+        ts_day   << std::put_time(lt, "%d");
+        ts_time  << std::put_time(lt, "%H-%M-%S");
+
+        fs::path out = fs::weakly_canonical(mmwave_sim_dir)
+                       / "outputs" / ts_month.str() / ts_day.str() / ts_time.str();
+        cfg.output_dir = out.string();
+    }
+    else if (!fs::path(cfg.output_dir).is_absolute())
+    {
+        // Relative output_dir in INI — resolve against the scenario directory
+        cfg.output_dir = (fs::path(base_dir) / cfg.output_dir).string();
     }
 
-    // Channel
+    // Channel — shared params
     cfg.channel.frequency_ghz    = std::stod(iniGet(ini, "channel", "frequency_ghz",    "28.0"));
     cfg.channel.tx_power_dbm     = std::stod(iniGet(ini, "channel", "tx_power_dbm",     "30.0"));
     cfg.channel.scenario         = iniGet(ini, "channel", "scenario",         "UMi");
+    cfg.channel.channel_model    = iniGet(ini, "channel", "channel_model",    "3gpp");
     cfg.channel.blockage_enabled = iniGetBool(ini, "channel", "blockage_enabled", true);
+
+    // Validate channel_model before anything downstream relies on it
+    {
+        const std::string& cm = cfg.channel.channel_model;
+        if (cm != "3gpp" && cm != "nyu")
+        {
+            throw std::runtime_error(
+                "[config] Unknown channel_model '" + cm +
+                "'. Must be '3gpp' or 'nyu'.");
+        }
+    }
+
+    // Performance tuning
+    cfg.channel.channel_update_period_ms = static_cast<uint32_t>(
+        std::stoul(iniGet(ini, "channel", "channel_update_period_ms", "0")));
+    cfg.channel.condition_update_period_ms = static_cast<uint32_t>(
+        std::stoul(iniGet(ini, "channel", "condition_update_period_ms", "0")));
+    cfg.channel.beamforming_model = iniGet(ini, "channel", "beamforming_model", "svd");
+    cfg.channel.cqi_period_slots = static_cast<uint32_t>(
+        std::stoul(iniGet(ini, "channel", "cqi_period_slots", "20")));
+    cfg.channel.amc_model = iniGet(ini, "channel", "amc_model", "error");
+
+    // NYU-specific channel params — only relevant when channel_model = "nyu"
+    cfg.channel.nyu.rf_bandwidth_mhz          = std::stod(iniGet(ini, "nyu_channel", "rf_bandwidth_mhz",          "800.0"));
+    cfg.channel.nyu.shadowing_enabled          = iniGetBool(ini, "nyu_channel", "shadowing_enabled",          true);
+    cfg.channel.nyu.pressure_mbar             = std::stod(iniGet(ini, "nyu_channel", "pressure_mbar",             "1013.25"));
+    cfg.channel.nyu.humidity_pct              = std::stod(iniGet(ini, "nyu_channel", "humidity_pct",              "50.0"));
+    cfg.channel.nyu.temperature_c             = std::stod(iniGet(ini, "nyu_channel", "temperature_c",             "20.0"));
+    cfg.channel.nyu.rain_rate_mm_hr           = std::stod(iniGet(ini, "nyu_channel", "rain_rate_mm_hr",           "0.0"));
+    cfg.channel.nyu.atmospheric_loss_enabled  = iniGetBool(ini, "nyu_channel", "atmospheric_loss_enabled",  false);
+    cfg.channel.nyu.foliage_loss_enabled      = iniGetBool(ini, "nyu_channel", "foliage_loss_enabled",      false);
+    cfg.channel.nyu.foliage_loss_db_m         = std::stod(iniGet(ini, "nyu_channel", "foliage_loss_db_m",         "0.4"));
+    cfg.channel.nyu.o2i_loss_type             = iniGet(ini, "nyu_channel", "o2i_loss_type", "Low Loss");
 
     // Traffic
     cfg.traffic.direction               = iniGet(ini, "traffic", "direction",               "dl");
@@ -252,6 +128,9 @@ ConfigLoader::Load(const std::string& run_config_path,
 
     // PCAP
     cfg.pcap_enabled = iniGetBool(ini, "output", "pcap_enabled", false);
+
+    // Trace level
+    cfg.trace_level = iniGet(ini, "output", "trace_level", "full");
 
     // --- Load nodes.json ---
     std::string nodes_file = iniGet(ini, "scenario", "nodes_file", "nodes.json");
@@ -289,7 +168,8 @@ ConfigLoader::Load(const std::string& run_config_path,
     }
 
     // --- Apply positions override (RL extension point) ---
-    // TODO (RL): This only sets node positions before the simulation starts.
+    // Overrides node positions before simulation starts.
+    // Runtime position changes require a separate control channel (future work).
     if (!positions_override_path.empty())
     {
         std::ifstream pf(positions_override_path);

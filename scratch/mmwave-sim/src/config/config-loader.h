@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "src/domain/types.h"
+#include "src/domain/sim-config.h"
 #include <string>
 
 namespace mmwave_sim
