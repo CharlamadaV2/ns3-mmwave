@@ -9,13 +9,13 @@
     "id": "ue0",
     "role": "ue",
     "mobility": "fixed",
-    "position": {"x": 100.0, "y": 30.0, "z": 1.6}
+    "position": {"x": 9.0, "y": 20.0, "z": 1.6}
   },
   {
     "id": "ue1",
     "role": "ue",
     "mobility": "constant_velocity",
-    "position": {"x": 150.0, "y": 0.0, "z": 1.6},
-    "velocity": {"vx": 0.0, "vy": -10.0, "vz": 0.0}
+    "position": {"x": 10.0, "y": 0.0, "z": 1.6},
+    "velocity": {"vx": -10.0, "vy": -30.0, "vz": 0.0}
   }
 ]

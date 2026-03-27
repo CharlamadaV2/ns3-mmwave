@@ -1,0 +1,16 @@
+[
+  {
+    "id": "enb0",
+    "role": "enb",
+    "mobility": "fixed",
+    "position": {"x": 0.0, "y": 0.0, "z": 60.0},
+    "_note": "UAV-A — anchor node. Role 'enb' is a simulator constraint: this node runs the mmWave downlink scheduler and connects to the EPC. Physically it represents a hovering UAV at 60m AGL. z = altitude AGL in metres."
+  },
+  {
+    "id": "ue0",
+    "role": "ue",
+    "mobility": "fixed",
+    "position": {"x": 250.0, "y": 0.0, "z": 60.0},
+    "_note": "UAV-B — client node. Role 'ue' is a simulator constraint: this node attaches to enb0 and receives scheduled traffic. Physically it represents a peer hovering UAV at 60m AGL, 250m horizontal separation. For other configurations: z in {30, 60, 120}, x in {100, 250, 500, 1000}."
+  }
+]

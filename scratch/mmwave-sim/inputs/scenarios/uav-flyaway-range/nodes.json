@@ -1,0 +1,17 @@
+[
+  {
+    "id": "enb0",
+    "role": "enb",
+    "mobility": "fixed",
+    "position": {"x": 0.0, "y": 0.0, "z": 60.0},
+    "_note": "UAV-A — fixed reference node hovering at 60m AGL. Role 'enb' is a simulator constraint (runs DL scheduler / EPC connection); physically this is a peer hovering UAV identical to ue0."
+  },
+  {
+    "id": "ue0",
+    "role": "ue",
+    "mobility": "constant_velocity",
+    "position": {"x": 50.0, "y": 0.0, "z": 60.0},
+    "velocity": {"vx": 5.0, "vy": 0.0, "vz": 0.0},
+    "_note": "UAV-B — flyaway node. Starts 50m from enb0 at same altitude, moves directly away at 5 m/s constant groundspeed along +x. Over the 540s active window the node traverses from 50m to ~2750m separation. The constant_velocity model does not support waypoints, so the return leg (Step 7) must be run as a separate scenario with reversed velocity — see comments in run.ini."
+  }
+]
