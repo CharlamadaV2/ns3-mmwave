@@ -6,10 +6,8 @@
 #include "ns3/simulator.h"
 #include "ns3/spectrum-value.h"
 
-#include <algorithm>
 #include <cmath>
 #include <iomanip>
-#include <limits>
 #include <stdexcept>
 
 using namespace ns3;
@@ -38,6 +36,19 @@ VizWriter::~VizWriter()
     if (m_linkFile.is_open())
     {
         m_linkFile.close();
+    }
+}
+
+void
+VizWriter::Flush()
+{
+    if (m_posFile.is_open())
+    {
+        m_posFile.flush();
+    }
+    if (m_linkFile.is_open())
+    {
+        m_linkFile.flush();
     }
 }
 

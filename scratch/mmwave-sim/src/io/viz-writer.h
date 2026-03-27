@@ -15,7 +15,7 @@
  */
 #pragma once
 
-#include "src/domain/types.h"
+#include "src/domain/sim-config.h"
 
 #include "ns3/channel-condition-model.h"
 #include "ns3/network-module.h"
@@ -43,6 +43,9 @@ class VizWriter
      * before Simulator::Run().
      */
     void Start();
+
+    /** Flush output streams so other readers (MetricsWriter) see complete data. */
+    void Flush();
 
   private:
     /** Called at each tick; writes one row per node / per link, then reschedules. */

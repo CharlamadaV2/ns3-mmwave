@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "src/domain/types.h"
+#include "src/domain/sim-config.h"
 
 namespace mmwave_sim
 {
@@ -17,6 +17,12 @@ class MetricsWriter
 {
   public:
     explicit MetricsWriter(const SimConfig& cfg);
+
+    /**
+     * Set wall-clock timing metadata to include in summary.json.
+     * Must be called before Write().
+     */
+    void SetTiming(const TimingInfo& t);
 
     /**
      * Parse RxPacketTrace.txt and DlRlcStats.txt from cfg.output_dir,
@@ -28,6 +34,7 @@ class MetricsWriter
 
   private:
     const SimConfig& m_cfg;
+    TimingInfo       m_timing;
 };
 
 }  // namespace mmwave_sim
