@@ -98,6 +98,23 @@ MmWavePhyTrace::GetTypeId(void)
 }
 
 void
+MmWavePhyTrace::ResetTraceFiles()
+{
+    if (m_rxPacketTraceFile.is_open())
+    {
+        m_rxPacketTraceFile.close();
+    }
+    if (m_ulPhyTraceFile.is_open())
+    {
+        m_ulPhyTraceFile.close();
+    }
+    if (m_dlPhyTraceFile.is_open())
+    {
+        m_dlPhyTraceFile.close();
+    }
+}
+
+void
 MmWavePhyTrace::SetPhyRxOutputFilename(std::string fileName)
 {
     NS_LOG_INFO("RxPacketTrace main filename: " << fileName);

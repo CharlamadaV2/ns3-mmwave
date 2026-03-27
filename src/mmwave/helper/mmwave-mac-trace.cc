@@ -95,6 +95,15 @@ MmWaveMacTrace::ReportEnbSchedulingInfo(Ptr<MmWaveMacTrace> enbStats,
 }
 
 void
+MmWaveMacTrace::ResetTraceFiles()
+{
+    if (m_schedAllocTraceFile.is_open())
+    {
+        m_schedAllocTraceFile.close();
+    }
+}
+
+void
 MmWaveMacTrace::SetOutputFilename(std::string fileName)
 {
     NS_LOG_INFO("Filename: " << fileName);

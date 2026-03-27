@@ -17,7 +17,6 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *   Author: Marco Miozzo <marco.miozzo@cttc.es>
  *           Nicola Baldo  <nbaldo@cttc.es>
  *
  *   Modified by: Marco Mezzavilla < mezzavilla@nyu.edu>
@@ -57,8 +56,7 @@
 #include <ns3/object-map.h>
 #include <ns3/pointer.h>
 #include <ns3/string.h>
-#include <ns3/three-gpp-propagation-loss-model.h>
-#include <ns3/three-gpp-spectrum-propagation-loss-model.h>
+#include <ns3/nyu-propagation-loss-model.h>
 #include <ns3/nyu-spectrum-propagation-loss-model.h>
 #include <ns3/uinteger.h>
 #include <ns3/uniform-planar-array.h>
@@ -127,14 +125,14 @@ MmWaveHelper::GetTypeId(void)
                           "The type of path-loss model to be used. "
                           "The allowed values for this attributes are the type names "
                           "of any class inheriting from ns3::PropagationLossModel.",
-                          StringValue("ns3::ThreeGppUmaPropagationLossModel"),
+                          StringValue("ns3::NYUUmaPropagationLossModel"),
                           MakeStringAccessor(&MmWaveHelper::SetPathlossModelType),
                           MakeStringChecker())
             .AddAttribute("ChannelModel",
                           "The type of MIMO channel model to be used. "
                           "The allowed values for this attributes are the type names "
                           "of any class inheriting from ns3::SpectrumPropagationLossModel.",
-                          StringValue("ns3::ThreeGppSpectrumPropagationLossModel"),
+                          StringValue("ns3::NYUSpectrumPropagationLossModel"),
                           MakeStringAccessor(&MmWaveHelper::SetChannelModelType),
                           MakeStringChecker())
             .AddAttribute("Scheduler",
@@ -388,24 +386,28 @@ MmWaveHelper::MmWaveChannelModelInitialization(void)
         // create and configure the SpectrumPropagationLossModel
         if (!m_spectrumPropagationLossModelType.empty())
         {
-            // if the selected model is ThreeGppSpectrumPropagationLossModel we
+            // if the selected model is NYUSpectrumPropagationLossModel we
             // need a special configuration procedure, otherwise, for the other
             // models, we try to configure the frequency
 
-            if (m_spectrumPropagationLossModelType == "ns3::ThreeGppSpectrumPropagationLossModel")
+            if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
             {
-                Ptr<ThreeGppSpectrumPropagationLossModel> threeGppSplm =
+                Ptr<NYUSpectrumPropagationLossModel> nyuSplm =
                     m_spectrumPropagationLossModelFactory
-                        .Create<ThreeGppSpectrumPropagationLossModel>();
-                threeGppSplm->SetChannelModelAttribute(
+                        .Create<NYUSpectrumPropagationLossModel>();
+                nyuSplm->SetChannelModelAttribute(
                     "Frequency",
                     DoubleValue(phyMacCommon->GetCenterFrequency()));
-
-                // the ThreeGppSpectrumPropagationLossModel must have the same ChannelConditionModel
+                nyuSplm->SetChannelModelAttribute(
+                    "RfBandwidth",
+                    DoubleValue(phyMacCommon->GetBandwidth()));
+                // Scenario is set via Config::SetDefault in the harness —
+                // do NOT hardcode it here (was previously forcing "Uma").
+                // the NYUSpectrumPropagationLossModel must have the same ChannelConditionModel
                 // as the propagation loss model instace
                 if (ccm) // the channel condition model was created using the factory
                 {
-                    threeGppSplm->SetChannelModelAttribute("ChannelConditionModel",
+                    nyuSplm->SetChannelModelAttribute("ChannelConditionModel",
                                                            PointerValue(ccm));
                 }
                 else if (!m_pathlossModel.empty()) // the channel condition model was created inside
@@ -414,65 +416,15 @@ MmWaveHelper::MmWaveChannelModelInitialization(void)
                     PointerValue ptr;
                     m_pathlossModel.at(it->first)->GetAttribute("ChannelConditionModel", ptr);
                     ccm = ptr.Get<ChannelConditionModel>();
-                    threeGppSplm->SetChannelModelAttribute("ChannelConditionModel",
+                    nyuSplm->SetChannelModelAttribute("ChannelConditionModel",
                                                            PointerValue(ccm));
                 }
                 else
                 {
                     NS_LOG_DEBUG(
-                        "ChannelConditionModel not set for ThreeGppSpectrumPropagationLossModel");
+                        "ChannelConditionModel not set for NYUSpectrumPropagationLossModel");
                 }
-                // Expose the final CCM for retrieval by external components (e.g. VizWriter)
-                m_channelConditionModel = ccm;
-
                 // set the propagation loss model in the channel
-                channel->AddPhasedArraySpectrumPropagationLossModel(threeGppSplm);
-            }
-            else if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
-            {
-                NS_LOG_DEBUG("NYU spectrum model: creating factory object");
-                Ptr<NYUSpectrumPropagationLossModel> nyuSplm =
-                    m_spectrumPropagationLossModelFactory
-                        .Create<NYUSpectrumPropagationLossModel>();
-                NS_ASSERT_MSG(nyuSplm, "Failed to create NYUSpectrumPropagationLossModel");
-                nyuSplm->SetChannelModelAttribute(
-                    "Frequency",
-                    DoubleValue(phyMacCommon->GetCenterFrequency()));
-                nyuSplm->SetChannelModelAttribute(
-                    "RfBandwidth",
-                    DoubleValue(phyMacCommon->GetBandwidth()));
-                // Scenario is set via Config::SetDefault — not hardcoded here.
-
-                if (ccm)
-                {
-                    NS_LOG_DEBUG("NYU spectrum model: using ccm from factory");
-                    nyuSplm->SetChannelModelAttribute("ChannelConditionModel",
-                                                       PointerValue(ccm));
-                }
-                else if (!m_pathlossModel.empty() && m_pathlossModel.count(it->first) > 0
-                         && m_pathlossModel.at(it->first))
-                {
-                    NS_LOG_DEBUG("NYU spectrum model: extracting ccm from pathloss model");
-                    PointerValue ptr;
-                    m_pathlossModel.at(it->first)->GetAttribute("ChannelConditionModel", ptr);
-                    ccm = ptr.Get<ChannelConditionModel>();
-                    if (ccm)
-                    {
-                        nyuSplm->SetChannelModelAttribute("ChannelConditionModel",
-                                                           PointerValue(ccm));
-                    }
-                    else
-                    {
-                        NS_LOG_WARN("NYU spectrum model: pathloss model has null ChannelConditionModel");
-                    }
-                }
-                else
-                {
-                    NS_LOG_WARN("NYU spectrum model: no ccm and no pathloss model — "
-                                "channel condition model will be default");
-                }
-                m_channelConditionModel = ccm;
-
                 channel->AddPhasedArraySpectrumPropagationLossModel(nyuSplm);
             }
             else
@@ -576,12 +528,6 @@ MmWaveHelper::SetBeamformingModelType(std::string type)
 {
     NS_LOG_FUNCTION(this << type);
     m_bfModelFactory = ObjectFactory(type);
-}
-
-Ptr<ChannelConditionModel>
-MmWaveHelper::GetChannelConditionModel() const
-{
-    return m_channelConditionModel;
 }
 
 void
@@ -992,34 +938,25 @@ MmWaveHelper::InstallSingleMcUeDevice(Ptr<Node> n)
         Ptr<PhasedArrayModel> antenna = m_uePhasedArrayModelFactory.Create<PhasedArrayModel>();
         NS_ASSERT_MSG(antenna, "error in creating the AntennaModel object");
 
-        // initialize the channel model (3GPP or NYU)
+        // initialize the NYU channel model
 
-        Ptr<MatrixBasedChannelModel> channelModel;
         [[maybe_unused]] Ptr<SpectrumPropagationLossModel> splm;
         [[maybe_unused]] Ptr<PhasedArraySpectrumPropagationLossModel> pSplm;
 
-        if (m_spectrumPropagationLossModelType == "ns3::ThreeGppSpectrumPropagationLossModel")
+        Ptr<NYUSpectrumPropagationLossModel> nyuSplm;
+
+        if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
         {
             pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(pSplm);
-            channelModel = threeGppSplm->GetChannelModel();
-        }
-        else if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
-        {
-            pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
-            channelModel = nyuSplm->GetChannelModel();
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
         }
         else
         {
             splm = m_channel.at(it->first)->GetSpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(splm);
-            if (threeGppSplm)
-            {
-                channelModel = threeGppSplm->GetChannelModel();
-            }
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(splm);
         }
 
+        auto channelModel = nyuSplm->GetChannelModel();
         Ptr<MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<MmWaveBeamformingModel>();
         bfModel->SetAttributeFailSafe("Device", PointerValue(device));
         bfModel->SetAttributeFailSafe("Antenna", PointerValue(antenna));
@@ -1658,33 +1595,25 @@ MmWaveHelper::InstallSingleUeDevice(Ptr<Node> n)
         Ptr<PhasedArrayModel> antenna = m_uePhasedArrayModelFactory.Create<PhasedArrayModel>();
         NS_ASSERT_MSG(antenna, "error in creating the AntennaModel object");
 
-        // initialize the channel model (3GPP or NYU)
+        // initialize the NYU channel model
 
-        Ptr<MatrixBasedChannelModel> channelModel;
         [[maybe_unused]] Ptr<SpectrumPropagationLossModel> splm;
         [[maybe_unused]] Ptr<PhasedArraySpectrumPropagationLossModel> pSplm;
 
-        if (m_spectrumPropagationLossModelType == "ns3::ThreeGppSpectrumPropagationLossModel")
+        Ptr<NYUSpectrumPropagationLossModel> nyuSplm;
+
+        if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
         {
             pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(pSplm);
-            channelModel = threeGppSplm->GetChannelModel();
-        }
-        else if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
-        {
-            pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
-            channelModel = nyuSplm->GetChannelModel();
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
         }
         else
         {
             splm = m_channel.at(it->first)->GetSpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(splm);
-            if (threeGppSplm)
-            {
-                channelModel = threeGppSplm->GetChannelModel();
-            }
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(splm);
         }
+
+        auto channelModel = nyuSplm->GetChannelModel();
 
         Ptr<MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<MmWaveBeamformingModel>();
         bfModel->SetAttributeFailSafe("Device", PointerValue(device));
@@ -1900,8 +1829,7 @@ MmWaveHelper::InstallSingleEnbDevice(Ptr<Node> n)
         dlPhy->SetMobility(mm);
 
         // hack to allow periodic computation of SINR at the eNB, without pilots
-        if (m_spectrumPropagationLossModelType == "ns3::ThreeGppSpectrumPropagationLossModel"
-            || m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
+        if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
         {
             phy->AddPhasedArraySpectrumPropagationLossModel(
                 m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel());
@@ -1927,32 +1855,24 @@ MmWaveHelper::InstallSingleEnbDevice(Ptr<Node> n)
         Ptr<PhasedArrayModel> antenna = m_enbPhasedArrayModelFactory.Create<PhasedArrayModel>();
         NS_ASSERT_MSG(antenna, "error in creating the AntennaModel object");
 
-        // initialize the channel model (3GPP or NYU)
-        Ptr<MatrixBasedChannelModel> channelModel;
-        [[maybe_unused]] Ptr<SpectrumPropagationLossModel> chSplm;
+        // initialize the NYU channel model
+        [[maybe_unused]] Ptr<SpectrumPropagationLossModel> splm;
         [[maybe_unused]] Ptr<PhasedArraySpectrumPropagationLossModel> pSplm;
 
-        if (m_spectrumPropagationLossModelType == "ns3::ThreeGppSpectrumPropagationLossModel")
+        Ptr<NYUSpectrumPropagationLossModel> nyuSplm;
+
+        if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
         {
             pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(pSplm);
-            channelModel = threeGppSplm->GetChannelModel();
-        }
-        else if (m_spectrumPropagationLossModelType == "ns3::NYUSpectrumPropagationLossModel")
-        {
-            pSplm = m_channel.at(it->first)->GetPhasedArraySpectrumPropagationLossModel();
-            auto nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
-            channelModel = nyuSplm->GetChannelModel();
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(pSplm);
         }
         else
         {
-            chSplm = m_channel.at(it->first)->GetSpectrumPropagationLossModel();
-            auto threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel>(chSplm);
-            if (threeGppSplm)
-            {
-                channelModel = threeGppSplm->GetChannelModel();
-            }
+            splm = m_channel.at(it->first)->GetSpectrumPropagationLossModel();
+            nyuSplm = DynamicCast<NYUSpectrumPropagationLossModel>(splm);
         }
+
+        auto channelModel = nyuSplm->GetChannelModel();
 
         Ptr<MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<MmWaveBeamformingModel>();
         bfModel->SetAttributeFailSafe("Device", PointerValue(device));
@@ -1964,9 +1884,9 @@ MmWaveHelper::InstallSingleEnbDevice(Ptr<Node> n)
             bfModel->SetAttributeFailSafe("PhasedArraySpectrumPropagationLossModel",
                                           PointerValue(pSplm));
         }
-        else if (chSplm)
+        else if (splm)
         {
-            bfModel->SetAttributeFailSafe("SpectrumPropagationLossModel", PointerValue(chSplm));
+            bfModel->SetAttributeFailSafe("SpectrumPropagationLossModel", PointerValue(splm));
         }
 
         bfModel->SetAttributeFailSafe("MmWavePhyMacCommon",
@@ -2076,7 +1996,7 @@ MmWaveHelper::InstallSingleEnbDevice(Ptr<Node> n)
 
     if (m_epcHelper)
     {
-        EnumValue<LteEnbRrc::LteEpsBearerToRlcMapping_t> epsBearerToRlcMapping;
+        EnumValue epsBearerToRlcMapping;
         rrc->GetAttribute("EpsBearerToRlcMapping", epsBearerToRlcMapping);
         // it does not make sense to use RLC/SM when also using the EPC
         if (epsBearerToRlcMapping.Get() == LteEnbRrc::RLC_SM_ALWAYS)
@@ -2358,7 +2278,7 @@ MmWaveHelper::InstallSingleLteEnbDevice(Ptr<Node> n)
 
     if (m_epcHelper)
     {
-        EnumValue<LteEnbRrc::LteEpsBearerToRlcMapping_t> epsBearerToRlcMapping;
+        EnumValue epsBearerToRlcMapping;
         rrc->GetAttribute("EpsBearerToRlcMapping", epsBearerToRlcMapping);
         // it does not make sense to use RLC/SM when also using the EPC
 

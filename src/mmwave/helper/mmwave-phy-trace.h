@@ -80,6 +80,12 @@ class MmWavePhyTrace : public Object
                                                 PhyTransmissionTraceParams param);
 
     /**
+     * Close all static trace file streams so they reopen with updated
+     * filenames on the next callback.  Call between seed iterations.
+     */
+    static void ResetTraceFiles();
+
+    /**
      * Sets the filename of the PHY reception traces
      * \param fileName the file name
      */

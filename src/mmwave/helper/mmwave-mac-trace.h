@@ -48,6 +48,12 @@ class MmWaveMacTrace : public Object
     static TypeId GetTypeId(void);
 
     /**
+     * Close the static trace file stream so it reopens with an updated
+     * filename on the next callback.  Call between seed iterations.
+     */
+    static void ResetTraceFiles();
+
+    /**
      * Sets the filename for the MAC-related traces
      *
      * \param fileName the intended filename
