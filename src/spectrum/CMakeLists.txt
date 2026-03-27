@@ -33,6 +33,8 @@ set(source_files
     model/spectrum-value.cc
     model/three-gpp-channel-model.cc
     model/three-gpp-spectrum-propagation-loss-model.cc
+    model/nyu-channel-model.cc
+    model/nyu-spectrum-propagation-loss-model.cc
     model/trace-fading-loss-model.cc
     model/tv-spectrum-transmitter.cc
     model/waveform-generator.cc
@@ -73,6 +75,8 @@ set(header_files
     model/spectrum-value.h
     model/three-gpp-channel-model.h
     model/three-gpp-spectrum-propagation-loss-model.h
+    model/nyu-channel-model.h
+    model/nyu-spectrum-propagation-loss-model.h
     model/trace-fading-loss-model.h
     model/tv-spectrum-transmitter.h
     model/waveform-generator.h

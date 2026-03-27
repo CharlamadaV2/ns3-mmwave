@@ -14,7 +14,11 @@ build_lib(
     model/propagation-loss-model.cc
     model/three-gpp-propagation-loss-model.cc
     model/three-gpp-v2v-propagation-loss-model.cc
+    model/nyu-channel-condition-model.cc
+    model/nyu-propagation-loss-model.cc
   HEADER_FILES
+    model/nyu-channel-condition-model.h
+    model/nyu-propagation-loss-model.h
     model/channel-condition-model.h
     model/cost231-propagation-loss-model.h
     model/itu-r-1411-los-propagation-loss-model.h
