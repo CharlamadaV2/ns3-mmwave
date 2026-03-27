@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include "src/domain/types.h"
-#include "src/sim/topology-builder.h"
+#include "src/domain/sim-config.h"
+#include "src/setup/topology-builder.h"
 
 namespace mmwave_sim
 {

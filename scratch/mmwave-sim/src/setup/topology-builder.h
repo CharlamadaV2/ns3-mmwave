@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include "src/domain/types.h"
+#include "src/domain/sim-config.h"
 
 #include "ns3/channel-condition-model.h"
 #include "ns3/internet-module.h"
@@ -18,6 +18,12 @@
 namespace mmwave_sim
 {
 
+struct MmWaveHelpers
+{
+    ns3::Ptr<ns3::mmwave::MmWaveHelper>                mmwaveHelper;
+    ns3::Ptr<ns3::mmwave::MmWavePointToPointEpcHelper> epcHelper;
+};
+
 class TopologyBuilder
 {
   public:
@@ -26,15 +32,27 @@ class TopologyBuilder
                     const ns3::Ptr<ns3::mmwave::MmWavePointToPointEpcHelper>& epc);
 
     /**
+     * Create MmWaveHelper and EPC helper, configured per SimConfig.
+     * Must be called AFTER ConfigureChannelDefaults().
+     */
+    static MmWaveHelpers CreateHelpers(const SimConfig& cfg);
+
+    /**
+     * Apply channel Config::SetDefault values.
+     * MUST be called BEFORE CreateObject<MmWaveHelper>() so the helper
+     * picks up the correct ChannelModel and PathlossModel at construction.
+     */
+    static void ConfigureChannelDefaults(const SimConfig& cfg);
+
+    /**
      * Execute the full topology build sequence:
-     *   1. Configure channel/blockage defaults
-     *   2. Set frequency via CC params
-     *   3. Create eNB and UE nodes with the right mobility models
-     *   4. Create building obstacles (if any) and install BuildingsHelper
-     *   5. Install mmWave devices
-     *   6. Wire EPC: remote host, P2P backhaul, static routing
-     *   7. Assign UE IP addresses
-     *   8. Attach UEs to closest eNB
+     *   1. Set frequency via CC params
+     *   2. Create eNB and UE nodes with the right mobility models
+     *   3. Create building obstacles (if any) and install BuildingsHelper
+     *   4. Install mmWave devices
+     *   5. Wire EPC: remote host, P2P backhaul, static routing
+     *   6. Assign UE IP addresses
+     *   7. Attach UEs to closest eNB
      */
     void Build();
 
@@ -59,6 +77,8 @@ class TopologyBuilder
     ns3::Ptr<ns3::ChannelConditionModel> m_condModel;
 
     void ConfigureChannel();
+    void ConfigureChannelNyu(const std::string& sc, double freqHz);
+    void ConfigureChannel3gpp(const std::string& sc, double freqHz);
     void CreateNodes();
     void InstallMobility();
     void CreateBuildings();

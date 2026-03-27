@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-#include "src/sim/traffic-setup.h"
+#include "src/setup/traffic-setup.h"
 
 #include "ns3/applications-module.h"
 #include "ns3/inet-socket-address.h"
