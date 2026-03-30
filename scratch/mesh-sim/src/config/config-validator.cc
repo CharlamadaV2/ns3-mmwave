@@ -1,0 +1,148 @@
+/* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
+#include "src/config/config-validator.h"
+
+#include <algorithm>
+#include <initializer_list>
+
+namespace mesh_sim
+{
+
+static void
+checkPositive(ValidationResult& r, const std::string& field, double val)
+{
+    if (val <= 0.0)
+    {
+        r.errors.push_back(field + " must be > 0 (got " + std::to_string(val) + ")");
+    }
+}
+
+static void
+checkOneOf(ValidationResult& r,
+           const std::string& field,
+           const std::string& val,
+           std::initializer_list<std::string> allowed)
+{
+    if (std::find(allowed.begin(), allowed.end(), val) == allowed.end())
+    {
+        std::string opts;
+        for (const auto& a : allowed)
+        {
+            if (!opts.empty())
+                opts += ", ";
+            opts += "'" + a + "'";
+        }
+        r.errors.push_back(field + ": unknown value '" + val +
+                           "' (must be one of: " + opts + ")");
+    }
+}
+
+ValidationResult
+ValidateConfig(const SimConfig& cfg)
+{
+    ValidationResult r;
+
+    // -- timing --
+    checkPositive(r, "duration_s", cfg.duration_s);
+    checkPositive(r, "tick_s", cfg.tick_s);
+
+    if (cfg.tick_s > cfg.duration_s)
+    {
+        r.errors.push_back("tick_s (" + std::to_string(cfg.tick_s) +
+                           ") must be <= duration_s (" +
+                           std::to_string(cfg.duration_s) + ")");
+    }
+    if (cfg.warmup_s < 0.0)
+    {
+        r.errors.push_back("warmup_s must be >= 0 (got " +
+                           std::to_string(cfg.warmup_s) + ")");
+    }
+    if (cfg.warmup_s >= cfg.duration_s && cfg.duration_s > 0.0)
+    {
+        r.errors.push_back("warmup_s (" + std::to_string(cfg.warmup_s) +
+                           ") must be < duration_s (" +
+                           std::to_string(cfg.duration_s) + ")");
+    }
+
+    // -- nodes --
+    if (cfg.nodes.size() < 2)
+    {
+        r.errors.push_back("at least 2 nodes required (got " +
+                           std::to_string(cfg.nodes.size()) + ")");
+    }
+
+    for (const auto& node : cfg.nodes)
+    {
+        checkOneOf(r, "node '" + node.id + "' mobility", node.mobility,
+                   {"fixed", "constant_velocity", "random_walk"});
+    }
+
+    // -- channel --
+    checkPositive(r, "channel.frequency_ghz", cfg.channel.frequency_ghz);
+    checkPositive(r, "channel.bandwidth_mhz", cfg.channel.bandwidth_mhz);
+    checkOneOf(r, "channel.channel_model", cfg.channel.channel_model,
+               {"3gpp", "nyu"});
+    checkOneOf(r, "channel.scenario", cfg.channel.scenario,
+               {"UMi", "UMa", "RMa", "InH", "InF"});
+
+    // -- traffic --
+    const auto& tc = cfg.mesh.traffic;
+    checkOneOf(r, "traffic.model", tc.model,
+               {"constant", "poisson", "on_off"});
+    checkOneOf(r, "traffic.flow_topology", tc.flow_topology,
+               {"all_pairs", "random_pairs", "gateway"});
+    checkPositive(r, "traffic.demand_mbps", tc.demand_mbps);
+
+    if (tc.flow_topology == "gateway")
+    {
+        if (tc.gateway_node_id.empty())
+        {
+            r.errors.push_back(
+                "traffic.gateway_node_id is required when flow_topology='gateway'");
+        }
+        else
+        {
+            bool found = false;
+            for (const auto& n : cfg.nodes)
+            {
+                if (n.id == tc.gateway_node_id)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                r.errors.push_back(
+                    "traffic.gateway_node_id '" + tc.gateway_node_id +
+                    "' does not match any node ID");
+            }
+        }
+    }
+
+    if (tc.flow_topology == "random_pairs" && tc.random_pair_count == 0)
+    {
+        r.errors.push_back(
+            "traffic.random_pair_count must be > 0 when flow_topology='random_pairs'");
+    }
+
+    // -- routing --
+    checkOneOf(r, "routing.algorithm", cfg.mesh.routing.algorithm,
+               {"shortest_path", "max_throughput", "min_hop"});
+
+    // -- buildings --
+    for (const auto& b : cfg.buildings)
+    {
+        std::string label = "building '" + b.id + "'";
+        if (b.x_min >= b.x_max)
+            r.errors.push_back(label + ": x_min must be < x_max");
+        if (b.y_min >= b.y_max)
+            r.errors.push_back(label + ": y_min must be < y_max");
+        if (b.z_min >= b.z_max)
+            r.errors.push_back(label + ": z_min must be < z_max");
+    }
+
+    return r;
+}
+
+}  // namespace mesh_sim

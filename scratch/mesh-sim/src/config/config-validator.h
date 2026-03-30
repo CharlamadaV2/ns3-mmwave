@@ -1,0 +1,29 @@
+/* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/*
+ * Config validation: checks a fully-loaded SimConfig for invalid
+ * or inconsistent values before the simulation runs.
+ * No ns-3 headers -- can be tested independently.
+ */
+#pragma once
+
+#include "src/domain/sim-config.h"
+
+#include <string>
+#include <vector>
+
+namespace mesh_sim
+{
+
+struct ValidationResult
+{
+    std::vector<std::string> errors;
+    bool ok() const { return errors.empty(); }
+};
+
+/**
+ * Validate a SimConfig after loading.  Returns all errors found
+ * (not just the first) so the user can fix them in one pass.
+ */
+ValidationResult ValidateConfig(const SimConfig& cfg);
+
+}  // namespace mesh_sim
