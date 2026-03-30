@@ -1,0 +1,8 @@
+# Compiled test binaries (appear in unit/*/ dirs)
+config-validator-test
+eval-test
+mesh-router-test
+traffic-matrix-test
+
+# ns3/ stub symlink directories (created by Makefiles)
+ns3/
