@@ -1,0 +1,26 @@
+/* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/*
+ * Per-link evaluation result POD type.
+ * One instance per ordered pair (tx, rx) per time step.
+ * No ns-3 headers included.
+ */
+#pragma once
+
+#include <cstdint>
+
+namespace mesh_sim
+{
+
+struct LinkResult
+{
+    uint32_t tx_id = 0;           // index into node list
+    uint32_t rx_id = 0;
+    double   distance_m = 0.0;    // 3D Euclidean distance
+    bool     is_los = false;      // true = Line of Sight
+    double   path_loss_db = 0.0;  // total path loss including shadow fading
+    double   rx_power_dbm = -999.0;
+    double   sinr_db = -999.0;
+    double   capacity_mbps = 0.0; // Shannon or AMC-based capacity
+};
+
+}  // namespace mesh_sim
