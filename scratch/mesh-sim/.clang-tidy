@@ -1,0 +1,28 @@
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  -bugprone-branch-clone,
+  -bugprone-infinite-loop,
+  misc-unused-using-decls,
+  modernize-use-override,
+  modernize-use-nullptr,
+  modernize-use-auto,
+  modernize-use-emplace,
+  modernize-loop-convert,
+  performance-*,
+  readability-container-size-empty,
+  readability-redundant-string-cstr,
+  readability-misleading-indentation,
+  readability-braces-around-statements,
+
+WarningsAsErrors: >
+  bugprone-use-after-move,
+  bugprone-dangling-handle,
+
+HeaderFilterRegex: 'src/.*\.h$'
+
+CheckOptions:
+  - key: modernize-use-auto.MinTypeNameLength
+    value: '8'
