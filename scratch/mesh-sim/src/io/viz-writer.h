@@ -1,11 +1,17 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
- * VizWriter: writes positions.csv and links.csv for GUI consumption.
+ * VizWriter: writes per-tick CSV snapshots for GUI and plotting consumption.
  * Called from the step loop at viz_tick_ms intervals.
  *
- * positions.csv columns:  time_s, node_id, x, y, z, node_type, active
- * links.csv columns:      time_s, node_a, node_b, dist_m, sinr_db, condition,
- *                          capacity_mbps, delivered_mbps, hop_count
+ * Output files:
+ *   positions.csv  -- time_s, node_id, x, y, z, node_type, active
+ *   links.csv      -- time_s, node_a, node_b, dist_m, sinr_db, condition,
+ *                     condition_reason, capacity_mbps, delivered_mbps, hop_count
+ *   rx-power.csv   -- time_s, node_a, node_b, rx_power_dbm
+ *   mcs.csv        -- time_s, node_a, node_b, mcs_index, spectral_eff
+ *   flows.csv      -- time_s, src, dst, demand_mbps, delivered_mbps, latency_ms,
+ *                     hop_count, routable
+ *   routes.csv     -- time_s, src, dst, path, bottleneck_mbps, hop_count, routable
  */
 #pragma once
 
@@ -45,9 +51,23 @@ class VizWriter
                     const LinkTable& links,
                     const std::vector<FlowResult>& flows);
 
+    void WriteRxPower(double time_s, const LinkTable& links);
+
+    void WriteMcs(double time_s, const LinkTable& links);
+
+    void WriteFlows(double time_s, const std::vector<FlowResult>& flows);
+
+    void WriteRoutes(double time_s,
+                     const std::vector<FlowResult>& flows,
+                     const LinkTable& links);
+
     const SimConfig& m_cfg;
     std::ofstream    m_posFile;
     std::ofstream    m_linkFile;
+    std::ofstream    m_rxPowerFile;
+    std::ofstream    m_mcsFile;
+    std::ofstream    m_flowFile;
+    std::ofstream    m_routeFile;
     double           m_vizTickS;
     double           m_nextWriteS;
 };
