@@ -59,7 +59,9 @@ struct BuildingSpec
     double z_max = 1.0;
     std::string type      = "Residential";         // "Residential", "Office", "Commercial"
     std::string ext_walls = "ConcreteWithWindows";  // see ns3::Building::ExtWallsType
-    int n_floors = 1;
+    int n_floors  = 1;
+    int n_rooms_x = 1;
+    int n_rooms_y = 1;
 };
 
 }  // namespace mesh_sim

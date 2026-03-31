@@ -81,6 +81,8 @@ parseBuildingSpec(const json& j)
     b.type      = j.value("type",      "Residential");
     b.ext_walls = j.value("ext_walls", "ConcreteWithWindows");
     b.n_floors  = j.value("n_floors",  1);
+    b.n_rooms_x = j.value("n_rooms_x", 1);
+    b.n_rooms_y = j.value("n_rooms_y", 1);
     return b;
 }
 

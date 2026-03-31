@@ -190,6 +190,8 @@ TopologyBuilder::CreateBuildings()
         b->SetBuildingType(parseBuildingType(bspec.type));
         b->SetExtWallsType(parseExtWalls(bspec.ext_walls));
         b->SetNFloors(bspec.n_floors);
+        b->SetNRoomsX(bspec.n_rooms_x);
+        b->SetNRoomsY(bspec.n_rooms_y);
     }
 
     BuildingsHelper::Install(m_nodes);

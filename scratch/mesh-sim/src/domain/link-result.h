@@ -21,6 +21,8 @@ struct LinkResult
     double   rx_power_dbm = -999.0;
     double   sinr_db = -999.0;
     double   capacity_mbps = 0.0; // Shannon or AMC-based capacity
+    uint32_t mcs_index = 0;       // CQI/MCS table index (0-14)
+    bool     condition_from_buildings = false; // true = deterministic (buildings), false = probabilistic
 };
 
 }  // namespace mesh_sim

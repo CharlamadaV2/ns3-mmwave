@@ -39,6 +39,7 @@ class LinkEvaluator
     double      m_bandwidthHz   = 400e6;
     double      m_bfGainDb      = 0.0;
     std::string m_amcModel      = "shannon";
+    bool        m_buildingsEnabled = false;
 
     ns3::Ptr<ns3::PropagationLossModel>  m_plModel;
     ns3::Ptr<ns3::ChannelConditionModel> m_condModel;

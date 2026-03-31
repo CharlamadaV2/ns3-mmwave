@@ -33,9 +33,10 @@ LinkEvaluator::Configure(const SimConfig& cfg,
     m_plModel   = plModel;
     m_condModel = condModel;
 
-    m_txPowerDbm  = cfg.channel.tx_power_dbm;
-    m_bandwidthHz = cfg.channel.bandwidth_mhz * 1e6;
-    m_amcModel    = cfg.channel.amc_model;
+    m_txPowerDbm       = cfg.channel.tx_power_dbm;
+    m_bandwidthHz      = cfg.channel.bandwidth_mhz * 1e6;
+    m_amcModel         = cfg.channel.amc_model;
+    m_buildingsEnabled = !cfg.buildings.empty();
 
     // Thermal noise floor: kTB in dBm = -174 dBm/Hz + 10*log10(B_hz) + noise figure.
     // -174 dBm/Hz is thermal noise power spectral density at T=290K (room temp).
@@ -75,11 +76,13 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
     // Treat as perfect LOS link: no path loss, just TX power + BF gain.
     if (r.distance_m < 1.0)
     {
-        r.is_los        = true;
-        r.path_loss_db  = 0.0;
-        r.rx_power_dbm  = m_txPowerDbm + m_bfGainDb;
-        r.sinr_db       = r.rx_power_dbm - m_noiseFloorDbm;
-        r.capacity_mbps = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
+        r.is_los                   = true;
+        r.path_loss_db             = 0.0;
+        r.rx_power_dbm             = m_txPowerDbm + m_bfGainDb;
+        r.sinr_db                  = r.rx_power_dbm - m_noiseFloorDbm;
+        r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
+        r.mcs_index                = SinrToMcsIndex(r.sinr_db);
+        r.condition_from_buildings = m_buildingsEnabled;
         NS_LOG_DEBUG("Link " << txIdx << "->" << rxIdx
                      << ": co-located (d<1m), SINR=" << r.sinr_db << " dB");
         return r;
@@ -104,7 +107,9 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
     // if needed for conservative estimates.
     r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
 
-    r.capacity_mbps = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
+    r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
+    r.mcs_index                = SinrToMcsIndex(r.sinr_db);
+    r.condition_from_buildings = m_buildingsEnabled;
 
     NS_LOG_DEBUG("Link " << txIdx << "->" << rxIdx
                  << ": d=" << r.distance_m << "m"
