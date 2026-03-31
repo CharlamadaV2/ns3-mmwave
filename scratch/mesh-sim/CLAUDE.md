@@ -2,7 +2,8 @@
 
 Lightweight time-stepped mmWave mesh simulator built on ns3-mmwave.
 All nodes are identical peers (no eNB/UE distinction). Uses ns-3 propagation
-models as library functions but does not use `Simulator::Run()`.
+models as library functions. Uses `Simulator::Stop()`+`Run()` as a controlled
+time-stepper each tick but does not use the ns-3 event loop for control flow.
 C++ for simulation; Python only for post-sim plotting.
 Entry point: `sim.cc`.
 
@@ -61,7 +62,7 @@ rl      <--  sim.cc
 ## Key differences from mmwave-sim
 
 - No EPC, RRC, MAC, HARQ, RLC, PDCP -- direct propagation model calls only
-- No `Simulator::Run()` -- simple for-loop over time steps
+- `Simulator::Stop()`+`Run()` advances the clock each tick; for-loop remains the master
 - All nodes are peers (no base station / UE roles)
 - Evaluates all N*(N-1)/2 links per tick (not just eNB-UE pairs)
 - Traffic is flow-level demands, not packet-level

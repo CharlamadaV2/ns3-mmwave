@@ -148,6 +148,15 @@ main(int argc, char* argv[])
         {
             double t = ti * cfg.tick_s;
 
+            // Advance the ns-3 simulator clock so that Simulator::Now() == t.
+            // Required for ConstantVelocityMobilityModel, RandomWalk2dMobilityModel,
+            // and ThreeGpp/NYU channel-condition cache expiry.
+            if (ti > 0)
+            {
+                ns3::Simulator::Stop(ns3::Seconds(cfg.tick_s));
+                ns3::Simulator::Run();
+            }
+
             // Evaluate all links
             linkTable.Update(N, linkEval.EvaluateAll(mobs));
 
@@ -194,6 +203,8 @@ main(int argc, char* argv[])
 
         NS_LOG_INFO("Seed " << seed << " complete (wall=" << std::fixed
                             << std::setprecision(3) << wallElapsed << "s).");
+
+        ns3::Simulator::Destroy();
     }
 
     if (seeds.size() > 1)
