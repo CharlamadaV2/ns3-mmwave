@@ -1,0 +1,10 @@
+[
+  {"id": "gateway", "role": "peer", "mobility": "fixed",
+    "position": {"x": 150.0, "y": 0.0, "z": 30.0}},
+  {"id": "walker-a", "role": "peer", "mobility": "random_walk",
+    "position": {"x": 50.0, "y": 50.0, "z": 1.5},
+    "random_walk": {"bounds": {"x_min": 0, "x_max": 300, "y_min": -100, "y_max": 100}, "speed_mps": 3.0}},
+  {"id": "walker-b", "role": "peer", "mobility": "random_walk",
+    "position": {"x": 250.0, "y": -30.0, "z": 1.5},
+    "random_walk": {"bounds": {"x_min": 0, "x_max": 300, "y_min": -100, "y_max": 100}, "speed_mps": 5.0}}
+]

@@ -1,0 +1,7 @@
+[
+  {"id": "node-a", "role": "peer", "mobility": "fixed",
+    "position": {"x": 0.0, "y": 0.0, "z": 10.0}},
+  {"id": "node-b", "role": "peer", "mobility": "constant_velocity",
+    "position": {"x": 50.0, "y": 0.0, "z": 10.0},
+    "velocity": {"vx": 20.0, "vy": 0.0, "vz": 0.0}}
+]
