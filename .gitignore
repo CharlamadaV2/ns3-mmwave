@@ -57,6 +57,7 @@ cmake-build-release/
 .cache/
 # mmwave-sim harness runtime outputs and generated traces
 scratch/mmwave-sim/outputs/
+scratch/mesh-sim/outputs/
 # Legacy output location (outputs now live in scratch/mmwave-sim/outputs/)
 outputs/
 RxPacketTrace.txt
