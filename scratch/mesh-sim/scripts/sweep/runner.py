@@ -208,18 +208,21 @@ def run_sweep(
 
         os.makedirs(point_dir, exist_ok=True)
 
-        # Determine nodes_file for this point
+        # Determine nodes_file and buildings_file for this point
         pt_nodes_file = nodes_file
+        pt_buildings_file = buildings_file
         for (s, k), v in point_params.items():
             if s == "scenario" and k == "nodes_file":
                 pt_nodes_file = v
+            elif s == "scenario" and k == "buildings_file":
+                pt_buildings_file = v
 
         # Generate run.ini and copy scenario files
         scenario_name = f"{cfg.label}_point-{i:03d}"
         write_point_ini(base_run_ini, point_dir, cfg.overrides, point_params,
                         scenario_name)
         copy_scenario_files(cfg.base_scenario, point_dir, pt_nodes_file,
-                            buildings_file)
+                            pt_buildings_file)
 
         # Run simulation
         cmd = [sim_binary, f"--run-config={os.path.join(point_dir, 'run.ini')}",
