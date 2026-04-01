@@ -117,9 +117,9 @@ ConfigLoader::Load(const std::string& run_config_path,
     {
         // Auto-generate a timestamped output directory anchored to
         // scratch/mesh-sim/outputs/ regardless of cwd.
-        // base_dir points at the scenario dir (e.g. .../inputs/scenarios/foo)
+        // base_dir points at the scenario dir (e.g. .../inputs/baselines/foo)
         // so we go up three levels to reach scratch/mesh-sim/.
-        fs::path mesh_sim_dir = fs::path(base_dir).parent_path()  // scenarios/
+        fs::path mesh_sim_dir = fs::path(base_dir).parent_path()  // baselines/
                                                     .parent_path()  // inputs/
                                                     .parent_path(); // mesh-sim/
         std::time_t now = std::time(nullptr);

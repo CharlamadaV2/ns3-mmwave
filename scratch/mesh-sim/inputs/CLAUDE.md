@@ -1,7 +1,7 @@
 # inputs/
 
 ## Scope
-Scenario definitions only. Each scenario is a directory under `scenarios/` containing configuration files that drive a simulation run.
+Scenario definitions only. Each baseline scenario is a directory under `baselines/` containing configuration files that drive a simulation run.
 
 ## Per-scenario files
 - **run.ini** -- Simulation parameters (channel, traffic, routing, mesh, output settings)
