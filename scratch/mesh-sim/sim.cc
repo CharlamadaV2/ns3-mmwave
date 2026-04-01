@@ -115,7 +115,7 @@ main(int argc, char* argv[])
         auto wallStart = std::chrono::system_clock::now();
 
         // Build topology (ns-3 nodes, mobility, propagation models)
-        mesh_sim::TopologyBuilder topo(cfg);
+       mesh_sim::TopologyBuilder topo(cfg);
         topo.Build();
         auto mobs = topo.GetMobilityModels();
         uint32_t N = static_cast<uint32_t>(mobs.size());

@@ -65,7 +65,11 @@ VizWriter::Open()
               << "# numNodes="    << numNodes              << "\n"
               << "# simDuration=" << simDurMs              << "\n"
               << "# tickMs="      << m_cfg.viz_tick_ms     << "\n"
-              << "# dimensions=3\n";
+              << "# dimensions=3\n"
+              << "# rainRate="    << m_cfg.channel.nyu.rain_rate_mm_hr << "\n"
+              << "# channelModel=" << m_cfg.channel.channel_model << "\n"
+              << "# flowTopology=" << m_cfg.mesh.traffic.flow_topology << "\n"
+              << "# trafficModel=" << m_cfg.mesh.traffic.model << "\n";
 
     m_posFile     << "time_s,node_id,x,y,z,node_type,active\n";
     m_linkFile    << "time_s,node_a,node_b,dist_m,sinr_db,condition,"
@@ -135,9 +139,10 @@ VizWriter::WritePositions(double time_s,
     for (uint32_t i = 0; i < mobs.size(); ++i)
     {
         Vector pos = mobs[i]->GetPosition();
+        const std::string& role = (i < m_cfg.nodes.size()) ? m_cfg.nodes[i].role : "peer";
         m_posFile << time_s << "," << i << ","
                   << pos.x << "," << pos.y << "," << pos.z
-                  << ",peer,1\n";
+                  << "," << role << ",1\n";
     }
 }
 
