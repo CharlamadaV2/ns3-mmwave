@@ -138,6 +138,50 @@ test_unknown_amc_throws()
     check(threw, "unknown amc_model throws runtime_error");
 }
 
+// ---- SinrToMcsIndex tests ----
+
+static void
+test_mcs_index_below_min()
+{
+    check(SinrToMcsIndex(-10.0) == 0, "mcs_index below SINR_MIN returns 0");
+}
+
+static void
+test_mcs_index_at_exact_thresholds()
+{
+    check(SinrToMcsIndex(-6.7) == 0,  "mcs_index at -6.7 dB = 0");
+    check(SinrToMcsIndex(10.3) == 8,  "mcs_index at 10.3 dB = 8");
+    check(SinrToMcsIndex(22.7) == 14, "mcs_index at 22.7 dB = 14");
+}
+
+static void
+test_mcs_index_between_thresholds()
+{
+    // 3.0 dB is between index 4 (2.4) and index 5 (4.3)
+    check(SinrToMcsIndex(3.0) == 4,  "mcs_index at 3.0 dB = 4");
+    // 15.0 dB is between index 10 (14.1) and index 11 (16.3)
+    check(SinrToMcsIndex(15.0) == 10, "mcs_index at 15.0 dB = 10");
+}
+
+static void
+test_mcs_index_very_high_sinr()
+{
+    check(SinrToMcsIndex(50.0) == 14, "mcs_index at 50 dB clamps to 14");
+}
+
+static void
+test_mcs_index_monotonic()
+{
+    uint32_t prev = 0;
+    for (double sinr = -6.7; sinr <= 25.0; sinr += 0.5)
+    {
+        uint32_t idx = SinrToMcsIndex(sinr);
+        check(idx >= prev, "mcs_index non-decreasing at SINR=" +
+              std::to_string(sinr));
+        prev = idx;
+    }
+}
+
 // ---- LinkTable tests ----
 
 static std::vector<LinkResult>
@@ -281,6 +325,13 @@ main()
     test_table_highest_mcs();
     test_table_increases_monotonically();
     test_unknown_amc_throws();
+
+    // SinrToMcsIndex
+    test_mcs_index_below_min();
+    test_mcs_index_at_exact_thresholds();
+    test_mcs_index_between_thresholds();
+    test_mcs_index_very_high_sinr();
+    test_mcs_index_monotonic();
 
     // LinkTable
     test_link_table_update_and_get();
