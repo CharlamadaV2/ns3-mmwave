@@ -49,6 +49,14 @@ makeCfg(const std::string& model, const std::string& topology,
 {
     SimConfig cfg;
     cfg.tick_s = 0.1;
+    for (int i = 0; i < 5; ++i)
+    {
+        NodeSpec ns;
+        ns.id = "node-" + std::to_string(i);
+        ns.role = "peer";
+        ns.mobility = "fixed";
+        cfg.nodes.push_back(ns);
+    }
     cfg.mesh.traffic.model          = model;
     cfg.mesh.traffic.flow_topology  = topology;
     cfg.mesh.traffic.demand_mbps    = demandMbps;
@@ -125,6 +133,40 @@ test_gateway_explicit_node()
     {
         check(f.dst == 2, "gateway(2): flow dst=" + std::to_string(f.dst));
     }
+}
+
+static void
+test_gateway_string_node_id()
+{
+    auto cfg = makeCfg("constant", "gateway");
+    cfg.mesh.traffic.gateway_node_id = "node-2";
+    TrafficMatrix tm(cfg);
+    tm.Initialize(4, 0.0);
+
+    check(tm.GetActiveFlows().size() == 3, "gateway(string): 4 nodes -> 3 flows");
+    for (const auto& f : tm.GetActiveFlows())
+    {
+        check(f.dst == 2, "gateway(string): flow dst=" + std::to_string(f.dst));
+    }
+}
+
+static void
+test_gateway_nonexistent_throws()
+{
+    auto cfg = makeCfg("constant", "gateway");
+    cfg.mesh.traffic.gateway_node_id = "nonexistent";
+    TrafficMatrix tm(cfg);
+
+    bool threw = false;
+    try
+    {
+        tm.Initialize(4, 0.0);
+    }
+    catch (const std::runtime_error&)
+    {
+        threw = true;
+    }
+    check(threw, "gateway(nonexistent): throws runtime_error");
 }
 
 // ---- unknown topology ----
@@ -257,6 +299,8 @@ main()
     // gateway
     test_gateway_default_node();
     test_gateway_explicit_node();
+    test_gateway_string_node_id();
+    test_gateway_nonexistent_throws();
 
     // error handling
     test_unknown_topology_throws();

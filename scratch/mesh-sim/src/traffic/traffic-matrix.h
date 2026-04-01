@@ -53,9 +53,10 @@ class TrafficMatrix
     void TickOnOff(double currentTime);
     void TickPoisson(double currentTime);
 
-    TrafficConfig m_trafficCfg;
-    uint32_t      m_numNodes = 0;
-    double        m_tickS    = 0.1;
+    TrafficConfig              m_trafficCfg;
+    std::vector<NodeSpec>      m_nodeSpecs;
+    uint32_t                   m_numNodes = 0;
+    double                     m_tickS    = 0.1;
 
     std::vector<Flow> m_flows;
 

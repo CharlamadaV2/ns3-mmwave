@@ -15,6 +15,7 @@ namespace mesh_sim
 
 TrafficMatrix::TrafficMatrix(const SimConfig& cfg)
     : m_trafficCfg(cfg.mesh.traffic),
+      m_nodeSpecs(cfg.nodes),
       m_tickS(cfg.tick_s)
 {
     m_uniformRng = ns3::CreateObject<ns3::UniformRandomVariable>();
@@ -118,7 +119,30 @@ TrafficMatrix::InitGateway(uint32_t numNodes, double currentTime)
     uint32_t gw = 0;
     if (!m_trafficCfg.gateway_node_id.empty())
     {
-        gw = static_cast<uint32_t>(std::stoul(m_trafficCfg.gateway_node_id));
+        // Try numeric index first; fall back to matching node ID string.
+        try
+        {
+            gw = static_cast<uint32_t>(std::stoul(m_trafficCfg.gateway_node_id));
+        }
+        catch (const std::invalid_argument&)
+        {
+            bool found = false;
+            for (uint32_t i = 0; i < m_nodeSpecs.size(); ++i)
+            {
+                if (m_nodeSpecs[i].id == m_trafficCfg.gateway_node_id)
+                {
+                    gw = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                throw std::runtime_error(
+                    "[TrafficMatrix] gateway_node_id '" +
+                    m_trafficCfg.gateway_node_id + "' not found in node list");
+            }
+        }
     }
 
     for (uint32_t i = 0; i < numNodes; ++i)
