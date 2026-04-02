@@ -25,18 +25,18 @@ struct McsEntry
 };
 
 static const McsEntry MCS_TABLE[] = {
-    { -6.7, 0.15},  // CQI 0  – QPSK, code rate ~1/5
+    { -6.7, 0.15},  // CQI 0  – QPSK, code rate
     { -4.7, 0.23},  // CQI 1
     { -2.3, 0.38},  // CQI 2
     {  0.2, 0.60},  // CQI 3
     {  2.4, 0.88},  // CQI 4
     {  4.3, 1.18},  // CQI 5
-    {  5.9, 1.48},  // CQI 6  – 16QAM starts ~here
+    {  5.9, 1.48},  // CQI 6  – 16QAM starts
     {  8.1, 1.91},  // CQI 7
     { 10.3, 2.41},  // CQI 8
     { 11.7, 2.73},  // CQI 9
     { 14.1, 3.32},  // CQI 10
-    { 16.3, 3.90},  // CQI 11 – 64QAM starts ~here
+    { 16.3, 3.90},  // CQI 11 – 64QAM starts
     { 18.7, 4.52},  // CQI 12
     { 21.0, 5.12},  // CQI 13
     { 22.7, 5.55},  // CQI 14

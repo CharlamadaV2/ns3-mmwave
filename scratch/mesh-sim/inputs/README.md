@@ -19,7 +19,8 @@ inputs/
 ## How to run a scenario
 
 ```bash
-./ns3 run "mesh-sim --scenario=scratch/mesh-sim/inputs/baselines/01-static-los-baseline"
+./build/scratch/mesh-sim/ns3*-sim-* \
+  --run-config=scratch/mesh-sim/inputs/baselines/01-static-los-baseline/run.ini
 ```
 
 Outputs are written to `scratch/mesh-sim/outputs/` in a timestamped directory.
