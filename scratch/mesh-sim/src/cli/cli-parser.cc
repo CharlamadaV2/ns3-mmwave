@@ -36,9 +36,15 @@ ParseCommandLine(int argc, char* argv[])
     cmd.AddValue("run-id",
                  "Override the run_id value from run.ini.",
                  args.run_id_override);
+    cmd.AddValue("output-dir",
+                 "Override the output directory (default: auto-generated timestamp).",
+                 args.output_dir);
     cmd.AddValue("debug-links",
                  "Enable verbose link-evaluation debug logging.",
                  args.debug_links);
+    cmd.AddValue("rl-mode",
+                 "Enable RL mode: exchange observations and actions via stdin/stdout JSON.",
+                 args.rl_mode);
     cmd.Parse(argc, argv);
 
     if (args.run_config_path.empty())

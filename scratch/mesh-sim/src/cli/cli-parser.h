@@ -17,10 +17,12 @@ struct CliArgs
 {
     std::string run_config_path;
     std::string positions_override_path;
+    std::string output_dir;
     std::string seeds_arg;       // raw comma-separated seed list
     int         seed_override  = -1;
     int         run_id_override = -1;
     bool        debug_links    = false;
+    bool        rl_mode        = false;
 };
 
 /**
