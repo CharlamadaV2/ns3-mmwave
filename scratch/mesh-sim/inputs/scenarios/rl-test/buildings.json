@@ -1,0 +1,15 @@
+[
+  {
+    "id": "wall",
+    "bounds": {
+      "x_min": 90.0,  "x_max": 110.0,
+      "y_min": -30.0, "y_max": 30.0,
+      "z_min": 0.0,   "z_max": 50.0
+    },
+    "type":      "Office",
+    "ext_walls": "ConcreteWithoutWindows",
+    "n_floors":  10,
+    "n_rooms_x": 4,
+    "n_rooms_y": 6
+  }
+]

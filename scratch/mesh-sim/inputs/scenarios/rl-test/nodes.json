@@ -1,0 +1,17 @@
+[
+  {
+    "id": "node-a",
+    "role": "peer",
+    "mobility": "fixed",
+    "node_type": "drone",
+    "position": {"x": 0.0, "y": 0.0, "z": 10.0}
+  },
+  {
+    "id": "node-b",
+    "role": "peer",
+    "mobility": "constant_velocity",
+    "node_type": "drone",
+    "position": {"x": 100.0, "y": 0.0, "z": 10.0},
+    "velocity": {"vx": 0.0, "vy": 0.0, "vz": 0.0}
+  }
+]

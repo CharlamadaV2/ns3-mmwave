@@ -1,0 +1,10 @@
+[
+  {"id": "gw",     "role": "peer", "mobility": "fixed",
+    "position": {"x": 0.0, "y": 0.0, "z": 10.0}},
+  {"id": "node-a", "role": "peer", "mobility": "fixed",
+    "position": {"x": 150.0, "y": 0.0, "z": 10.0}},
+  {"id": "node-b", "role": "peer", "mobility": "fixed",
+    "position": {"x": 0.0, "y": 150.0, "z": 10.0}},
+  {"id": "node-c", "role": "peer", "mobility": "fixed",
+    "position": {"x": -150.0, "y": 0.0, "z": 10.0}}
+]
