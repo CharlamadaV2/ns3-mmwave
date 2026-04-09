@@ -41,12 +41,21 @@ struct RandomWalkParams
 struct NodeSpec
 {
     std::string id;
-    std::string role;      // "peer" (all nodes are peers in mesh-sim)
-    std::string mobility;  // "fixed", "constant_velocity", "random_walk"
+    std::string role;       // "peer" (all nodes are peers in mesh-sim)
+    std::string mobility;   // "fixed", "constant_velocity", "random_walk"
+    std::string node_type;  // "drone", "vehicle", "pedestrian" — determines max speed
     Position    position;
     Velocity    velocity;
     RandomWalkParams random_walk;
 };
+
+// Max speed (m/s) derived from node type. Used by RL to cap velocity.
+inline double MaxSpeedForType(const std::string& node_type)
+{
+    if (node_type == "vehicle") return 15.0;
+    if (node_type == "pedestrian") return 1.5;
+    return 20.0;  // drone (default)
+}
 
 struct BuildingSpec
 {

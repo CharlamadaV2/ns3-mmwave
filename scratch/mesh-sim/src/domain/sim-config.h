@@ -28,6 +28,20 @@ struct TimingInfo
     double elapsed_s = 0.0;
 };
 
+struct RlConfig
+{
+    bool        enabled               = false;
+    std::string controlled_node_id;                 // empty → last node
+    std::string action_type           = "discrete"; // "discrete" or "continuous"
+    std::string reward_type           = "throughput"; // "throughput" or "mean_sinr"
+    double      step_size_m           = 50.0;       // discrete only: offset for left/right
+    double      arrival_threshold_m   = 1.0;        // continuous only: "arrived" distance
+    double      x_min                 = -1000.0;
+    double      x_max                 =  2000.0;
+    double      y_min                 = -1000.0;
+    double      y_max                 =  1000.0;
+};
+
 struct SimConfig
 {
     std::string scenario_name;
@@ -42,6 +56,8 @@ struct SimConfig
     MeshConfig    mesh;
 
     uint32_t viz_tick_ms = 100;  // how often to write CSV snapshots
+
+    RlConfig rl;
 
     std::vector<NodeSpec>     nodes;
     std::vector<BuildingSpec> buildings;
