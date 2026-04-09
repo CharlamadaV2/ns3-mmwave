@@ -1,5 +1,33 @@
 # TODO — Future Possibilities
 
+## RL Enhancements
+
+### Multi-Node Control
+RL currently controls one node. Future: control all node positions via
+multi-agent RL or a centralized controller. Each node already has its own
+max speed from `node_type`.
+
+### Continuous Desired-Position Actions with SB3
+The discrete left/right/stay action space is a v0 simplification. The
+continuous action type (`action_type = continuous`) is already implemented
+and outputs absolute target (x, y) coordinates. Next step: integrate
+Stable Baselines 3 (PPO/SAC) using the Gymnasium env which already supports
+both discrete and continuous spaces.
+
+### Richer Reward Shaping
+Currently supports `throughput` (sum delivered_mbps) and `mean_sinr`.
+Future: weighted combinations of throughput, fairness (min-link capacity),
+latency, coverage area, or energy cost.
+
+### 3D Movement for Drones
+Currently RL only adjusts x/y position. Aerial nodes (drones) should be
+able to control altitude (z-axis) while ground nodes (vehicles, pedestrians)
+remain 2D-constrained.
+
+### Larger Discrete Action Spaces
+Add 4-direction (up/down in y-axis) and 8-direction (diagonals) as
+additional `action_type` options.
+
 ## Beam Codebook Model
 
 mesh-sim currently uses ideal beamforming (fixed gain = 2 x 10*log10(N) dB).
