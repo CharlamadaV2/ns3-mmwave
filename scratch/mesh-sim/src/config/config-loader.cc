@@ -26,7 +26,8 @@ parseNodeSpec(const json& j)
     NodeSpec n;
     n.id       = j.at("id").get<std::string>();
     n.role     = j.value("role", "peer");
-    n.mobility = j.value("mobility", "fixed");
+    n.mobility  = j.value("mobility", "fixed");
+    n.node_type = j.value("node_type", "drone");
 
     if (j.contains("position"))
     {
@@ -192,6 +193,18 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.mesh.routing.algorithm = iniGet(ini, "routing", "algorithm", "shortest_path");
     cfg.mesh.routing.max_hops  = static_cast<uint32_t>(
         std::stoul(iniGet(ini, "routing", "max_hops", "5")));
+
+    // [rl] — reinforcement learning config
+    cfg.rl.enabled              = iniGetBool(ini, "rl", "enabled", false);
+    cfg.rl.controlled_node_id   = iniGet(ini, "rl", "controlled_node_id", "");
+    cfg.rl.action_type          = iniGet(ini, "rl", "action_type", "discrete");
+    cfg.rl.reward_type          = iniGet(ini, "rl", "reward_type", "throughput");
+    cfg.rl.step_size_m          = std::stod(iniGet(ini, "rl", "step_size_m", "50.0"));
+    cfg.rl.arrival_threshold_m  = std::stod(iniGet(ini, "rl", "arrival_threshold_m", "1.0"));
+    cfg.rl.x_min                = std::stod(iniGet(ini, "rl", "x_min", "-1000.0"));
+    cfg.rl.x_max                = std::stod(iniGet(ini, "rl", "x_max", "2000.0"));
+    cfg.rl.y_min                = std::stod(iniGet(ini, "rl", "y_min", "-1000.0"));
+    cfg.rl.y_max                = std::stod(iniGet(ini, "rl", "y_max", "1000.0"));
 
     // --- Load nodes.json ---
     std::string nodes_file = iniGet(ini, "scenario", "nodes_file", "nodes.json");

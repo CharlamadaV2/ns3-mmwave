@@ -130,6 +130,55 @@ ValidateConfig(const SimConfig& cfg)
     checkOneOf(r, "routing.algorithm", cfg.mesh.routing.algorithm,
                {"shortest_path", "max_throughput", "min_hop"});
 
+    // -- node types --
+    for (const auto& node : cfg.nodes)
+    {
+        checkOneOf(r, "node '" + node.id + "' node_type", node.node_type,
+                   {"drone", "vehicle", "pedestrian"});
+    }
+
+    // -- rl --
+    if (cfg.rl.enabled)
+    {
+        checkOneOf(r, "rl.action_type", cfg.rl.action_type,
+                   {"discrete", "continuous"});
+        checkOneOf(r, "rl.reward_type", cfg.rl.reward_type,
+                   {"throughput", "mean_sinr"});
+
+        if (cfg.rl.action_type == "discrete")
+        {
+            checkPositive(r, "rl.step_size_m", cfg.rl.step_size_m);
+        }
+        if (cfg.rl.action_type == "continuous")
+        {
+            checkPositive(r, "rl.arrival_threshold_m", cfg.rl.arrival_threshold_m);
+        }
+
+        if (cfg.rl.x_min >= cfg.rl.x_max)
+            r.errors.push_back("rl.x_min must be < rl.x_max");
+        if (cfg.rl.y_min >= cfg.rl.y_max)
+            r.errors.push_back("rl.y_min must be < rl.y_max");
+
+        if (!cfg.rl.controlled_node_id.empty())
+        {
+            bool found = false;
+            for (const auto& n : cfg.nodes)
+            {
+                if (n.id == cfg.rl.controlled_node_id)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                r.errors.push_back(
+                    "rl.controlled_node_id '" + cfg.rl.controlled_node_id +
+                    "' does not match any node ID");
+            }
+        }
+    }
+
     // -- buildings --
     for (const auto& b : cfg.buildings)
     {
