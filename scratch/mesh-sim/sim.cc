@@ -9,6 +9,7 @@
 #include "src/io/progress-logger.h"
 #include "src/io/run-logger.h"
 #include "src/io/viz-writer.h"
+#include "src/rl/rl-bridge.h"
 #include "src/routing/mesh-router.h"
 #include "src/setup/topology-builder.h"
 #include "src/traffic/traffic-matrix.h"
@@ -20,6 +21,7 @@
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 
 namespace fs = std::filesystem;
 
@@ -55,6 +57,16 @@ main(int argc, char* argv[])
     if (args.run_id_override >= 0)
     {
         cfg.run_id = static_cast<uint32_t>(args.run_id_override);
+    }
+
+    if (!args.output_dir.empty())
+    {
+        cfg.output_dir = args.output_dir;
+    }
+
+    if (args.rl_mode)
+    {
+        cfg.rl.enabled = true;
     }
 
     auto vr = mesh_sim::ValidateConfig(cfg);
@@ -137,6 +149,25 @@ main(int argc, char* argv[])
 
         mesh_sim::MetricsWriter metricsWriter(cfg);
 
+        // RL bridge (optional)
+        std::unique_ptr<mesh_sim::RlBridge> rlBridge;
+        uint32_t rlControlledIdx = N - 1; // default: last node
+        if (cfg.rl.enabled)
+        {
+            if (!cfg.rl.controlled_node_id.empty())
+            {
+                for (uint32_t i = 0; i < cfg.nodes.size(); ++i)
+                {
+                    if (cfg.nodes[i].id == cfg.rl.controlled_node_id)
+                    {
+                        rlControlledIdx = i;
+                        break;
+                    }
+                }
+            }
+            rlBridge = std::make_unique<mesh_sim::RlBridge>(cfg, rlControlledIdx);
+        }
+
         // Step loop
         uint32_t numTicks = static_cast<uint32_t>(cfg.duration_s / cfg.tick_s);
 
@@ -190,6 +221,17 @@ main(int argc, char* argv[])
             vizWriter.WriteTick(t, mobs, linkTable, flowResults);
             metricsWriter.AccumulateTick(t, linkTable, flowResults, N);
             progress.Tick(ti);
+
+            // RL interaction: send obs+reward, receive action, set velocity
+            if (rlBridge)
+            {
+                bool done = (ti == numTicks);
+                rlBridge->Step(ti, t, mobs, linkTable, flowResults, done);
+                if (!done)
+                {
+                    rlBridge->ApplyAction(mobs[rlControlledIdx]);
+                }
+            }
         }
 
         vizWriter.Close();

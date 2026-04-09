@@ -21,6 +21,7 @@ set(MESH_SIM_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/routing/mesh-router.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/viz-writer.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/metrics-writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rl/rl-bridge.cc
 )
 
 # Target name must match the ns3 script convention:
