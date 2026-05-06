@@ -61,6 +61,7 @@ scratch/mesh-sim/outputs/
 scratch/mesh-sim/inputs/custom/
 scratch/mesh-sim/inputs/sweeps/*
 !scratch/mesh-sim/inputs/sweeps/example.ini
+scratch/mesh-sim/data/*
 # Legacy output location (outputs now live in scratch/mmwave-sim/outputs/)
 outputs/
 RxPacketTrace.txt
