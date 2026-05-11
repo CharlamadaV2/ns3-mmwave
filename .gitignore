@@ -3,6 +3,7 @@
 *.patch
 *.rej
 .claude/
+.DS_Store
 
 *.o
 *.pyc
