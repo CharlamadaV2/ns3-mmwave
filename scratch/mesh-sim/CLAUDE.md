@@ -23,6 +23,13 @@ Entry point: `sim.cc`.
   describing its scope -- read it first.
 - **Comment discipline**: Only comment when something isn't obvious. Keep
   comments short and descriptive. Don't restate what the code already says.
+  - Docstrings: one line. No multi-paragraph docstrings, no "Args/Returns"
+    blocks, no usage examples -- types and names already convey those.
+  - No history in comments: don't narrate abandoned approaches, prior
+    attempts, or "earlier code did X, then we learned Y." That belongs in
+    the commit message, not the source.
+  - No multi-line block comments above functions. If the *why* truly
+    needs more than one line, two lines max.
 - Never run `./ns3 build` or `./ns3 run` -- the user handles builds.
 - When adding new source files, update `CMakeLists.txt`'s source list.
 
