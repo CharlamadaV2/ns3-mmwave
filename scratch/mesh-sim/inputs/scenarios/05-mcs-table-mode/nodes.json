@@ -1,6 +1,0 @@
-[
-  {"id": "node-a", "role": "peer", "mobility": "fixed",
-    "position": {"x": 0.0, "y": 0.0, "z": 10.0}},
-  {"id": "node-b", "role": "peer", "mobility": "fixed",
-    "position": {"x": 200.0, "y": 0.0, "z": 10.0}}
-]

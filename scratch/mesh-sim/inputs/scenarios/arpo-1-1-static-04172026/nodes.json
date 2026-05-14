@@ -1,8 +1,0 @@
-[
-  {"id": "rab1", "role": "peer", "mobility": "fixed",
-    "position": {"x": 0.0, "y": 0.0, "z": 10.0}},
-  {"id": "rab2", "role": "peer", "mobility": "fixed",
-    "position": {"x": -13.0, "y": -2.9, "z": 10.0}},
-  {"id": "rab3", "role": "peer", "mobility": "fixed",
-    "position": {"x": 131.4, "y": -197.6, "z": 10.0}}
-]
