@@ -1,10 +1,9 @@
 """
 Run from scratch/mesh-sim/:
     python -m scripts.arpo_data.cli extract
-    python -m scripts.arpo_data.cli summarize
-    python -m scripts.arpo_data.cli plot --scenario <name> [--gallery]
-    python -m scripts.arpo_data.cli plot --all [--gallery]
-    python -m scripts.arpo_data.cli compare
+    python -m scripts.arpo_data.cli plot --scenario <name>
+    python -m scripts.arpo_data.cli plot --all
+    python -m scripts.arpo_data.cli multi-day
 """
 
 import argparse
@@ -15,35 +14,30 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from .compare import compare
 from .extract import extract
-from .gallery import (
-    plot_snr_box,
-    plot_snr_heatmap,
-    plot_snr_per_link,
-    plot_snr_per_node,
-    plot_topology_card,
+from .loaders import (
+    load_bh2_scenario,
+    load_gps_scenario,
 )
-from .loaders import load_bh2_scenario, load_gps_scenario, load_ping_scenario
-from .paths import CSV_ROOT, PLOTS_DIR
+from .multi_day import multi_day
+from .paths import CSV_ROOT, PER_DAY_DIR
 from .plots import (
-    filter_dominant_peers,
     plot_bh2_mcs,
+    plot_bh2_per,
+    plot_bh2_rcpi,
     plot_bh2_snr,
     plot_bh2_throughput,
     plot_gps_tracks,
-    plot_ping_latency,
 )
-from .summarize import summarize
 
 
-def _save(result, path: Path) -> None:
+def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
     """
     Save a figure (and an optional trace CSV) returned from a plot fn.
 
-    Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. When a
-    trace is present, it's written next to the PNG as ``<stem>_trace.csv``
-    so a reader can grep any plotted point back to the source rows.
+    Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
+    lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
+    supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
     """
     if result is None:
         return
@@ -53,45 +47,53 @@ def _save(result, path: Path) -> None:
         fig, trace = result, None
     if fig is None:
         return
-    path.parent.mkdir(parents=True, exist_ok=True)
+    png_path.parent.mkdir(parents=True, exist_ok=True)
     # I believe the DPI is maxed
-    fig.savefig(path, dpi=200, bbox_inches="tight")
+    fig.savefig(png_path, dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"    wrote {path}")
+    print(f"    wrote {png_path}")
     if trace is not None and not trace.empty:
-        trace_path = path.with_name(f"{path.stem}_trace.csv")
-        trace.to_csv(trace_path, index=False)
-        print(f"    wrote {trace_path}")
+        target = csv_path if csv_path is not None \
+            else png_path.with_name(f"{png_path.stem}_trace.csv")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        trace.to_csv(target, index=False)
+        print(f"    wrote {target}")
 
 
-def _plot_one(scen_dir: Path, gallery: bool) -> None:
-    out = PLOTS_DIR / scen_dir.name
+def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
+    """
+    Save the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
+
+    PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
+    outputs for each source rab live together.
+    """
+    if not results:
+        return
+    for src, peer, fig, trace in results:
+        png = scen_dir / "pngs" / src / f"{base_name}__{src}_to_{peer}.png"
+        csv = scen_dir / "csvs" / src / f"{base_name}__{src}_to_{peer}_trace.csv"
+        _save((fig, trace), png, csv)
+
+
+def _plot_one(scen_dir: Path) -> None:
+    out = PER_DAY_DIR / scen_dir.name
+    pngs = out / "pngs"
+    csvs = out / "csvs"
     print(f"  [{scen_dir.name}]")
 
     name = scen_dir.name
     bh2 = load_bh2_scenario(scen_dir)
     if bh2 is not None:
-        _save(plot_bh2_snr(bh2, name), out / "bh2_snr.png")
-        _save(plot_bh2_mcs(bh2, name), out / "bh2_mcs.png")
-        _save(plot_bh2_throughput(bh2, name), out / "bh2_throughput.png")
-
-    ping = load_ping_scenario(scen_dir)
-    if ping is not None:
-        _save(plot_ping_latency(ping, name), out / "ping_latency.png")
+        _save_pairs(plot_bh2_snr(bh2, name),        out, "bh2_snr")
+        _save_pairs(plot_bh2_rcpi(bh2, name),       out, "bh2_rcpi")
+        _save_pairs(plot_bh2_mcs(bh2, name),        out, "bh2_mcs")
+        _save_pairs(plot_bh2_throughput(bh2, name), out, "bh2_throughput")
+        _save_pairs(plot_bh2_per(bh2, name),        out, "bh2_per")
 
     gps = load_gps_scenario(scen_dir)
     if gps is not None:
-        _save(plot_gps_tracks(gps, name), out / "gps_track.png")
-
-    if gallery and bh2 is not None:
-        snr = filter_dominant_peers(bh2.dropna(subset=["field_snr"]))
-        if not snr.empty:
-            gout = out / "snr_gallery"
-            _save(plot_topology_card(bh2.attrs.get("topology", {})), gout / "topology.png")
-            _save(plot_snr_per_node(snr), gout / "style_a_per_node.png")
-            _save(plot_snr_per_link(snr), gout / "style_b_per_link.png")
-            _save(plot_snr_heatmap(snr), gout / "style_c_heatmap.png")
-            _save(plot_snr_box(snr), gout / "style_d_box.png")
+        _save(plot_gps_tracks(gps, name),
+              pngs / "gps_track.png", csvs / "gps_track_trace.csv")
 
 
 def _cmd_plot(args: argparse.Namespace) -> int:
@@ -110,10 +112,10 @@ def _cmd_plot(args: argparse.Namespace) -> int:
             return 1
         scenarios = [scen]
 
-    PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+    PER_DAY_DIR.mkdir(parents=True, exist_ok=True)
     for s in scenarios:
-        _plot_one(s, gallery=args.gallery)
-    print(f"\nDone. Figures in {PLOTS_DIR}/")
+        _plot_one(s)
+    print(f"\nDone. Figures in {PER_DAY_DIR}/")
     return 0
 
 
@@ -122,26 +124,24 @@ def main() -> int:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("extract", help="Unzip the ARPO data bundle")
-    sub.add_parser("summarize", help="Report file presence and data anomalies")
 
     pp = sub.add_parser("plot", help="Generate per-scenario figures")
     g = pp.add_mutually_exclusive_group(required=True)
     g.add_argument("--scenario", help="Scenario directory name under csv/")
     g.add_argument("--all", action="store_true", help="Plot every scenario")
-    pp.add_argument("--gallery", action="store_true",
-                    help="Also emit the 4-style SNR comparison gallery")
 
-    sub.add_parser("compare", help="Cross-scenario SNR heatmap")
+    sub.add_parser(
+        "multi-day",
+        help="Day-vs-day ECDF overlays + K-S table per scenario family",
+    )
 
     args = p.parse_args()
     if args.cmd == "extract":
         return extract()
-    if args.cmd == "summarize":
-        return summarize()
     if args.cmd == "plot":
         return _cmd_plot(args)
-    if args.cmd == "compare":
-        return compare()
+    if args.cmd == "multi-day":
+        return multi_day()
     return 1
 
 
