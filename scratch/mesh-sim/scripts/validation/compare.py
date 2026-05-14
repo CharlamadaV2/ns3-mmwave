@@ -93,9 +93,7 @@ ALL_PAIRS: Tuple[Tuple[str, str], ...] = (
 )
 
 
-# ---------------------------------------------------------------------------
-# Field-side smoothing (mirrors scripts/arpo_data/plots.py conventions)
-# ---------------------------------------------------------------------------
+# Field-side smoothing helpers.
 
 def _anchor_seconds(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -112,13 +110,11 @@ def _anchor_seconds(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _max_per_bin(df: pd.DataFrame, value_col: str, bin_s: float = 1.0) -> pd.DataFrame:
-    """
-    Per ``bin_s`` window, keep the row with the max ``value_col``.
+    """Per ``bin_s`` window, keep the row with the max ``value_col``.
 
-    Mirrors scripts.arpo_data.plots._max_across_macs_per_bin: each rab has 4
-    Hydra antennas (4 local MACs), so the field reports up to 4 samples for
-    the same instant. The traffic for a directional mmWave link uses the
-    best-aimed antenna, so "max across MACs" is the correct collapse.
+    Each rab has 4 Hydra antennas (4 local MACs) and reports up to 4 samples
+    per instant; a directional mmWave link uses the best-aimed antenna, so
+    "max across MACs" is the correct collapse.
     """
     if df.empty or value_col not in df.columns:
         return df.iloc[0:0]
