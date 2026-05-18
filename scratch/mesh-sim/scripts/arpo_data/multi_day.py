@@ -158,6 +158,9 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
+_UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
+
+
 def _plot_ecdfs(
     family: str,
     src: str,
@@ -170,6 +173,10 @@ def _plot_ecdfs(
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
     days = sorted(bags_by_day.keys())
+    medians = {d: float(np.median(bags_by_day[d].values)) for d in days}
+    unit = _UNIT_BY_SHORT.get(metric.short, "")
+    unit_suffix = f" {unit}" if unit else ""
+
     cmap = plt.get_cmap("tab10")
     for i, day in enumerate(days):
         bag = bags_by_day[day]
@@ -178,9 +185,10 @@ def _plot_ecdfs(
             x, y, where="post",
             color=cmap(i % 10), linewidth=1.6, alpha=0.9,
             label=f"{_fmt_day(day)}   n={bag.values.size:,}   "
-                  f"pairs={len(bag.beam_pairs)}   scn={bag.n_scenarios}",
+                  f"pairs={len(bag.beam_pairs)}   scn={bag.n_scenarios}   "
+                  f"med={medians[day]:.2f}{unit_suffix}",
         )
-        ax.axvline(float(np.median(bag.values)), color=cmap(i % 10),
+        ax.axvline(medians[day], color=cmap(i % 10),
                    linestyle=":", linewidth=0.8, alpha=0.6)
 
     ax.set_xlabel(metric.label, fontweight="bold")
@@ -188,11 +196,31 @@ def _plot_ecdfs(
     ax.grid(True, alpha=0.3)
     ax.set_ylim(-0.02, 1.02)
     ax.legend(loc="lower right", fontsize=8, framealpha=0.9,
-              title="day                samples / beam-pairs / scenarios",
+              title="day              samples / beam-pairs / scenarios / median",
               title_fontsize=8)
+
+    if len(days) == 2:
+        d_a, d_b = days
+        delta = medians[d_b] - medians[d_a]
+        delta_str = (f"Δmed ({_fmt_day(d_b)} − {_fmt_day(d_a)}) "
+                     f"= {delta:+.2f}{unit_suffix}")
+    else:
+        max_pair = max(
+            ((a, b) for i, a in enumerate(days) for b in days[i + 1:]),
+            key=lambda ab: abs(medians[ab[1]] - medians[ab[0]]),
+            default=None,
+        )
+        delta_str = None
+        if max_pair is not None:
+            a, b = max_pair
+            delta = medians[b] - medians[a]
+            delta_str = (f"max |Δmed| = {abs(delta):.2f}{unit_suffix}   "
+                         f"({_fmt_day(a)} vs {_fmt_day(b)})")
 
     main = f"{family}:  {src} → {peer}   ({metric.label})"
     sub_bits = [f"{len(days)} days"]
+    if delta_str:
+        sub_bits.append(delta_str)
     if ks_value is not None:
         sub_bits.append(f"K–S = {ks_value:.3f}")
     sub = "   ·   ".join(sub_bits)
