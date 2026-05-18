@@ -25,7 +25,14 @@ python -m scripts.arpo_data.cli extract                       # unzip
 python -m scripts.arpo_data.cli plot --scenario <name>        # one scenario
 python -m scripts.arpo_data.cli plot --all                    # every scenario
 python -m scripts.arpo_data.cli multi-day                     # day-vs-day ECDFs + K-S
+python -m scripts.arpo_data.multiday_variance                 # variance table from _pairwise_ks.csv
 ```
+
+`multiday_variance` is a read-only summary over the CSV produced by `multi-day`.
+It prints three views — per-family rollup, per-link rollup, and the detail
+table sorted by `|Δmed|` descending — so unstable day-to-day links surface at
+the top without opening any PNGs. Flags: `--metric {snr,rcpi,mcs,per,throughput}`,
+`--family <name>`, `--top N`, `--csv <out>`.
 
 ## Output
 
@@ -51,6 +58,7 @@ and `_pairwise_ks.csv`.
 | `loaders.py`   | Per-scenario `bh2` / `gps` / `mcm` loaders                    |
 | `plots/`       | Per-scenario plot functions (bh2 metrics, GPS)                |
 | `multi_day.py` | `multi-day` subcommand                                        |
+| `multiday_variance.py` | Variance table over `_pairwise_ks.csv`                |
 
 ## Conventions
 
