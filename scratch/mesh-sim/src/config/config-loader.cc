@@ -59,6 +59,19 @@ parseNodeSpec(const json& j)
         n.random_walk.speed_mps = rw.value("speed_mps", 1.5);
     }
 
+    if (j.contains("waypoints"))
+    {
+        for (const auto& jw : j["waypoints"])
+        {
+            Waypoint w;
+            w.t = jw.value("t", 0.0);
+            w.x = jw.value("x", 0.0);
+            w.y = jw.value("y", 0.0);
+            w.z = jw.value("z", 0.0);
+            n.waypoints.push_back(w);
+        }
+    }
+
     return n;
 }
 
@@ -153,6 +166,8 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.channel.amc_model        = iniGet(ini, "channel", "amc_model",        "shannon");
     cfg.channel.noise_figure_db  = std::stod(iniGet(ini, "channel", "noise_figure_db",  "5.0"));
     cfg.channel.bandwidth_mhz   = std::stod(iniGet(ini, "channel", "bandwidth_mhz",   "400.0"));
+    cfg.channel.tx_array_gain_dbi = std::stod(iniGet(ini, "channel", "tx_array_gain_dbi", "12.0"));
+    cfg.channel.rx_array_gain_dbi = std::stod(iniGet(ini, "channel", "rx_array_gain_dbi", "12.0"));
 
     // Validate channel_model
     {

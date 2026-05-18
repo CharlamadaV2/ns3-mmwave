@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace mesh_sim
 {
@@ -38,15 +39,24 @@ struct RandomWalkParams
     double speed_mps = 1.5;
 };
 
+struct Waypoint
+{
+    double t = 0.0;  // seconds since scenario start
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+};
+
 struct NodeSpec
 {
     std::string id;
     std::string role;       // "peer" (all nodes are peers in mesh-sim)
-    std::string mobility;   // "fixed", "constant_velocity", "random_walk"
+    std::string mobility;   // "fixed", "constant_velocity", "random_walk", "waypoint"
     std::string node_type;  // "drone", "vehicle", "pedestrian" — determines max speed
     Position    position;
     Velocity    velocity;
     RandomWalkParams random_walk;
+    std::vector<Waypoint> waypoints;  // used only when mobility == "waypoint"
 };
 
 // Max speed (m/s) derived from node type. Used by RL to cap velocity.

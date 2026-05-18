@@ -44,6 +44,7 @@ class TopologyBuilder
     void InstallMobilityFixed(const ns3::Ptr<ns3::Node>& node, const NodeSpec& spec);
     void InstallMobilityConstantVelocity(const ns3::Ptr<ns3::Node>& node, const NodeSpec& spec);
     void InstallMobilityRandomWalk(const ns3::Ptr<ns3::Node>& node, const NodeSpec& spec);
+    void InstallMobilityWaypoint(const ns3::Ptr<ns3::Node>& node, const NodeSpec& spec);
 };
 
 }  // namespace mesh_sim

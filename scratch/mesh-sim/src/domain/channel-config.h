@@ -44,6 +44,8 @@ struct ChannelConfig
     std::string amc_model         = "shannon"; // "shannon" or "table"
     double      noise_figure_db   = 5.0;      // receiver noise figure
     double      bandwidth_mhz     = 400.0;    // system bandwidth for noise floor and capacity
+    double      tx_array_gain_dbi = 12.0;     // peak directional gain per side
+    double      rx_array_gain_dbi = 12.0;
 
     NyuChannelConfig nyu; // NYU-only params; ignored when channel_model = "3gpp"
 };

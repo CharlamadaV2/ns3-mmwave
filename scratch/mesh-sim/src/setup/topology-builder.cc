@@ -11,6 +11,8 @@
 #include "ns3/nyu-propagation-loss-model.h"
 #include "ns3/string.h"
 #include "ns3/three-gpp-propagation-loss-model.h"
+#include "ns3/waypoint-mobility-model.h"
+#include "ns3/waypoint.h"
 
 #include <stdexcept>
 
@@ -107,6 +109,10 @@ TopologyBuilder::CreateNodesAndMobility()
         {
             InstallMobilityRandomWalk(node, spec);
         }
+        else if (spec.mobility == "waypoint")
+        {
+            InstallMobilityWaypoint(node, spec);
+        }
         else
         {
             throw std::runtime_error("Unknown mobility '" + spec.mobility +
@@ -142,6 +148,22 @@ TopologyBuilder::InstallMobilityConstantVelocity(const Ptr<Node>& node, const No
         Vector(spec.position.x, spec.position.y, spec.position.z));
     node->GetObject<ConstantVelocityMobilityModel>()->SetVelocity(
         Vector(spec.velocity.vx, spec.velocity.vy, spec.velocity.vz));
+}
+
+void
+TopologyBuilder::InstallMobilityWaypoint(const Ptr<Node>& node, const NodeSpec& spec)
+{
+    MobilityHelper mob;
+    mob.SetMobilityModel("ns3::WaypointMobilityModel");
+    NodeContainer nc;
+    nc.Add(node);
+    mob.Install(nc);
+
+    Ptr<WaypointMobilityModel> wm = node->GetObject<WaypointMobilityModel>();
+    for (const auto& wp : spec.waypoints)
+    {
+        wm->AddWaypoint(ns3::Waypoint(Seconds(wp.t), Vector(wp.x, wp.y, wp.z)));
+    }
 }
 
 void

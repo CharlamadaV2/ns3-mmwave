@@ -74,7 +74,33 @@ ValidateConfig(const SimConfig& cfg)
     for (const auto& node : cfg.nodes)
     {
         checkOneOf(r, "node '" + node.id + "' mobility", node.mobility,
-                   {"fixed", "constant_velocity", "random_walk"});
+                   {"fixed", "constant_velocity", "random_walk", "waypoint"});
+
+        if (node.mobility == "waypoint")
+        {
+            const std::string label = "node '" + node.id + "' waypoints";
+            if (node.waypoints.size() < 2)
+            {
+                r.errors.push_back(label + ": need at least 2 waypoints (got " +
+                                   std::to_string(node.waypoints.size()) + ")");
+            }
+            for (size_t i = 1; i < node.waypoints.size(); ++i)
+            {
+                if (node.waypoints[i].t <= node.waypoints[i - 1].t)
+                {
+                    r.errors.push_back(label + ": time must be strictly monotonic " +
+                                       "(index " + std::to_string(i) + " t=" +
+                                       std::to_string(node.waypoints[i].t) + " <= " +
+                                       std::to_string(node.waypoints[i - 1].t) + ")");
+                    break;
+                }
+            }
+            if (!node.waypoints.empty() && node.waypoints.front().t < 0.0)
+            {
+                r.errors.push_back(label + ": first waypoint t must be >= 0 (got " +
+                                   std::to_string(node.waypoints.front().t) + ")");
+            }
+        }
     }
 
     // -- channel --
@@ -84,6 +110,16 @@ ValidateConfig(const SimConfig& cfg)
                {"3gpp", "nyu"});
     checkOneOf(r, "channel.scenario", cfg.channel.scenario,
                {"UMi", "UMa", "RMa", "InH", "InF"});
+    if (cfg.channel.tx_array_gain_dbi < 0.0)
+    {
+        r.errors.push_back("channel.tx_array_gain_dbi must be >= 0 (got " +
+                           std::to_string(cfg.channel.tx_array_gain_dbi) + ")");
+    }
+    if (cfg.channel.rx_array_gain_dbi < 0.0)
+    {
+        r.errors.push_back("channel.rx_array_gain_dbi must be >= 0 (got " +
+                           std::to_string(cfg.channel.rx_array_gain_dbi) + ")");
+    }
 
     // -- traffic --
     const auto& tc = cfg.mesh.traffic;
