@@ -1,10 +1,12 @@
-"""
-Filesystem locations and per-file conventions for ARPO-style datasets.
+##@package docstring
+# Filesystem locations and per-file conventions for ARPO-style datasets.
 
-Defaults target the bundled Spring Lake zip under ``data/``. Callers that
-analyze a different bundle should construct their own ``DatasetPaths``
-instead of relying on the module-level aliases at the bottom of this file.
-"""
+# Defaults target the bundled Spring Lake zip under ``data/``. Callers that
+# analyze a different bundle should construct their own ``DatasetPaths``
+# instead of relying on the module-level aliases at the bottom of this file.
+##
+
+#TODO: Finish Documentation for this page
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,10 +23,13 @@ KNOWN_BAD_SCENARIOS: tuple[str, ...] = (
     "1-1_static_baseline_1_04162026",
 )
 
-
+ 
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class DatasetPaths:
-    """Locations + filename conventions for one ARPO-style dataset."""
+    ##Locations + filename conventions for one ARPO-style dataset.##
 
     zip_path: Path = DEFAULT_ZIP_PATH
     extract_dir: Path = DEFAULT_EXTRACT_DIR

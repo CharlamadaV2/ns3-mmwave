@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * Topology / geometry POD types: nodes, buildings, and their spatial properties.
  * No ns-3 headers included — keeps compilation fast and allows use in
  * post-run IO code without ns-3 linkage.
@@ -16,20 +16,27 @@ namespace mesh_sim
 // For 2D scenarios: set z to a constant height.
 // For 1D scenarios: additionally set y = 0 for all nodes.
 // The coordinate system is arbitrary; relative geometry is what matters.
+/**
+* @brief
+*/
 struct Position
 {
     double x = 0.0;
     double y = 0.0;
     double z = 0.0;
 };
-
+/**
+* @brief
+*/
 struct Velocity
 {
     double vx = 0.0;
     double vy = 0.0;
     double vz = 0.0;
 };
-
+/**
+* @brief
+*/
 struct RandomWalkParams
 {
     double x_min = -100.0;
@@ -38,7 +45,9 @@ struct RandomWalkParams
     double y_max = 100.0;
     double speed_mps = 1.5;
 };
-
+/**
+* @brief
+*/
 struct Waypoint
 {
     double t = 0.0;  // seconds since scenario start
@@ -46,7 +55,9 @@ struct Waypoint
     double y = 0.0;
     double z = 0.0;
 };
-
+/**
+* @brief
+*/
 struct NodeSpec
 {
     std::string id;
@@ -60,6 +71,13 @@ struct NodeSpec
 };
 
 // Max speed (m/s) derived from node type. Used by RL to cap velocity.
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 inline double MaxSpeedForType(const std::string& node_type)
 {
     if (node_type == "vehicle") return 15.0;
@@ -67,6 +85,9 @@ inline double MaxSpeedForType(const std::string& node_type)
     return 20.0;  // drone (default)
 }
 
+/**
+* @brief
+*/
 struct BuildingSpec
 {
     std::string id;

@@ -1,12 +1,17 @@
-"""Helpers shared across bh2 and GPS plots."""
+##@package docstring
+# Helpers shared across bh2 and GPS plots.
+
+##
 
 import pandas as pd
 
 from ..paths import KNOWN_BAD_SCENARIOS
 
-
+## Documentation for a function.
+#
+#  More details.
 def scenario_caption(df: pd.DataFrame) -> str:
-    """e.g. ``3 rabs, 9.7 ks``."""
+    ##e.g. ``3 rabs, 9.7 ks``.##
     n_nodes = df["__node__"].nunique() if "__node__" in df.columns else 0
     if "__sec__" in df.columns and not df["__sec__"].empty:
         duration_s = float(df["__sec__"].max())
@@ -18,10 +23,14 @@ def scenario_caption(df: pd.DataFrame) -> str:
     label = "rabs" if n_nodes != 1 else "rab"
     return f"{n_nodes} {label}, {dur}"
 
-
+## Documentation for a function.
+#
+#  More details.
 def crashed_suffix(scenario: str) -> str:
     return "  [CRASHED -- see event log]" if scenario in KNOWN_BAD_SCENARIOS else ""
 
-
+## Documentation for a function.
+#
+#  More details.
 def concat_trace(rows: list[pd.DataFrame]) -> pd.DataFrame:
     return pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()

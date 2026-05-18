@@ -1,9 +1,12 @@
-"""Day-vs-day comparison for the same scenario family.
+##@package docstring
+# Day-vs-day comparison for the same scenario family.
 
-Pools per-day trace CSVs at the (link, metric) level, then renders ECDF
-overlays + K-S distances. Antenna identity is dropped here -- drill into
-the per-day plots if you need it.
-"""
+# Pools per-day trace CSVs at the (link, metric) level, then renders ECDF
+# overlays + K-S distances. Antenna identity is dropped here -- drill into
+# the per-day plots if you need it.
+##
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -22,10 +25,12 @@ from .paths import KNOWN_BAD_SCENARIOS, MULTI_DAY_DIR, PER_DAY_DIR
 _SUFFIX_RE = re.compile(r"_(?:baseline_\d+_)?(\d{8})$")
 _TRACE_RE = re.compile(r"^bh2_([a-z]+)__([a-z0-9]+)_to_([a-z0-9]+)_trace\.csv$")
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class _MetricSpec:
-    """How to load + render one metric's trace CSVs."""
+    ##How to load + render one metric's trace CSVs.##
     prefix: str
     column: str
     label: str
@@ -45,17 +50,17 @@ _METRICS_BY_SHORT = {m.short: m for m in _METRICS}
 # Bags below this many samples make ECDFs meaningless and K-S noisy.
 _MIN_SAMPLES_PER_DAY = 100
 
-
+## @brief
 def _parse_scenario(name: str) -> tuple[str, str] | None:
-    """``("1-1_static", "04162026")`` from ``1-1_static_baseline_2_04162026``."""
+    ##``("1-1_static", "04162026")`` from ``1-1_static_baseline_2_04162026``.##
     m = _SUFFIX_RE.search(name)
     if not m:
         return None
     return name[:m.start()], m.group(1)
 
-
+## @brief
 def _scenarios_by_family(per_day_root: Path) -> dict[str, dict[str, list[Path]]]:
-    """``{family: {day: [scenario_dir, ...]}}`` skipping crashed scenarios."""
+    ##``{family: {day: [scenario_dir, ...]}}`` skipping crashed scenarios.##
     out: dict[str, dict[str, list[Path]]] = defaultdict(lambda: defaultdict(list))
     for scen in sorted(per_day_root.iterdir()):
         if not scen.is_dir() or scen.name in KNOWN_BAD_SCENARIOS:
@@ -67,19 +72,21 @@ def _scenarios_by_family(per_day_root: Path) -> dict[str, dict[str, list[Path]]]
         out[family][day].append(scen)
     return out
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass
 class _DayBag:
-    """All samples pooled for one (family, day, link, metric)."""
+    ##All samples pooled for one (family, day, link, metric).##
     values: np.ndarray
     beam_pairs: set[tuple[str, str]]
     n_scenarios: int
 
-
+## @brief
 def _load_traces_for_family(
     days: dict[str, list[Path]],
 ) -> dict[tuple[str, str, str, str], _DayBag]:
-    """Returns ``{(day, src, peer, metric_short): _DayBag}`` across all scenarios."""
+    ##Returns ``{(day, src, peer, metric_short): _DayBag}`` across all scenarios.##
     bags: dict[tuple[str, str, str, str], _DayBag] = {}
     for day, scen_dirs in days.items():
         for scen_dir in scen_dirs:
@@ -123,9 +130,9 @@ def _load_traces_for_family(
                     bag.n_scenarios += 1
     return bags
 
-
+## @brief
 def _summary(values: np.ndarray) -> dict:
-    """Quantile summary used for the per-day-stats CSV."""
+    ##Quantile summary used for the per-day-stats CSV.##
     q = np.quantile(values, [0.05, 0.25, 0.50, 0.75, 0.95])
     return {
         "n_samples": int(values.size),
@@ -140,16 +147,16 @@ def _summary(values: np.ndarray) -> dict:
         "max":       float(np.max(values)),
     }
 
-
+## @brief
 def _ecdf(values: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Step ECDF: x = sorted values, y = (i+1)/n at each step."""
+    ##Step ECDF: x = sorted values, y = (i+1)/n at each step.##
     x = np.sort(values)
     y = np.arange(1, x.size + 1) / x.size
     return x, y
 
-
+## @brief
 def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
-    """Two-sample K-S statistic ``max |F_a(x) - F_b(x)|`` (no scipy)."""
+    ##Two-sample K-S statistic ``max |F_a(x) - F_b(x)|`` (no scipy).##
     a_sorted = np.sort(a)
     b_sorted = np.sort(b)
     joint = np.sort(np.concatenate([a_sorted, b_sorted]))
@@ -160,7 +167,7 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
 
 _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
-
+## @brief
 def _plot_ecdfs(
     family: str,
     src: str,
@@ -169,7 +176,7 @@ def _plot_ecdfs(
     bags_by_day: dict[str, _DayBag],
     ks_value: float | None,
 ) -> plt.Figure:
-    """ECDF overlay, one line per day, with stats table beneath the title."""
+    ##ECDF overlay, one line per day, with stats table beneath the title.##
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
     days = sorted(bags_by_day.keys())
@@ -230,19 +237,21 @@ def _plot_ecdfs(
     fig.tight_layout(rect=(0, 0, 1, 0.90))
     return fig
 
-
+## @brief
 def _fmt_day(day: str) -> str:
-    """``"04162026" -> "04/16/2026"`` for legend labels."""
+    ##``"04162026" -> "04/16/2026"`` for legend labels.##
     if len(day) == 8 and day.isdigit():
         return f"{day[0:2]}/{day[2:4]}/{day[4:8]}"
     return day
 
-
+## Documentation for a function.
+#
+#  More details.
 def run_multi_day(
     per_day_root: Path,
     multi_day_root: Path,
 ) -> tuple[list[dict], list[dict]]:
-    """Write PNGs + the two summary CSVs; return ``(per_day_rows, pairwise_rows)``."""
+    ##Write PNGs + the two summary CSVs; return ``(per_day_rows, pairwise_rows)``.##
     if not per_day_root.is_dir():
         raise FileNotFoundError(f"per-day plots dir not found: {per_day_root}")
 
@@ -339,8 +348,10 @@ def run_multi_day(
 
     return per_day_rows, pairwise_rows
 
-
+## Documentation for a function.
+#
+#  More details.
 def multi_day() -> int:
-    """CLI entrypoint."""
+    ##CLI entrypoint.##
     run_multi_day(PER_DAY_DIR, MULTI_DAY_DIR)
     return 0

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * SINR-to-capacity mapping functions. Pure math, no ns-3 dependency.
  * Used by LinkEvaluator and testable standalone.
  */
@@ -8,7 +8,8 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
-
+/** @brief 
+*/
 namespace mesh_sim
 {
 
@@ -18,12 +19,16 @@ static constexpr double SINR_MIN_DB = -6.7;
 // MCS table derived from 3GPP TS 38.214 Table 5.1.3.1-1 (NR CQI mapping).
 // SINR thresholds and spectral efficiencies match the 15 CQI indices.
 // Same data used by MmWaveAmc::CreateCqiFeedbackWbTdma() in ns3-mmwave.
+/** @brief
+*/
 struct McsEntry
 {
     double sinr_min_db;
     double spectral_eff; // bits/s/Hz
 };
 
+/** @brief
+*/
 static const McsEntry MCS_TABLE[] = {
     { -6.7, 0.15},  // CQI 0  – QPSK, code rate
     { -4.7, 0.23},  // CQI 1
@@ -45,6 +50,13 @@ static constexpr uint32_t MCS_TABLE_SIZE = 15;
 
 // Walk the MCS table to find the highest entry whose SINR threshold is met.
 // Returns the index (0–14). Below SINR_MIN_DB returns 0.
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 inline uint32_t
 SinrToMcsIndex(double sinr_db)
 {
@@ -66,8 +78,13 @@ SinrToMcsIndex(double sinr_db)
     }
     return idx;
 }
-
-inline double
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */double
 SinrToCapacity(double sinr_db, double bandwidth_hz, const std::string& amc_model)
 {
     if (sinr_db < SINR_MIN_DB)

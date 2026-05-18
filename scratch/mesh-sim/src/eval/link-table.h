@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * LinkTable: NxN link quality matrix updated each tick.
  * Wraps the flat output of LinkEvaluator::EvaluateAll() into
  * a symmetric matrix with O(1) per-link lookup.
@@ -10,10 +10,17 @@
 
 #include <cstdint>
 #include <vector>
-
+/** @brief
+*/
 namespace mesh_sim
 {
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 class LinkTable
 {
   public:

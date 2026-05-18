@@ -1,4 +1,9 @@
-"""Compare each scenario's sim layout/motion against the field collect."""
+## @package docstring
+# Compare each scenario's sim layout/motion against the field collect.
+#
+# More details.
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -18,7 +23,9 @@ FIELD_PER_DAY_ROOT = REPO_ROOT / "data" / "arpo_extracted" / "_plots" / "per_day
 
 _MOBILE_BBOX_M = 20.0   # bbox max-dim threshold for "mobile"; path length alone is GPS-noise-prone
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class NodeMotion:
     node: str
@@ -37,7 +44,7 @@ class NodeMotion:
     def label(self) -> str:
         return "mobile" if self.is_mobile else "static"
 
-
+## @brief
 def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
                     y: np.ndarray) -> NodeMotion:
     n = x.size
@@ -60,7 +67,7 @@ def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
         duration_s=duration,
     )
 
-
+## @brief
 def _load_field_motion(field_scenario_dir: Path) -> dict[str, NodeMotion]:
     trace = field_scenario_dir / "csvs" / "gps_track_trace.csv"
     if not trace.is_file():
@@ -77,10 +84,10 @@ def _load_field_motion(field_scenario_dir: Path) -> dict[str, NodeMotion]:
         )
     return out
 
-
+## @brief
 def _load_sim_motion(scenario_out_dir: Path,
                      seed_name: str = "seed-1") -> tuple[dict[str, NodeMotion], dict[int, str]]:
-    """Returns (per-node motion, node_id -> label map)."""
+    ##Returns (per-node motion, node_id -> label map).##
     pos = scenario_out_dir / seed_name / "positions.csv"
     if not pos.is_file():
         return {}, {}
@@ -99,9 +106,9 @@ def _load_sim_motion(scenario_out_dir: Path,
         )
     return out, label_map
 
-
+## @brief
 def _node_id_to_label(scenario_out_dir: Path) -> dict[int, str]:
-    """Pull rab labels from the snapshotted nodes.json (order = node_id)."""
+    ##Pull rab labels from the snapshotted nodes.json (order = node_id).##
     nodes_json = scenario_out_dir / "inputs" / "nodes.json"
     if not nodes_json.is_file():
         return {}
@@ -111,9 +118,9 @@ def _node_id_to_label(scenario_out_dir: Path) -> dict[int, str]:
         return {}
     return {i: str(s.get("id", f"node{i}")) for i, s in enumerate(specs)}
 
-
+## @brief
 def _sim_mobility_modes(scenario_out_dir: Path) -> dict[str, str]:
-    """rab -> mobility string from snapshotted nodes.json."""
+    ##rab -> mobility string from snapshotted nodes.json.##
     nodes_json = scenario_out_dir / "inputs" / "nodes.json"
     if not nodes_json.is_file():
         return {}
@@ -123,9 +130,9 @@ def _sim_mobility_modes(scenario_out_dir: Path) -> dict[str, str]:
         return {}
     return {str(s.get("id", "?")): str(s.get("mobility", "?")) for s in specs}
 
-
+## @brief
 def _pairwise_distances(motion: dict[str, NodeMotion]) -> dict[tuple[str, str], float]:
-    """Initial-position pairwise Euclidean distance, sorted pair keys."""
+    ##Initial-position pairwise Euclidean distance, sorted pair keys.##
     nodes = sorted(motion.keys())
     out: dict[tuple[str, str], float] = {}
     for i, a in enumerate(nodes):
@@ -138,11 +145,11 @@ def _pairwise_distances(motion: dict[str, NodeMotion]) -> dict[tuple[str, str], 
                 out[(a, b)] = float(np.hypot(bx - ax, by - ay))
     return out
 
-
+## @brief
 def _fmt(v: float, digits: int = 1) -> str:
     return "—" if not np.isfinite(v) else f"{v:.{digits}f}"
 
-
+## @brief
 def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
     if not body:
         return "  ".join(header) + "\n(no rows)"
@@ -153,7 +160,7 @@ def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
         lines.append("  ".join(cell.ljust(w) for cell, w in zip(row, widths)))
     return "\n".join(lines)
 
-
+## @brief
 def _render_per_node(field: dict[str, NodeMotion],
                      sim: dict[str, NodeMotion],
                      sim_modes: dict[str, str]) -> tuple[str, list[str]]:
@@ -189,7 +196,7 @@ def _render_per_node(field: dict[str, NodeMotion],
         ))
     return _render_table(header, body), mismatches
 
-
+## @brief
 def _render_pairwise(field: dict[str, NodeMotion],
                      sim: dict[str, NodeMotion],
                      tol_m: float) -> tuple[str, list[str]]:
@@ -220,9 +227,9 @@ def _render_pairwise(field: dict[str, NodeMotion],
         ))
     return _render_table(header, body), geom_warnings
 
-
+## @brief
 def _process_scenario(scenario_out_dir: Path, tol_m: float) -> tuple[bool, str]:
-    """Returns (had_mismatch, report_text)."""
+    ##Returns (had_mismatch, report_text).##
     sim_name = scenario_out_dir.name
     field_name = sim_to_field_scenario(sim_name)
     if field_name is None:
@@ -262,12 +269,14 @@ def _process_scenario(scenario_out_dir: Path, tol_m: float) -> tuple[bool, str]:
             lines.append(f"    * geometry off  — {w}")
     return had_mismatch, "\n".join(lines)
 
-
+## @brief
 def _discover_scenarios(batch_dir: Path) -> list[Path]:
     return sorted(p for p in batch_dir.iterdir()
                   if p.is_dir() and (p / "seed-1" / "positions.csv").is_file())
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Compare each sim scenario's layout/motion against the field collect.")

@@ -1,4 +1,9 @@
-"""ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces."""
+##@package docstring
+# ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces.
+
+##
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -26,7 +31,9 @@ _TRACE_FILE_RE = re.compile(
 _SIM_NAME_RE = re.compile(r"^arpo-(\d+)-([\dxX])-(.+?)-(\d{8})$")
 _MCS_FIELD_CAP = 12
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class _MetricSpec:
     short: str
@@ -42,9 +49,11 @@ _METRICS: tuple[_MetricSpec, ...] = (
 )
 _METRICS_BY_SHORT = {m.short: m for m in _METRICS}
 
-
+## Documentation for a function.
+#
+#  More details.
 def sim_to_field_scenario(sim_name: str) -> str | None:
-    """`arpo-1-1-static-04172026` -> `1-1_static_04172026`."""
+    ##`arpo-1-1-static-04172026` -> `1-1_static_04172026`.##
     m = _SIM_NAME_RE.match(sim_name)
     if not m:
         return None
@@ -52,7 +61,7 @@ def sim_to_field_scenario(sim_name: str) -> str | None:
     mid_joined = mid.replace("-", "_")
     return f"{major}-{minor.upper()}_{mid_joined}_{day}"
 
-
+## @brief
 def _read_metric_column(csv_path: Path, column: str) -> np.ndarray:
     if not csv_path.is_file():
         return np.array([], dtype=np.float64)
@@ -65,7 +74,7 @@ def _read_metric_column(csv_path: Path, column: str) -> np.ndarray:
     vals = pd.to_numeric(df[column], errors="coerce").dropna()
     return vals.to_numpy(dtype=np.float64)
 
-
+## @brief
 def _discover_pairs(seed_traces_root: Path) -> set[tuple[str, str]]:
     out: set[tuple[str, str]] = set()
     csvs = seed_traces_root / "csvs"
@@ -82,7 +91,7 @@ def _discover_pairs(seed_traces_root: Path) -> set[tuple[str, str]]:
             out.add(tuple(sorted([a, b])))
     return out
 
-
+## @brief
 def _pool_sim(scenario_dir: Path, src: str, peer: str,
               spec: _MetricSpec) -> np.ndarray:
     sim_traces = scenario_dir / "sim_traces"
@@ -97,7 +106,7 @@ def _pool_sim(scenario_dir: Path, src: str, peer: str,
             arrs.append(_read_metric_column(p, spec.column))
     return np.concatenate(arrs) if arrs else np.array([])
 
-
+## @brief
 def _pool_field(field_scen_dir: Path, src: str, peer: str,
                 spec: _MetricSpec) -> np.ndarray:
     if not field_scen_dir.is_dir():
@@ -108,13 +117,13 @@ def _pool_field(field_scen_dir: Path, src: str, peer: str,
         arrs.append(_read_metric_column(p, spec.column))
     return np.concatenate(arrs) if arrs else np.array([])
 
-
+## @brief
 def _ecdf(values: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     x = np.sort(values)
     y = np.arange(1, x.size + 1) / x.size
     return x, y
 
-
+## @brief
 def _ks_2samp(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
     if a.size == 0 or b.size == 0:
         return float("nan"), float("nan")
@@ -128,7 +137,7 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
     p = float(min(1.0, 2.0 * math.exp(-2.0 * n_e * d * d)))
     return d, p
 
-
+## @brief
 def _bootstrap_ecdf_band(values: np.ndarray, x_grid: np.ndarray,
                          n_boot: int, ci_pct: float,
                          rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
@@ -145,14 +154,14 @@ def _bootstrap_ecdf_band(values: np.ndarray, x_grid: np.ndarray,
     half = (100.0 - ci_pct) / 2.0
     return np.percentile(boot, half, axis=0), np.percentile(boot, 100.0 - half, axis=0)
 
-
+## @brief
 def _stats(values: np.ndarray) -> tuple[float, float]:
     if values.size == 0:
         return float("nan"), float("nan")
     q25, med, q75 = np.percentile(values, [25, 50, 75])
     return float(med), float(q75 - q25)
 
-
+## @brief
 def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
               spec: _MetricSpec, scenario: str, src: str, peer: str,
               ks_d: float, ks_p: float,
@@ -209,13 +218,13 @@ def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
     fig.tight_layout(rect=(0, 0, 1, 0.90))
     return fig
 
-
+## @brief
 def _apply_mcs_cap(values: np.ndarray, cap: int | None) -> np.ndarray:
     if cap is None or values.size == 0:
         return values
     return np.clip(values, None, cap)
 
-
+## @brief
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
                       out_dir: Path, n_boot: int, ci_pct: float,
                       rng: np.random.Generator) -> list[dict]:
@@ -272,7 +281,9 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
             print(f"    wrote {png_path.relative_to(scenario_dir)}")
     return rows
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="ECDF + bootstrap-CI comparison of sim vs ARPO field.")
     p.add_argument("batch_root", help="batch output dir (parent of per-scenario dirs)")

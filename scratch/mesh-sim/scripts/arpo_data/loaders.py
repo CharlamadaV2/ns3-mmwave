@@ -1,11 +1,13 @@
-"""
-Per-scenario CSV loaders.
+##@package docstring
+# Per-scenario CSV loaders.
 
-Node clocks are skewed, so loaders add ``__sec__`` (seconds since each
-session's first sample) for cross-session comparison. ``__session__``
-is the hostname. Loaders return ``DataFrame | None``; None means no
-usable data.
-"""
+# Node clocks are skewed, so loaders add ``__sec__`` (seconds since each
+# session's first sample) for cross-session comparison. ``__session__``
+# is the hostname. Loaders return ``DataFrame | None``; None means no
+# usable data.
+##
+
+#TODO: Finish Documentation for this page
 
 from pathlib import Path
 
@@ -13,24 +15,30 @@ import pandas as pd
 
 from .topology import build_topology, resolve_peer
 
-
+## Documentation for a function.
+#
+#  More details.
 def to_datetime(df: pd.DataFrame) -> pd.Series:
-    """``timestamp`` (ns since epoch) -> UTC datetime."""
+    ##``timestamp`` (ns since epoch) -> UTC datetime.##
     return pd.to_datetime(
         pd.to_numeric(df["timestamp"], errors="coerce"),
         unit="ns", utc=True,
     )
 
-
+## Documentation for a function.
+#
+#  More details.
 def session_relative_seconds(df: pd.DataFrame) -> pd.Series:
-    """Seconds since each session's earliest ``__t__``."""
+    ##Seconds since each session's earliest ``__t__``.##
     key = "__session__" if "__session__" in df.columns else "__node__"
     t0 = df.groupby(key)["__t__"].transform("min")
     return (df["__t__"] - t0).dt.total_seconds()
 
-
+## Documentation for a function.
+#
+#  More details.
 def load_bh2_scenario(scen_dir: Path) -> pd.DataFrame | None:
-    """Every node's bh2.csv concatenated, with topology and ``__sec__``."""
+    ##Every node's bh2.csv concatenated, with topology and ``__sec__``.##
     topo = build_topology(scen_dir)
     frames = []
     for node in sorted(scen_dir.iterdir()):
@@ -65,9 +73,11 @@ def load_bh2_scenario(scen_dir: Path) -> pd.DataFrame | None:
     out.attrs["topology"] = topo
     return out
 
-
+## Documentation for a function.
+#
+#  More details.
 def load_mcm_scenario(scen_dir: Path) -> pd.DataFrame | None:
-    """Every node's mcm.csv concatenated -- per-radio mesh-client-manager state."""
+    ##Every node's mcm.csv concatenated -- per-radio mesh-client-manager state.##
     frames = []
     for node in sorted(scen_dir.iterdir()):
         if not node.is_dir() or node.name == "sdwan":
@@ -91,9 +101,11 @@ def load_mcm_scenario(scen_dir: Path) -> pd.DataFrame | None:
     out = pd.concat(frames, ignore_index=True).dropna(subset=["__t__"])
     return out if not out.empty else None
 
-
+## Documentation for a function.
+#
+#  More details.
 def load_gps_scenario(scen_dir: Path) -> pd.DataFrame | None:
-    """GPS per node (prefers ``geotak_gps.csv``); drops lat=lon=0 (no fix)."""
+    ##GPS per node (prefers ``geotak_gps.csv``); drops lat=lon=0 (no fix).##
     frames = []
     for node in sorted(scen_dir.iterdir()):
         if not node.is_dir() or node.name == "sdwan":
@@ -111,7 +123,7 @@ def load_gps_scenario(scen_dir: Path) -> pd.DataFrame | None:
     df["__sec__"] = session_relative_seconds(df)
     return df
 
-
+## @brief
 def _load_node_gps(node: Path) -> pd.DataFrame | None:
     geotak = node / "geotak_gps.csv"
     if geotak.exists():

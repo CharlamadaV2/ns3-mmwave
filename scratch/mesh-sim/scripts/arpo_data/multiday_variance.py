@@ -1,4 +1,9 @@
-"""Day-vs-day variance table from arpo_data's pairwise K-S CSV."""
+##@package docstring
+# Day-vs-day variance table from arpo_data's pairwise K-S CSV.
+
+##
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -14,13 +19,13 @@ DEFAULT_KS_CSV = (REPO_ROOT / "data" / "arpo_extracted" / "_plots"
 
 _UNIT_BY_METRIC = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
-
+## @brief
 def _fmt_day(day: str) -> str:
     if isinstance(day, str) and len(day) == 8 and day.isdigit():
         return f"{day[0:2]}/{day[2:4]}/{day[4:8]}"
     return str(day)
 
-
+## @brief
 def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
     if not body:
         return "  ".join(header) + "\n(no rows)"
@@ -31,9 +36,9 @@ def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
         lines.append("  ".join(cell.ljust(w) for cell, w in zip(row, widths)))
     return "\n".join(lines)
 
-
+## @brief
 def _summary_table(df: pd.DataFrame, unit: str) -> str:
-    """One row per (family, link, day-pair), sorted by |Δmed| desc."""
+    ##One row per (family, link, day-pair), sorted by |Δmed| desc.##
     unit_suffix = f" {unit}" if unit else ""
     df = df.assign(abs_delta=df["median_delta"].abs()) \
            .sort_values("abs_delta", ascending=False)
@@ -55,9 +60,9 @@ def _summary_table(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-
+## @brief
 def _link_rollup(df: pd.DataFrame, unit: str) -> str:
-    """Per-link summary across families: how unstable is each link, on average?"""
+    ##Per-link summary across families: how unstable is each link, on average?##
     unit_suffix = f" {unit}" if unit else ""
     grp = df.assign(abs_delta=df["median_delta"].abs()).groupby(
         ["src_rab", "peer_rab"], dropna=False
@@ -83,9 +88,9 @@ def _link_rollup(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-
+## @brief
 def _family_rollup(df: pd.DataFrame, unit: str) -> str:
-    """Per-family summary: which scenarios show the biggest day-to-day swings?"""
+    ##Per-family summary: which scenarios show the biggest day-to-day swings?##
     unit_suffix = f" {unit}" if unit else ""
     grp = df.assign(abs_delta=df["median_delta"].abs()).groupby("family", dropna=False)
     header = ("family", "n link-pairs", "mean |Δmed|", "max |Δmed|", "worst link")
@@ -110,7 +115,9 @@ def _family_rollup(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Day-vs-day variance table from arpo_data's pairwise K-S CSV.")

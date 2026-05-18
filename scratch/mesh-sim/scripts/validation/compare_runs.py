@@ -1,4 +1,9 @@
-"""Cross-batch summary table: one row per validation batch."""
+##@package docstring
+# Cross-batch summary table: one row per validation batch.
+
+##
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -18,7 +23,9 @@ _DEFAULT_TX_POWER_DBM = 10.0
 _DEFAULT_GAIN_DBI = 12.0  # matches the pre-knob hardcoded BF_ELEMENTS_PER_NODE=16
 _RAB3 = "rab3"
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class BatchRow:
     run_dir: str
@@ -38,7 +45,7 @@ class BatchRow:
     per_scen_close_dmed: dict[str, float]
     per_scen_far_dmed: dict[str, float]
 
-
+## @brief
 def _read_run_ini(ini_path: Path) -> dict[str, str]:
     cp = configparser.ConfigParser(inline_comment_prefixes=(";", "#"))
     cp.read(ini_path)
@@ -51,9 +58,9 @@ def _read_run_ini(ini_path: Path) -> dict[str, str]:
             out[k] = v.strip()
     return out
 
-
+## @brief
 def _sniff_batch_config(batch_dir: Path) -> dict[str, float | str]:
-    """Pull channel/gain/tx settings from the first scenario's snapshotted run.ini."""
+    ##Pull channel/gain/tx settings from the first scenario's snapshotted run.ini.##
     for scen_dir in sorted(batch_dir.iterdir()):
         ini = scen_dir / "inputs" / "run.ini"
         if ini.is_file():
@@ -72,19 +79,19 @@ def _sniff_batch_config(batch_dir: Path) -> dict[str, float | str]:
         "rx_gain_dbi":  float("nan"),
     }
 
-
+## @brief
 def _classify(src: str, peer: str) -> str:
     if src == _RAB3 or peer == _RAB3:
         return "far"
     return "close"
 
-
+## @brief
 def _batch_label(batch_dir: Path) -> str:
-    """Compact column label, e.g. `14-01-40` from `14-01-40-validation`."""
+    ##Compact column label, e.g. `14-01-40` from `14-01-40-validation`.##
     name = batch_dir.name
     return name.removesuffix("-validation")
 
-
+## @brief
 def _summarize_batch(batch_dir: Path, metric: str) -> BatchRow | None:
     summary_csv = batch_dir / "validation_summary.csv"
     if not summary_csv.is_file():
@@ -139,15 +146,15 @@ def _summarize_batch(batch_dir: Path, metric: str) -> BatchRow | None:
         per_scen_far_dmed=per_scen_far_dmed,
     )
 
-
+## @brief
 def _discover_batches(root: Path) -> list[Path]:
     return sorted(p.parent for p in root.rglob("validation_summary.csv"))
 
-
+## @brief
 def _fmt(v: float, digits: int = 2) -> str:
     return "—" if not np.isfinite(v) else f"{v:.{digits}f}"
 
-
+## @brief
 def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
     if not body:
         return "  ".join(header)
@@ -158,7 +165,7 @@ def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
         lines.append("  ".join(cell.ljust(w) for cell, w in zip(row, widths)))
     return "\n".join(lines)
 
-
+## @brief
 def _render_main(rows: list[BatchRow]) -> str:
     header = ("run", "run dir", "channel", "scenario", "gain/side (Tx,Rx)",
               "tot gain", "n pairs", "mean |Δmed|", "mean K-S")
@@ -178,7 +185,7 @@ def _render_main(rows: list[BatchRow]) -> str:
         ))
     return _render_table(header, body)
 
-
+## @brief
 def _render_link_class(rows: list[BatchRow]) -> str:
     header = ("run", "close (rab1↔rab2) mean dB off",
               "far (rab*↔rab3) mean dB off")
@@ -187,7 +194,7 @@ def _render_link_class(rows: list[BatchRow]) -> str:
              _fmt(r.far_dmed) + " dB") for r in rows]
     return _render_table(header, body)
 
-
+## @brief
 def _scenario_order(rows: list[BatchRow]) -> list[str]:
     seen: dict[str, None] = {}
     for r in rows:
@@ -195,7 +202,7 @@ def _scenario_order(rows: list[BatchRow]) -> list[str]:
             seen.setdefault(s, None)
     return sorted(seen)
 
-
+## @brief
 def _render_per_scenario(rows: list[BatchRow], picker, value_suffix: str,
                          digits: int = 2) -> str:
     scenarios = _scenario_order(rows)
@@ -209,7 +216,9 @@ def _render_per_scenario(rows: list[BatchRow], picker, value_suffix: str,
         body.append(tuple(cells))
     return _render_table(header, body)
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Cross-batch validation summary table (sim vs ARPO field).")

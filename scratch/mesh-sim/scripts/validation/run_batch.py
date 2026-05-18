@@ -1,4 +1,9 @@
-"""Run mesh-sim across a directory of scenarios, multi-seed."""
+##@package docstring
+# Run mesh-sim across a directory of scenarios, multi-seed.
+
+##
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -17,9 +22,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCENARIOS_DIR = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
 DEFAULT_SEEDS = "1,2,3,4,5"
 
-
+## @brief
 def _read_scenario_duration(ini_path: Path) -> float | None:
-    """Pull duration_s from [scenario] in a run.ini; returns None if absent."""
+    ##Pull duration_s from [scenario] in a run.ini; returns None if absent.##
     if not ini_path.is_file():
         return None
     in_section = False
@@ -36,21 +41,21 @@ def _read_scenario_duration(ini_path: Path) -> float | None:
                 return None
     return None
 
-
+## @brief
 def _find_sim_binary() -> str | None:
     ns3_root = REPO_ROOT.parent.parent
     pattern = str(ns3_root / "build" / "scratch" / "mesh-sim" / "ns3*-sim-*")
     matches = sorted(glob.glob(pattern))
     return matches[0] if matches else None
 
-
+## @brief
 def _discover_scenarios(scenarios_dir: Path) -> list[Path]:
     if not scenarios_dir.is_dir():
         return []
     return sorted(p for p in scenarios_dir.iterdir()
                   if p.is_dir() and (p / "run.ini").is_file())
 
-
+## @brief
 def _run_one(sim_binary: str, scenario: Path, seeds: str,
              out_dir: Path, env: dict[str, str]) -> tuple[int, str]:
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -67,7 +72,9 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
         result = subprocess.run(cmd, stdout=log_f, stderr=subprocess.STDOUT, env=env)
     return result.returncode, str(log_path)
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Run mesh-sim across validation scenarios.")
     p.add_argument("--scenarios-dir", default=str(DEFAULT_SCENARIOS_DIR),

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/**  
  * Command-line parsing and pre-simulation setup helpers.
  * Keeps sim.cc focused on orchestration.
  */

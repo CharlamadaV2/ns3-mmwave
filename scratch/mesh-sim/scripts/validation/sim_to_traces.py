@@ -1,4 +1,9 @@
-"""Convert sim seed CSVs into arpo_data-style trace CSVs."""
+## @package docstring
+# Convert sim seed CSVs into arpo_data-style trace CSVs.
+#
+#
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -17,6 +22,7 @@ _METRIC_SPECS = (
 )
 
 
+## @brief
 def _load_node_id_map(seed_dir: Path) -> dict[int, str]:
     nodes_json = seed_dir.parent / "inputs" / "nodes.json"
     if not nodes_json.is_file():
@@ -25,7 +31,7 @@ def _load_node_id_map(seed_dir: Path) -> dict[int, str]:
         nodes = json.load(f)
     return {i: str(n["id"]) for i, n in enumerate(nodes)}
 
-
+## @brief
 def _read_warmup_s(seed_dir: Path) -> float:
     run_ini = seed_dir.parent / "inputs" / "run.ini"
     if not run_ini.is_file():
@@ -34,7 +40,7 @@ def _read_warmup_s(seed_dir: Path) -> float:
     cfg.read(run_ini)
     return cfg.getfloat("scenario", "warmup_s", fallback=0.0)
 
-
+## @brief
 def _convert_one(csv_path: Path, value_col: str, trace_col: str,
                  node_map: dict[int, str], warmup_s: float) -> pd.DataFrame:
     if not csv_path.is_file():
@@ -64,7 +70,9 @@ def _convert_one(csv_path: Path, value_col: str, trace_col: str,
         trace_col:        df[value_col].to_numpy(),
     })
 
-
+## Documentation for a function.
+#
+#  More details.
 def convert_seed(seed_dir: Path, out_root: Path) -> int:
     node_map = _load_node_id_map(seed_dir)
     warmup_s = _read_warmup_s(seed_dir)
@@ -82,7 +90,9 @@ def convert_seed(seed_dir: Path, out_root: Path) -> int:
             n_written += 1
     return n_written
 
-
+## Documentation for a function.
+#
+#  More details.
 def convert_scenario(scenario_dir: Path) -> int:
     seed_dirs = sorted(p for p in scenario_dir.iterdir()
                        if p.is_dir() and p.name.startswith("seed-"))
@@ -98,7 +108,9 @@ def convert_scenario(scenario_dir: Path) -> int:
         print(f"  {seed_name}: {n} trace csvs")
     return total
 
-
+## Documentation for a function.
+#
+#  More details.
 def convert_batch(batch_root: Path) -> None:
     scenarios = sorted(p for p in batch_root.iterdir()
                        if p.is_dir() and (p / "inputs").is_dir())
@@ -110,7 +122,9 @@ def convert_batch(batch_root: Path) -> None:
         n = convert_scenario(scen)
         print(f"  total: {n} csvs")
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Convert sim seed CSVs to arpo_data-style trace CSVs.")

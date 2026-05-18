@@ -1,10 +1,13 @@
-"""
-Run from scratch/mesh-sim/:
-    python -m scripts.arpo_data.cli extract
-    python -m scripts.arpo_data.cli plot --scenario <name>
-    python -m scripts.arpo_data.cli plot --all
-    python -m scripts.arpo_data.cli multi-day
-"""
+##@package docstring
+# Run from scratch/mesh-sim/:
+#     python -m scripts.arpo_data.cli extract
+#     python -m scripts.arpo_data.cli plot --scenario <name>
+#     python -m scripts.arpo_data.cli plot --all
+#     python -m scripts.arpo_data.cli multi-day
+
+##
+
+#TODO: Finish Documentation for this page
 
 import argparse
 import sys
@@ -30,15 +33,15 @@ from .plots import (
     plot_gps_tracks,
 )
 
-
+## @brief
 def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
-    """
-    Save a figure (and an optional trace CSV) returned from a plot fn.
+    # ##
+    # Save a figure (and an optional trace CSV) returned from a plot fn.
 
-    Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
-    lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
-    supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
-    """
+    # Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
+    # lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
+    # supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
+    ##
     if result is None:
         return
     if isinstance(result, tuple):
@@ -59,14 +62,14 @@ def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
         trace.to_csv(target, index=False)
         print(f"    wrote {target}")
 
-
+## @brief
 def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
-    """
-    Save the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
+    ##
+    # Save the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
 
-    PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
-    outputs for each source rab live together.
-    """
+    # PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
+    # outputs for each source rab live together.
+    ##
     if not results:
         return
     for src, peer, fig, trace in results:
@@ -74,7 +77,7 @@ def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
         csv = scen_dir / "csvs" / src / f"{base_name}__{src}_to_{peer}_trace.csv"
         _save((fig, trace), png, csv)
 
-
+## @brief
 def _plot_one(scen_dir: Path) -> None:
     out = PER_DAY_DIR / scen_dir.name
     pngs = out / "pngs"
@@ -95,7 +98,7 @@ def _plot_one(scen_dir: Path) -> None:
         _save(plot_gps_tracks(gps, name),
               pngs / "gps_track.png", csvs / "gps_track_trace.csv")
 
-
+## @brief
 def _cmd_plot(args: argparse.Namespace) -> int:
     if not CSV_ROOT.exists():
         print(f"ERROR: {CSV_ROOT} not found -- run `extract` first", file=sys.stderr)
@@ -118,7 +121,9 @@ def _cmd_plot(args: argparse.Namespace) -> int:
     print(f"\nDone. Figures in {PER_DAY_DIR}/")
     return 0
 
-
+## Documentation for a function.
+#
+#  More details.
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)

@@ -32,3 +32,13 @@ rm -rf cmake-cache build
 ```bash
 python -m scripts.sweep.cli --config inputs/custom/sherpa/1.1/sweep.ini
 ```
+
+## Documentation
+The documentation of this module is available at [this link]
+
+## About
+This sim is being worked on by the University of Massachusetts's ACNL
+
+## Authors ##
+
+The 

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * ProgressLogger: prints simulation progress to stderr.
  * Called directly from the step loop (no Simulator::Schedule).
  * Header-only.
@@ -11,9 +11,12 @@
 #include <iomanip>
 #include <iostream>
 
+  /** @brief
+  */
 namespace mesh_sim
 {
-
+  /** @brief
+  */
 struct ProgressLogger
 {
     uint32_t total_ticks;
@@ -22,7 +25,13 @@ struct ProgressLogger
     double   duration_s;
     double   tick_s;
     std::chrono::time_point<std::chrono::steady_clock> wall_start;
-
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void Tick(uint32_t tick_index)
     {
         if (tick_index % interval_ticks != 0 && tick_index != total_ticks)

@@ -1,4 +1,7 @@
-"""GPS track plot for one scenario."""
+##@package docstring
+# GPS track plot for one scenario.
+
+##
 
 from __future__ import annotations
 
@@ -10,9 +13,11 @@ from matplotlib.lines import Line2D
 
 from .common import crashed_suffix, scenario_caption
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_gps_tracks(df: pd.DataFrame, scenario_name: str = "") -> tuple[plt.Figure, pd.DataFrame] | None:
-    """Node positions in metres from the centroid; color = time since start."""
+    ##Node positions in metres from the centroid; color = time since start.##
     if df.empty:
         return None
 
@@ -81,9 +86,9 @@ def plot_gps_tracks(df: pd.DataFrame, scenario_name: str = "") -> tuple[plt.Figu
     })
     return fig, trace
 
-
+## @brief
 def _add_scale_bar(ax: plt.Axes) -> None:
-    """Horizontal scale bar in the lower-left, length rounded to a tidy value."""
+    ##Horizontal scale bar in the lower-left, length rounded to a tidy value.##
     x0, x1 = ax.get_xlim()
     y0, y1 = ax.get_ylim()
     span = x1 - x0

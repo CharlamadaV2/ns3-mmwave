@@ -1,11 +1,14 @@
-"""
-Generate waypoint mobility for a sim node from its field GPS trace.
+## @package docstring
+# Generate waypoint mobility for a sim node from its field GPS trace.
 
-Reads the per-day `gps_track_trace.csv` (centroid-ENU metres) emitted by
-`arpo_data.cli plot`, aligns the field frame to the sim frame using a
-stationary anchor node (default: rab1), downsamples the moving node's
-track to N waypoints, and patches them into the scenario's `nodes.json`.
-"""
+# Reads the per-day `gps_track_trace.csv` (centroid-ENU metres) emitted by
+# `arpo_data.cli plot`, aligns the field frame to the sim frame using a
+# stationary anchor node (default: rab1), downsamples the moving node's
+# track to N waypoints, and patches them into the scenario's `nodes.json`.
+#
+# More details.
+
+#TODO: Finish Documentation for this page
 
 from __future__ import annotations
 
@@ -25,7 +28,7 @@ FIELD_PER_DAY_ROOT = REPO_ROOT / "data" / "arpo_extracted" / "_plots" / "per_day
 
 _MOBILE_BBOX_M = 20.0  # field bbox max-dim threshold to count as "mobile"
 
-
+## @brief
 def _load_field_trace(scenario_field_dir: Path) -> pd.DataFrame:
     csv = scenario_field_dir / "csvs" / "gps_track_trace.csv"
     if not csv.is_file():
@@ -33,10 +36,10 @@ def _load_field_trace(scenario_field_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(csv, usecols=["node", "sec_since_origin", "east_m", "north_m"])
     return df
 
-
+## @brief
 def _anchor_offset(df: pd.DataFrame, anchor: str,
                    sim_anchor_xy: tuple[float, float]) -> tuple[float, float]:
-    """Return (dx, dy) so that field_anchor mean -> sim_anchor_xy."""
+    ##Return (dx, dy) so that field_anchor mean -> sim_anchor_xy.##
     g = df[df["node"] == anchor]
     if g.empty:
         raise ValueError(f"anchor '{anchor}' not in field trace")
@@ -44,10 +47,10 @@ def _anchor_offset(df: pd.DataFrame, anchor: str,
     f_mean_y = float(g["north_m"].mean())
     return sim_anchor_xy[0] - f_mean_x, sim_anchor_xy[1] - f_mean_y
 
-
+## @brief
 def _downsample_uniform_time(t: np.ndarray, x: np.ndarray, y: np.ndarray,
                              n: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Take n waypoints evenly spaced in time, always including first and last."""
+    ##Take n waypoints evenly spaced in time, always including first and last.##
     if t.size <= n:
         return t, x, y
     grid = np.linspace(t[0], t[-1], n)
@@ -56,9 +59,9 @@ def _downsample_uniform_time(t: np.ndarray, x: np.ndarray, y: np.ndarray,
     idx = np.unique(idx)
     return t[idx], x[idx], y[idx]
 
-
+## @brief
 def _scale_time(t: np.ndarray, mode: str, target_s: float | None) -> np.ndarray:
-    """Map field timeline onto sim timeline."""
+    ##Map field timeline onto sim timeline.##
     t0 = t[0]
     rel = t - t0
     if mode == "raw":
@@ -73,15 +76,15 @@ def _scale_time(t: np.ndarray, mode: str, target_s: float | None) -> np.ndarray:
         return np.minimum(rel, target_s)
     raise ValueError(f"unknown time mode: {mode}")
 
-
+## @brief
 def _load_nodes_json(path: Path) -> list[dict]:
     return json.loads(path.read_text())
 
-
+## @brief
 def _save_nodes_json(path: Path, nodes: list[dict]) -> None:
     path.write_text(json.dumps(nodes, indent=2) + "\n")
 
-
+## @brief
 def _patch_node(nodes: list[dict], target_id: str,
                 waypoints: list[dict]) -> dict:
     for n in nodes:
@@ -98,9 +101,9 @@ def _patch_node(nodes: list[dict], target_id: str,
             return n
     raise KeyError(f"node id '{target_id}' not in nodes.json")
 
-
+## @brief
 def _resolve_scenario_dir(name: str) -> Path:
-    """Accept either the sim or field scenario name."""
+    ##Accept either the sim or field scenario name.##
     direct = SCENARIOS_ROOT / name
     if direct.is_dir():
         return direct
@@ -109,7 +112,7 @@ def _resolve_scenario_dir(name: str) -> Path:
             return sim_dir
     raise FileNotFoundError(f"scenario dir not found for '{name}' under {SCENARIOS_ROOT}")
 
-
+## @brief
 def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
     g = df[df["node"] == node]
     if g.empty:
@@ -117,17 +120,19 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
     return float(max(g["east_m"].max() - g["east_m"].min(),
                      g["north_m"].max() - g["north_m"].min()))
 
-
+## Documentation for a function.
+#
+#  More details.
 def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str = "rab1",
                              n_waypoints: int = 20, time_mode: str = "raw",
                              duration: float | None = None, field_z: float | None = None,
                              field_scenario: str | None = None,
                              dry_run: bool = False,
                              mobile_bbox_m: float = _MOBILE_BBOX_M) -> str:
-    """Patch one scenario's nodes.json with field-derived waypoints.
+    ##Patch one scenario's nodes.json with field-derived waypoints.
 
-    Returns a one-line status string: "patched", "skipped: ...", or "error: ..."
-    """
+    # Returns a one-line status string: "patched", "skipped: ...", or "error: ..."
+    ##
     nodes_json = sim_dir / "nodes.json"
     if not nodes_json.is_file():
         return f"error: nodes.json not found at {nodes_json}"
@@ -181,7 +186,9 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
     _save_nodes_json(nodes_json, nodes)
     return summary
 
-
+## Documentation for a function.
+#
+#  More details.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Generate waypoint mobility from field GPS for a sim node.")

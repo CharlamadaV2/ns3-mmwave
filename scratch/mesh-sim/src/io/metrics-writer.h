@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * MetricsWriter: accumulates per-tick metrics in-memory during the step loop,
  * then writes summary.json after the simulation completes.
  *
@@ -18,22 +18,55 @@
 
 namespace mesh_sim
 {
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 class MetricsWriter
 {
   public:
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     explicit MetricsWriter(const SimConfig& cfg);
-
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void SetTiming(const TimingInfo& t);
-
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void AccumulateTick(double time_s,
                         const LinkTable& links,
                         const std::vector<FlowResult>& flows,
                         uint32_t numNodes);
-
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void Write() const;
 
   private:
+    /** @brief
+    */
     struct NodeStats
     {
         double   sinr_sum       = 0.0;
@@ -46,7 +79,8 @@ class MetricsWriter
         double   rx_delivered   = 0.0;  // sum of delivered_mbps where node is dst
         uint64_t tick_count     = 0;
     };
-
+      /** @brief
+  */
     struct FlowStats
     {
         double   demand_sum     = 0.0;

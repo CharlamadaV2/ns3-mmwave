@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * Per-link evaluation result POD type.
  * One instance per ordered pair (tx, rx) per time step.
  * No ns-3 headers included.
@@ -7,10 +7,17 @@
 #pragma once
 
 #include <cstdint>
-
+/** @brief
+*/
 namespace mesh_sim
 {
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 struct LinkResult
 {
     uint32_t tx_id = 0;           // index into node list

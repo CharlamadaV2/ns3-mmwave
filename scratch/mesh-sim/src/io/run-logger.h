@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved
  * config for reproducibility.  Header-only (same pattern as progress-logger.h).
  * No ns-3 dependency.
@@ -17,9 +17,18 @@
 #include <string>
 #include <vector>
 
+  /** @brief
+  */
 namespace mesh_sim
 {
 
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 inline void
 WriteRunLog(const std::string& base_output_dir,
             const CliArgs& args,

@@ -1,4 +1,9 @@
-"""Unzip an ARPO-style data bundle into ``paths.extract_dir``."""
+##@package docstring
+# Unzip an ARPO-style data bundle into ``paths.extract_dir``.
+
+##
+
+#TODO: Finish Documentation for this page
 
 import fnmatch
 import sys
@@ -14,11 +19,13 @@ DEFAULT_JUNK_PATTERNS: tuple[str, ...] = (
     "desktop.ini", "*/desktop.ini",  # Windows folder config
 )
 
-
+## @brief
 def _is_junk(name: str, patterns: tuple[str, ...]) -> bool:
     return any(fnmatch.fnmatch(name, p) for p in patterns)
 
-
+## Documentation for a function.
+#
+#  More details.
 def extract(
         paths: DatasetPaths = DEFAULT,
         junk_patterns: tuple[str, ...] = DEFAULT_JUNK_PATTERNS,

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * Radio / channel configuration POD types.
  * No ns-3 headers included — keeps compilation fast and allows use in
  * post-run IO code without ns-3 linkage.
@@ -9,11 +9,20 @@
 #include <cstdint>
 #include <string>
 
+/** @brief
+*/
 namespace mesh_sim
 {
 
 // Parameters unique to the NYU channel model.
 // Only applied when channel_model = "nyu"; ignored for 3gpp.
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 struct NyuChannelConfig
 {
     // NYUChannelModel
@@ -30,7 +39,13 @@ struct NyuChannelConfig
     double      foliage_loss_db_m        = 0.4;        // FoliageLoss
     std::string o2i_loss_type            = "Low Loss"; // O2ILosstype: "Low Loss" or "High Loss"
 };
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
 struct ChannelConfig
 {
     // Shared between 3gpp and nyu

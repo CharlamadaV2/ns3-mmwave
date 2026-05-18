@@ -1,17 +1,19 @@
-"""
-MAC -> rab label and stable plot color.
+##@package docstring
+# MAC -> rab label and stable plot color.
 
-Vocab: a *rab* is a chassis hostname (``rab1`` ...). Each rab carries
-several radios; each radio is one Linux *netdev* (``wlP1p1s0f0`` ...)
-with its own MAC. ``rabN.M`` = rab N's M-th netdev, alphabetical, 1-based.
+# Vocab: a *rab* is a chassis hostname (``rab1`` ...). Each rab carries
+# several radios; each radio is one Linux *netdev* (``wlP1p1s0f0`` ...)
+# with its own MAC. ``rabN.M`` = rab N's M-th netdev, alphabetical, 1-based.
 
-Labels come from the global union of ``tag_local_mac`` across every
-scenario, so a peer MAC still resolves when its owner's bh2.csv is
-missing from this scenario. Peer MACs no rab ever claims become
-``ext1``, ``ext2``, ....
+# Labels come from the global union of ``tag_local_mac`` across every
+# scenario, so a peer MAC still resolves when its owner's bh2.csv is
+# missing from this scenario. Peer MACs no rab ever claims become
+# ``ext1``, ``ext2``, ....
 
-Hostname is the finest label -- no chassis sub-splitting.
-"""
+# Hostname is the finest label -- no chassis sub-splitting.
+##
+
+#TODO: Finish Documentation for this page
 
 from pathlib import Path
 
@@ -40,7 +42,9 @@ RAB2_NETDEV_ORIENTATION: dict[str, str] = {
     "wlP2p1s0f1": "left",
 }
 
-
+## Documentation for a function.
+#
+#  More details.
 def netdev_orientation(rab: str, netdev: str) -> str | None:
     if rab != "rab2":
         return None
@@ -50,7 +54,7 @@ def netdev_orientation(rab: str, netdev: str) -> str | None:
 # {rab: sorted netdevs}, global union across scenarios so ``rab1.5`` is stable.
 _RAB_NETDEVS_CACHE: dict[Path, dict[str, list[str]]] = {}
 
-
+## @brief
 def _rab_netdevs(csv_root: Path) -> dict[str, list[str]]:
     if csv_root in _RAB_NETDEVS_CACHE:
         return _RAB_NETDEVS_CACHE[csv_root]
@@ -75,9 +79,11 @@ def _rab_netdevs(csv_root: Path) -> dict[str, list[str]]:
     _RAB_NETDEVS_CACHE[csv_root] = ordered
     return ordered
 
-
+## Documentation for a function.
+#
+#  More details.
 def radio_index(rab: str, netdev: str, csv_root: Path | None = None) -> int | None:
-    """1-based position of ``netdev`` in ``rab``'s sorted netdev list, or None."""
+    ##1-based position of ``netdev`` in ``rab``'s sorted netdev list, or None.##
     if not netdev:
         return None
     if csv_root is None:
@@ -89,9 +95,11 @@ def radio_index(rab: str, netdev: str, csv_root: Path | None = None) -> int | No
     except ValueError:
         return None
 
-
+## Documentation for a function.
+#
+#  More details.
 def radio_label(rab: str, netdev: str, csv_root: Path | None = None) -> str:
-    """``rabN.M`` label for a (rab, netdev) pair; ``{rab}.?`` if unknown."""
+    ##``rabN.M`` label for a (rab, netdev) pair; ``{rab}.?`` if unknown.##
     idx = radio_index(rab, netdev, csv_root=csv_root)
     return f"{rab}.{idx}" if idx is not None else f"{rab}.?"
 
@@ -100,7 +108,7 @@ def radio_label(rab: str, netdev: str, csv_root: Path | None = None) -> str:
 # lets a peer MAC resolve when its owner's bh2.csv isn't in this scenario.
 _GLOBAL_MAC_NETDEVS_CACHE: dict[Path, dict[str, str]] = {}
 
-
+## @brief
 def _global_mac_netdevs(csv_root: Path) -> dict[str, str]:
     if csv_root in _GLOBAL_MAC_NETDEVS_CACHE:
         return _GLOBAL_MAC_NETDEVS_CACHE[csv_root]
@@ -127,9 +135,11 @@ def _global_mac_netdevs(csv_root: Path) -> dict[str, str]:
     _GLOBAL_MAC_NETDEVS_CACHE[csv_root] = out
     return out
 
-
+## Documentation for a function.
+#
+#  More details.
 def mac_radio_label(mac: str, csv_root: Path | None = None) -> str | None:
-    """MAC -> ``rabN.M``; None if no rab ever claimed this MAC as a local MAC."""
+    ##MAC -> ``rabN.M``; None if no rab ever claimed this MAC as a local MAC.##
     if mac is None:
         return None
     if csv_root is None:
@@ -148,13 +158,15 @@ def mac_radio_label(mac: str, csv_root: Path | None = None) -> str | None:
 # Plot pipelines call build_topology many times per scenario -- cache the scan.
 _GLOBAL_OWNERS_CACHE: dict[Path, dict[str, str]] = {}
 
-
+## Documentation for a function.
+#
+#  More details.
 def node_color(label: str) -> str:
     return FIXED_COLORS.get(label, "0.4")
 
-
+## @brief
 def _global_local_macs(csv_root: Path) -> dict[str, str]:
-    """{mac: hostname} for every ``tag_local_mac`` ever claimed by any node."""
+    ##{mac: hostname} for every ``tag_local_mac`` ever claimed by any node.##
     if csv_root in _GLOBAL_OWNERS_CACHE:
         return _GLOBAL_OWNERS_CACHE[csv_root]
     out: dict[str, str] = {}
@@ -177,9 +189,11 @@ def _global_local_macs(csv_root: Path) -> dict[str, str]:
     _GLOBAL_OWNERS_CACHE[csv_root] = out
     return out
 
-
+## Documentation for a function.
+#
+#  More details.
 def build_topology(scen_dir: Path) -> dict[str, str]:
-    """{mac: label} for every MAC in *scen_dir*. Unknowns cluster into ``extN``."""
+    ##{mac: label} for every MAC in *scen_dir*. Unknowns cluster into ``extN``.##
     topo = dict(_global_local_macs(scen_dir.parent))
 
     all_peers: set[str] = set()
@@ -198,15 +212,17 @@ def build_topology(scen_dir: Path) -> dict[str, str]:
             topo[mac] = f"ext{i}"
     return topo
 
-
+## Documentation for a function.
+#
+#  More details.
 def resolve_peer(mac, topo: dict[str, str]) -> str:
     if pd.isna(mac):
         return "?"
     return topo.get(str(mac), f"?:{str(mac)[-5:]}")
 
-
+## @brief
 def _cluster_macs(macs: list[str]) -> list[list[str]]:
-    """Group MACs whose last byte is within 3 of an existing group member."""
+    ##Group MACs whose last byte is within 3 of an existing group member.##
     groups: list[list[str]] = []
     for mac in macs:
         last = _last_byte(mac)
@@ -218,6 +234,6 @@ def _cluster_macs(macs: list[str]) -> list[list[str]]:
             groups.append([mac])
     return groups
 
-
+## @brief
 def _last_byte(mac: str) -> int:
     return int(mac.split(":")[-1], 16)

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/** @brief
  * Top-level simulation configuration and runtime metadata POD types.
  * No ns-3 headers included — keeps compilation fast and allows use in
  * post-run IO code without ns-3 linkage.
@@ -14,20 +14,27 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-
+/**
+* @brief
+*/
 namespace mesh_sim
 {
 
 // Runtime-only timing metadata (not loaded from config).
 // Populated by sim.cc after the step loop completes.
 // MetricsWriter converts the time_points to ISO-8601 when writing JSON.
+/**
+* @brief
+*/
 struct TimingInfo
 {
     std::chrono::system_clock::time_point start;
     std::chrono::system_clock::time_point end;
     double elapsed_s = 0.0;
 };
-
+/**
+* @brief
+*/
 struct RlConfig
 {
     bool        enabled               = false;
@@ -41,7 +48,9 @@ struct RlConfig
     double      y_min                 = -1000.0;
     double      y_max                 =  1000.0;
 };
-
+/**
+* @brief
+*/
 struct SimConfig
 {
     std::string scenario_name;

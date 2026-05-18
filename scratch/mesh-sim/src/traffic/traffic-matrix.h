@@ -30,27 +30,101 @@ struct Flow
     double phase_end_s = 0.0;
 };
 
+/** @brief
+*/
+
 class TrafficMatrix
 {
   public:
+  /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     explicit TrafficMatrix(const SimConfig& cfg);
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void Initialize(uint32_t numNodes, double currentTime);
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void Tick(double currentTime);
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     const std::vector<Flow>& GetActiveFlows() const;
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     double GetDemand(uint32_t src, uint32_t dst) const;
 
   private:
+  /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void InitAllPairs(uint32_t numNodes, double currentTime);
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void InitRandomPairs(uint32_t numNodes, double currentTime);
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void InitGateway(uint32_t numNodes, double currentTime);
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     Flow MakeFlow(uint32_t src, uint32_t dst, double currentTime) const;
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void TickOnOff(double currentTime);
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     void TickPoisson(double currentTime);
 
     TrafficConfig              m_trafficCfg;
@@ -59,8 +133,21 @@ class TrafficMatrix
     double                     m_tickS    = 0.1;
 
     std::vector<Flow> m_flows;
-
+/**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     ns3::Ptr<ns3::UniformRandomVariable>      m_uniformRng;
+    /**
+ * Description of what the method does.
+ *
+ * @param input Description of parameter.
+ * @return Description of return value.
+ * @throws Exception Description of exception.
+ */
     ns3::Ptr<ns3::ExponentialRandomVariable>   m_expRng;
 };
 

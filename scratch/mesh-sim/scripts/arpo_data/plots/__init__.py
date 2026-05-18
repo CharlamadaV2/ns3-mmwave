@@ -1,4 +1,7 @@
-"""ARPO field-data plot functions. Sim-output plots live in ``scripts.plotting``."""
+##@package docstring
+# ARPO field-data plot functions. Sim-output plots live in ``scripts.plotting``.
+
+##
 
 from .bh2 import (
     plot_bh2_mcs,

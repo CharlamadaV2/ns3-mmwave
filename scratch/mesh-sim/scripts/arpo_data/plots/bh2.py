@@ -1,6 +1,10 @@
-"""Per-radio bh2 plots: one figure per (src_rab, peer_rab), one subplot per local MAC."""
+##@package docstring
+# Per-radio bh2 plots: one figure per (src_rab, peer_rab), one subplot per local MAC.
+
+##
 
 from __future__ import annotations
+
 
 from dataclasses import dataclass
 
@@ -19,9 +23,11 @@ from .common import concat_trace, crashed_suffix, scenario_caption
 _BH2_PairResult = tuple[str, str, plt.Figure, pd.DataFrame]
 _MIN_SAMPLES_PER_PEER_MAC = 5
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_bh2_snr(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
-    """Raw SNR per (source radio, peer antenna)."""
+    ##Raw SNR per (source radio, peer antenna).##
     return _per_radio_metric(
         df=df,
         scenario_name=scenario_name,
@@ -34,9 +40,11 @@ def plot_bh2_snr(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairRes
         use_antenna_legend=True,
     )
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_bh2_rcpi(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
-    """Raw RCPI (received signal power, dBm) per (source radio, peer antenna)."""
+    ##Raw RCPI (received signal power, dBm) per (source radio, peer antenna).##
     return _per_radio_metric(
         df=df,
         scenario_name=scenario_name,
@@ -48,9 +56,11 @@ def plot_bh2_rcpi(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairRe
         use_antenna_legend=True,
     )
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_bh2_mcs(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
-    """Raw MCS-TX index per (source radio, peer antenna)."""
+    ##Raw MCS-TX index per (source radio, peer antenna).##
     return _per_radio_metric(
         df=df,
         scenario_name=scenario_name,
@@ -64,9 +74,11 @@ def plot_bh2_mcs(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairRes
         connect_lines=True,
     )
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_bh2_per(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
-    """Raw packet-error counter per (source radio, peer antenna)."""
+    ##Raw packet-error counter per (source radio, peer antenna).##
     return _per_radio_metric(
         df=df,
         scenario_name=scenario_name,
@@ -78,9 +90,11 @@ def plot_bh2_per(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairRes
         use_antenna_legend=True,
     )
 
-
+## Documentation for a function.
+#
+#  More details.
 def plot_bh2_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
-    """PHY rate per beam-pair from ``field_bytes_tx`` deltas; drops counter resets."""
+    ##PHY rate per beam-pair from ``field_bytes_tx`` deltas; drops counter resets.##
     if df is None or "field_bytes_tx" not in df.columns:
         return []
     sub = df.dropna(subset=["field_bytes_tx", "tag_local_mac", "tag_sta_mac"])
@@ -117,7 +131,7 @@ def plot_bh2_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_
             results.append(result)
     return results
 
-
+## @brief
 def _per_radio_metric(
         df: pd.DataFrame,
         scenario_name: str,
@@ -131,7 +145,7 @@ def _per_radio_metric(
         use_antenna_legend: bool = False,
         connect_lines: bool = False,
 ) -> list[_BH2_PairResult]:
-    """Shared body for SNR/RCPI/MCS/PER -- everything except throughput."""
+    ##Shared body for SNR/RCPI/MCS/PER -- everything except throughput.##
     if df is None or value_col not in df.columns:
         return []
     needed = [value_col, "tag_local_mac", "tag_sta_mac"]
@@ -164,9 +178,9 @@ def _per_radio_metric(
             results.append(result)
     return results
 
-
+## @brief
 def _build_peer_label_map(peer_macs: list[str]) -> dict[str, str]:
-    """``{peer_mac: 'rab2.3'}`` resolved through the global topology cache."""
+    ##``{peer_mac: 'rab2.3'}`` resolved through the global topology cache.##
     out: dict[str, str] = {}
     for mac in peer_macs:
         label = mac_radio_label(mac)
@@ -174,16 +188,18 @@ def _build_peer_label_map(peer_macs: list[str]) -> dict[str, str]:
             out[str(mac)] = label
     return out
 
-
+## Documentation for a class.
+#
+#  More details.
 @dataclass(frozen=True)
 class _HeaderLayout:
-    """Inch-based heights for the title/table/legend block above the subplots."""
+    ##Inch-based heights for the title/table/legend block above the subplots.##
     title_in: float
     table_in: float
     legend_in: float
     total_in: float
 
-
+## @brief
 def _compute_header_layout(n_macs: int, use_antenna_legend: bool) -> _HeaderLayout:
     title_in = 0.65
     table_in = 0.18 * (n_macs + 1) + 0.10
@@ -191,17 +207,17 @@ def _compute_header_layout(n_macs: int, use_antenna_legend: bool) -> _HeaderLayo
     total_in = title_in + table_in + legend_in + 0.30
     return _HeaderLayout(title_in, table_in, legend_in, total_in)
 
-
+## @brief
 def _build_peer_legend_labels(peer_macs: list[str], peer_rab: str,
                               peer_label_map: dict[str, str]) -> dict[str, str]:
-    """{peer_mac: 'rab2.3'} when known, else '{peer} ...MAC' fallback."""
+    ##{peer_mac: 'rab2.3'} when known, else '{peer} ...MAC' fallback.##
     out: dict[str, str] = {}
     for mac in peer_macs:
         canonical = peer_label_map.get(mac)
         out[mac] = canonical if canonical else f"{peer_rab} ...{str(mac)[-8:]}"
     return out
 
-
+## @brief
 def _plot_one_subplot(
         ax: plt.Axes,
         *,
@@ -221,7 +237,7 @@ def _plot_one_subplot(
         connect_lines: bool,
         extra_trace_cols: dict[str, str] | None,
 ) -> tuple[list[pd.DataFrame], set[str]]:
-    """Plot one source-MAC subplot. Returns (trace rows, peer MACs that were drawn)."""
+    ##Plot one source-MAC subplot. Returns (trace rows, peer MACs that were drawn).##
     row_df = pair_df[pair_df["tag_local_mac"] == local_mac]
     netdev = _first_str(row_df.get("tag_interface"))
     subtitle = _radio_subtitle(src, netdev, local_mac)
@@ -274,7 +290,7 @@ def _plot_one_subplot(
     )
     return trace_rows, plotted_peer_macs
 
-
+## @brief
 def _format_subplot_axis(
         ax: plt.Axes,
         *,
@@ -286,7 +302,7 @@ def _format_subplot_axis(
         show_per_subplot_legend: bool,
         hidden: int,
 ) -> None:
-    """Apply MCS reference lines, axis limits, title/grid/legend annotations."""
+    ##Apply MCS reference lines, axis limits, title/grid/legend annotations.##
     if add_mcs_reference_lines:
         for thr, lbl in [(5, "MCS 0"), (10, "MCS 4"),
                          (15, "MCS 8"), (20, "MCS 12")]:
@@ -310,7 +326,7 @@ def _format_subplot_axis(
                 transform=ax.transAxes, ha="right", va="bottom",
                 fontsize=7, color="0.4")
 
-
+## @brief
 def _build_per_radio_figure(
         pair_df: pd.DataFrame,
         src: str,
@@ -328,7 +344,7 @@ def _build_per_radio_figure(
         connect_lines: bool = False,
         peer_label_map: dict[str, str] | None = None,
 ) -> _BH2_PairResult | None:
-    """One (src_rab, peer_rab) figure with one subplot per source local_mac."""
+    ##One (src_rab, peer_rab) figure with one subplot per source local_mac.##
     if pair_df.empty:
         return None
     local_macs = _stable_local_mac_order(pair_df, src)
@@ -377,7 +393,7 @@ def _build_per_radio_figure(
     )
     return src, peer, fig, concat_trace(trace_rows)
 
-
+## @brief
 def _render_figure_chrome(
         fig: plt.Figure,
         *,
@@ -394,7 +410,7 @@ def _render_figure_chrome(
         color_map: dict[str, tuple],
         peer_legend_labels: dict[str, str],
 ) -> None:
-    """Apply tight_layout + render the centered header, stats table, and legend."""
+    ##Apply tight_layout + render the centered header, stats table, and legend.##
     fig_h = float(fig.get_size_inches()[1])
     top_margin = max(1.0 - layout.total_in / fig_h, 0.55)
     fig.tight_layout(rect=(0, 0, 1, top_margin))
@@ -422,28 +438,28 @@ def _render_figure_chrome(
             y_center=legend_center_y,
         )
 
-
+## @brief
 def _make_per_radio_axes(local_macs: list[str], height_per_panel: float,
                          header_inches: float = 1.6):
-    """One column of subplots, one row per source-side local MAC."""
+    ##One column of subplots, one row per source-side local MAC.##
     n = max(len(local_macs), 1)
     fig, axes = plt.subplots(n, 1,
                              figsize=(13, height_per_panel * n + header_inches),
                              sharex=True, squeeze=False)
     return fig, [axes[i][0] for i in range(n)]
 
-
+## @brief
 def _peer_mac_colors(peer_macs: list[str]) -> dict[str, str]:
-    """Deterministic peer-MAC -> matplotlib color, stable within one figure."""
+    ##Deterministic peer-MAC -> matplotlib color, stable within one figure.##
     if not peer_macs:
         return {}
     cmap = plt.get_cmap("tab10" if len(peer_macs) <= 10 else "tab20")
     n = max(cmap.N, 1)
     return {mac: cmap(i % n) for i, mac in enumerate(sorted(peer_macs))}
 
-
+## @brief
 def _stable_local_mac_order(pair_df: pd.DataFrame, src_rab: str) -> list:
-    """Source-side local MACs ordered by global radio index; unknowns at the end."""
+    ##Source-side local MACs ordered by global radio index; unknowns at the end.##
     macs = pair_df["tag_local_mac"].dropna().unique()
     keyed: list[tuple[int, str, object]] = []
     for lm in macs:
@@ -454,10 +470,10 @@ def _stable_local_mac_order(pair_df: pd.DataFrame, src_rab: str) -> list:
     keyed.sort()
     return [lm for _, _, lm in keyed]
 
-
+## @brief
 def _per_radio_stats_rows(pair_df: pd.DataFrame, value_col: str,
                           src_rab: str) -> list[tuple[str, float, int]]:
-    """Per-source-radio ``(label, median, n)`` in stable radio-index order."""
+    ##Per-source-radio ``(label, median, n)`` in stable radio-index order.##
     rows: list[tuple[int, str, float, int]] = []
     for lm, g in pair_df.groupby("tag_local_mac"):
         netdev = _first_str(g.get("tag_interface"))
@@ -473,12 +489,12 @@ def _per_radio_stats_rows(pair_df: pd.DataFrame, value_col: str,
     rows.sort(key=lambda r: (r[0], r[1]))
     return [(label, median, n) for _, label, median, n in rows]
 
-
+## @brief
 def _figure_centered_header(fig: plt.Figure, scenario_name: str,
                             src: str, peer: str, title_metric: str,
                             df: pd.DataFrame, y_main: float,
                             y_scenario: float) -> None:
-    """Two-line centered header at caller-supplied y offsets."""
+    ##Two-line centered header at caller-supplied y offsets.##
     caption = scenario_caption(df)
     crashed = crashed_suffix(scenario_name)
     main = f"{src} per radio  ->  {peer}   ({title_metric})"
@@ -489,12 +505,12 @@ def _figure_centered_header(fig: plt.Figure, scenario_name: str,
                  fontsize=10, ha="center", va="center",
                  fontweight="bold", color="0.15")
 
-
+## @brief
 def _render_per_radio_stats_table(fig: plt.Figure, pair_df: pd.DataFrame,
                                   value_col: str, metric_label: str,
                                   src_rab: str, y_top: float,
                                   y_bottom: float) -> None:
-    """Centered per-source-radio median/n table above the subplots."""
+    ##Centered per-source-radio median/n table above the subplots.##
     rows = _per_radio_stats_rows(pair_df, value_col, src_rab)
     if not rows:
         return
@@ -526,13 +542,13 @@ def _render_per_radio_stats_table(fig: plt.Figure, pair_df: pd.DataFrame,
             if col_idx == 0:
                 cell.set_text_props(family="monospace", fontsize=8)
 
-
+## @brief
 def _render_peer_antenna_legend(fig: plt.Figure, peer_rab: str,
                                 plotted_macs: set[str],
                                 color_map: dict[str, tuple],
                                 peer_legend_labels: dict[str, str],
                                 y_center: float) -> None:
-    """Single figure-level legend mapping color -> peer radio."""
+    ##Single figure-level legend mapping color -> peer radio.##
     macs = [m for m in peer_legend_labels if m in plotted_macs]
     macs.sort(key=lambda m: peer_legend_labels.get(m, m))
     handles: list[Line2D] = []
@@ -556,9 +572,9 @@ def _render_peer_antenna_legend(fig: plt.Figure, peer_rab: str,
         title_fontsize=9,
     )
 
-
+## @brief
 def _radio_subtitle(rab: str, netdev: str, local_mac) -> str:
-    """``rab2.3 (rear)  wlP2p1s0f0  ...02:30`` style label."""
+    ##``rab2.3 (rear)  wlP2p1s0f0  ...02:30`` style label.##
     parts = [radio_label(rab, netdev)]
     orient = netdev_orientation(rab, netdev) if netdev else None
     if orient:
@@ -568,9 +584,9 @@ def _radio_subtitle(rab: str, netdev: str, local_mac) -> str:
     parts.append(f"...{str(local_mac)[-8:]}")
     return "  ".join(parts)
 
-
+## @brief
 def _per_pair_rate_mbps(pair_df: pd.DataFrame) -> pd.DataFrame:
-    """PHY rate per (tag_local_mac, tag_sta_mac); drops counter resets only."""
+    ##PHY rate per (tag_local_mac, tag_sta_mac); drops counter resets only.##
     out = []
     grouped = pair_df.groupby(["tag_local_mac", "tag_sta_mac"], sort=False)
     for (lmac, smac), g in grouped:
@@ -588,7 +604,7 @@ def _per_pair_rate_mbps(pair_df: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame()
     return pd.concat(out, ignore_index=True).dropna(subset=["__mbps__"])
 
-
+## @brief
 def _first_str(series) -> str:
     if series is None:
         return ""
