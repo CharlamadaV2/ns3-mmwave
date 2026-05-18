@@ -5,7 +5,7 @@ Usage
 -----
     python -m scripts.rl.train \
         --sim-binary build/scratch/mesh-sim/ns3*-sim-* \
-        --run-config scratch/mesh-sim/inputs/scenarios/rl-test/run.ini \
+        --run-config scratch/mesh-sim/inputs/baselines/rl-test/run.ini \
         --num-episodes 50
 """
 
