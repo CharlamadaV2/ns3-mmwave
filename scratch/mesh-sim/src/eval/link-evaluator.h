@@ -37,9 +37,14 @@ class LinkEvaluator
     double      m_txPowerDbm    = 30.0;
     double      m_noiseFloorDbm = -174.0;
     double      m_bandwidthHz   = 400e6;
-    double      m_bfGainDb      = 0.0;
     std::string m_amcModel      = "shannon";
     bool        m_buildingsEnabled = false;
+
+    // Per-node array gains, indexed parallel to cfg.nodes (and to mobs in
+    // EvaluateAll). Resolved at Configure() from each NodeSpec's override
+    // or the channel default.
+    std::vector<double> m_txGainDbi;
+    std::vector<double> m_rxGainDbi;
 
     ns3::Ptr<ns3::PropagationLossModel>  m_plModel;
     ns3::Ptr<ns3::ChannelConditionModel> m_condModel;

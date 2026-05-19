@@ -6,6 +6,7 @@
  */
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -57,6 +58,10 @@ struct NodeSpec
     Velocity    velocity;
     RandomWalkParams random_walk;
     std::vector<Waypoint> waypoints;  // used only when mobility == "waypoint"
+
+    // Per-node array gain overrides; fall back to channel.tx/rx_array_gain_dbi.
+    std::optional<double> tx_array_gain_dbi;
+    std::optional<double> rx_array_gain_dbi;
 };
 
 // Max speed (m/s) derived from node type. Used by RL to cap velocity.

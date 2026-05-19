@@ -101,6 +101,19 @@ ValidateConfig(const SimConfig& cfg)
                                    std::to_string(node.waypoints.front().t) + ")");
             }
         }
+
+        if (node.tx_array_gain_dbi.has_value() && *node.tx_array_gain_dbi < 0.0)
+        {
+            r.errors.push_back("node '" + node.id +
+                               "' tx_array_gain_dbi must be >= 0 (got " +
+                               std::to_string(*node.tx_array_gain_dbi) + ")");
+        }
+        if (node.rx_array_gain_dbi.has_value() && *node.rx_array_gain_dbi < 0.0)
+        {
+            r.errors.push_back("node '" + node.id +
+                               "' rx_array_gain_dbi must be >= 0 (got " +
+                               std::to_string(*node.rx_array_gain_dbi) + ")");
+        }
     }
 
     // -- channel --

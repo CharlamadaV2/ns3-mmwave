@@ -72,6 +72,15 @@ parseNodeSpec(const json& j)
         }
     }
 
+    if (j.contains("tx_array_gain_dbi"))
+    {
+        n.tx_array_gain_dbi = j["tx_array_gain_dbi"].get<double>();
+    }
+    if (j.contains("rx_array_gain_dbi"))
+    {
+        n.rx_array_gain_dbi = j["rx_array_gain_dbi"].get<double>();
+    }
+
     return n;
 }
 
