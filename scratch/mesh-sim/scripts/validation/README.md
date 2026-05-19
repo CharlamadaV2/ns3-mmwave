@@ -1,9 +1,10 @@
 # scripts/validation
 
 Sim-vs-field comparison: runs mesh-sim across a directory of scenarios
-(multi-seed), then overlays the pooled sim distribution against the
-ARPO field traces as an ECDF with a bootstrap 90% CI band + two-sample
-K-S statistic.
+(multi-seed), then overlays the pooled sim distribution against the ARPO
+field traces as normalized histograms with a bootstrap CI band on the sim
+curve, plus a two-sample K-S statistic and |Δmedian|/|Δmean| in the
+chart subtitle and CSV.
 
 Scenario inputs come from `inputs/custom/sherpa/spring_lake/` (one dir
 per scenario, each holding `run.ini` + `nodes.json`). Field traces come
@@ -24,7 +25,7 @@ python -m scripts.validation.run_batch
 # 3. convert per-seed sim outputs to arpo_data-style trace CSVs
 python -m scripts.validation.sim_to_traces outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation
 
-# 4. ECDF + bootstrap CI + K-S vs field
+# 4. histogram overlay + bootstrap CI + K-S vs field
 python -m scripts.validation.compare      outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation
 
 # 5. cross-batch summary (overall + per-scenario)
@@ -71,12 +72,27 @@ in the field but the sim has it pinned `fixed`." The mobility classifier is bbox
 (threshold 20 m max-dim) so cumulative GPS jitter doesn't trip it.
 
 `compare_runs` auto-discovers every batch under `outputs/` with a
-`validation_summary.csv`, or accepts explicit batch dirs as positional args.
-It prints the headline summary (channel/gain/tx config + mean |Δmed| + mean K-S
-per batch), the close vs far link-class breakdown, and a per-scenario matrix so
-you can see which scenarios drive the mean. For multi-day variance in the
-**field** data itself (independent of any sim run), see
-`python -m scripts.arpo_data.multiday_variance`.
+`validation_summary.csv` (or takes explicit batch dirs) and writes cross-batch
+heatmap PNGs to `outputs/cross_batch_summary/`. One PNG per (metric, score) —
+rows = scenarios with date, cols = batches with timestamp, cells = mean across
+rab links. For multi-day variance in the **field** data itself (independent of
+any sim run), see `python -m scripts.arpo_data.multiday_variance`.
+
+## How to read the chart
+
+One axis: normalized histograms (densities) of sim and field samples,
+overlaid. Density normalization (∫=1) lets the curves compare directly even
+though sim N (tens of thousands) is much larger than field N. The shaded
+band on the sim curve is a pointwise bootstrap CI (default 90%, B=1000).
+
+Subtitle annotates the K-S D-statistic and |Δmedian|/|Δmean| in the metric's
+units. K-S is unitless (0–1) — useful for ranking similarity across runs;
+|Δmed| / |Δmean| are in the metric's own units. Median is the robust
+central-tendency (skewed wireless metrics + bursty fades drag the mean
+around); mean is reported alongside it so you can see when they diverge.
+
+The K-S p-value is intentionally not reported: with N in the tens of
+thousands per pool, p ≈ 0 even for operationally trivial differences.
 
 ## Output
 
@@ -84,13 +100,12 @@ you can see which scenarios drive the mean. For multi-day variance in the
 |----------------|--------------------------------------------------------------------|
 | `run_batch`    | `outputs/.../<HH-MM-SS>-validation/<scenario>/seed-N/{links,mcs,rx-power}.csv` + `batch_manifest.json` |
 | `sim_to_traces`| `outputs/.../<scenario>/sim_traces/seed-N/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv` |
-| `compare`      | `outputs/.../<scenario>/validation/pngs/<src>/ecdf_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
+| `compare`      | `outputs/.../<scenario>/validation/pngs/<src>/hist_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
 
-Each ECDF figure plots the sim curve with a shaded pointwise bootstrap CI
-band (default 90%, B=1000) and the field curve as a single line; the K-S
-statistic, asymptotic p-value, and |Δmedians| are annotated. The summary
-CSV has one row per (scenario, link, metric) with medians, IQRs, sample
-counts, and K-S.
+Each figure plots sim density with a shaded pointwise bootstrap CI band
+(default 90%, B=1000) and field density as a line; subtitle annotates K-S,
+|Δmed|, and |Δmean|. The summary CSV has one row per (scenario, link, metric)
+with means, medians, IQRs, sample counts, |Δmedians|, |Δmeans|, and K-S.
 
 ## Module layout
 
@@ -98,7 +113,7 @@ counts, and K-S.
 |--------------------|-------------------------------------------------------------------|
 | `run_batch.py`     | One sim binary call per scenario, fanning out seeds via `--seeds=` |
 | `sim_to_traces.py` | Rewrites per-seed sim CSVs into arpo_data-compatible trace CSVs   |
-| `compare.py`       | Pools sim seeds + field directions, renders ECDF overlays + K-S   |
+| `compare.py`       | Pools sim seeds + field directions, renders histogram overlays + K-S |
 | `compare_runs.py`  | Cross-batch summary table (overall + per-scenario)                |
 | `scenario_fidelity.py` | Per-scenario sim-vs-field layout/mobility audit               |
 | `build_waypoints.py` | Generate waypoint mobility for a node from its field GPS trace  |
