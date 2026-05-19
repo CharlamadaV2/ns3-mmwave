@@ -128,21 +128,71 @@ def _global_mac_netdevs(csv_root: Path) -> dict[str, str]:
     return out
 
 
+_MAC_DEVICE_CACHE: dict[Path, dict[str, str]] = {}
+_DEVICE_NETDEVS_CACHE: dict[Path, dict[str, list[str]]] = {}
+
+
+def _global_mac_devices(csv_root: Path) -> dict[str, str]:
+    """{mac: tag_device_name} -- full chassis identifier like ``sky01-mw``."""
+    if csv_root in _MAC_DEVICE_CACHE:
+        return _MAC_DEVICE_CACHE[csv_root]
+    out: dict[str, str] = {}
+    if csv_root.is_dir():
+        for scen in sorted(csv_root.iterdir()):
+            if not scen.is_dir():
+                continue
+            for node in sorted(scen.iterdir()):
+                if not node.is_dir() or node.name == "sdwan":
+                    continue
+                fp = node / "bh2.csv"
+                if not fp.exists():
+                    continue
+                try:
+                    df = pd.read_csv(fp, low_memory=False,
+                                     usecols=["tag_local_mac", "tag_device_name"])
+                except (ValueError, KeyError):
+                    continue
+                pairs = df.dropna(subset=["tag_local_mac", "tag_device_name"]) \
+                    .drop_duplicates()
+                for mac, dev in zip(pairs["tag_local_mac"], pairs["tag_device_name"]):
+                    out.setdefault(str(mac), str(dev))
+    _MAC_DEVICE_CACHE[csv_root] = out
+    return out
+
+
+def _device_netdevs(csv_root: Path) -> dict[str, list[str]]:
+    """{device_name: sorted netdevs} -- per-device index source for ``<device>.<idx>``."""
+    if csv_root in _DEVICE_NETDEVS_CACHE:
+        return _DEVICE_NETDEVS_CACHE[csv_root]
+    out: dict[str, set[str]] = {}
+    devs = _global_mac_devices(csv_root)
+    nets = _global_mac_netdevs(csv_root)
+    for mac, dev in devs.items():
+        nd = nets.get(mac)
+        if nd:
+            out.setdefault(dev, set()).add(nd)
+    ordered = {dev: sorted(netdevs) for dev, netdevs in out.items()}
+    _DEVICE_NETDEVS_CACHE[csv_root] = ordered
+    return ordered
+
+
 def mac_radio_label(mac: str, csv_root: Path | None = None) -> str | None:
-    """MAC -> ``rabN.M``; None if no rab ever claimed this MAC as a local MAC."""
+    """MAC -> ``<device_name>.<idx>`` (e.g. ``sky01-mw.1``); None if the MAC has no known device."""
     if mac is None:
         return None
     if csv_root is None:
         from .paths import CSV_ROOT
         csv_root = CSV_ROOT
-    owners = _global_local_macs(csv_root)
-    rab = owners.get(str(mac))
-    if rab is None:
-        return None
+    dev = _global_mac_devices(csv_root).get(str(mac))
     netdev = _global_mac_netdevs(csv_root).get(str(mac))
-    if not netdev:
+    if not dev or not netdev:
         return None
-    return radio_label(rab, netdev, csv_root=csv_root)
+    netdevs = _device_netdevs(csv_root).get(dev, [])
+    try:
+        idx = netdevs.index(netdev) + 1
+    except ValueError:
+        return f"{dev}.?"
+    return f"{dev}.{idx}"
 
 
 # Plot pipelines call build_topology many times per scenario -- cache the scan.

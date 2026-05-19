@@ -558,8 +558,9 @@ def _render_peer_antenna_legend(fig: plt.Figure, peer_rab: str,
 
 
 def _radio_subtitle(rab: str, netdev: str, local_mac) -> str:
-    """``rab2.3 (rear)  wlP2p1s0f0  ...02:30`` style label."""
-    parts = [radio_label(rab, netdev)]
+    """``titan02-mw.3 (rear)  wlP2p1s0f0  ...02:30`` style label."""
+    label = mac_radio_label(local_mac) or radio_label(rab, netdev)
+    parts = [label]
     orient = netdev_orientation(rab, netdev) if netdev else None
     if orient:
         parts.append(f"({orient})")
