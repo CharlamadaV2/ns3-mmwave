@@ -24,7 +24,8 @@ From `scratch/mesh-sim/`:
 python -m scripts.arpo_data.cli extract                       # unzip
 python -m scripts.arpo_data.cli plot --scenario <name>        # one scenario
 python -m scripts.arpo_data.cli plot --all                    # every scenario
-python -m scripts.arpo_data.cli multi-day                     # day-vs-day ECDFs + K-S
+python -m scripts.arpo_data.cli multi-day                     # day-vs-day histogram overlays + K-S
+python -m scripts.arpo_data.cli multi-day --family <fam> --audit   # row/max diagnostics per CSV
 python -m scripts.arpo_data.multiday_variance                 # variance table from _pairwise_ks.csv
 ```
 
@@ -33,6 +34,19 @@ It prints three views — per-family rollup, per-link rollup, and the detail
 table sorted by `|Δmed|` descending — so unstable day-to-day links surface at
 the top without opening any PNGs. Flags: `--metric {snr,rcpi,mcs,per,throughput}`,
 `--family <name>`, `--top N`, `--csv <out>`.
+
+## How to read the multi-day chart
+
+One overlay per (family, link, metric): one normalized histogram per day,
+all areas integrate to 1 so days with different sample counts overlay
+directly. Each curve has a dotted vertical line at its median; the legend
+reports n, median, and mean per day.
+
+Subtitle annotates the day-pair with the largest |Δmed| plus the K-S D-
+statistic. Use `--audit` on the CLI to print raw-CSV row count vs parsed-bag
+row count and raw-column max vs parsed-bag max — surfaces NaN-coerce drops
+and helps confirm whether a "value > plot max" you spotted in a raw CSV is a
+genuine pipeline drop or a scope mismatch (different slice).
 
 ## Output
 
@@ -44,8 +58,9 @@ the top without opening any PNGs. Flags: `--metric {snr,rcpi,mcs,per,throughput}
 
 `plot` emits per-radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput)
 plus GPS tracks; each figure has a matching trace CSV. `multi-day` pools
-those traces by scenario family and writes ECDF overlays + `_per_day_stats.csv`
-and `_pairwise_ks.csv`.
+those traces by scenario family and writes histogram overlays plus
+`_per_day_stats.csv` and `_pairwise_ks.csv` (the latter holds K-S plus
+median/mean deltas per day-pair).
 
 ## Module layout
 

@@ -130,10 +130,14 @@ def main() -> int:
     g.add_argument("--scenario", help="Scenario directory name under csv/")
     g.add_argument("--all", action="store_true", help="Plot every scenario")
 
-    sub.add_parser(
+    md = sub.add_parser(
         "multi-day",
-        help="Day-vs-day ECDF overlays + K-S table per scenario family",
+        help="Day-vs-day distribution overlays + similarity table per scenario family",
     )
+    md.add_argument("--family",
+                    help="Only process this scenario family")
+    md.add_argument("--audit", action="store_true",
+                    help="Print raw-CSV vs parsed-bag row count + max diagnostics")
 
     args = p.parse_args()
     if args.cmd == "extract":
@@ -141,7 +145,7 @@ def main() -> int:
     if args.cmd == "plot":
         return _cmd_plot(args)
     if args.cmd == "multi-day":
-        return multi_day()
+        return multi_day(audit=args.audit, family_filter=args.family)
     return 1
 
 

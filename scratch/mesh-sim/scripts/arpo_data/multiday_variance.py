@@ -35,13 +35,17 @@ def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
 def _summary_table(df: pd.DataFrame, unit: str) -> str:
     """One row per (family, link, day-pair), sorted by |Δmed| desc."""
     unit_suffix = f" {unit}" if unit else ""
+    has_mean = "mean_delta" in df.columns
     df = df.assign(abs_delta=df["median_delta"].abs()) \
            .sort_values("abs_delta", ascending=False)
-    header = ("family", "link", "day_a → day_b", "n_a", "n_b",
-              "med_a", "med_b", "Δmed (b−a)", "|Δmed|", "K-S")
+    header = ["family", "link", "day_a → day_b", "n_a", "n_b",
+              "med_a", "med_b", "Δmed (b−a)"]
+    if has_mean:
+        header.append("Δmean (b−a)")
+    header += ["|Δmed|", "K-S"]
     body = []
     for _, r in df.iterrows():
-        body.append((
+        row = [
             str(r["family"]),
             f"{r['src_rab']} ↔ {r['peer_rab']}",
             f"{_fmt_day(r['day_a'])} → {_fmt_day(r['day_b'])}",
@@ -50,10 +54,15 @@ def _summary_table(df: pd.DataFrame, unit: str) -> str:
             f"{float(r['median_a']):.2f}{unit_suffix}",
             f"{float(r['median_b']):.2f}{unit_suffix}",
             f"{float(r['median_delta']):+.2f}{unit_suffix}",
+        ]
+        if has_mean:
+            row.append(f"{float(r['mean_delta']):+.2f}{unit_suffix}")
+        row += [
             f"{float(r['abs_delta']):.2f}{unit_suffix}",
             f"{float(r['ks_statistic']):.3f}",
-        ))
-    return _render_table(header, body)
+        ]
+        body.append(tuple(row))
+    return _render_table(tuple(header), body)
 
 
 def _link_rollup(df: pd.DataFrame, unit: str) -> str:
