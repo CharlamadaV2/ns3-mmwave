@@ -121,6 +121,8 @@ ValidateConfig(const SimConfig& cfg)
     checkPositive(r, "channel.bandwidth_mhz", cfg.channel.bandwidth_mhz);
     checkOneOf(r, "channel.channel_model", cfg.channel.channel_model,
                {"3gpp", "nyu"});
+    checkOneOf(r, "channel.condition_model", cfg.channel.condition_model,
+               {"auto", "static_los"});
     checkOneOf(r, "channel.scenario", cfg.channel.scenario,
                {"UMi", "UMa", "RMa", "InH", "InF"});
     if (cfg.channel.tx_array_gain_dbi < 0.0)

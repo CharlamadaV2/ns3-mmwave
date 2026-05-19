@@ -198,7 +198,12 @@ TopologyBuilder::InstallMobilityRandomWalk(const Ptr<Node>& node, const NodeSpec
 void
 TopologyBuilder::CreateBuildings()
 {
-    if (m_cfg.buildings.empty())
+    // BuildingsChannelConditionModel needs MobilityBuildingInfo on every
+    // node, even with zero buildings, so install the helper whenever the
+    // user asked for static_los.
+    const bool needs_helper =
+        !m_cfg.buildings.empty() || m_cfg.channel.condition_model == "static_los";
+    if (!needs_helper)
     {
         return;
     }
@@ -258,7 +263,7 @@ TopologyBuilder::ConfigurePropagationModel()
         plModel->SetAttribute("FoliageLoss",            DoubleValue(nyu.foliage_loss_db_m));
         plModel->SetAttribute("O2ILosstype",            StringValue(nyu.o2i_loss_type));
 
-        if (!m_cfg.buildings.empty())
+        if (ch.condition_model == "static_los" || !m_cfg.buildings.empty())
         {
             auto ccm = CreateObject<BuildingsChannelConditionModel>();
             plModel->SetChannelConditionModel(ccm);
@@ -303,7 +308,7 @@ TopologyBuilder::ConfigurePropagationModel()
 
         plModel->SetFrequency(freqHz);
 
-        if (!m_cfg.buildings.empty())
+        if (ch.condition_model == "static_los" || !m_cfg.buildings.empty())
         {
             auto ccm = CreateObject<BuildingsChannelConditionModel>();
             plModel->SetChannelConditionModel(ccm);

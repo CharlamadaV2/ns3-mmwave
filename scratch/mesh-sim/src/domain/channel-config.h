@@ -38,6 +38,7 @@ struct ChannelConfig
     double      tx_power_dbm     = 30.0;   // per-node transmit power (dBm)
     std::string scenario         = "UMi";  // "UMi", "UMa", "RMa", "InH", "InF"
     std::string channel_model    = "3gpp"; // "3gpp" or "nyu"
+    std::string condition_model  = "auto"; // "auto" or "static_los"
     bool        blockage_enabled = true;   // 3gpp: ThreeGppChannelModel::Blockage
                                            // nyu:  NYUChannelModel::Blockage
     std::string beamforming_model = "svd";    // for reference; simplified in mesh-sim
