@@ -1,4 +1,4 @@
-## @package scenario_fidelity
+## @file scenario_fidelity.py
 # @brief Compare each scenario's sim layout and motion against the field collect.
 #
 # For each scenario in a batch output directory this module checks two things:

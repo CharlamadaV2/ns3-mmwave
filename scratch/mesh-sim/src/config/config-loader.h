@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /** @brief
  * ConfigLoader: parses run.ini + referenced nodes.json / buildings.json
  * and returns a fully populated SimConfig struct.

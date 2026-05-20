@@ -1,4 +1,4 @@
-## @package sim_to_traces
+## @file sim_to_traces.py
 # @brief Convert sim seed CSVs into arpo_data-style per-link trace CSVs.
 #
 # The ns-3 sim writes one CSV per metric (e.g. ``links.csv``, ``mcs.csv``)

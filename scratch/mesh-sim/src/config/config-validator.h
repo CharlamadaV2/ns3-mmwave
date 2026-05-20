@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /** @brief
  * Config validation: checks a fully-loaded SimConfig for invalid
  * or inconsistent values before the simulation runs.

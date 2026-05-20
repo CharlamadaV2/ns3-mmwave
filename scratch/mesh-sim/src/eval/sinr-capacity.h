@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /** @brief
  * SINR-to-capacity mapping functions. Pure math, no ns-3 dependency.
  * Used by LinkEvaluator and testable standalone.

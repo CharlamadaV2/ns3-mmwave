@@ -1,4 +1,4 @@
-## @package run_batch
+## @file run_batch.py
 # @brief Run mesh-sim across a directory of scenarios, multi-seed.
 #
 # Discovers all scenario subdirectories that contain a ``run.ini``, invokes

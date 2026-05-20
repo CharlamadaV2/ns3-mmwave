@@ -1,4 +1,4 @@
-## @package compare_runs
+## @file compare_runs.py
 # @brief Cross-batch summary table: one row per validation batch.
 #
 # Reads the ``validation_summary.csv`` produced by @ref compare for each batch

@@ -1,4 +1,4 @@
-## @package compare
+## @file compare.py
 # @brief ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces.
 #
 # For each (scenario, link, metric) triple this module:

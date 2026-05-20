@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /**
  * @file channel-config.h
  * @brief Radio and channel configuration POD types.

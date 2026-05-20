@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /** @brief
  * Top-level simulation configuration and runtime metadata POD types.
  * No ns-3 headers included — keeps compilation fast and allows use in

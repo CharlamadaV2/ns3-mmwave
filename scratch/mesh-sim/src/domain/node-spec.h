@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
 /**
  * @file node-spec.h
  * @brief Topology and geometry POD types: nodes, buildings, and spatial properties.

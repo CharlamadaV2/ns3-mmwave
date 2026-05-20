@@ -69,4 +69,4 @@ and `_pairwise_ks.csv`.
 
 ## Dependencies
 
-`pandas`, `numpy`, `matplotlib`. No ns-3.
+`pandas`, `numpy`, and `matplotlib`
