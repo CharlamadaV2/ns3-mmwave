@@ -34,11 +34,8 @@ python -m scripts.sweep.cli --config inputs/custom/sherpa/1.1/sweep.ini
 ```
 
 ## Documentation
-The documentation of this module is available at [this link](file://wsl.localhost/Ubuntu/home/kimson/ns3-mmwave/scratch/mesh-sim/docs/html/index.html)
+The documentation of this module is available at ```file:///C:/Users/[Your Name]/[Repository File Path]/ns3-mmwave/scratch/mesh-sim/docs/html/index.html```
+This link is accessable through your favorite brower.
 
 ## About
 This sim is being worked on by the University of Massachusetts's ACNL
-
-## Authors ##
-
-The 

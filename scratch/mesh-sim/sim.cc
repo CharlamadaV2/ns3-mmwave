@@ -27,8 +27,9 @@ namespace fs = std::filesystem;
 
 NS_LOG_COMPONENT_DEFINE("MeshSim");
 
+
 int
-main(int argc, char* argv[])
+main(int argc, char* argv[]) ///< Takes params for cli at start
 {
     auto args = mesh_sim::ParseCommandLine(argc, argv);
     ns3::LogComponentEnable("MeshSim", ns3::LOG_LEVEL_INFO);

@@ -14,16 +14,22 @@
 
 namespace mesh_sim
 {
-
+/** @brief
+*
+*/
 struct ValidationResult
 {
     std::vector<std::string> errors;
     bool ok() const { return errors.empty(); }
 };
 
-/**
+/** @brief 
+
  * Validate a SimConfig after loading.  Returns all errors found
  * (not just the first) so the user can fix them in one pass.
+ * 
+ * @param
+ * @return
  */
 ValidationResult ValidateConfig(const SimConfig& cfg);
 

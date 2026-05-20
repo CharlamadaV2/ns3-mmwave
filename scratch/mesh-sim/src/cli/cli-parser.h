@@ -52,6 +52,7 @@ struct CliArgs
     bool        rl_mode         = false;  ///< Enable RL mode (stdin/stdout JSON exchange) when @c true.
 };
 
+
 /**
  * @brief Parse @c argv via @c ns3::CommandLine and return a populated @ref CliArgs.
  *

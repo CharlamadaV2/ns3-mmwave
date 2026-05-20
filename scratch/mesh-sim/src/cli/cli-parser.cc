@@ -47,6 +47,7 @@ ParseCommandLine(int argc, char* argv[])
                  args.rl_mode);
     cmd.Parse(argc, argv);
 
+    //Makes config path required
     if (args.run_config_path.empty())
     {
         std::cerr << "Error: --run-config=<path> is required.\n";
@@ -71,6 +72,7 @@ ParseCommandLine(int argc, char* argv[])
     return args;
 }
 
+//Manages seeding
 std::vector<uint32_t>
 ResolveSeeds(const CliArgs& args, const SimConfig& cfg)
 {

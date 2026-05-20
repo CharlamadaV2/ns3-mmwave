@@ -18,7 +18,7 @@ namespace mesh_sim
 class ConfigLoader
 {
   public:
-    /**
+    /** @brief
      * Load a complete SimConfig from a run.ini file.
      *
      * @param run_config_path  Path to run.ini (required).

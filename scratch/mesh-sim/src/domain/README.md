@@ -1,11 +1,20 @@
+\dir src/domain
 # src/domain
-
-## Run
 
 ## Output
 
 ## Module Layout
+```
+src/domain/
+    -
+    -
+    -
+    -
+    -
+```
 
 ## Conventions 
 
 ## Dependencies
+
+no dependencies 

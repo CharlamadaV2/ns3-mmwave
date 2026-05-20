@@ -1,8 +1,3 @@
-/**
- * @brief 
- * 
- */
-
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 #include "src/io/viz-writer.h"
 #include "src/eval/sinr-capacity.h"

@@ -6,19 +6,7 @@ handling, seed resolution, and input archiving into standalone functions
 with no ns-3 types in their public signatures (except `ns3::CommandLine`
 inside the `.cc`).
 
-
-## Run
-
-From `scratch/mesh-sim/`:
-
-```bash
-./ns3 run mesh-sim -- \
-    --run-config=inputs/custom/sherpa/spring_lake/<scenario>/run.ini \
-    --seeds=1,2,3,4,5 \
-    --output-dir=outputs/my-batch
-```
-
-### Flags
+## Flags
 
 | Flag | Required | Default | Description |
 |------|----------|---------|-------------|
@@ -31,10 +19,6 @@ From `scratch/mesh-sim/`:
 | `--debug-links` | no | `false` | Enable verbose per-link evaluation logging. |
 | `--rl-mode` | no | `false` | Enable RL mode — the sim exchanges observations and actions via stdin/stdout JSON. |
 
-### Seed precedence
-
-`--seeds` > `--seed` > value in `run.ini`
-
 
 ## Output
 
@@ -42,7 +26,7 @@ Each seed produces its own subdirectory under the batch root:
 
 ```
 <output-dir>/
-  inputs/          # snapshot of all scenario input files (run.ini, nodes.json, …)
+  inputs/          # snapshot of all scenario input files (run.ini, nodes.json)
   seed-1/
     links.csv
     mcs.csv
@@ -50,7 +34,6 @@ Each seed produces its own subdirectory under the batch root:
     positions.csv
     run.log
   seed-2/
-    …
 ```
 
 The `inputs/` directory is written by `ArchiveScenarioInputs` before any seed
@@ -82,4 +65,4 @@ src/cli/
 
 ## Dependencies
 
-No dependencies required to run
+Depends on ns3 framework

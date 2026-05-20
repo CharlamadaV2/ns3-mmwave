@@ -1,8 +1,3 @@
-/**
- * @brief 
- * 
-*/
-
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 #include "src/config/config-loader.h"
 #include "src/util/ini-parser.h"

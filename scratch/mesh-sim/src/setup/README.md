@@ -1,11 +1,14 @@
+\dir src/setup
 # src/setup
-
-## Run
 
 ## Output
 
 ## Module Layout
+```
+src/setup/
+```
 
 ## Conventions 
 
 ## Dependencies
+no dependencies
