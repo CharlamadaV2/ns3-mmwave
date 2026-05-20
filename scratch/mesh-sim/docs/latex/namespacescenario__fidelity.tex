@@ -1,0 +1,19 @@
+\hypertarget{namespacescenario__fidelity}{}\doxysection{scenario\+\_\+fidelity Namespace Reference}
+\label{namespacescenario__fidelity}\index{scenario\_fidelity@{scenario\_fidelity}}
+
+
+Compare each scenario\textquotesingle{}s sim layout and motion against the field collect.  
+
+
+
+
+\doxysubsection{Detailed Description}
+Compare each scenario\textquotesingle{}s sim layout and motion against the field collect. 
+
+For each scenario in a batch output directory this module checks two things\+:
+\begin{DoxyEnumerate}
+\item {\bfseries{Mobility fidelity}} — does each node\textquotesingle{}s mobile/static classification in the sim match the field GPS trace?
+\item {\bfseries{Geometry fidelity}} — are the initial pairwise inter-\/node distances in the sim within tolerance of the field GPS positions?
+\end{DoxyEnumerate}
+
+Results are printed as human-\/readable tables with {\ttfamily ✓}/{\ttfamily ✗} markers. Scenarios with mismatches are collected into a flagged list at the end. 

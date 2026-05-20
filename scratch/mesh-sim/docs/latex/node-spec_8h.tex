@@ -1,0 +1,62 @@
+\hypertarget{node-spec_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/node-\/spec.h File Reference}
+\label{node-spec_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/node-\/spec.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/node-\/spec.h}}
+
+
+Topology and geometry POD types\+: nodes, buildings, and spatial properties.  
+
+
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for node-\/spec.h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{node-spec_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{node-spec_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Position}{mesh\+\_\+sim\+::\+Position}}
+\begin{DoxyCompactList}\small\item\em Cartesian position in metres. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Velocity}{mesh\+\_\+sim\+::\+Velocity}}
+\begin{DoxyCompactList}\small\item\em Constant velocity vector in metres per second. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1RandomWalkParams}{mesh\+\_\+sim\+::\+Random\+Walk\+Params}}
+\begin{DoxyCompactList}\small\item\em Bounding box and speed parameters for the random-\/walk mobility model. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Waypoint}{mesh\+\_\+sim\+::\+Waypoint}}
+\begin{DoxyCompactList}\small\item\em A single timed waypoint in a node\textquotesingle{}s mobility trajectory. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{mesh\+\_\+sim\+::\+Node\+Spec}}
+\begin{DoxyCompactList}\small\item\em Full specification for one simulation node. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{mesh\+\_\+sim\+::\+Building\+Spec}}
+\begin{DoxyCompactList}\small\item\em Axis-\/aligned bounding-\/box specification for one building. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}{mesh\+\_\+sim\+::\+Max\+Speed\+For\+Type}} (const std\+::string \&node\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Return the maximum speed (m/s) allowed for a given node type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Topology and geometry POD types\+: nodes, buildings, and spatial properties. 
+
+No ns-\/3 headers are included — keeps compilation fast and allows these types to be used in post-\/run I/O code without ns-\/3 linkage.
+
+{\bfseries{Coordinate convention}} All positions are stored as (x, y, z) triples in metres.
+\begin{DoxyItemize}
+\item 2-\/D scenarios\+: set z to a constant height for all nodes.
+\item 1-\/D scenarios\+: additionally set y = 0 for all nodes. The coordinate system is arbitrary; only relative geometry matters. 
+\end{DoxyItemize}

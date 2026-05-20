@@ -1,0 +1,145 @@
+\hypertarget{structmesh__sim_1_1NyuChannelConfig}{}\doxysection{mesh\+\_\+sim\+::Nyu\+Channel\+Config Struct Reference}
+\label{structmesh__sim_1_1NyuChannelConfig}\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+
+
+Parameters specific to the NYU mm\+Wave channel model.  
+
+
+
+
+{\ttfamily \#include $<$channel-\/config.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a070e248b8f660812f374d4e52bd242e9}{rf\+\_\+bandwidth\+\_\+mhz}} = 800.\+0
+\begin{DoxyCompactList}\small\item\em (NYUChannel\+Model\+::\+Rf\+Bandwidth). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a6fa9fd68a85e6986628d2b70163674cb}{shadowing\+\_\+enabled}} = true
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Shadowing\+Enabled). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a956c2d021c475fa8fa9a42d6591305af}{pressure\+\_\+mbar}} = 1013.\+25
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Pressure). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_abbe356ca763f151987f9d41d2ce2ef50}{humidity\+\_\+pct}} = 50.\+0
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Humidity). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_acfa242dd15390376baec4951b85c04e1}{temperature\+\_\+c}} = 20.\+0
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Temperature). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a078a0ef3456bd1ff968faf3e1dd7c9d0}{rain\+\_\+rate\+\_\+mm\+\_\+hr}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Rain\+Rate). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a85388f3a2007e0dc84aa19987c3edbf4}{atmospheric\+\_\+loss\+\_\+enabled}} = false
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Atmospheric\+Loss\+Enabled). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_ac572f08b67d195ad79a9ffcac011286a}{foliage\+\_\+loss\+\_\+enabled}} = false
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Foliage\+Loss\+Enabled). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a8e4ddf7d7ef97df1f3ffd333ef3ce085}{foliage\+\_\+loss\+\_\+db\+\_\+m}} = 0.\+4
+\begin{DoxyCompactList}\small\item\em (NYUPropagation\+Loss\+Model\+::\+Foliage\+Loss). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig_a13ff2998980012ed34d3812347a1f8a8}{o2i\+\_\+loss\+\_\+type}} = \char`\"{}Low Loss\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Parameters specific to the NYU mm\+Wave channel model. 
+
+These fields are only applied when \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}{Channel\+Config\+::channel\+\_\+model}} is {\ttfamily \char`\"{}nyu\char`\"{}}. They are silently ignored for the {\ttfamily \char`\"{}3gpp\char`\"{}} model.
+
+ns-\/3 attribute names are shown in comments so they can be cross-\/referenced with NYUChannel\+Model / NYUPropagation\+Loss\+Model documentation. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a85388f3a2007e0dc84aa19987c3edbf4}\label{structmesh__sim_1_1NyuChannelConfig_a85388f3a2007e0dc84aa19987c3edbf4}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!atmospheric\_loss\_enabled@{atmospheric\_loss\_enabled}}
+\index{atmospheric\_loss\_enabled@{atmospheric\_loss\_enabled}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{atmospheric\_loss\_enabled}{atmospheric\_loss\_enabled}}
+{\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::atmospheric\+\_\+loss\+\_\+enabled = false}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Atmospheric\+Loss\+Enabled). 
+
+Enable molecular absorption loss \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a8e4ddf7d7ef97df1f3ffd333ef3ce085}\label{structmesh__sim_1_1NyuChannelConfig_a8e4ddf7d7ef97df1f3ffd333ef3ce085}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!foliage\_loss\_db\_m@{foliage\_loss\_db\_m}}
+\index{foliage\_loss\_db\_m@{foliage\_loss\_db\_m}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{foliage\_loss\_db\_m}{foliage\_loss\_db\_m}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::foliage\+\_\+loss\+\_\+db\+\_\+m = 0.\+4}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Foliage\+Loss). 
+
+Foliage loss rate in d\+B/m \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_ac572f08b67d195ad79a9ffcac011286a}\label{structmesh__sim_1_1NyuChannelConfig_ac572f08b67d195ad79a9ffcac011286a}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!foliage\_loss\_enabled@{foliage\_loss\_enabled}}
+\index{foliage\_loss\_enabled@{foliage\_loss\_enabled}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{foliage\_loss\_enabled}{foliage\_loss\_enabled}}
+{\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::foliage\+\_\+loss\+\_\+enabled = false}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Foliage\+Loss\+Enabled). 
+
+Enable foliage excess loss \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_abbe356ca763f151987f9d41d2ce2ef50}\label{structmesh__sim_1_1NyuChannelConfig_abbe356ca763f151987f9d41d2ce2ef50}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!humidity\_pct@{humidity\_pct}}
+\index{humidity\_pct@{humidity\_pct}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{humidity\_pct}{humidity\_pct}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::humidity\+\_\+pct = 50.\+0}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Humidity). 
+
+Relative humidity in percent \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a13ff2998980012ed34d3812347a1f8a8}\label{structmesh__sim_1_1NyuChannelConfig_a13ff2998980012ed34d3812347a1f8a8}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!o2i\_loss\_type@{o2i\_loss\_type}}
+\index{o2i\_loss\_type@{o2i\_loss\_type}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{o2i\_loss\_type}{o2i\_loss\_type}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::o2i\+\_\+loss\+\_\+type = \char`\"{}Low Loss\char`\"{}}
+
+Outdoor-\/to-\/indoor loss class\+: {\ttfamily \char`\"{}\+Low Loss\char`\"{}} or {\ttfamily \char`\"{}\+High Loss\char`\"{}} (NYUPropagation\+Loss\+Model\+::\+O2\+ILosstype). \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a956c2d021c475fa8fa9a42d6591305af}\label{structmesh__sim_1_1NyuChannelConfig_a956c2d021c475fa8fa9a42d6591305af}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!pressure\_mbar@{pressure\_mbar}}
+\index{pressure\_mbar@{pressure\_mbar}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{pressure\_mbar}{pressure\_mbar}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::pressure\+\_\+mbar = 1013.\+25}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Pressure). 
+
+Atmospheric pressure in mbar \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a078a0ef3456bd1ff968faf3e1dd7c9d0}\label{structmesh__sim_1_1NyuChannelConfig_a078a0ef3456bd1ff968faf3e1dd7c9d0}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!rain\_rate\_mm\_hr@{rain\_rate\_mm\_hr}}
+\index{rain\_rate\_mm\_hr@{rain\_rate\_mm\_hr}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{rain\_rate\_mm\_hr}{rain\_rate\_mm\_hr}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::rain\+\_\+rate\+\_\+mm\+\_\+hr = 0.\+0}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Rain\+Rate). 
+
+Rain rate in mm/hr; 0 = dry \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a070e248b8f660812f374d4e52bd242e9}\label{structmesh__sim_1_1NyuChannelConfig_a070e248b8f660812f374d4e52bd242e9}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!rf\_bandwidth\_mhz@{rf\_bandwidth\_mhz}}
+\index{rf\_bandwidth\_mhz@{rf\_bandwidth\_mhz}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{rf\_bandwidth\_mhz}{rf\_bandwidth\_mhz}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::rf\+\_\+bandwidth\+\_\+mhz = 800.\+0}
+
+
+
+(NYUChannel\+Model\+::\+Rf\+Bandwidth). 
+
+RF bandwidth passed to NYUChannel\+Model \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_a6fa9fd68a85e6986628d2b70163674cb}\label{structmesh__sim_1_1NyuChannelConfig_a6fa9fd68a85e6986628d2b70163674cb}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!shadowing\_enabled@{shadowing\_enabled}}
+\index{shadowing\_enabled@{shadowing\_enabled}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{shadowing\_enabled}{shadowing\_enabled}}
+{\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::shadowing\+\_\+enabled = true}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Shadowing\+Enabled). 
+
+Enable shadow-\/fading component \mbox{\Hypertarget{structmesh__sim_1_1NyuChannelConfig_acfa242dd15390376baec4951b85c04e1}\label{structmesh__sim_1_1NyuChannelConfig_acfa242dd15390376baec4951b85c04e1}} 
+\index{mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}!temperature\_c@{temperature\_c}}
+\index{temperature\_c@{temperature\_c}!mesh\_sim::NyuChannelConfig@{mesh\_sim::NyuChannelConfig}}
+\doxysubsubsection{\texorpdfstring{temperature\_c}{temperature\_c}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Nyu\+Channel\+Config\+::temperature\+\_\+c = 20.\+0}
+
+
+
+(NYUPropagation\+Loss\+Model\+::\+Temperature). 
+
+Air temperature in °C 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/\mbox{\hyperlink{channel-config_8h}{channel-\/config.\+h}}\end{DoxyCompactItemize}

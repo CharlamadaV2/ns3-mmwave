@@ -1,0 +1,99 @@
+Sim-\/vs-\/field comparison\+: runs mesh-\/sim across a directory of scenarios (multi-\/seed), then overlays the pooled sim distribution against the ARPO field traces as an ECDF with a bootstrap 90\% CI band + two-\/sample K-\/S statistic.
+
+Scenario inputs come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} (one dir per scenario, each holding {\ttfamily run.\+ini} + {\ttfamily nodes.\+json}). Field traces come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}{}\doxysection{Run}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}
+From {\ttfamily scratch/mesh-\/sim/}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# 1. produce field trace CSVs (one-\/time per dataset; skip if already done)}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/all}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 2. run the sim across all scenarios (default: 5 seeds each)}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 3. convert per-\/seed sim outputs to arpo\_data-\/style trace CSVs}
+\DoxyCodeLine{python -\/m scripts.validation.sim\_to\_traces outputs/<YYYY-\/MM>/<DD>/<HH-\/MM-\/SS>-\/validation}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 4. ECDF + bootstrap CI + K-\/S vs field}
+\DoxyCodeLine{python -\/m scripts.validation.compare      outputs/<YYYY-\/MM>/<DD>/<HH-\/MM-\/SS>-\/validation}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 5. cross-\/batch summary (overall + per-\/scenario)}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 6. scenario fidelity audit (sim vs field layout/mobility)}
+\DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity outputs/<YYYY-\/MM>/<DD>/<HH-\/MM-\/SS>-\/validation}
+
+\end{DoxyCode}
+
+
+Flags worth knowing\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/seeds 1,2,3,4,5,6,7,8,9,10}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/only arpo-\/1-\/1-\/static-\/04172026 -\/-\/dry-\/run}
+\DoxyCodeLine{python -\/m scripts.validation.compare   <batch> -\/-\/metrics snr,rcpi -\/-\/ci 95}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs <batch1> <batch2> -\/-\/metric snr}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs -\/-\/no-\/per-\/scenario       \# overall tables only}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs -\/-\/csv outputs/cmp.csv -\/-\/per-\/scenario-\/csv outputs/cmp\_long.csv}
+\DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity <batch> -\/-\/only arpo-\/2-\/2-\/los-\/obstruction-\/04172026}
+\DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity <batch> -\/-\/tol-\/m 10}
+\DoxyCodeLine{python -\/m scripts.validation.build\_waypoints arpo-\/2-\/2-\/los-\/obstruction-\/04172026 -\/-\/dry-\/run}
+\DoxyCodeLine{python -\/m scripts.validation.build\_waypoints arpo-\/2-\/2-\/los-\/obstruction-\/04172026 -\/-\/time-\/mode scale -\/-\/duration 120}
+\DoxyCodeLine{python -\/m scripts.validation.build\_waypoints -\/-\/all -\/-\/time-\/mode scale -\/-\/duration 120}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/auto-\/waypoints}
+
+\end{DoxyCode}
+
+
+{\ttfamily -\/-\/auto-\/waypoints} on {\ttfamily \mbox{\hyperlink{namespacerun__batch}{run\+\_\+batch}}} patches each scenario\textquotesingle{}s {\ttfamily nodes.\+json} in-\/place from its field GPS trace before invoking the sim (skips static-\/rab2 scenarios automatically). The patch is permanent — {\ttfamily git diff inputs/} to see what changed, {\ttfamily git checkout inputs/} to revert.
+
+{\ttfamily \mbox{\hyperlink{namespacebuild__waypoints}{build\+\_\+waypoints}}} reads the field {\ttfamily gps\+\_\+track\+\_\+trace.\+csv} for a scenario, translates to the sim frame using a stationary anchor node (default {\ttfamily rab1}), downsamples the moving node\textquotesingle{}s track to N waypoints, and patches them into the scenario\textquotesingle{}s {\ttfamily nodes.\+json} with {\ttfamily mobility = \char`\"{}waypoint\char`\"{}}. Time modes\+: {\ttfamily raw} (use field clock as-\/is), {\ttfamily clip} (cap at {\ttfamily -\/-\/duration}), {\ttfamily scale} (stretch/compress to {\ttfamily -\/-\/duration}). After patching, rebuild the sim and re-\/run.
+
+{\ttfamily \mbox{\hyperlink{namespacescenario__fidelity}{scenario\+\_\+fidelity}}} reads each scenario\textquotesingle{}s snapshotted {\ttfamily nodes.\+json} + {\ttfamily seed-\/1/positions.\+csv} and the field\textquotesingle{}s {\ttfamily gps\+\_\+track\+\_\+trace.\+csv} (produced by {\ttfamily arpo\+\_\+data.\+cli plot}), then for each rab reports field-\/vs-\/sim bounding box, path length, and mobility class (static / mobile), plus pairwise t=0 distances between rabs. It surfaces mismatches like \char`\"{}rab2 drives a 1.\+7 km loop in the field but the sim has it pinned \`{}fixed\`{}.\char`\"{} The mobility classifier is bbox-\/based (threshold 20 m max-\/dim) so cumulative GPS jitter doesn\textquotesingle{}t trip it.
+
+{\ttfamily \mbox{\hyperlink{namespacecompare__runs}{compare\+\_\+runs}}} auto-\/discovers every batch under {\ttfamily outputs/} with a {\ttfamily validation\+\_\+summary.\+csv}, or accepts explicit batch dirs as positional args. It prints the headline summary (channel/gain/tx config + mean $\vert$Δmed$\vert$ + mean K-\/S per batch), the close vs far link-\/class breakdown, and a per-\/scenario matrix so you can see which scenarios drive the mean. For multi-\/day variance in the {\bfseries{field}} data itself (independent of any sim run), see {\ttfamily python -\/m scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
+\endhead
+{\ttfamily \mbox{\hyperlink{namespacerun__batch}{run\+\_\+batch}}}   &{\ttfamily outputs/.../$<$HH-\/\+MM-\/\+SS$>$-\/validation/$<$scenario$>$/seed-\/\+N/\{links,mcs,rx-\/power\}.csv} + {\ttfamily batch\+\_\+manifest.\+json}    \\\cline{1-2}
+{\ttfamily \mbox{\hyperlink{namespacesim__to__traces}{sim\+\_\+to\+\_\+traces}}}   &{\ttfamily outputs/.../$<$scenario$>$/sim\+\_\+traces/seed-\/\+N/csvs/$<$src$>$/bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv}    \\\cline{1-2}
+{\ttfamily compare}   &{\ttfamily outputs/.../$<$scenario$>$/validation/pngs/$<$src$>$/ecdf\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$.png} + per-\/scenario {\ttfamily metrics.\+csv} + top-\/level {\ttfamily validation\+\_\+summary.\+csv}   \\\cline{1-2}
+\end{longtabu}
+
+
+Each ECDF figure plots the sim curve with a shaded pointwise bootstrap CI band (default 90\%, B=1000) and the field curve as a single line; the K-\/S statistic, asymptotic p-\/value, and $\vert$Δmedians$\vert$ are annotated. The summary CSV has one row per (scenario, link, metric) with medians, IQRs, sample counts, and K-\/S.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}{}\doxysection{Module layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endhead
+{\ttfamily run\+\_\+batch.\+py}   &One sim binary call per scenario, fanning out seeds via {\ttfamily -\/-\/seeds=}    \\\cline{1-2}
+{\ttfamily sim\+\_\+to\+\_\+traces.\+py}   &Rewrites per-\/seed sim CSVs into arpo\+\_\+data-\/compatible trace CSVs    \\\cline{1-2}
+{\ttfamily compare.\+py}   &Pools sim seeds + field directions, renders ECDF overlays + K-\/S    \\\cline{1-2}
+{\ttfamily compare\+\_\+runs.\+py}   &Cross-\/batch summary table (overall + per-\/scenario)    \\\cline{1-2}
+{\ttfamily scenario\+\_\+fidelity.\+py}   &Per-\/scenario sim-\/vs-\/field layout/mobility audit    \\\cline{1-2}
+{\ttfamily build\+\_\+waypoints.\+py}   &Generate waypoint mobility for a node from its field GPS trace   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}
+
+\begin{DoxyItemize}
+\item Sim and field samples are pooled raw (no smoothing, no time alignment) -- the comparison is distributional, not temporal.
+\item Sim MCS is post-\/capped at 12 to match the field firmware limit.
+\item Sim trace CSVs leave {\ttfamily tag\+\_\+local\+\_\+mac} / {\ttfamily tag\+\_\+sta\+\_\+mac} / {\ttfamily tag\+\_\+interface} empty (sim has no per-\/antenna identity).
+\item Scenario names map by stripping {\ttfamily arpo-\/}, joining the middle tokens with {\ttfamily \+\_\+}, and upper-\/casing single-\/letter family tokens ({\ttfamily arpo-\/1-\/x-\/misc-\/04172026} → {\ttfamily 1-\/X\+\_\+misc\+\_\+04172026}).
+\item {\ttfamily NaN} rows in {\ttfamily validation\+\_\+summary.\+csv} mean the field collect didn\textquotesingle{}t capture telemetry for that link (e.\+g. rab2 and rab3 weren\textquotesingle{}t beam-\/paired in {\ttfamily 2-\/7\+\_\+throughput\+\_\+stationary} or {\ttfamily 2-\/X\+\_\+blocking}). Not a pipeline bug -- there is nothing to compare against.
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}
+{\ttfamily pandas}, {\ttfamily numpy}, {\ttfamily matplotlib}. No scipy, no ns-\/3. 

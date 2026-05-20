@@ -1,0 +1,49 @@
+\hypertarget{channel-config_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/channel-\/config.h File Reference}
+\label{channel-config_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/channel-\/config.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/channel-\/config.h}}
+
+
+Radio and channel configuration POD types.  
+
+
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for channel-\/config.h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{channel-config_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{channel-config_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig}{mesh\+\_\+sim\+::\+Nyu\+Channel\+Config}}
+\begin{DoxyCompactList}\small\item\em Parameters specific to the NYU mm\+Wave channel model. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{mesh\+\_\+sim\+::\+Channel\+Config}}
+\begin{DoxyCompactList}\small\item\em Complete radio and channel configuration for a simulation run. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Radio and channel configuration POD types. 
+
+No ns-\/3 headers are included — keeps compilation fast and allows use in post-\/run I/O code without ns-\/3 linkage.
+
+Two channel models are supported, selected by Channel\+Config\+::channel\+\_\+model\+:
+\begin{DoxyItemize}
+\item {\ttfamily \char`\"{}3gpp\char`\"{}} — 3GPP TR 38.\+901 statistical model (default).
+\item {\ttfamily \char`\"{}nyu\char`\"{}} — NYU WIRELESS mm\+Wave model; requires the additional parameters in Nyu\+Channel\+Config. 
+\end{DoxyItemize}

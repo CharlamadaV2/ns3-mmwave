@@ -1,0 +1,103 @@
+\hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+paths.\+Dataset\+Paths Class Reference}
+\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths}\index{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}}
+
+
+Scenario names whose CSVs are known to be contaminated or partial.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a5f26bbd84495a5df1109335d3ed2ae92}{csv\+\_\+root}} (self)
+\begin{DoxyCompactList}\small\item\em $<$ Root directory for extracted content. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a83332ecab03d1920f72705b10fd702f9}{plots\+\_\+dir}} (self)
+\begin{DoxyCompactList}\small\item\em Root of all generated plot output. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a4928de6be67c8a8907c1aba8c49aaae1}{per\+\_\+day\+\_\+dir}} (self)
+\begin{DoxyCompactList}\small\item\em Per-\/scenario PNG and trace CSV output directory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a6e6af025037de8e7fdcd27be7ac1a512}{multi\+\_\+day\+\_\+dir}} (self)
+\begin{DoxyCompactList}\small\item\em Multi-\/day ECDF and K-\/S output directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}} 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}}
+\begin{DoxyCompactList}\small\item\em $<$ Path to the source zip bundle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Scenario names whose CSVs are known to be contaminated or partial. 
+
+For example, the collection process crashed mid-\/run and wrote malformed JSONL. These are silently skipped during multi-\/day aggregation.
+
+Locations and filename conventions for one ARPO-\/style dataset.
+
+Frozen so it can be used as a dict key or placed in a set. Construct a custom instance to point at a different zip/extract tree without touching any module-\/level state.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{custom = DatasetPaths(}
+\DoxyCodeLine{    zip\_path=Path(\textcolor{stringliteral}{"{}/mnt/data/other\_bundle.zip"{}}),}
+\DoxyCodeLine{    extract\_dir=Path(\textcolor{stringliteral}{"{}/mnt/data/other\_extracted"{}}),}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+ 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a5f26bbd84495a5df1109335d3ed2ae92}\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a5f26bbd84495a5df1109335d3ed2ae92}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}!csv\_root@{csv\_root}}
+\index{csv\_root@{csv\_root}!scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}}
+\doxysubsubsection{\texorpdfstring{csv\_root()}{csv\_root()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+paths.\+Dataset\+Paths.\+csv\+\_\+root (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+$<$ Root directory for extracted content. 
+
+Root of all per-\/scenario CSV directories. \begin{DoxyReturn}{Returns}
+{\ttfamily $<$extract\+\_\+dir$>$/csv} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a6e6af025037de8e7fdcd27be7ac1a512}\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a6e6af025037de8e7fdcd27be7ac1a512}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}!multi\_day\_dir@{multi\_day\_dir}}
+\index{multi\_day\_dir@{multi\_day\_dir}!scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}}
+\doxysubsubsection{\texorpdfstring{multi\_day\_dir()}{multi\_day\_dir()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+paths.\+Dataset\+Paths.\+multi\+\_\+day\+\_\+dir (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Multi-\/day ECDF and K-\/S output directory. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily $<$plots\+\_\+dir$>$/multi\+\_\+day} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a4928de6be67c8a8907c1aba8c49aaae1}\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a4928de6be67c8a8907c1aba8c49aaae1}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}!per\_day\_dir@{per\_day\_dir}}
+\index{per\_day\_dir@{per\_day\_dir}!scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}}
+\doxysubsubsection{\texorpdfstring{per\_day\_dir()}{per\_day\_dir()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+paths.\+Dataset\+Paths.\+per\+\_\+day\+\_\+dir (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Per-\/scenario PNG and trace CSV output directory. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily $<$plots\+\_\+dir$>$/per\+\_\+day} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a83332ecab03d1920f72705b10fd702f9}\label{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a83332ecab03d1920f72705b10fd702f9}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}!plots\_dir@{plots\_dir}}
+\index{plots\_dir@{plots\_dir}!scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths@{scratch.mesh-\/sim.scripts.arpo\_data.paths.DatasetPaths}}
+\doxysubsubsection{\texorpdfstring{plots\_dir()}{plots\_dir()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths_a391456f3d71dcc38a36fec60b1bc7bf6}{Path}} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+paths.\+Dataset\+Paths.\+plots\+\_\+dir (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Root of all generated plot output. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily $<$extract\+\_\+dir$>$/\+\_\+plots} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/paths.\+py\end{DoxyCompactItemize}

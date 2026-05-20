@@ -1,0 +1,28 @@
+\hypertarget{namespacemulti__day}{}\doxysection{multi\+\_\+day Namespace Reference}
+\label{namespacemulti__day}\index{multi\_day@{multi\_day}}
+
+
+Day-\/vs-\/day comparison for the same scenario family.  
+
+
+
+
+\doxysubsection{Detailed Description}
+Day-\/vs-\/day comparison for the same scenario family. 
+
+Pools per-\/day trace CSVs at the (link, metric) level, then renders ECDF overlays and computes two-\/sample K-\/S distances for every day pair. Antenna identity is dropped here — drill into the per-\/day plots if you need per-\/radio breakdown.
+
+{\bfseries{Output files written to multi\+\_\+day\+\_\+root/}} \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endhead
+{\ttfamily $<$family$>$/pngs/$<$src$>$/}   &ECDF overlay PNGs per (link, metric).    \\\cline{1-2}
+{\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}   &Quantile summary per (family, day, link, metric).    \\\cline{1-2}
+{\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   &K-\/S statistic + median delta for every day pair.   \\\cline{1-2}
+\end{longtabu}

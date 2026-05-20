@@ -1,0 +1,26 @@
+\hypertarget{namespacerun__batch}{}\doxysection{run\+\_\+batch Namespace Reference}
+\label{namespacerun__batch}\index{run\_batch@{run\_batch}}
+
+
+Run mesh-\/sim across a directory of scenarios, multi-\/seed.  
+
+
+
+
+\doxysubsection{Detailed Description}
+Run mesh-\/sim across a directory of scenarios, multi-\/seed. 
+
+Discovers all scenario subdirectories that contain a {\ttfamily run.\+ini}, invokes the ns-\/3 sim binary for each with a configurable set of random seeds, and writes outputs to a timestamped batch directory.
+
+Optionally patches each scenario\textquotesingle{}s {\ttfamily nodes.\+json} with real-\/\+GPS-\/derived waypoints before running (see \mbox{\hyperlink{namespacebuild__waypoints}{build\+\_\+waypoints}}).
+
+{\bfseries{Output layout}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{outputs/<YYYY-\/MM>/<DD>/<HH-\/MM-\/SS>-\/validation/}
+\DoxyCodeLine{  <scenario>/}
+\DoxyCodeLine{    run.log}
+\DoxyCodeLine{    seed-\/<N>/         (written by the sim binary)}
+\DoxyCodeLine{  batch\_manifest.json}
+
+\end{DoxyCode}
+ 

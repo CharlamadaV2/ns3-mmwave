@@ -1,0 +1,561 @@
+\hypertarget{namespacemesh__sim}{}\doxysection{mesh\+\_\+sim Namespace Reference}
+\label{namespacemesh__sim}\index{mesh\_sim@{mesh\_sim}}
+
+
+\mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} struct.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig}{Nyu\+Channel\+Config}}
+\begin{DoxyCompactList}\small\item\em Parameters specific to the NYU mm\+Wave channel model. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}}
+\begin{DoxyCompactList}\small\item\em Complete radio and channel configuration for a simulation run. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1TrafficConfig}{Traffic\+Config}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1RoutingConfig}{Routing\+Config}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{Mesh\+Config}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Position}{Position}}
+\begin{DoxyCompactList}\small\item\em Cartesian position in metres. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Velocity}{Velocity}}
+\begin{DoxyCompactList}\small\item\em Constant velocity vector in metres per second. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1RandomWalkParams}{Random\+Walk\+Params}}
+\begin{DoxyCompactList}\small\item\em Bounding box and speed parameters for the random-\/walk mobility model. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Waypoint}{Waypoint}}
+\begin{DoxyCompactList}\small\item\em A single timed waypoint in a node\textquotesingle{}s mobility trajectory. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}}
+\begin{DoxyCompactList}\small\item\em Full specification for one simulation node. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spec}}
+\begin{DoxyCompactList}\small\item\em Axis-\/aligned bounding-\/box specification for one building. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1TimingInfo}{Timing\+Info}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1RlConfig}{Rl\+Config}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{Link\+Evaluator}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{Link\+Table}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1McsEntry}{Mcs\+Entry}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter}{Metrics\+Writer}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger}{Progress\+Logger}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1VizWriter}{Viz\+Writer}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1FlowResult}{Flow\+Result}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1MeshRouter}{Mesh\+Router}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1TopologyBuilder}{Topology\+Builder}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix}{Traffic\+Matrix}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} = std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, std\+::string $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \mbox{\hyperlink{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}{Parse\+Command\+Line}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{Resolve\+Seeds}} (const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&args, const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg)
+\item 
+void \mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{Archive\+Scenario\+Inputs}} (const std\+::string \&base\+\_\+output\+\_\+dir, const std\+::string \&run\+\_\+config\+\_\+path)
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}} \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} (const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg)
+\item 
+double \mbox{\hyperlink{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}{Max\+Speed\+For\+Type}} (const std\+::string \&node\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Return the maximum speed (m/s) allowed for a given node type. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}} (double sinr\+\_\+db)
+\item 
+double \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{Sinr\+To\+Capacity}} (double sinr\+\_\+db, double bandwidth\+\_\+hz, const std\+::string \&amc\+\_\+model)
+\item 
+void \mbox{\hyperlink{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}{Write\+Run\+Log}} (const std\+::string \&base\+\_\+output\+\_\+dir, const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&args, const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg, const std\+::vector$<$ uint32\+\_\+t $>$ \&seeds)
+\item 
+\mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}} (const std\+::string \&path)
+\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_a4265a363240776b14f624c437b274c61}{ini\+Get}} (const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&ini, const std\+::string \&section, const std\+::string \&key, const std\+::string \&def)
+\item 
+bool \mbox{\hyperlink{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}{ini\+Get\+Bool}} (const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&ini, const std\+::string \&section, const std\+::string \&key, bool def)
+\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}{trim\+Str}} (const std\+::string \&s)
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}{split\+Tab}} (const std\+::string \&line)
+\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}{to\+Iso8601}} (const std\+::chrono\+::system\+\_\+clock\+::time\+\_\+point \&tp)
+\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}{resolve\+Path}} (const std\+::string \&base\+\_\+dir, const std\+::string \&path)
+\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_acd22cd5edefb2bc7bca48d593f0a87f4}{dir\+Of}} (const std\+::string \&path)
+\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}{parse\+Seed\+List}} (const std\+::string \&arg)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} struct. 
+
+\mbox{\hyperlink{classmesh__sim_1_1TopologyBuilder}{Topology\+Builder}}\+: creates ns-\/3 mobility models, buildings, and propagation models for the mesh topology. This is the only layer that creates ns-\/3 objects. No EPC, RRC, MAC, or protocol stack.
+
+\mbox{\hyperlink{classmesh__sim_1_1MeshRouter}{Mesh\+Router}}\+: routes flows over the mesh link graph. Supports Dijkstra shortest-\/path, widest-\/path (max throughput), and min-\/hop (BFS) algorithms. Applies proportional-\/fairness congestion scaling when links are overloaded.
+
+\mbox{\hyperlink{classmesh__sim_1_1VizWriter}{Viz\+Writer}}\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals.
+
+Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h_source}{progress-\/logger.\+h}}). No ns-\/3 dependency.
+
+\mbox{\hyperlink{structmesh__sim_1_1ProgressLogger}{Progress\+Logger}}\+: prints simulation progress to stderr. Called directly from the step loop (no Simulator\+::\+Schedule). Header-\/only.
+
+\mbox{\hyperlink{classmesh__sim_1_1MetricsWriter}{Metrics\+Writer}}\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes.
+
+SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{Link\+Evaluator}} and testable standalone.
+
+\mbox{\hyperlink{classmesh__sim_1_1LinkTable}{Link\+Table}}\+: NxN link quality matrix updated each tick. Wraps the flat output of Link\+Evaluator\+::\+Evaluate\+All() into a symmetric matrix with O(1) per-\/link lookup.
+
+\mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{Link\+Evaluator}}\+: wraps ns-\/3 propagation models to compute per-\/link path loss, SINR, and capacity. Core physics engine of mesh-\/sim.
+
+Top-\/level simulation configuration and runtime metadata POD types. No ns-\/3 headers included — keeps compilation fast and allows use in post-\/run IO code without ns-\/3 linkage.
+
+Mesh-\/specific configuration POD types\+: traffic generation and routing. No ns-\/3 headers included.
+
+Per-\/link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-\/3 headers included.
+
+Config validation\+: checks a fully-\/loaded \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} for invalid or inconsistent values before the simulation runs. No ns-\/3 headers -- can be tested independently.
+
+Command-\/line parsing and pre-\/simulation setup helpers. Keeps sim.\+cc focused on orchestration.
+
+No ns-\/3 headers included — this code can be compiled and tested independently of the ns-\/3 build.
+
+No ns-\/3 headers -- stdlib and nlohmann/json only.
+
+Output files\+: positions.\+csv -- time\+\_\+s, node\+\_\+id, x, y, z, node\+\_\+type, active links.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, dist\+\_\+m, sinr\+\_\+db, condition, condition\+\_\+reason, capacity\+\_\+mbps, delivered\+\_\+mbps, hop\+\_\+count rx-\/power.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, rx\+\_\+power\+\_\+dbm mcs.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, mcs\+\_\+index, spectral\+\_\+eff flows.\+csv -- time\+\_\+s, src, dst, demand\+\_\+mbps, delivered\+\_\+mbps, latency\+\_\+ms, hop\+\_\+count, routable routes.\+csv -- time\+\_\+s, src, dst, path, bottleneck\+\_\+mbps, hop\+\_\+count, routable 
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}\label{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}} 
+\index{mesh\_sim@{mesh\_sim}!IniMap@{IniMap}}
+\index{IniMap@{IniMap}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{IniMap}{IniMap}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{mesh\+\_\+sim\+::\+Ini\+Map}} = typedef std\+::map$<$std\+::string, std\+::map$<$std\+::string, std\+::string$>$ $>$}
+
+Section -\/$>$ (key -\/$>$ value) map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini()}}. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}\label{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}} 
+\index{mesh\_sim@{mesh\_sim}!ArchiveScenarioInputs@{ArchiveScenarioInputs}}
+\index{ArchiveScenarioInputs@{ArchiveScenarioInputs}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{ArchiveScenarioInputs()}{ArchiveScenarioInputs()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Archive\+Scenario\+Inputs (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+\_\+output\+\_\+dir,  }\item[{const std\+::string \&}]{run\+\_\+config\+\_\+path }\end{DoxyParamCaption})}
+
+Copy all regular files from the scenario input directory into $<$base\+\_\+output\+\_\+dir$>$/inputs/ for reproducibility. \mbox{\Hypertarget{namespacemesh__sim_acd22cd5edefb2bc7bca48d593f0a87f4}\label{namespacemesh__sim_acd22cd5edefb2bc7bca48d593f0a87f4}} 
+\index{mesh\_sim@{mesh\_sim}!dirOf@{dirOf}}
+\index{dirOf@{dirOf}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{dirOf()}{dirOf()}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::dir\+Of (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Return the parent directory of the given path. Returns \char`\"{}.\char`\"{} if the path contains no directory separator. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a4265a363240776b14f624c437b274c61}\label{namespacemesh__sim_a4265a363240776b14f624c437b274c61}} 
+\index{mesh\_sim@{mesh\_sim}!iniGet@{iniGet}}
+\index{iniGet@{iniGet}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{iniGet()}{iniGet()}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::ini\+Get (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&}]{ini,  }\item[{const std\+::string \&}]{section,  }\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{def = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})}
+
+Retrieve a string value from an Ini\+Map, returning {\ttfamily def} if not found. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}\label{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}} 
+\index{mesh\_sim@{mesh\_sim}!iniGetBool@{iniGetBool}}
+\index{iniGetBool@{iniGetBool}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{iniGetBool()}{iniGetBool()}}
+{\footnotesize\ttfamily bool mesh\+\_\+sim\+::ini\+Get\+Bool (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&}]{ini,  }\item[{const std\+::string \&}]{section,  }\item[{const std\+::string \&}]{key,  }\item[{bool}]{def }\end{DoxyParamCaption})}
+
+Retrieve a boolean value from an Ini\+Map, returning {\ttfamily def} if not found. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}\label{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}} 
+\index{mesh\_sim@{mesh\_sim}!MaxSpeedForType@{MaxSpeedForType}}
+\index{MaxSpeedForType@{MaxSpeedForType}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{MaxSpeedForType()}{MaxSpeedForType()}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Max\+Speed\+For\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{node\+\_\+type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the maximum speed (m/s) allowed for a given node type. 
+
+Used by the RL controller to cap continuous velocity actions before they are applied to the node.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ node\+\_\+type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ max speed    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ node\+\_\+type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ max speed    }\\\cline{1-2}
+\endhead
+{\ttfamily \char`\"{}vehicle\char`\"{}}   &15.\+0 m/s    \\\cline{1-2}
+{\ttfamily \char`\"{}pedestrian\char`\"{}}   &1.\+5 m/s    \\\cline{1-2}
+{\ttfamily \char`\"{}drone\char`\"{}} (default)   &20.\+0 m/s   \\\cline{1-2}
+\end{longtabu}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em node\+\_\+type} & Node type string from \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}{Node\+Spec\+::node\+\_\+type}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Maximum speed in metres per second. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}\label{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}} 
+\index{mesh\_sim@{mesh\_sim}!ParseCommandLine@{ParseCommandLine}}
+\index{ParseCommandLine@{ParseCommandLine}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{ParseCommandLine()}{ParseCommandLine()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} mesh\+\_\+sim\+::\+Parse\+Command\+Line (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+Parse command-\/line arguments via ns3\+::\+Command\+Line. Exits with error if --run-\/config is not provided. \mbox{\Hypertarget{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}\label{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}} 
+\index{mesh\_sim@{mesh\_sim}!parseIni@{parseIni}}
+\index{parseIni@{parseIni}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{parseIni()}{parseIni()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} mesh\+\_\+sim\+::parse\+Ini (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+Parse an INI-\/style config file. Supports \mbox{[}section\mbox{]} headers, key=value pairs, and \# / ; comments. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}\label{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}} 
+\index{mesh\_sim@{mesh\_sim}!parseSeedList@{parseSeedList}}
+\index{parseSeedList@{parseSeedList}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{parseSeedList()}{parseSeedList()}}
+{\footnotesize\ttfamily std\+::vector$<$ uint32\+\_\+t $>$ mesh\+\_\+sim\+::parse\+Seed\+List (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{arg }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Parse a comma-\/separated string of seed values into a vector. Skips empty tokens (e.\+g. \char`\"{}1,,3\char`\"{} -\/$>$ \{1, 3\}). Exits with an error message if any token is not a valid unsigned integer. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}\label{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}} 
+\index{mesh\_sim@{mesh\_sim}!resolvePath@{resolvePath}}
+\index{resolvePath@{resolvePath}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{resolvePath()}{resolvePath()}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::resolve\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+\_\+dir,  }\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Resolve a possibly-\/relative path against a base directory. Returns the path unchanged if it is already absolute or empty. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}\label{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}} 
+\index{mesh\_sim@{mesh\_sim}!ResolveSeeds@{ResolveSeeds}}
+\index{ResolveSeeds@{ResolveSeeds}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{ResolveSeeds()}{ResolveSeeds()}}
+{\footnotesize\ttfamily std\+::vector$<$ uint32\+\_\+t $>$ mesh\+\_\+sim\+::\+Resolve\+Seeds (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&}]{args,  }\item[{const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+Determine the seed list from CLI args and config defaults. Priority\+: --seeds $>$ --seed $>$ cfg.\+seed. \mbox{\Hypertarget{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}\label{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}} 
+\index{mesh\_sim@{mesh\_sim}!SinrToCapacity@{SinrToCapacity}}
+\index{SinrToCapacity@{SinrToCapacity}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{SinrToCapacity()}{SinrToCapacity()}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sinr\+To\+Capacity (\begin{DoxyParamCaption}\item[{double}]{sinr\+\_\+db,  }\item[{double}]{bandwidth\+\_\+hz,  }\item[{const std\+::string \&}]{amc\+\_\+model }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}\label{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}} 
+\index{mesh\_sim@{mesh\_sim}!SinrToMcsIndex@{SinrToMcsIndex}}
+\index{SinrToMcsIndex@{SinrToMcsIndex}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{SinrToMcsIndex()}{SinrToMcsIndex()}}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Sinr\+To\+Mcs\+Index (\begin{DoxyParamCaption}\item[{double}]{sinr\+\_\+db }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}\label{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}} 
+\index{mesh\_sim@{mesh\_sim}!splitTab@{splitTab}}
+\index{splitTab@{splitTab}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{splitTab()}{splitTab()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ mesh\+\_\+sim\+::split\+Tab (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{line }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Split a string by tab characters and return the tokens. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}\label{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}} 
+\index{mesh\_sim@{mesh\_sim}!toIso8601@{toIso8601}}
+\index{toIso8601@{toIso8601}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{toIso8601()}{toIso8601()}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::to\+Iso8601 (\begin{DoxyParamCaption}\item[{const std\+::chrono\+::system\+\_\+clock\+::time\+\_\+point \&}]{tp }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Format a time\+\_\+point as an ISO 8601 UTC string (e.\+g. \char`\"{}2026-\/03-\/27\+T14\+:30\+:00\+Z\char`\"{}). Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}\label{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}} 
+\index{mesh\_sim@{mesh\_sim}!trimStr@{trimStr}}
+\index{trimStr@{trimStr}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{trimStr()}{trimStr()}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::trim\+Str (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception.\\
+\hline
+\end{DoxyExceptions}
+Trim leading and trailing whitespace from a string. Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}\label{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}} 
+\index{mesh\_sim@{mesh\_sim}!ValidateConfig@{ValidateConfig}}
+\index{ValidateConfig@{ValidateConfig}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{ValidateConfig()}{ValidateConfig()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}} mesh\+\_\+sim\+::\+Validate\+Config (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after loading. Returns all errors found (not just the first) so the user can fix them in one pass. \mbox{\Hypertarget{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}\label{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}} 
+\index{mesh\_sim@{mesh\_sim}!WriteRunLog@{WriteRunLog}}
+\index{WriteRunLog@{WriteRunLog}!mesh\_sim@{mesh\_sim}}
+\doxysubsubsection{\texorpdfstring{WriteRunLog()}{WriteRunLog()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Write\+Run\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+\_\+output\+\_\+dir,  }\item[{const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&}]{args,  }\item[{const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&}]{cfg,  }\item[{const std\+::vector$<$ uint32\+\_\+t $>$ \&}]{seeds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}

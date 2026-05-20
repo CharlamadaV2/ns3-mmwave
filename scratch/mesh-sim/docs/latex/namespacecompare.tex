@@ -1,0 +1,22 @@
+\hypertarget{namespacecompare}{}\doxysection{compare Namespace Reference}
+\label{namespacecompare}\index{compare@{compare}}
+
+
+ECDF + bootstrap-\/\+CI comparison of pooled sim seeds vs ARPO field traces.  
+
+
+
+
+\doxysubsection{Detailed Description}
+ECDF + bootstrap-\/\+CI comparison of pooled sim seeds vs ARPO field traces. 
+
+For each (scenario, link, metric) triple this module\+:
+\begin{DoxyEnumerate}
+\item Pools sim samples across all seed runs.
+\item Loads the matching field trace.
+\item Computes a two-\/sample K-\/S statistic and p-\/value.
+\item Renders an ECDF plot with a bootstrap confidence band around the sim curve.
+\item Writes per-\/scenario and aggregate {\ttfamily metrics.\+csv} / {\ttfamily validation\+\_\+summary.\+csv}.
+\end{DoxyEnumerate}
+
+Also exports sim\+\_\+to\+\_\+field\+\_\+scenario, the canonical name-\/mapping function used throughout the pipeline to translate sim scenario names to field names. 

@@ -1,0 +1,36 @@
+\hypertarget{structmesh__sim_1_1Waypoint}{}\doxysection{mesh\+\_\+sim\+::Waypoint Struct Reference}
+\label{structmesh__sim_1_1Waypoint}\index{mesh\_sim::Waypoint@{mesh\_sim::Waypoint}}
+
+
+A single timed waypoint in a node\textquotesingle{}s mobility trajectory.  
+
+
+
+
+{\ttfamily \#include $<$node-\/spec.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmesh__sim_1_1Waypoint_a817c872ad79be6dc7d1374063a32152a}\label{structmesh__sim_1_1Waypoint_a817c872ad79be6dc7d1374063a32152a}} 
+double \mbox{\hyperlink{structmesh__sim_1_1Waypoint_a817c872ad79be6dc7d1374063a32152a}{t}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Time since scenario start at which this position is reached (s). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structmesh__sim_1_1Waypoint_a6c78e88b5bf3a41c534e6eb5bc3b183d}\label{structmesh__sim_1_1Waypoint_a6c78e88b5bf3a41c534e6eb5bc3b183d}} 
+double \mbox{\hyperlink{structmesh__sim_1_1Waypoint_a6c78e88b5bf3a41c534e6eb5bc3b183d}{x}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em East position at time {\ttfamily t} (m). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structmesh__sim_1_1Waypoint_a2a75915205187788e3788d4a1d65c7e2}\label{structmesh__sim_1_1Waypoint_a2a75915205187788e3788d4a1d65c7e2}} 
+double \mbox{\hyperlink{structmesh__sim_1_1Waypoint_a2a75915205187788e3788d4a1d65c7e2}{y}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em North position at time {\ttfamily t} (m). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structmesh__sim_1_1Waypoint_ac23a13cbdc551c74dc500c57be2b2a9a}\label{structmesh__sim_1_1Waypoint_ac23a13cbdc551c74dc500c57be2b2a9a}} 
+double \mbox{\hyperlink{structmesh__sim_1_1Waypoint_ac23a13cbdc551c74dc500c57be2b2a9a}{z}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Altitude at time {\ttfamily t} (m). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A single timed waypoint in a node\textquotesingle{}s mobility trajectory. 
+
+Waypoints are stored in time order in \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a80786d2b403d20b06661059d28341476}{Node\+Spec\+::waypoints}}. The simulator linearly interpolates position between consecutive waypoints. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/\mbox{\hyperlink{node-spec_8h}{node-\/spec.\+h}}\end{DoxyCompactItemize}

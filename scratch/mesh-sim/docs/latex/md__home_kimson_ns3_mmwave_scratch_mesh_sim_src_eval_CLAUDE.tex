@@ -1,0 +1,13 @@
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md44}{}\doxysection{Scope}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md44}
+Link evaluation -- wraps ns-\/3 propagation models to compute per-\/link path loss, SINR, and capacity. This is the core physics engine replacing the full cellular stack.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md45}{}\doxysection{Files}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md45}
+
+\begin{DoxyItemize}
+\item {\bfseries{\mbox{\hyperlink{link-evaluator_8h_source}{link-\/evaluator.\+h}}/cc}} -- {\ttfamily Link\+Evaluator} calls {\ttfamily Propagation\+Loss\+Model\+::\+Calc\+Rx\+Power()}, adds beamforming gain, computes SINR and Shannon/\+AMC capacity. Returns {\ttfamily Link\+Result}.
+\item {\bfseries{\mbox{\hyperlink{sinr-capacity_8h_source}{sinr-\/capacity.\+h}}}} -- {\ttfamily Sinr\+To\+Capacity()} pure-\/math function (Shannon + MCS table). Header-\/only, no ns-\/3 dependency, testable standalone.
+\item {\bfseries{\mbox{\hyperlink{link-table_8h_source}{link-\/table.\+h}}/cc}} -- {\ttfamily Link\+Table} stores the NxN link quality matrix. Updated each tick. Exposes per-\/link and aggregate queries.
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md46}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_CLAUDE_autotoc_md46}
+
+\begin{DoxyItemize}
+\item Depends on\+: {\ttfamily domain/}, ns-\/3 modules (propagation, mobility, buildings)
+\item Depended on by\+: {\ttfamily routing/}, {\ttfamily io/}, {\ttfamily sim.\+cc} 
+\end{DoxyItemize}

@@ -1,0 +1,30 @@
+\hypertarget{namespacepaths}{}\doxysection{paths Namespace Reference}
+\label{namespacepaths}\index{paths@{paths}}
+
+
+Filesystem locations and per-\/file conventions for ARPO-\/style datasets.  
+
+
+
+
+\doxysubsection{Detailed Description}
+Filesystem locations and per-\/file conventions for ARPO-\/style datasets. 
+
+Defaults target the bundled Spring Lake zip under {\ttfamily data/}. Callers that analyse a different bundle should construct their own Dataset\+Paths instead of relying on the module-\/level aliases at the bottom of this file.
+
+Directory layout expected after extraction\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{data/}
+\DoxyCodeLine{  arpo\_spring\_lake\_data.zip}
+\DoxyCodeLine{  arpo\_extracted/}
+\DoxyCodeLine{    csv/}
+\DoxyCodeLine{      <scenario>/}
+\DoxyCodeLine{        <node>/}
+\DoxyCodeLine{          bh2.csv}
+\DoxyCodeLine{          gps.csv | geotak\_gps.csv}
+\DoxyCodeLine{    \_plots/}
+\DoxyCodeLine{      per\_day/}
+\DoxyCodeLine{      multi\_day/}
+
+\end{DoxyCode}
+ 
