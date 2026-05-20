@@ -38,9 +38,9 @@ the top without opening any PNGs. Flags: `--metric {snr,rcpi,mcs,per,throughput}
 
 | Step      | Where                                                              |
 |-----------|--------------------------------------------------------------------|
-| extract   | `data/arpo_extracted/csv/<scenario>/<node>/`                       |
-| plot      | `data/arpo_extracted/_plots/per_day/<scenario>/{pngs,csvs}/<src>/` |
-| multi-day | `data/arpo_extracted/_plots/multi_day/<family>/` + two CSVs        |
+| `extract`   | `data/arpo_extracted/csv/<scenario>/<node>/`                       |
+| `plot`      | `data/arpo_extracted/_plots/per_day/<scenario>/{pngs,csvs}/<src>/` |
+| `multi-day` | `data/arpo_extracted/_plots/multi_day/<family>/` + two CSVs        |
 
 `plot` emits per-radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput)
 plus GPS tracks; each figure has a matching trace CSV. `multi-day` pools
@@ -51,14 +51,14 @@ and `_pairwise_ks.csv`.
 
 | File           | Role                                                          |
 |----------------|---------------------------------------------------------------|
-| `cli.py`       | Subcommand parser; saves figures returned by plot fns         |
-| `paths.py`     | Filesystem constants                                          |
-| `extract.py`   | `extract` subcommand                                          |
-| `topology.py`  | MAC -> rab label resolution + plot colors                     |
-| `loaders.py`   | Per-scenario `bh2` / `gps` / `mcm` loaders                    |
-| `plots/`       | Per-scenario plot functions (bh2 metrics, GPS)                |
-| `multi_day.py` | `multi-day` subcommand                                        |
-| `multiday_variance.py` | Variance table over `_pairwise_ks.csv`                |
+| @ref cli.py "cli"  | Subcommand parser; saves figures returned by plot fns         |
+| @ref paths.py "paths"     | Filesystem constants                                          |
+| @ref extract.py "extract"  | `extract` subcommand                                          |
+| @ref topology.py "topology"  | MAC -> rab label resolution + plot colors                     |
+| @ref loaders.py "loaders"   | Per-scenario `bh2` / `gps` / `mcm` loaders                    |
+| @ref scripts.arpo_data.plots "plots/"     | Per-scenario plot functions (bh2 metrics, GPS)                |
+| @ref multi_day.py "multi_day" | `multi-day` subcommand                                        |
+| @ref multiday_variance.py "multiday_variance" | Variance table over `_pairwise_ks.csv`                |
 
 ## Conventions
 

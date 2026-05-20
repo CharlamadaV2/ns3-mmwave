@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Mesh-Sim: Main Page</title>
+<title>Mesh-Sim: mesh-sim</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,11 +61,39 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Mesh-Sim Documentation</div>  </div>
+<div class="title">mesh-sim </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md__home_kimson_ns3_mmwave_scratch_mesh_sim_README"></a> Lightweight time-stepped mmWave mesh simulator built on ns3-mmwave.</p>
+<h1><a class="anchor" id="autotoc_md107"></a>
+Build</h1>
+<p>All commands run from the <b>ns3-mmwave repo root</b> (two levels above this directory).</p>
+<div class="fragment"><div class="line">./ns3 clean</div>
+<div class="line">./ns3 configure --build-profile=debug -- -DCMAKE_OSX_ARCHITECTURES=arm64</div>
+<div class="line">./ns3 build</div>
+</div><!-- fragment --><p>If <code>./ns3 clean</code> doesn't clear the cache fully, remove it manually first:</p>
+<div class="fragment"><div class="line">rm -rf cmake-cache build</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md108"></a>
+Run</h1>
+<h2><a class="anchor" id="autotoc_md109"></a>
+Single scenario</h2>
+<div class="fragment"><div class="line">./build/scratch/mesh-sim/ns3*-sim-* \</div>
+<div class="line">  --run-config=scratch/mesh-sim/inputs/baselines/01-static-los-baseline/run.ini</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md110"></a>
+Sweep</h2>
+<div class="fragment"><div class="line">python -m scripts.sweep.cli --config inputs/custom/sherpa/1.1/sweep.ini</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md111"></a>
+Documentation</h1>
+<p>The documentation of this module is available at <a href="file://wsl.localhost/Ubuntu/home/kimson/ns3-mmwave/scratch/mesh-sim/docs/html/index.html">this link</a></p>
+<h1><a class="anchor" id="autotoc_md112"></a>
+About</h1>
+<p>This sim is being worked on by the University of Massachusetts's ACNL</p>
+<h1><a class="anchor" id="autotoc_md113"></a>
+Authors</h1>
+<p>The </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

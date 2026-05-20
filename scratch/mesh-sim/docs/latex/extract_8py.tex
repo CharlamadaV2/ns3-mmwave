@@ -1,0 +1,44 @@
+\hypertarget{extract_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/extract.py File Reference}
+\label{extract_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/extract.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/extract.py}}
+
+
+Unzips ARPO data bundle into the configured extraction directory.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{extract_8py_acce1260a5fd98946c6033241d397f006}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+extract.\+extract}} (Dataset\+Paths paths=DEFAULT, tuple\mbox{[}str,...\mbox{]} junk\+\_\+patterns=DEFAULT\+\_\+\+JUNK\+\_\+\+PATTERNS)
+\begin{DoxyCompactList}\small\item\em Extract the ARPO data bundle to the configured directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Unzips ARPO data bundle into the configured extraction directory. 
+
+The extractor skips OS-\/generated junk files (mac\+OS resource forks, Windows thumbnail caches, etc.) and is idempotent — re-\/running when the zip is older than the already-\/extracted tree is a no-\/op. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{extract_8py_acce1260a5fd98946c6033241d397f006}\label{extract_8py_acce1260a5fd98946c6033241d397f006}} 
+\index{extract.py@{extract.py}!extract@{extract}}
+\index{extract@{extract}!extract.py@{extract.py}}
+\doxysubsubsection{\texorpdfstring{extract()}{extract()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+extract.\+extract (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths}{Dataset\+Paths}} }]{paths = {\ttfamily DEFAULT},  }\item[{tuple\mbox{[}str, ...\mbox{]} }]{junk\+\_\+patterns = {\ttfamily DEFAULT\+\_\+JUNK\+\_\+PATTERNS} }\end{DoxyParamCaption})}
+
+
+
+Extract the ARPO data bundle to the configured directory. 
+
+The function is idempotent\+: if the extraction directory already exists and its mtime is newer than the zip, extraction is skipped and a summary of the existing CSVs is printed instead.
+
+After extraction the directory\textquotesingle{}s mtime is updated so subsequent calls can detect that extraction is current.
+
+
+\begin{DoxyParams}{Parameters}
+{\em paths} & Dataset path configuration; defaults to DEFAULT (the Spring Lake bundle). \\
+\hline
+{\em junk\+\_\+patterns} & Glob patterns for entries to skip; defaults to DEFAULT\+\_\+\+JUNK\+\_\+\+PATTERNS. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 if the zip file is not found. 
+\end{DoxyReturn}

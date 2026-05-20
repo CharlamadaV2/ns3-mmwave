@@ -80,18 +80,18 @@ Run</h1>
 <div class="line">python -m scripts.arpo_data.cli plot --all                    # every scenario</div>
 <div class="line">python -m scripts.arpo_data.cli multi-day                     # day-vs-day ECDFs + K-S</div>
 <div class="line">python -m scripts.arpo_data.multiday_variance                 # variance table from _pairwise_ks.csv</div>
-</div><!-- fragment --><p><code><a class="el" href="namespacemultiday__variance.html" title="Day-vs-day variance table from arpo_data&#39;s pairwise K-S CSV.">multiday_variance</a></code> is a read-only summary over the CSV produced by <code>multi-day</code>. It prints three views — per-family rollup, per-link rollup, and the detail table sorted by <code>|Δmed|</code> descending — so unstable day-to-day links surface at the top without opening any PNGs. Flags: <code>--metric {snr,rcpi,mcs,per,throughput}</code>, <code>--family &lt;name&gt;</code>, <code>--top N</code>, <code>--csv &lt;out&gt;</code>.</p>
+</div><!-- fragment --><p><code>multiday_variance</code> is a read-only summary over the CSV produced by <code>multi-day</code>. It prints three views — per-family rollup, per-link rollup, and the detail table sorted by <code>|Δmed|</code> descending — so unstable day-to-day links surface at the top without opening any PNGs. Flags: <code>--metric {snr,rcpi,mcs,per,throughput}</code>, <code>--family &lt;name&gt;</code>, <code>--top N</code>, <code>--csv &lt;out&gt;</code>.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Output</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Step   </th><th class="markdownTableHeadNone">Where    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">extract   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/csv/&lt;scenario&gt;/&lt;node&gt;/</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>extract</code>   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/csv/&lt;scenario&gt;/&lt;node&gt;/</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">plot   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/_plots/per_day/&lt;scenario&gt;/{pngs,csvs}/&lt;src&gt;/</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>plot</code>   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/_plots/per_day/&lt;scenario&gt;/{pngs,csvs}/&lt;src&gt;/</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">multi-day   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/_plots/multi_day/&lt;family&gt;/</code> + two CSVs   </td></tr>
+<td class="markdownTableBodyNone"><code>multi-day</code>   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/_plots/multi_day/&lt;family&gt;/</code> + two CSVs   </td></tr>
 </table>
 <p><code>plot</code> emits per-radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. <code>multi-day</code> pools those traces by scenario family and writes ECDF overlays + <code>_per_day_stats.csv</code> and <code>_pairwise_ks.csv</code>.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
@@ -100,26 +100,26 @@ Module layout</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Role    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>cli.py</code>   </td><td class="markdownTableBodyNone">Subcommand parser; saves figures returned by plot fns    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="cli_8py.html">cli</a>   </td><td class="markdownTableBodyNone">Subcommand parser; saves figures returned by plot fns    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>paths.py</code>   </td><td class="markdownTableBodyNone">Filesystem constants    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="paths_8py.html">paths</a>   </td><td class="markdownTableBodyNone">Filesystem constants    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>extract.py</code>   </td><td class="markdownTableBodyNone"><code>extract</code> subcommand    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="extract_8py.html">extract</a>   </td><td class="markdownTableBodyNone"><code>extract</code> subcommand    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>topology.py</code>   </td><td class="markdownTableBodyNone">MAC -&gt; rab label resolution + plot colors    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="topology_8py.html">topology</a>   </td><td class="markdownTableBodyNone">MAC -&gt; rab label resolution + plot colors    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>loaders.py</code>   </td><td class="markdownTableBodyNone">Per-scenario <code>bh2</code> / <code>gps</code> / <code>mcm</code> loaders    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="loaders_8py.html">loaders</a>   </td><td class="markdownTableBodyNone">Per-scenario <code>bh2</code> / <code>gps</code> / <code>mcm</code> loaders    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>plots/</code>   </td><td class="markdownTableBodyNone">Per-scenario plot functions (bh2 metrics, GPS)    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="namespacescripts_1_1arpo__data_1_1plots.html">plots/</a>   </td><td class="markdownTableBodyNone">Per-scenario plot functions (bh2 metrics, GPS)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>multi_day.py</code>   </td><td class="markdownTableBodyNone"><code>multi-day</code> subcommand    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="multi__day_8py.html">multi_day</a>   </td><td class="markdownTableBodyNone"><code>multi-day</code> subcommand    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>multiday_variance.py</code>   </td><td class="markdownTableBodyNone">Variance table over <code>_pairwise_ks.csv</code>   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="multiday__variance_8py.html">multiday_variance</a>   </td><td class="markdownTableBodyNone">Variance table over <code>_pairwise_ks.csv</code>   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Conventions</h1>
 <ul>
-<li>Plot fns return a <code>matplotlib.Figure</code>; only <code>cli.py</code> calls <code>savefig</code>.</li>
+<li>Plot fns return a <code>matplotlib.Figure</code>; only <code><a class="el" href="cli_8py.html" title="Main script to be ran for manipulating ARPO data as desired.">cli.py</a></code> calls <code>savefig</code>.</li>
 <li>Loaders return <code>pd.DataFrame | None</code>.</li>
 <li>Node clocks are skewed &ndash; comparisons use <code>__sec__</code> (session-relative), not raw UTC.</li>
 </ul>

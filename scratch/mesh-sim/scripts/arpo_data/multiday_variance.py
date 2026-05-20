@@ -1,4 +1,4 @@
-## @package multiday_variance
+## @file multiday_variance.py
 # @brief Day-vs-day variance table from arpo_data's pairwise K-S CSV.
 # 
 # A command line interface that creates day-vs-day variance.

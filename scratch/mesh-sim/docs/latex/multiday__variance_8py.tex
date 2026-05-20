@@ -1,0 +1,61 @@
+\hypertarget{multiday__variance_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/multiday\+\_\+variance.py File Reference}
+\label{multiday__variance_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/multiday\_variance.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/multiday\_variance.py}}
+
+
+Day-\/vs-\/day variance table from arpo\+\_\+data\textquotesingle{}s pairwise K-\/S CSV.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em Manages command line interface parameters for creating tables. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{multiday__variance_8py_a88fb8ee5daae3c42ece8bc39be37a774}\label{multiday__variance_8py_a88fb8ee5daae3c42ece8bc39be37a774}} 
+{\bfseries scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+REPO\+\_\+\+ROOT} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\item 
+tuple {\bfseries scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Day-\/vs-\/day variance table from arpo\+\_\+data\textquotesingle{}s pairwise K-\/S CSV. 
+
+A command line interface that creates day-\/vs-\/day variance. The command line interface can take parameters change the metric, file paths, or to only show specific families 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}\label{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}} 
+\index{multiday\_variance.py@{multiday\_variance.py}!main@{main}}
+\index{main@{main}!multiday\_variance.py@{multiday\_variance.py}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Manages command line interface parameters for creating tables. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & List of parameters to be taken from the command line \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success returns 0, 1 if df is empty or csv is not found 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{multiday__variance_8py_a8c3aa9138b2649babb72b6a753e110f2}\label{multiday__variance_8py_a8c3aa9138b2649babb72b6a753e110f2}} 
+\index{multiday\_variance.py@{multiday\_variance.py}!DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}}
+\index{DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}!multiday\_variance.py@{multiday\_variance.py}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_KS\_CSV}{DEFAULT\_KS\_CSV}}
+{\footnotesize\ttfamily tuple scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  (REPO\_ROOT / \textcolor{stringliteral}{"{}data"{}} / \textcolor{stringliteral}{"{}arpo\_extracted"{}} / \textcolor{stringliteral}{"{}\_plots"{}}}
+\DoxyCodeLine{2                   / \textcolor{stringliteral}{"{}multi\_day"{}} / \textcolor{stringliteral}{"{}\_pairwise\_ks.csv"{}})}
+
+\end{DoxyCode}

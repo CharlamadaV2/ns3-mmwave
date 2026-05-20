@@ -1,0 +1,40 @@
+\hypertarget{cli_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/cli.py File Reference}
+\label{cli_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/cli.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/cli.py}}
+
+
+Main script to be ran for manipulating ARPO data as desired.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{cli_8py_aec6d2ce5b2e265c08b8cb984165611f7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+main}} ()
+\begin{DoxyCompactList}\small\item\em Takes command line arguements to interact with ARPO data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main script to be ran for manipulating ARPO data as desired. 
+
+Provides a command line interface that can do one of the following commands\+:
+\begin{DoxyItemize}
+\item Extract unzips data folder into extraction target direction
+\item Multi-\/day compares day vs day data for multi day scenarios
+\item Plot generates figures for specific scenario or all scenarios per individual day 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{cli_8py_aec6d2ce5b2e265c08b8cb984165611f7}\label{cli_8py_aec6d2ce5b2e265c08b8cb984165611f7}} 
+\index{cli.py@{cli.py}!main@{main}}
+\index{main@{main}!cli.py@{cli.py}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Takes command line arguements to interact with ARPO data. 
+
+There are three arguments to be taken\+: \char`\"{}extract\char`\"{}, \char`\"{}plot\char`\"{}, or \char`\"{}multi-\/day\char`\"{} The extract arg will execute the extraction script The plot arg will execute the \+\_\+com\+\_\+plot function passing args for all or specific scenario The multi-\/day will execute the multi\+\_\+day script
+
+\begin{DoxyReturn}{Returns}
+result of \char`\"{}extract\char`\"{}, \char`\"{}\+\_\+cmd\+\_\+plot\char`\"{}, or \char`\"{}multi\+\_\+day\char`\"{} on success, returns 1 if the argument does not exist 
+\end{DoxyReturn}

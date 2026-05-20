@@ -1,0 +1,39 @@
+\label{index_md__home_kimson_ns3_mmwave_scratch_mesh_sim_README}%
+\Hypertarget{index_md__home_kimson_ns3_mmwave_scratch_mesh_sim_README}%
+ Lightweight time-\/stepped mm\+Wave mesh simulator built on ns3-\/mmwave.\hypertarget{index_autotoc_md107}{}\doxysection{Build}\label{index_autotoc_md107}
+All commands run from the {\bfseries{ns3-\/mmwave repo root}} (two levels above this directory).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./ns3 clean}
+\DoxyCodeLine{./ns3 configure -\/-\/build-\/profile=debug -\/-\/ -\/DCMAKE\_OSX\_ARCHITECTURES=arm64}
+\DoxyCodeLine{./ns3 build}
+
+\end{DoxyCode}
+
+
+If {\ttfamily ./ns3 clean} doesn\textquotesingle{}t clear the cache fully, remove it manually first\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{rm -\/rf cmake-\/cache build}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md108}{}\doxysection{Run}\label{index_autotoc_md108}
+\hypertarget{index_autotoc_md109}{}\doxysubsection{Single scenario}\label{index_autotoc_md109}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./build/scratch/mesh-\/sim/ns3*-\/sim-\/* \(\backslash\)}
+\DoxyCodeLine{  -\/-\/run-\/config=scratch/mesh-\/sim/inputs/baselines/01-\/static-\/los-\/baseline/run.ini}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md110}{}\doxysubsection{Sweep}\label{index_autotoc_md110}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{python -\/m scripts.sweep.cli -\/-\/config inputs/custom/sherpa/1.1/sweep.ini}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md111}{}\doxysection{Documentation}\label{index_autotoc_md111}
+The documentation of this module is available at \href{file://wsl.localhost/Ubuntu/home/kimson/ns3-mmwave/scratch/mesh-sim/docs/html/index.html}{\texttt{ this link}}\hypertarget{index_autotoc_md112}{}\doxysection{About}\label{index_autotoc_md112}
+This sim is being worked on by the University of Massachusetts\textquotesingle{}s ACNL\hypertarget{index_autotoc_md113}{}\doxysection{Authors}\label{index_autotoc_md113}
+The 

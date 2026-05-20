@@ -1,4 +1,4 @@
-## @package cli
+## @file cli.py
 # @brief Main script to be ran for manipulating ARPO data as desired
 #
 # Provides a command line interface that can do one of the following commands: 

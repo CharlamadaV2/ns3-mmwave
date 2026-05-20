@@ -1,4 +1,4 @@
-##@package docstring
+## @package scripts.arpo_data.plots
 # ARPO field-data plot functions. Sim-output plots live in ``scripts.plotting``.
 
 ##

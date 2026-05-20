@@ -1,4 +1,4 @@
-## @package topology
+## @file topology.py
 # @brief MAC-address-to-rab-label resolution and stable per-node plot colours.
 #
 # **Vocabulary**

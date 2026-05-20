@@ -1,4 +1,4 @@
-## @package paths
+## @file paths.py
 # @brief Filesystem locations and per-file conventions for ARPO-style datasets.
 #
 # Defaults target the bundled Spring Lake zip under ``data/``. Callers that

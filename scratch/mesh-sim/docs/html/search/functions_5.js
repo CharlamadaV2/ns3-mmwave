@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['iniget_222',['iniGet',['../namespacemesh__sim.html#a4265a363240776b14f624c437b274c61',1,'mesh_sim']]],
-  ['inigetbool_223',['iniGetBool',['../namespacemesh__sim.html#ae04531924c26c3e87354a22203eaaa2e',1,'mesh_sim']]],
-  ['initialize_224',['Initialize',['../classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683',1,'mesh_sim::TrafficMatrix']]],
-  ['is_5fmobile_225',['is_mobile',['../classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion.html#ae1a03addf80ab57816b29b51be5d3019',1,'scratch::mesh-sim::scripts::validation::scenario_fidelity::NodeMotion']]]
+  ['getactiveflows_243',['GetActiveFlows',['../classmesh__sim_1_1TrafficMatrix.html#a5128ce2f890d3ace9f0ab5a0ae10cfe4',1,'mesh_sim::TrafficMatrix']]],
+  ['getconditionmodel_244',['GetConditionModel',['../classmesh__sim_1_1TopologyBuilder.html#a9cbc52d0694c6e7e4082f314eb131d50',1,'mesh_sim::TopologyBuilder']]],
+  ['getdemand_245',['GetDemand',['../classmesh__sim_1_1TrafficMatrix.html#a158372ed579012cb0478e15f61ca2d3b',1,'mesh_sim::TrafficMatrix']]],
+  ['getmobilitymodels_246',['GetMobilityModels',['../classmesh__sim_1_1TopologyBuilder.html#a04af6f6de00df557a1b19063f583d728',1,'mesh_sim::TopologyBuilder']]],
+  ['getpropagationmodel_247',['GetPropagationModel',['../classmesh__sim_1_1TopologyBuilder.html#aa1a9b78577d635fc1924d1c7821d31c1',1,'mesh_sim::TopologyBuilder']]]
 ];

@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['t_287',['t',['../structmesh__sim_1_1Waypoint.html#a817c872ad79be6dc7d1374063a32152a',1,'mesh_sim::Waypoint']]],
-  ['temperature_5fc_288',['temperature_c',['../structmesh__sim_1_1NyuChannelConfig.html#acfa242dd15390376baec4951b85c04e1',1,'mesh_sim::NyuChannelConfig']]],
-  ['tx_5farray_5fgain_5fdbi_289',['tx_array_gain_dbi',['../structmesh__sim_1_1ChannelConfig.html#a63fdc79768d957215b0059347804c11a',1,'mesh_sim::ChannelConfig']]],
-  ['tx_5fpower_5fdbm_290',['tx_power_dbm',['../structmesh__sim_1_1ChannelConfig.html#a73ba58e55344b3d8e1097372320705db',1,'mesh_sim::ChannelConfig']]],
-  ['type_291',['type',['../structmesh__sim_1_1BuildingSpec.html#ad80b368f2ff10c2c5ad75c1f1829015f',1,'mesh_sim::BuildingSpec']]]
+  ['scenario_325',['scenario',['../structmesh__sim_1_1ChannelConfig.html#a46faa875060c3b19c65291cadf3a523d',1,'mesh_sim::ChannelConfig']]],
+  ['shadowing_5fenabled_326',['shadowing_enabled',['../structmesh__sim_1_1NyuChannelConfig.html#a6fa9fd68a85e6986628d2b70163674cb',1,'mesh_sim::NyuChannelConfig']]],
+  ['speed_5fmps_327',['speed_mps',['../structmesh__sim_1_1RandomWalkParams.html#adc0572267ec3fda5073a86c5ff9749b1',1,'mesh_sim::RandomWalkParams']]]
 ];

@@ -1,4 +1,4 @@
-## @package extract
+## @file extract.py
 # @brief Unzips ARPO data bundle into the configured extraction directory.
 #
 # The extractor skips OS-generated junk files (macOS resource forks, Windows

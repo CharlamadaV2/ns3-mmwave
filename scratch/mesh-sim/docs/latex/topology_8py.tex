@@ -1,0 +1,201 @@
+\hypertarget{topology_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/topology.py File Reference}
+\label{topology_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/topology.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/topology.py}}
+
+
+MAC-\/address-\/to-\/rab-\/label resolution and stable per-\/node plot colours.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+str$\vert$None \mbox{\hyperlink{topology_8py_a9203327bd3963aff2a731cd71d6ff953}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+netdev\+\_\+orientation}} (str rab, str netdev)
+\begin{DoxyCompactList}\small\item\em Fixed matplotlib colour for each well-\/known node label. \end{DoxyCompactList}\item 
+int$\vert$None \mbox{\hyperlink{topology_8py_a681a7d7ef34c18f98dd0246058233021}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+index}} (str rab, str netdev, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Return the 1-\/based position of a netdev in its rab\textquotesingle{}s sorted list. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{topology_8py_a06665ab6680c5342211daa86aa07bf58}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+label}} (str rab, str netdev, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Return the human-\/readable {\ttfamily rab\+N.\+M} label for a (rab, netdev) pair. \end{DoxyCompactList}\item 
+str$\vert$None \mbox{\hyperlink{topology_8py_aba3402870cc86790151c3c942ca62f12}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+mac\+\_\+radio\+\_\+label}} (str mac, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Resolve a MAC address to its {\ttfamily rab\+N.\+M} radio label. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{topology_8py_a0e7d2239c00dbf42758b5692bf2b3cc4}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+node\+\_\+color}} (str label)
+\begin{DoxyCompactList}\small\item\em Return the matplotlib colour string for a node label. \end{DoxyCompactList}\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{topology_8py_ac9eee33ea46e060f34cf213d28bc7298}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+build\+\_\+topology}} (Path scen\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Build the \{mac\+: label\} topology map for a single scenario directory. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{topology_8py_a1a580f5cccded40f10bd3f9e95cf3a05}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+resolve\+\_\+peer}} (mac, dict\mbox{[}str, str\mbox{]} topo)
+\begin{DoxyCompactList}\small\item\em Resolve a peer MAC to its label using a pre-\/built topology map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+MAC-\/address-\/to-\/rab-\/label resolution and stable per-\/node plot colours. 
+
+{\bfseries{Vocabulary}}
+\begin{DoxyItemize}
+\item A {\itshape rab} is a chassis hostname ({\ttfamily rab1}, {\ttfamily rab2}, …).
+\item Each rab carries several radios; each radio is one Linux netdev (e.\+g. {\ttfamily wl\+P1p1s0f0}) with its own MAC address.
+\item {\ttfamily rab\+N.\+M} denotes rab N\textquotesingle{}s M-\/th netdev in alphabetical order, 1-\/based.
+\end{DoxyItemize}
+
+{\bfseries{Label resolution strategy}} Labels are built from the global union of {\ttfamily tag\+\_\+local\+\_\+mac} values across every scenario, so a peer MAC still resolves even when its owner\textquotesingle{}s {\ttfamily bh2.\+csv} is absent from the current scenario. Peer MACs that no rab ever claims are grouped by last-\/byte proximity and labelled {\ttfamily ext1}, {\ttfamily ext2}, …
+
+{\bfseries{Granularity}} Resolution stops at the hostname level — no chassis sub-\/splitting. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{topology_8py_ac9eee33ea46e060f34cf213d28bc7298}\label{topology_8py_ac9eee33ea46e060f34cf213d28bc7298}} 
+\index{topology.py@{topology.py}!build\_topology@{build\_topology}}
+\index{build\_topology@{build\_topology}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{build\_topology()}{build\_topology()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+build\+\_\+topology (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})}
+
+
+
+Build the \{mac\+: label\} topology map for a single scenario directory. 
+
+Labels known MACs from the global local-\/\+MAC table, then groups any remaining peer-\/only MACs by last-\/byte proximity and assigns them {\ttfamily ext1}, {\ttfamily ext2}, …
+
+
+\begin{DoxyParams}{Parameters}
+{\em scen\+\_\+dir} & Path to one scenario directory (parent is assumed to be csv\+\_\+root). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapping from MAC address string to human-\/readable node label. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_aba3402870cc86790151c3c942ca62f12}\label{topology_8py_aba3402870cc86790151c3c942ca62f12}} 
+\index{topology.py@{topology.py}!mac\_radio\_label@{mac\_radio\_label}}
+\index{mac\_radio\_label@{mac\_radio\_label}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{mac\_radio\_label()}{mac\_radio\_label()}}
+{\footnotesize\ttfamily  str $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+mac\+\_\+radio\+\_\+label (\begin{DoxyParamCaption}\item[{str}]{mac,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Resolve a MAC address to its {\ttfamily rab\+N.\+M} radio label. 
+
+Returns {\ttfamily None} if no rab ever claimed this MAC as a local MAC, meaning it is a peer-\/only address that cannot be tied to a specific radio.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & MAC address string (colon-\/separated hex). \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily \char`\"{}rab\+N.\+M\char`\"{}} label or {\ttfamily None}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_a9203327bd3963aff2a731cd71d6ff953}\label{topology_8py_a9203327bd3963aff2a731cd71d6ff953}} 
+\index{topology.py@{topology.py}!netdev\_orientation@{netdev\_orientation}}
+\index{netdev\_orientation@{netdev\_orientation}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{netdev\_orientation()}{netdev\_orientation()}}
+{\footnotesize\ttfamily  str $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+netdev\+\_\+orientation (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev }\end{DoxyParamCaption})}
+
+
+
+Fixed matplotlib colour for each well-\/known node label. 
+
+Unmapped labels fall back to {\ttfamily \char`\"{}0.\+4\char`\"{}} (medium grey). {\ttfamily \char`\"{}?\char`\"{}} is the sentinel used when a MAC cannot be resolved at all.
+
+Netdev-\/to-\/antenna-\/face mapping for rab2 only.
+
+rab1 and rab3 carry extra lowercase {\ttfamily wlp$\ast$} netdevs that this layout cannot describe, so orientation is only defined for rab2. Source\+: {\ttfamily data/titan01-\/mw.\+json}.
+
+Return the antenna-\/face orientation for a (rab, netdev) pair.
+
+Only rab2 has a known orientation table; all other rabs return None.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname (e.\+g. {\ttfamily \char`\"{}rab2\char`\"{}}). \\
+\hline
+{\em netdev} & Linux netdev name (e.\+g. {\ttfamily \char`\"{}wl\+P1p1s0f0\char`\"{}}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Orientation string ({\ttfamily \char`\"{}front\char`\"{}}, {\ttfamily \char`\"{}rear\char`\"{}}, {\ttfamily \char`\"{}left\char`\"{}}, {\ttfamily \char`\"{}right\char`\"{}}) or {\ttfamily None} if unknown. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_a0e7d2239c00dbf42758b5692bf2b3cc4}\label{topology_8py_a0e7d2239c00dbf42758b5692bf2b3cc4}} 
+\index{topology.py@{topology.py}!node\_color@{node\_color}}
+\index{node\_color@{node\_color}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{node\_color()}{node\_color()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+node\+\_\+color (\begin{DoxyParamCaption}\item[{str}]{label }\end{DoxyParamCaption})}
+
+
+
+Return the matplotlib colour string for a node label. 
+
+Unmapped labels (not in FIXED\+\_\+\+COLORS) return {\ttfamily \char`\"{}0.\+4\char`\"{}} (medium grey).
+
+
+\begin{DoxyParams}{Parameters}
+{\em label} & Node label such as {\ttfamily \char`\"{}rab1\char`\"{}} or {\ttfamily \char`\"{}ext2\char`\"{}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matplotlib colour string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_a681a7d7ef34c18f98dd0246058233021}\label{topology_8py_a681a7d7ef34c18f98dd0246058233021}} 
+\index{topology.py@{topology.py}!radio\_index@{radio\_index}}
+\index{radio\_index@{radio\_index}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{radio\_index()}{radio\_index()}}
+{\footnotesize\ttfamily  int $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+index (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Return the 1-\/based position of a netdev in its rab\textquotesingle{}s sorted list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname. \\
+\hline
+{\em netdev} & Linux netdev name. \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1-\/based index, or {\ttfamily None} if the netdev is not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_a06665ab6680c5342211daa86aa07bf58}\label{topology_8py_a06665ab6680c5342211daa86aa07bf58}} 
+\index{topology.py@{topology.py}!radio\_label@{radio\_label}}
+\index{radio\_label@{radio\_label}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{radio\_label()}{radio\_label()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+label (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Return the human-\/readable {\ttfamily rab\+N.\+M} label for a (rab, netdev) pair. 
+
+Falls back to {\ttfamily \char`\"{}\{rab\}.?\char`\"{}} when the netdev index cannot be determined.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname. \\
+\hline
+{\em netdev} & Linux netdev name. \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Label string such as {\ttfamily \char`\"{}rab2.\+3\char`\"{}} or {\ttfamily \char`\"{}rab1.?\char`\"{}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{topology_8py_a1a580f5cccded40f10bd3f9e95cf3a05}\label{topology_8py_a1a580f5cccded40f10bd3f9e95cf3a05}} 
+\index{topology.py@{topology.py}!resolve\_peer@{resolve\_peer}}
+\index{resolve\_peer@{resolve\_peer}!topology.py@{topology.py}}
+\doxysubsubsection{\texorpdfstring{resolve\_peer()}{resolve\_peer()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+resolve\+\_\+peer (\begin{DoxyParamCaption}\item[{}]{mac,  }\item[{dict\mbox{[}str, str\mbox{]}}]{topo }\end{DoxyParamCaption})}
+
+
+
+Resolve a peer MAC to its label using a pre-\/built topology map. 
+
+Returns {\ttfamily \char`\"{}?\char`\"{}} for Na\+N/\+None MACs and {\ttfamily \char`\"{}?\+:$<$last5$>$\char`\"{}} for MACs absent from the topology, providing enough context to identify the device in logs.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & MAC address value (may be {\ttfamily float(\char`\"{}nan\char`\"{})} from pandas). \\
+\hline
+{\em topo} & Topology map produced by build\+\_\+topology. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Human-\/readable label string. 
+\end{DoxyReturn}

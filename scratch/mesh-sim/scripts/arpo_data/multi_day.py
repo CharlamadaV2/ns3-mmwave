@@ -1,4 +1,4 @@
-## @package multi_day
+## @file multi_day.py
 # @brief Day-vs-day comparison for the same scenario family.
 #
 # Pools per-day trace CSVs at the (link, metric) level, then renders ECDF

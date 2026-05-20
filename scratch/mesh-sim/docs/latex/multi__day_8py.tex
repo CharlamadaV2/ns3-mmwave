@@ -1,0 +1,93 @@
+\hypertarget{multi__day_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/multi\+\_\+day.py File Reference}
+\label{multi__day_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/multi\_day.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/multi\_day.py}}
+
+
+Day-\/vs-\/day comparison for the same scenario family.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+Metric\+Spec}}
+\begin{DoxyCompactList}\small\item\em Specification for loading and rendering one radio metric. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+Day\+Bag}}
+\begin{DoxyCompactList}\small\item\em All pooled samples for one (family, day, link, metric) combination. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} \mbox{\hyperlink{multi__day_8py_a609a778db51740e3f382851719215734}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day}} (Path per\+\_\+day\+\_\+root, Path multi\+\_\+day\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Run the full multi-\/day analysis and write all output files. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day}} ()
+\begin{DoxyCompactList}\small\item\em CLI entry point for the {\ttfamily multi-\/day} subcommand. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Day-\/vs-\/day comparison for the same scenario family. 
+
+Pools per-\/day trace CSVs at the (link, metric) level, then renders ECDF overlays and computes two-\/sample K-\/S distances for every day pair. Antenna identity is dropped here — drill into the per-\/day plots if you need per-\/radio breakdown.
+
+{\bfseries{Output files written to multi\+\_\+day\+\_\+root/}} \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endhead
+{\ttfamily $<$family$>$/pngs/$<$src$>$/}   &ECDF overlay PNGs per (link, metric).    \\\cline{1-2}
+{\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}   &Quantile summary per (family, day, link, metric).    \\\cline{1-2}
+{\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   &K-\/S statistic + median delta for every day pair.   \\\cline{1-2}
+\end{longtabu}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}\label{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}} 
+\index{multi\_day.py@{multi\_day.py}!multi\_day@{multi\_day}}
+\index{multi\_day@{multi\_day}!multi\_day.py@{multi\_day.py}}
+\doxysubsubsection{\texorpdfstring{multi\_day()}{multi\_day()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the {\ttfamily multi-\/day} subcommand. 
+
+Delegates to run\+\_\+multi\+\_\+day using the default PER\+\_\+\+DAY\+\_\+\+DIR and MULTI\+\_\+\+DAY\+\_\+\+DIR paths.
+
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{multi__day_8py_a609a778db51740e3f382851719215734}\label{multi__day_8py_a609a778db51740e3f382851719215734}} 
+\index{multi\_day.py@{multi\_day.py}!run\_multi\_day@{run\_multi\_day}}
+\index{run\_multi\_day@{run\_multi\_day}!multi\_day.py@{multi\_day.py}}
+\doxysubsubsection{\texorpdfstring{run\_multi\_day()}{run\_multi\_day()}}
+{\footnotesize\ttfamily  tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day (\begin{DoxyParamCaption}\item[{Path}]{per\+\_\+day\+\_\+root,  }\item[{Path}]{multi\+\_\+day\+\_\+root }\end{DoxyParamCaption})}
+
+
+
+Run the full multi-\/day analysis and write all output files. 
+
+For each scenario family that has at least two days of data\+:
+\begin{DoxyEnumerate}
+\item Pool trace CSVs into \+\_\+\+Day\+Bag objects via \+\_\+load\+\_\+traces\+\_\+for\+\_\+family.
+\item Compute quantile summaries for {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}.
+\item Compute K-\/S statistics for every day pair for {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}.
+\item Render and save an ECDF overlay PNG per (link, metric).
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em per\+\_\+day\+\_\+root} & Directory of per-\/day plot output (produced by {\ttfamily plot}). \\
+\hline
+{\em multi\+\_\+day\+\_\+root} & Output directory for multi-\/day results. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (per\+\_\+day\+\_\+rows, pairwise\+\_\+rows)} of the raw dicts written to CSV, useful for testing or downstream processing. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em File\+Not\+Found\+Error} & if {\ttfamily per\+\_\+day\+\_\+root} does not exist. \\
+\hline
+\end{DoxyExceptions}

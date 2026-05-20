@@ -1,4 +1,4 @@
-## @package loaders
+## @file loaders.py
 # @brief Per-scenario CSV loaders for backhaul-radio and GPS data.
 #
 # **Clock skew handling**

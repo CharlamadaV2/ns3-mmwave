@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['rain_5frate_5fmm_5fhr_279',['rain_rate_mm_hr',['../structmesh__sim_1_1NyuChannelConfig.html#a078a0ef3456bd1ff968faf3e1dd7c9d0',1,'mesh_sim::NyuChannelConfig']]],
-  ['random_5fwalk_280',['random_walk',['../structmesh__sim_1_1NodeSpec.html#a3650f7ffcfefc98d1cbb807bdb2b62bb',1,'mesh_sim::NodeSpec']]],
-  ['rf_5fbandwidth_5fmhz_281',['rf_bandwidth_mhz',['../structmesh__sim_1_1NyuChannelConfig.html#a070e248b8f660812f374d4e52bd242e9',1,'mesh_sim::NyuChannelConfig']]],
-  ['role_282',['role',['../structmesh__sim_1_1NodeSpec.html#add21485f98c3ad53223264b68bb2d537',1,'mesh_sim::NodeSpec']]],
-  ['rx_5farray_5fgain_5fdbi_283',['rx_array_gain_dbi',['../structmesh__sim_1_1ChannelConfig.html#a669268605fcb3227231ad80def49ab57',1,'mesh_sim::ChannelConfig']]]
+  ['path_317',['Path',['../classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths.html#a391456f3d71dcc38a36fec60b1bc7bf6',1,'scratch::mesh-sim::scripts::arpo_data::paths::DatasetPaths']]],
+  ['position_318',['position',['../structmesh__sim_1_1NodeSpec.html#abbdb0e3af176cbb0aeb06710b9d41637',1,'mesh_sim::NodeSpec']]],
+  ['pressure_5fmbar_319',['pressure_mbar',['../structmesh__sim_1_1NyuChannelConfig.html#a956c2d021c475fa8fa9a42d6591305af',1,'mesh_sim::NyuChannelConfig']]]
 ];

@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['velocity_292',['velocity',['../structmesh__sim_1_1NodeSpec.html#a1b12dcff6f2970af61495782f68dc77a',1,'mesh_sim::NodeSpec']]],
-  ['vx_293',['vx',['../structmesh__sim_1_1Velocity.html#adb201a8f95d974cec15d632cda0d6487',1,'mesh_sim::Velocity']]],
-  ['vy_294',['vy',['../structmesh__sim_1_1Velocity.html#a2ce031a6fb3c7cf1806b7fd311658d88',1,'mesh_sim::Velocity']]],
-  ['vz_295',['vz',['../structmesh__sim_1_1Velocity.html#aadd9a2644da8a4938be13fe100b6af35',1,'mesh_sim::Velocity']]]
+  ['t_328',['t',['../structmesh__sim_1_1Waypoint.html#a817c872ad79be6dc7d1374063a32152a',1,'mesh_sim::Waypoint']]],
+  ['temperature_5fc_329',['temperature_c',['../structmesh__sim_1_1NyuChannelConfig.html#acfa242dd15390376baec4951b85c04e1',1,'mesh_sim::NyuChannelConfig']]],
+  ['tx_5farray_5fgain_5fdbi_330',['tx_array_gain_dbi',['../structmesh__sim_1_1ChannelConfig.html#a63fdc79768d957215b0059347804c11a',1,'mesh_sim::ChannelConfig']]],
+  ['tx_5fpower_5fdbm_331',['tx_power_dbm',['../structmesh__sim_1_1ChannelConfig.html#a73ba58e55344b3d8e1097372320705db',1,'mesh_sim::ChannelConfig']]],
+  ['type_332',['type',['../structmesh__sim_1_1BuildingSpec.html#ad80b368f2ff10c2c5ad75c1f1829015f',1,'mesh_sim::BuildingSpec']]]
 ];

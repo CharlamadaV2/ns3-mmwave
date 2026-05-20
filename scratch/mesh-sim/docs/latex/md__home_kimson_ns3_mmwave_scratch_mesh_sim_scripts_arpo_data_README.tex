@@ -22,7 +22,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \end{DoxyCode}
 
 
-{\ttfamily \mbox{\hyperlink{namespacemultiday__variance}{multiday\+\_\+variance}}} is a read-\/only summary over the CSV produced by {\ttfamily multi-\/day}. It prints three views — per-\/family rollup, per-\/link rollup, and the detail table sorted by {\ttfamily $\vert$Δmed$\vert$} descending — so unstable day-\/to-\/day links surface at the top without opening any PNGs. Flags\+: {\ttfamily -\/-\/metric \{snr,rcpi,mcs,per,throughput\}}, {\ttfamily -\/-\/family $<$name$>$}, {\ttfamily -\/-\/top N}, {\ttfamily -\/-\/csv $<$out$>$}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md3}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md3}
+{\ttfamily multiday\+\_\+variance} is a read-\/only summary over the CSV produced by {\ttfamily multi-\/day}. It prints three views — per-\/family rollup, per-\/link rollup, and the detail table sorted by {\ttfamily $\vert$Δmed$\vert$} descending — so unstable day-\/to-\/day links surface at the top without opening any PNGs. Flags\+: {\ttfamily -\/-\/metric \{snr,rcpi,mcs,per,throughput\}}, {\ttfamily -\/-\/family $<$name$>$}, {\ttfamily -\/-\/top N}, {\ttfamily -\/-\/csv $<$out$>$}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md3}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md3}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -33,9 +33,9 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \hline
 \PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
 \endhead
-extract   &{\ttfamily data/arpo\+\_\+extracted/csv/$<$scenario$>$/$<$node$>$/}    \\\cline{1-2}
-plot   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/\{pngs,csvs\}/$<$src$>$/}    \\\cline{1-2}
-multi-\/day   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/multi\+\_\+day/$<$family$>$/} + two CSVs   \\\cline{1-2}
+{\ttfamily extract}   &{\ttfamily data/arpo\+\_\+extracted/csv/$<$scenario$>$/$<$node$>$/}    \\\cline{1-2}
+{\ttfamily plot}   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/\{pngs,csvs\}/$<$src$>$/}    \\\cline{1-2}
+{\ttfamily multi-\/day}   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/multi\+\_\+day/$<$family$>$/} + two CSVs   \\\cline{1-2}
 \end{longtabu}
 
 
@@ -50,19 +50,19 @@ multi-\/day   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/multi\+\_\+day/$<
 \hline
 \PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
 \endhead
-{\ttfamily cli.\+py}   &Subcommand parser; saves figures returned by plot fns    \\\cline{1-2}
-{\ttfamily paths.\+py}   &Filesystem constants    \\\cline{1-2}
-{\ttfamily extract.\+py}   &{\ttfamily extract} subcommand    \\\cline{1-2}
-{\ttfamily topology.\+py}   &MAC -\/$>$ rab label resolution + plot colors    \\\cline{1-2}
-{\ttfamily loaders.\+py}   &Per-\/scenario {\ttfamily bh2} / {\ttfamily gps} / {\ttfamily mcm} loaders    \\\cline{1-2}
-{\ttfamily plots/}   &Per-\/scenario plot functions (bh2 metrics, GPS)    \\\cline{1-2}
-{\ttfamily multi\+\_\+day.\+py}   &{\ttfamily multi-\/day} subcommand    \\\cline{1-2}
-{\ttfamily multiday\+\_\+variance.\+py}   &Variance table over {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   \\\cline{1-2}
+\mbox{\hyperlink{cli_8py}{cli}}   &Subcommand parser; saves figures returned by plot fns    \\\cline{1-2}
+\mbox{\hyperlink{paths_8py}{paths}}   &Filesystem constants    \\\cline{1-2}
+\mbox{\hyperlink{extract_8py}{extract}}   &{\ttfamily extract} subcommand    \\\cline{1-2}
+\mbox{\hyperlink{topology_8py}{topology}}   &MAC -\/$>$ rab label resolution + plot colors    \\\cline{1-2}
+\mbox{\hyperlink{loaders_8py}{loaders}}   &Per-\/scenario {\ttfamily bh2} / {\ttfamily gps} / {\ttfamily mcm} loaders    \\\cline{1-2}
+\mbox{\hyperlink{namespacescripts_1_1arpo__data_1_1plots}{plots/}}   &Per-\/scenario plot functions (bh2 metrics, GPS)    \\\cline{1-2}
+\mbox{\hyperlink{multi__day_8py}{multi\+\_\+day}}   &{\ttfamily multi-\/day} subcommand    \\\cline{1-2}
+\mbox{\hyperlink{multiday__variance_8py}{multiday\+\_\+variance}}   &Variance table over {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   \\\cline{1-2}
 \end{longtabu}
 \hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md5}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md5}
 
 \begin{DoxyItemize}
-\item Plot fns return a {\ttfamily matplotlib.\+Figure}; only {\ttfamily cli.\+py} calls {\ttfamily savefig}.
+\item Plot fns return a {\ttfamily matplotlib.\+Figure}; only {\ttfamily \mbox{\hyperlink{cli_8py}{cli.\+py}}} calls {\ttfamily savefig}.
 \item Loaders return {\ttfamily pd.\+Data\+Frame $\vert$ None}.
 \item Node clocks are skewed -- comparisons use {\ttfamily \+\_\+\+\_\+sec\+\_\+\+\_\+} (session-\/relative), not raw UTC.
 \end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md6}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README_autotoc_md6}

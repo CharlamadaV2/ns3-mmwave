@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['id_266',['id',['../structmesh__sim_1_1NodeSpec.html#a950262852492aff9f300ec5ed3a40704',1,'mesh_sim::NodeSpec::id()'],['../structmesh__sim_1_1BuildingSpec.html#add6b7cab774447938546e243930c804d',1,'mesh_sim::BuildingSpec::id()']]]
+  ['humidity_5fpct_306',['humidity_pct',['../structmesh__sim_1_1NyuChannelConfig.html#abbe356ca763f151987f9d41d2ce2ef50',1,'mesh_sim::NyuChannelConfig']]]
 ];
