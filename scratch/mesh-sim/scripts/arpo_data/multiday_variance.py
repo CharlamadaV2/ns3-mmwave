@@ -1,9 +1,9 @@
-##@package docstring
-# Day-vs-day variance table from arpo_data's pairwise K-S CSV.
-
-##
-
-#TODO: Finish Documentation for this page
+## @package multiday_variance
+# @brief Day-vs-day variance table from arpo_data's pairwise K-S CSV.
+# 
+# A command line interface that creates day-vs-day variance.
+# The command line interface can take parameters change the metric, 
+# file paths, or to only show specific families
 
 from __future__ import annotations
 
@@ -19,13 +19,18 @@ DEFAULT_KS_CSV = (REPO_ROOT / "data" / "arpo_extracted" / "_plots"
 
 _UNIT_BY_METRIC = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
-## @brief
+## @brief Reformats the date of the scenario to month/day/year
+# @param date   The given day/month/year of the scenario
+# @return string    The scenarios date formatted in month/day/year
 def _fmt_day(day: str) -> str:
     if isinstance(day, str) and len(day) == 8 and day.isdigit():
         return f"{day[0:2]}/{day[2:4]}/{day[4:8]}"
     return str(day)
 
-## @brief
+## @brief Joins header and each row in body together
+# @param header     Row of column headers to be linked to body
+# @param body   Rows of data to be linked together
+# @return string    Result of the assembled table
 def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
     if not body:
         return "  ".join(header) + "\n(no rows)"
@@ -36,9 +41,11 @@ def _render_table(header: tuple[str, ...], body: list[tuple[str, ...]]) -> str:
         lines.append("  ".join(cell.ljust(w) for cell, w in zip(row, widths)))
     return "\n".join(lines)
 
-## @brief
+## @brief One row per (family, link, day-pair), sorted by |Δmed| desc.##
+# @param df dataframe of scenario of the two compared days
+# @param metric unit of the scenarios data
+# @return _render_table Result of rendered table with params from formatted header and body
 def _summary_table(df: pd.DataFrame, unit: str) -> str:
-    ##One row per (family, link, day-pair), sorted by |Δmed| desc.##
     unit_suffix = f" {unit}" if unit else ""
     df = df.assign(abs_delta=df["median_delta"].abs()) \
            .sort_values("abs_delta", ascending=False)
@@ -60,9 +67,11 @@ def _summary_table(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-## @brief
+## @brief per-link summary across families: how unstable is each link, on average?
+# @param df dataframe of scenario of the two compared days
+# @param metric unit of the scenarios data
+# @return _render_table Result of rendered table with params from formatted header and body
 def _link_rollup(df: pd.DataFrame, unit: str) -> str:
-    ##Per-link summary across families: how unstable is each link, on average?##
     unit_suffix = f" {unit}" if unit else ""
     grp = df.assign(abs_delta=df["median_delta"].abs()).groupby(
         ["src_rab", "peer_rab"], dropna=False
@@ -88,9 +97,11 @@ def _link_rollup(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-## @brief
+## @brief Per-family summary: which scenarios show the biggest day-to-day swings?
+# @param df dataframe of scenario of the two compared days
+# @param metric unit of the scenarios data
+# @return _render_table Result of rendered table with params from formatted header and body
 def _family_rollup(df: pd.DataFrame, unit: str) -> str:
-    ##Per-family summary: which scenarios show the biggest day-to-day swings?##
     unit_suffix = f" {unit}" if unit else ""
     grp = df.assign(abs_delta=df["median_delta"].abs()).groupby("family", dropna=False)
     header = ("family", "n link-pairs", "mean |Δmed|", "max |Δmed|", "worst link")
@@ -115,9 +126,9 @@ def _family_rollup(df: pd.DataFrame, unit: str) -> str:
         ))
     return _render_table(header, body)
 
-## Documentation for a function.
-#
-#  More details.
+## @brief Manages command line interface parameters for creating tables
+# @param argv List of parameters to be taken from the command line
+# @return On success returns 0, 1 if df is empty or csv is not found
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Day-vs-day variance table from arpo_data's pairwise K-S CSV.")
@@ -170,6 +181,7 @@ def main(argv: list[str] | None = None) -> int:
         detail = detail.head(args.top)
     print(_summary_table(detail.drop(columns="abs_delta"), unit))
 
+    #Turns table in csv format 
     if args.csv:
         out = Path(args.csv).resolve()
         out.parent.mkdir(parents=True, exist_ok=True)

@@ -1,13 +1,10 @@
-##@package docstring
-# Run from scratch/mesh-sim/:
-#     python -m scripts.arpo_data.cli extract
-#     python -m scripts.arpo_data.cli plot --scenario <name>
-#     python -m scripts.arpo_data.cli plot --all
-#     python -m scripts.arpo_data.cli multi-day
-
-##
-
-#TODO: Finish Documentation for this page
+## @package cli
+# @brief Main script to be ran for manipulating ARPO data as desired
+#
+# Provides a command line interface that can do one of the following commands: 
+# - Extract unzips data folder into extraction target direction
+# - Multi-day compares day vs day data for multi day scenarios
+# - Plot generates figures for specific scenario or all scenarios per individual day
 
 import argparse
 import sys
@@ -33,15 +30,15 @@ from .plots import (
     plot_gps_tracks,
 )
 
-## @brief
+## @brief Save a figure (and an optional trace CSV) returned from a plot fn.
+# @param result contains figure and trace of specific scenario
+# @param png_path path to store the resultant figure
+# @param csv_path path to store the resultant trace
+#
+# Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
+# lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
+# supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
 def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
-    # ##
-    # Save a figure (and an optional trace CSV) returned from a plot fn.
-
-    # Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
-    # lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
-    # supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
-    ##
     if result is None:
         return
     if isinstance(result, tuple):
@@ -51,7 +48,7 @@ def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
     if fig is None:
         return
     png_path.parent.mkdir(parents=True, exist_ok=True)
-    # I believe the DPI is maxed
+    # DPI is maxed at 200
     fig.savefig(png_path, dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"    wrote {png_path}")
@@ -62,14 +59,15 @@ def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
         trace.to_csv(target, index=False)
         print(f"    wrote {target}")
 
-## @brief
+## @brief Saves the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
+# @param results contains src, peer, fig, and trace tuples produced by per-radio plot
+# @param scen_dir directory path where scenario is stored
+# @param base_name name of the bh2 metric 
+#
+# PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
+# outputs for each source rab live together.
 def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
-    ##
-    # Save the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
 
-    # PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
-    # outputs for each source rab live together.
-    ##
     if not results:
         return
     for src, peer, fig, trace in results:
@@ -77,7 +75,8 @@ def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
         csv = scen_dir / "csvs" / src / f"{base_name}__{src}_to_{peer}_trace.csv"
         _save((fig, trace), png, csv)
 
-## @brief
+## @brief plots different metrics for specific scenario of given day
+# @param scen_dir directory path where scenario is stored
 def _plot_one(scen_dir: Path) -> None:
     out = PER_DAY_DIR / scen_dir.name
     pngs = out / "pngs"
@@ -98,7 +97,9 @@ def _plot_one(scen_dir: Path) -> None:
         _save(plot_gps_tracks(gps, name),
               pngs / "gps_track.png", csvs / "gps_track_trace.csv")
 
-## @brief
+## @brief manages command line argument for multi or single plot generator
+# @param args contains argument for which scenario to plot or all scenarios.
+# @return On success returns 0, while 1 for errors
 def _cmd_plot(args: argparse.Namespace) -> int:
     if not CSV_ROOT.exists():
         print(f"ERROR: {CSV_ROOT} not found -- run `extract` first", file=sys.stderr)
@@ -121,9 +122,15 @@ def _cmd_plot(args: argparse.Namespace) -> int:
     print(f"\nDone. Figures in {PER_DAY_DIR}/")
     return 0
 
-## Documentation for a function.
+## @brief Takes command line arguements to interact with ARPO data
 #
-#  More details.
+# There are three arguments to be taken: "extract", "plot", or "multi-day"
+# The extract arg will execute the extraction script
+# The plot arg will execute the _com_plot function passing args for all or specific scenario
+# The multi-day will execute the multi_day script
+#  
+# @return result of "extract", "_cmd_plot", or "multi_day" on success, 
+#       returns 1 if the argument does not exist
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)

@@ -1,9 +1,21 @@
-##@package docstring
-# Run mesh-sim across a directory of scenarios, multi-seed.
-
-##
-
-#TODO: Finish Documentation for this page
+## @package run_batch
+# @brief Run mesh-sim across a directory of scenarios, multi-seed.
+#
+# Discovers all scenario subdirectories that contain a ``run.ini``, invokes
+# the ns-3 sim binary for each with a configurable set of random seeds, and
+# writes outputs to a timestamped batch directory.
+#
+# Optionally patches each scenario's ``nodes.json`` with real-GPS-derived
+# waypoints before running (see @ref build_waypoints).
+#
+# **Output layout**
+# @code
+# outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/
+#   <scenario>/
+#     run.log
+#     seed-<N>/         (written by the sim binary)
+#   batch_manifest.json
+# @endcode
 
 from __future__ import annotations
 
@@ -18,13 +30,19 @@ from pathlib import Path
 
 from .build_waypoints import patch_scenario_waypoints
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_SCENARIOS_DIR = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
-DEFAULT_SEEDS = "1,2,3,4,5"
+REPO_ROOT              = Path(__file__).resolve().parents[2]
+DEFAULT_SCENARIOS_DIR  = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
+DEFAULT_SEEDS          = "1,2,3,4,5"  ##< Default comma-separated seed list.
 
-## @brief
+
+## @brief Extract the ``duration_s`` value from a ``run.ini`` ``[scenario]`` section.
+#
+# Parses the file line-by-line to avoid loading the entire configparser machinery
+# for a single value. Returns ``None`` if the key is absent or unparseable.
+#
+# @param ini_path Path to the ``run.ini`` file.
+# @return Duration in seconds as a float, or ``None``.
 def _read_scenario_duration(ini_path: Path) -> float | None:
-    ##Pull duration_s from [scenario] in a run.ini; returns None if absent.##
     if not ini_path.is_file():
         return None
     in_section = False
@@ -41,21 +59,44 @@ def _read_scenario_duration(ini_path: Path) -> float | None:
                 return None
     return None
 
-## @brief
+
+## @brief Locate the compiled ns-3 sim binary via glob.
+#
+# Searches for the pattern
+# ``<repo_root>/../../build/scratch/mesh-sim/ns3*-sim-*`` and returns the
+# lexicographically first match (which in practice is the only build).
+#
+# @return Absolute path string of the binary, or ``None`` if not found.
 def _find_sim_binary() -> str | None:
     ns3_root = REPO_ROOT.parent.parent
-    pattern = str(ns3_root / "build" / "scratch" / "mesh-sim" / "ns3*-sim-*")
-    matches = sorted(glob.glob(pattern))
+    pattern  = str(ns3_root / "build" / "scratch" / "mesh-sim" / "ns3*-sim-*")
+    matches  = sorted(glob.glob(pattern))
     return matches[0] if matches else None
 
-## @brief
+
+## @brief Discover all scenario directories that contain a ``run.ini`` file.
+#
+# @param scenarios_dir Parent directory to search.
+# @return Sorted list of qualifying subdirectory paths.
 def _discover_scenarios(scenarios_dir: Path) -> list[Path]:
     if not scenarios_dir.is_dir():
         return []
     return sorted(p for p in scenarios_dir.iterdir()
                   if p.is_dir() and (p / "run.ini").is_file())
 
-## @brief
+
+## @brief Invoke the sim binary for one scenario and capture its output to a log file.
+#
+# The command passes the scenario's ``run.ini``, the seed list, and the output
+# directory as command-line arguments. Both stdout and stderr are written to
+# ``<out_dir>/run.log``.
+#
+# @param sim_binary Path string of the ns-3 sim binary.
+# @param scenario   Scenario directory (contains ``run.ini``).
+# @param seeds      Comma-separated seed string (e.g. ``"1,2,3,4,5"``).
+# @param out_dir    Destination for sim output files and the log.
+# @param env        Environment variables dict for the subprocess.
+# @return Tuple ``(returncode, log_path_str)``.
 def _run_one(sim_binary: str, scenario: Path, seeds: str,
              out_dir: Path, env: dict[str, str]) -> tuple[int, str]:
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -72,9 +113,21 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
         result = subprocess.run(cmd, stdout=log_f, stderr=subprocess.STDOUT, env=env)
     return result.returncode, str(log_path)
 
-## Documentation for a function.
+
+## @brief CLI entry point for the batch runner.
 #
-#  More details.
+# Full workflow:
+# -# Discover scenarios under ``--scenarios-dir``.
+# -# Locate the sim binary (auto-detect or ``--sim-binary``).
+# -# For each scenario (optionally filtered by ``--only``):
+#    -# Optionally patch waypoints via @ref patch_scenario_waypoints.
+#    -# Invoke the sim via @ref _run_one.
+#    -# Append the result to ``batch_manifest.json`` (written after every run
+#       so a crash doesn't lose partial results).
+# -# Print a final OK/failed count.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 if all scenarios succeeded, 1 if any failed.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Run mesh-sim across validation scenarios.")
     p.add_argument("--scenarios-dir", default=str(DEFAULT_SCENARIOS_DIR),
@@ -102,7 +155,7 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     scenarios_dir = Path(args.scenarios_dir).resolve()
-    scenarios = _discover_scenarios(scenarios_dir)
+    scenarios     = _discover_scenarios(scenarios_dir)
     if args.only:
         scenarios = [s for s in scenarios if s.name == args.only]
     if not scenarios:
@@ -117,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.out:
         batch_root = Path(args.out).resolve()
     else:
-        now = datetime.now()
+        now        = datetime.now()
         batch_root = (REPO_ROOT / "outputs" / now.strftime("%Y-%m")
                       / now.strftime("%d")
                       / (now.strftime("%H-%M-%S") + "-validation"))
@@ -136,11 +189,12 @@ def main(argv: list[str] | None = None) -> int:
 
     batch_root.mkdir(parents=True, exist_ok=True)
 
-    env = os.environ.copy()
+    # Extend library search paths so the sim binary can find ns-3 shared libs.
+    env     = os.environ.copy()
     ns3_root = REPO_ROOT.parent.parent
-    lib_dir = str(ns3_root / "build" / "lib")
+    lib_dir  = str(ns3_root / "build" / "lib")
     env["DYLD_LIBRARY_PATH"] = lib_dir + ":" + env.get("DYLD_LIBRARY_PATH", "")
-    env["LD_LIBRARY_PATH"] = lib_dir + ":" + env.get("LD_LIBRARY_PATH", "")
+    env["LD_LIBRARY_PATH"]   = lib_dir + ":" + env.get("LD_LIBRARY_PATH",   "")
 
     manifest = {
         "timestamp":     datetime.now().isoformat(),
@@ -150,36 +204,39 @@ def main(argv: list[str] | None = None) -> int:
         "runs":          [],
     }
 
-    n_ok = 0
-    n_fail = 0
+    n_ok = n_fail = 0
     for i, scen in enumerate(scenarios, 1):
         out_dir = batch_root / scen.name
         print(f"\n[{i}/{len(scenarios)}] {scen.name}")
+
         if args.auto_waypoints:
-            # Read scenario duration_s from run.ini so scale-mode targets the actual sim length.
+            # Read scenario duration so scale-mode targets the actual sim window.
             duration = _read_scenario_duration(scen / "run.ini")
-            status = patch_scenario_waypoints(
+            status   = patch_scenario_waypoints(
                 scen,
                 node=args.waypoint_node,
                 time_mode=args.waypoint_time_mode,
                 duration=duration,
             )
             print(f"  waypoints: {status}")
-        rc, log = _run_one(sim_binary, scen, args.seeds, out_dir, env)
-        status = "ok" if rc == 0 else "failed"
-        if rc == 0:
+
+        rc, log  = _run_one(sim_binary, scen, args.seeds, out_dir, env)
+        ok_flag  = rc == 0
+        if ok_flag:
             n_ok += 1
             print(f"  ok  -> {out_dir}")
         else:
             n_fail += 1
             print(f"  FAILED (exit {rc}); see {log}")
+
         manifest["runs"].append({
-            "scenario":    scen.name,
+            "scenario":     scen.name,
             "scenario_dir": str(scen),
-            "output_dir":  str(out_dir),
-            "status":      status,
-            "exit_code":   rc,
+            "output_dir":   str(out_dir),
+            "status":       "ok" if ok_flag else "failed",
+            "exit_code":    rc,
         })
+        # Write after every scenario so a mid-batch crash doesn't lose results.
         with open(batch_root / "batch_manifest.json", "w") as f:
             json.dump(manifest, f, indent=2)
 

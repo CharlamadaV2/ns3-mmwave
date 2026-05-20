@@ -1,14 +1,23 @@
-## @package docstring
-# Generate waypoint mobility for a sim node from its field GPS trace.
-
-# Reads the per-day `gps_track_trace.csv` (centroid-ENU metres) emitted by
-# `arpo_data.cli plot`, aligns the field frame to the sim frame using a
-# stationary anchor node (default: rab1), downsamples the moving node's
-# track to N waypoints, and patches them into the scenario's `nodes.json`.
+## @package build_waypoints
+# @brief Generate waypoint mobility for a sim node from its field GPS trace.
 #
-# More details.
-
-#TODO: Finish Documentation for this page
+# Reads the per-day ``gps_track_trace.csv`` (centroid-ENU metres) emitted by
+# ``arpo_data.cli plot``, aligns the field coordinate frame to the sim frame
+# using a stationary anchor node (default: rab1), downsamples the moving
+# node's track to N waypoints, and patches them into the scenario's
+# ``nodes.json``.
+#
+# **Coordinate frames**
+# Field GPS fixes are expressed in ENU metres relative to an arbitrary
+# centroid. The sim uses its own metre-based XY plane. Alignment is done by
+# computing the mean field position of the anchor node and translating so
+# that it coincides with the anchor's position in ``nodes.json``.
+#
+# **Typical usage**
+# @code
+# python -m scripts.sim.build_waypoints arpo-1-1-static-04172026 --dry-run
+# python -m scripts.sim.build_waypoints --all --time-mode scale
+# @endcode
 
 from __future__ import annotations
 
@@ -22,13 +31,26 @@ import pandas as pd
 
 from .compare import sim_to_field_scenario
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-SCENARIOS_ROOT = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
+REPO_ROOT          = Path(__file__).resolve().parents[2]
+SCENARIOS_ROOT     = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
 FIELD_PER_DAY_ROOT = REPO_ROOT / "data" / "arpo_extracted" / "_plots" / "per_day"
 
-_MOBILE_BBOX_M = 20.0  # field bbox max-dim threshold to count as "mobile"
+## @brief Maximum bounding-box dimension (metres) below which a node is considered static.
+#
+# Path length alone is GPS-noise-prone, so the bbox max-dim is used instead.
+_MOBILE_BBOX_M = 20.0
 
-## @brief
+
+## @brief Load the GPS track trace CSV for a field scenario.
+#
+# The trace is produced by ``arpo_data.cli plot`` and contains ENU coordinates
+# relative to the session centroid.
+#
+# @param scenario_field_dir Per-day output directory for the field scenario
+#                           (e.g. ``data/arpo_extracted/_plots/per_day/<name>``).
+# @return DataFrame with columns ``node``, ``sec_since_origin``,
+#         ``east_m``, ``north_m``.
+# @throws FileNotFoundError if ``csvs/gps_track_trace.csv`` is absent.
 def _load_field_trace(scenario_field_dir: Path) -> pd.DataFrame:
     csv = scenario_field_dir / "csvs" / "gps_track_trace.csv"
     if not csv.is_file():
@@ -36,10 +58,20 @@ def _load_field_trace(scenario_field_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(csv, usecols=["node", "sec_since_origin", "east_m", "north_m"])
     return df
 
-## @brief
+
+## @brief Compute the (dx, dy) translation that maps the field anchor to the sim anchor.
+#
+# The field anchor's mean ENU position is shifted so it coincides with the
+# anchor's XY position in ``nodes.json``. The same offset is applied to all
+# other nodes to preserve relative geometry.
+#
+# @param df            Full GPS trace DataFrame (all nodes).
+# @param anchor        Node name of the stationary anchor (e.g. ``"rab1"``).
+# @param sim_anchor_xy Anchor's (x, y) position from ``nodes.json`` in metres.
+# @return Tuple ``(dx, dy)`` in metres.
+# @throws ValueError if the anchor is not present in the trace.
 def _anchor_offset(df: pd.DataFrame, anchor: str,
                    sim_anchor_xy: tuple[float, float]) -> tuple[float, float]:
-    ##Return (dx, dy) so that field_anchor mean -> sim_anchor_xy.##
     g = df[df["node"] == anchor]
     if g.empty:
         raise ValueError(f"anchor '{anchor}' not in field trace")
@@ -47,22 +79,45 @@ def _anchor_offset(df: pd.DataFrame, anchor: str,
     f_mean_y = float(g["north_m"].mean())
     return sim_anchor_xy[0] - f_mean_x, sim_anchor_xy[1] - f_mean_y
 
-## @brief
+
+## @brief Downsample a track to N waypoints uniformly spaced in time.
+#
+# Always includes the first and last point regardless of spacing. If the
+# track already has fewer points than requested, it is returned unchanged.
+# Duplicate indices after searchsorted are collapsed via ``np.unique``.
+#
+# @param t 1-D array of time values (seconds), must be sorted ascending.
+# @param x 1-D array of east positions (metres).
+# @param y 1-D array of north positions (metres).
+# @param n Target number of waypoints.
+# @return Tuple ``(t_ds, x_ds, y_ds)`` of downsampled arrays.
 def _downsample_uniform_time(t: np.ndarray, x: np.ndarray, y: np.ndarray,
                              n: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    ##Take n waypoints evenly spaced in time, always including first and last.##
     if t.size <= n:
         return t, x, y
     grid = np.linspace(t[0], t[-1], n)
-    idx = np.searchsorted(t, grid)
-    idx = np.clip(idx, 0, t.size - 1)
-    idx = np.unique(idx)
+    idx  = np.searchsorted(t, grid)
+    idx  = np.clip(idx, 0, t.size - 1)
+    idx  = np.unique(idx)
     return t[idx], x[idx], y[idx]
 
-## @brief
+
+## @brief Map field timestamps onto the sim timeline.
+#
+# Three modes are supported:
+# - ``raw``   — relative field time used directly (t[0] subtracted).
+# - ``scale`` — relative time stretched/compressed so the last point lands
+#               at ``target_s``.
+# - ``clip``  — relative time capped at ``target_s``; points beyond are
+#               clamped to the cap value.
+#
+# @param t        1-D time array (seconds since epoch or arbitrary origin).
+# @param mode     One of ``"raw"``, ``"scale"``, ``"clip"``.
+# @param target_s Target duration in seconds (required for ``clip``/``scale``).
+# @return Relative time array starting at 0.
+# @throws ValueError for an unrecognised mode string.
 def _scale_time(t: np.ndarray, mode: str, target_s: float | None) -> np.ndarray:
-    ##Map field timeline onto sim timeline.##
-    t0 = t[0]
+    t0  = t[0]
     rel = t - t0
     if mode == "raw":
         return rel
@@ -76,22 +131,40 @@ def _scale_time(t: np.ndarray, mode: str, target_s: float | None) -> np.ndarray:
         return np.minimum(rel, target_s)
     raise ValueError(f"unknown time mode: {mode}")
 
-## @brief
+
+## @brief Read a ``nodes.json`` file and return its contents as a list of dicts.
+#
+# @param path Path to the ``nodes.json`` file.
+# @return List of node specification dicts.
 def _load_nodes_json(path: Path) -> list[dict]:
     return json.loads(path.read_text())
 
-## @brief
+
+## @brief Write a list of node dicts back to ``nodes.json`` with 2-space indentation.
+#
+# @param path  Destination path.
+# @param nodes List of node specification dicts to serialise.
 def _save_nodes_json(path: Path, nodes: list[dict]) -> None:
     path.write_text(json.dumps(nodes, indent=2) + "\n")
 
-## @brief
+
+## @brief Patch one node entry in-place with waypoint mobility data.
+#
+# Sets ``mobility`` to ``"waypoint"``, writes the waypoints list, and
+# synchronises ``position.{x,y,z}`` with the first waypoint so that static
+# snapshots (logs, visual tools) start at the correct location.
+#
+# @param nodes      List of node dicts (mutated in-place).
+# @param target_id  ``id`` field of the node to patch.
+# @param waypoints  List of ``{"t", "x", "y", "z"}`` dicts.
+# @return The patched node dict.
+# @throws KeyError if no node with ``target_id`` is found.
 def _patch_node(nodes: list[dict], target_id: str,
                 waypoints: list[dict]) -> dict:
     for n in nodes:
         if n.get("id") == target_id:
-            n["mobility"] = "waypoint"
+            n["mobility"]  = "waypoint"
             n["waypoints"] = waypoints
-            # Keep position in sync with the first waypoint so logs/snapshots match.
             wp0 = waypoints[0]
             n.setdefault("position", {})
             n["position"]["x"] = wp0["x"]
@@ -101,9 +174,17 @@ def _patch_node(nodes: list[dict], target_id: str,
             return n
     raise KeyError(f"node id '{target_id}' not in nodes.json")
 
-## @brief
+
+## @brief Resolve a scenario name to its directory under @ref SCENARIOS_ROOT.
+#
+# Accepts both the sim-form name (``arpo-1-1-static-04172026``) and the
+# field-form name (``1-1_static_04172026``), so callers don't need to know
+# which convention was used.
+#
+# @param name Scenario name in either sim or field form.
+# @return Absolute path to the scenario directory.
+# @throws FileNotFoundError if no matching directory is found.
 def _resolve_scenario_dir(name: str) -> Path:
-    ##Accept either the sim or field scenario name.##
     direct = SCENARIOS_ROOT / name
     if direct.is_dir():
         return direct
@@ -112,7 +193,15 @@ def _resolve_scenario_dir(name: str) -> Path:
             return sim_dir
     raise FileNotFoundError(f"scenario dir not found for '{name}' under {SCENARIOS_ROOT}")
 
-## @brief
+
+## @brief Return the maximum bounding-box dimension of a node's field track (metres).
+#
+# Used to decide whether the node was actually moving during the field collect.
+# Returns 0.0 if the node has no rows in the trace.
+#
+# @param df   Full GPS trace DataFrame.
+# @param node Node name to filter on.
+# @return ``max(east_extent, north_extent)`` in metres.
 def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
     g = df[df["node"] == node]
     if g.empty:
@@ -120,19 +209,36 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
     return float(max(g["east_m"].max() - g["east_m"].min(),
                      g["north_m"].max() - g["north_m"].min()))
 
-## Documentation for a function.
+
+## @brief Patch one scenario's ``nodes.json`` with field-derived waypoints.
 #
-#  More details.
+# Full pipeline in one call:
+# -# Load the field GPS trace for the corresponding field scenario.
+# -# Skip the scenario if the target node's bbox is below @ref _MOBILE_BBOX_M
+#    (the node was stationary in the field).
+# -# Compute the frame-alignment offset from the anchor node.
+# -# Apply the offset and optionally rescale/clip the time axis.
+# -# Downsample to ``n_waypoints`` uniformly-spaced-in-time points.
+# -# Write the waypoints into ``nodes.json`` (unless ``dry_run`` is set).
+#
+# @param sim_dir        Scenario directory containing ``nodes.json``.
+# @param node           ID of the node to author waypoints for (default: ``"rab2"``).
+# @param anchor         ID of the stationary alignment anchor (default: ``"rab1"``).
+# @param n_waypoints    Target waypoint count after downsampling (default: 20).
+# @param time_mode      One of ``"raw"``, ``"scale"``, ``"clip"`` (default: ``"raw"``).
+# @param duration       Target duration in seconds for ``clip``/``scale`` modes.
+# @param field_z        Override z-value for all waypoints; default keeps existing node z.
+# @param field_scenario Override the field scenario name (else derived from sim name).
+# @param dry_run        If True, report what would be done without writing ``nodes.json``.
+# @param mobile_bbox_m  Bbox threshold below which the node is treated as static.
+# @return One-line status string starting with ``"patched"``, ``"skipped: ..."``,
+#         or ``"error: ..."``.
 def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str = "rab1",
                              n_waypoints: int = 20, time_mode: str = "raw",
                              duration: float | None = None, field_z: float | None = None,
                              field_scenario: str | None = None,
                              dry_run: bool = False,
                              mobile_bbox_m: float = _MOBILE_BBOX_M) -> str:
-    ##Patch one scenario's nodes.json with field-derived waypoints.
-
-    # Returns a one-line status string: "patched", "skipped: ...", or "error: ..."
-    ##
     nodes_json = sim_dir / "nodes.json"
     if not nodes_json.is_file():
         return f"error: nodes.json not found at {nodes_json}"
@@ -165,17 +271,17 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
     x = g["east_m"].to_numpy(dtype=np.float64) + dx
     y = g["north_m"].to_numpy(dtype=np.float64) + dy
 
-    t_sim = _scale_time(t, time_mode, duration)
+    t_sim          = _scale_time(t, time_mode, duration)
     t_ds, x_ds, y_ds = _downsample_uniform_time(t_sim, x, y, n_waypoints)
 
     target_node = next((n for n in nodes if n.get("id") == node), None)
-    z_default = float(target_node["position"].get("z", 0.0)) if target_node else 0.0
-    z_val = field_z if field_z is not None else z_default
+    z_default   = float(target_node["position"].get("z", 0.0)) if target_node else 0.0
+    z_val       = field_z if field_z is not None else z_default
 
     waypoints = [{"t": float(ti), "x": float(xi), "y": float(yi), "z": z_val}
                  for ti, xi, yi in zip(t_ds, x_ds, y_ds)]
 
-    path_m = float(np.sum(np.hypot(np.diff(x_ds), np.diff(y_ds))))
+    path_m  = float(np.sum(np.hypot(np.diff(x_ds), np.diff(y_ds))))
     summary = (f"patched: {len(waypoints)} waypoints, "
                f"bbox {x_ds.max() - x_ds.min():.0f}x{y_ds.max() - y_ds.min():.0f} m, "
                f"path {path_m:.0f} m, t {t_ds[0]:.0f}..{t_ds[-1]:.0f} s")
@@ -186,9 +292,15 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
     _save_nodes_json(nodes_json, nodes)
     return summary
 
-## Documentation for a function.
+
+## @brief CLI entry point for the build-waypoints tool.
 #
-#  More details.
+# Accepts either a single scenario name or ``--all`` to iterate every scenario
+# under @ref SCENARIOS_ROOT. Prints a per-scenario status line and a final
+# summary count of patched / skipped / errored scenarios.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 if no errors occurred, 1 otherwise.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Generate waypoint mobility from field GPS for a sim node.")
@@ -229,9 +341,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         sim_dirs = [_resolve_scenario_dir(args.scenario)]
 
-    n_patched = 0
-    n_skipped = 0
-    n_error = 0
+    n_patched = n_skipped = n_error = 0
     for sim_dir in sim_dirs:
         status = patch_scenario_waypoints(
             sim_dir,
