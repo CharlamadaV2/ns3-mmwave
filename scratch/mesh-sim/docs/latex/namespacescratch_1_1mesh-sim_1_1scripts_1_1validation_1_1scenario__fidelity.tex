@@ -1,0 +1,349 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity}\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}
+\begin{DoxyCompactList}\small\item\em Motion summary for one node derived from a position time series. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a6682dc4298d7247f9052e7c85aace98f}{\+\_\+motion\+\_\+from\+\_\+xy}} (str node, np.\+ndarray t, np.\+ndarray x, np.\+ndarray y)
+\begin{DoxyCompactList}\small\item\em Compute a \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} summary from raw position arrays. \end{DoxyCompactList}\item 
+dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae9d40823108a4bab2a4389d24fb0d1ce}{\+\_\+load\+\_\+field\+\_\+motion}} (Path field\+\_\+scenario\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Load per-\/node motion from a field scenario\textquotesingle{}s GPS track trace. \end{DoxyCompactList}\item 
+tuple\mbox{[}dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}, dict\mbox{[}int, str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a0249633198360e5cb18e827240ca3fe3}{\+\_\+load\+\_\+sim\+\_\+motion}} (Path scenario\+\_\+out\+\_\+dir, str seed\+\_\+name=\char`\"{}seed-\/1\char`\"{})
+\begin{DoxyCompactList}\small\item\em Load per-\/node motion from a sim scenario\textquotesingle{}s {\ttfamily positions.\+csv}. \end{DoxyCompactList}\item 
+dict\mbox{[}int, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ac0b7d0ae4c3c0e560b1fd8b6f6871ef1}{\+\_\+node\+\_\+id\+\_\+to\+\_\+label}} (Path scenario\+\_\+out\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Build the integer-\/node-\/\+ID → rab-\/label map from a snapshotted {\ttfamily nodes.\+json}. \end{DoxyCompactList}\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abd32a04bd1c1407bd6df564906a16b56}{\+\_\+sim\+\_\+mobility\+\_\+modes}} (Path scenario\+\_\+out\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Read the mobility mode string for each node from a snapshotted {\ttfamily nodes.\+json}. \end{DoxyCompactList}\item 
+dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, float\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abcbeff85b2560de817ff02ca82cb58a2}{\+\_\+pairwise\+\_\+distances}} (dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} motion)
+\begin{DoxyCompactList}\small\item\em Compute initial-\/position pairwise Euclidean distances between all nodes. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_afed35898e66980b14484f70e0e55d588}{\+\_\+fmt}} (float v, int digits=1)
+\begin{DoxyCompactList}\small\item\em Format a float for table display, substituting {\ttfamily \char`\"{}—\char`\"{}} for non-\/finite values. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a28930cf6a1edd38180738859971d909b}{\+\_\+render\+\_\+table}} (tuple\mbox{[}str,...\mbox{]} header, list\mbox{[}tuple\mbox{[}str,...\mbox{]}\mbox{]} body)
+\begin{DoxyCompactList}\small\item\em Render a plain-\/text fixed-\/width table. \end{DoxyCompactList}\item 
+tuple\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_adab2ac4af1f7145d6ad96cfdbaf443ce}{\+\_\+render\+\_\+per\+\_\+node}} (dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} field, dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} sim, dict\mbox{[}str, str\mbox{]} sim\+\_\+modes)
+\begin{DoxyCompactList}\small\item\em Render the per-\/node mobility comparison table. \end{DoxyCompactList}\item 
+tuple\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a13bbd5c9d7a3e52f0e8bd3194d55b063}{\+\_\+render\+\_\+pairwise}} (dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} field, dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} sim, float tol\+\_\+m)
+\begin{DoxyCompactList}\small\item\em Render the pairwise initial-\/distance comparison table. \end{DoxyCompactList}\item 
+tuple\mbox{[}bool, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_acc61ddc7bec2f0f20888652d6d05eeb2}{\+\_\+process\+\_\+scenario}} (Path scenario\+\_\+out\+\_\+dir, float tol\+\_\+m)
+\begin{DoxyCompactList}\small\item\em Run the fidelity check for one scenario output directory. \end{DoxyCompactList}\item 
+list\mbox{[}Path\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a250b7954934bbc217c51d3465d4db8c8}{\+\_\+discover\+\_\+scenarios}} (Path batch\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Discover all scenario directories that contain a {\ttfamily seed-\/1/positions.\+csv}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae22121415414640c55bd96ffa4d51a76}{main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em CLI entry point for the scenario-\/fidelity checker. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_af4b0a697dc54535413eb5eef8eae3bcf}{REPO\+\_\+\+ROOT}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\item 
+string \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a203738f642489d54fa12d2389c85f893}{FIELD\+\_\+\+PER\+\_\+\+DAY\+\_\+\+ROOT}} = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_af4b0a697dc54535413eb5eef8eae3bcf}{REPO\+\_\+\+ROOT}} / \char`\"{}data\char`\"{} / \char`\"{}arpo\+\_\+extracted\char`\"{} / \char`\"{}\+\_\+plots\char`\"{} / \char`\"{}per\+\_\+day\char`\"{}
+\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a963cf49df7931ab71c63188cad33eb88}{\+\_\+\+MOBILE\+\_\+\+BBOX\+\_\+M}} = 20.\+0
+\begin{DoxyCompactList}\small\item\em Bounding-\/box max-\/dimension threshold (metres) for classifying a node as mobile. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a250b7954934bbc217c51d3465d4db8c8}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a250b7954934bbc217c51d3465d4db8c8}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_discover\_scenarios@{\_discover\_scenarios}}
+\index{\_discover\_scenarios@{\_discover\_scenarios}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_discover\_scenarios()}{\_discover\_scenarios()}}
+{\footnotesize\ttfamily  list\mbox{[}Path\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+discover\+\_\+scenarios (\begin{DoxyParamCaption}\item[{Path}]{batch\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Discover all scenario directories that contain a {\ttfamily seed-\/1/positions.\+csv}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em batch\+\_\+dir} & Batch output directory to search. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sorted list of qualifying subdirectory paths. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_afed35898e66980b14484f70e0e55d588}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_afed35898e66980b14484f70e0e55d588}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_fmt@{\_fmt}}
+\index{\_fmt@{\_fmt}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_fmt()}{\_fmt()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+fmt (\begin{DoxyParamCaption}\item[{float}]{v,  }\item[{int }]{digits = {\ttfamily 1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format a float for table display, substituting {\ttfamily \char`\"{}—\char`\"{}} for non-\/finite values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Value to format. \\
+\hline
+{\em digits} & Decimal places (default 1). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae9d40823108a4bab2a4389d24fb0d1ce}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae9d40823108a4bab2a4389d24fb0d1ce}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_load\_field\_motion@{\_load\_field\_motion}}
+\index{\_load\_field\_motion@{\_load\_field\_motion}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_load\_field\_motion()}{\_load\_field\_motion()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+load\+\_\+field\+\_\+motion (\begin{DoxyParamCaption}\item[{Path}]{field\+\_\+scenario\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Load per-\/node motion from a field scenario\textquotesingle{}s GPS track trace. 
+
+Reads {\ttfamily csvs/gps\+\_\+track\+\_\+trace.\+csv} which contains ENU coordinates relative to the session centroid.
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+scenario\+\_\+dir} & Per-\/day output directory for the field scenario. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict mapping node name to \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}, or empty dict if the trace CSV is absent. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a0249633198360e5cb18e827240ca3fe3}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a0249633198360e5cb18e827240ca3fe3}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_load\_sim\_motion@{\_load\_sim\_motion}}
+\index{\_load\_sim\_motion@{\_load\_sim\_motion}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_load\_sim\_motion()}{\_load\_sim\_motion()}}
+{\footnotesize\ttfamily  tuple\mbox{[}dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}, dict\mbox{[}int, str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+load\+\_\+sim\+\_\+motion (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+out\+\_\+dir,  }\item[{str }]{seed\+\_\+name = {\ttfamily \char`\"{}seed-\/1\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Load per-\/node motion from a sim scenario\textquotesingle{}s {\ttfamily positions.\+csv}. 
+
+Uses the snapshotted {\ttfamily inputs/nodes.\+json} to map integer node IDs back to rab labels. Defaults to {\ttfamily seed-\/1} for determinism.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+out\+\_\+dir} & Scenario output directory (contains {\ttfamily seed-\/$\ast$/}). \\
+\hline
+{\em seed\+\_\+name} & Name of the seed subdirectory to read (default\+: {\ttfamily \char`\"{}seed-\/1\char`\"{}}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (motion\+\_\+dict, label\+\_\+map)} where {\ttfamily motion\+\_\+dict} maps rab label to \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} and {\ttfamily label\+\_\+map} maps integer node ID to rab label. Both are empty if {\ttfamily positions.\+csv} is absent. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a6682dc4298d7247f9052e7c85aace98f}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a6682dc4298d7247f9052e7c85aace98f}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_motion\_from\_xy@{\_motion\_from\_xy}}
+\index{\_motion\_from\_xy@{\_motion\_from\_xy}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_motion\_from\_xy()}{\_motion\_from\_xy()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+motion\+\_\+from\+\_\+xy (\begin{DoxyParamCaption}\item[{str}]{node,  }\item[{np.\+ndarray}]{t,  }\item[{np.\+ndarray}]{x,  }\item[{np.\+ndarray}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute a \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} summary from raw position arrays. 
+
+Returns a zero-\/valued \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}} for an empty position set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Node identifier string. \\
+\hline
+{\em t} & 1-\/D time array (seconds), same length as x and y. \\
+\hline
+{\em x} & 1-\/D east position array (metres). \\
+\hline
+{\em y} & 1-\/D north position array (metres). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Populated \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ac0b7d0ae4c3c0e560b1fd8b6f6871ef1}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ac0b7d0ae4c3c0e560b1fd8b6f6871ef1}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_node\_id\_to\_label@{\_node\_id\_to\_label}}
+\index{\_node\_id\_to\_label@{\_node\_id\_to\_label}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_node\_id\_to\_label()}{\_node\_id\_to\_label()}}
+{\footnotesize\ttfamily  dict\mbox{[}int, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+node\+\_\+id\+\_\+to\+\_\+label (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+out\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Build the integer-\/node-\/\+ID → rab-\/label map from a snapshotted {\ttfamily nodes.\+json}. 
+
+Node order in the JSON array corresponds to node IDs assigned by the sim.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+out\+\_\+dir} & Scenario output directory containing {\ttfamily inputs/nodes.\+json}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict {\ttfamily \{node\+\_\+id\+: label\}}, or empty dict if the file is missing or malformed. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abcbeff85b2560de817ff02ca82cb58a2}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abcbeff85b2560de817ff02ca82cb58a2}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_pairwise\_distances@{\_pairwise\_distances}}
+\index{\_pairwise\_distances@{\_pairwise\_distances}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_pairwise\_distances()}{\_pairwise\_distances()}}
+{\footnotesize\ttfamily  dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, float\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+pairwise\+\_\+distances (\begin{DoxyParamCaption}\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}}]{motion }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute initial-\/position pairwise Euclidean distances between all nodes. 
+
+Uses sorted pair keys so {\ttfamily (\char`\"{}rab1\char`\"{}, \char`\"{}rab2\char`\"{})} and {\ttfamily (\char`\"{}rab2\char`\"{}, \char`\"{}rab1\char`\"{})} are the same entry.
+
+
+\begin{DoxyParams}{Parameters}
+{\em motion} & Dict of node label → \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict mapping sorted {\ttfamily (rab\+\_\+a, rab\+\_\+b)} tuples to distance in metres. NaN is stored for pairs with non-\/finite coordinates. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_acc61ddc7bec2f0f20888652d6d05eeb2}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_acc61ddc7bec2f0f20888652d6d05eeb2}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_process\_scenario@{\_process\_scenario}}
+\index{\_process\_scenario@{\_process\_scenario}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_process\_scenario()}{\_process\_scenario()}}
+{\footnotesize\ttfamily  tuple\mbox{[}bool, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+process\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+out\+\_\+dir,  }\item[{float}]{tol\+\_\+m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Run the fidelity check for one scenario output directory. 
+
+Loads field GPS and sim position data, builds both comparison tables, and assembles a human-\/readable report string.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+out\+\_\+dir} & Scenario output directory (contains {\ttfamily seed-\/$\ast$/}). \\
+\hline
+{\em tol\+\_\+m} & Pairwise distance tolerance in metres. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (had\+\_\+mismatch, report\+\_\+text)} where {\ttfamily had\+\_\+mismatch} is {\ttfamily True} if any mobility or geometry check failed. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a13bbd5c9d7a3e52f0e8bd3194d55b063}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a13bbd5c9d7a3e52f0e8bd3194d55b063}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_render\_pairwise@{\_render\_pairwise}}
+\index{\_render\_pairwise@{\_render\_pairwise}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_render\_pairwise()}{\_render\_pairwise()}}
+{\footnotesize\ttfamily  tuple\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+render\+\_\+pairwise (\begin{DoxyParamCaption}\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}}]{field,  }\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}}]{sim,  }\item[{float}]{tol\+\_\+m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render the pairwise initial-\/distance comparison table. 
+
+Compares field and sim t=0 inter-\/node distances and flags pairs that exceed the tolerance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em field} & Field motion dict. \\
+\hline
+{\em sim} & Sim motion dict. \\
+\hline
+{\em tol\+\_\+m} & Distance tolerance in metres. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (table\+\_\+string, geometry\+\_\+warnings)} where {\ttfamily geometry\+\_\+warnings} lists pairs outside tolerance. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_adab2ac4af1f7145d6ad96cfdbaf443ce}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_adab2ac4af1f7145d6ad96cfdbaf443ce}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_render\_per\_node@{\_render\_per\_node}}
+\index{\_render\_per\_node@{\_render\_per\_node}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_render\_per\_node()}{\_render\_per\_node()}}
+{\footnotesize\ttfamily  tuple\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+render\+\_\+per\+\_\+node (\begin{DoxyParamCaption}\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}}]{field,  }\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}\mbox{]}}]{sim,  }\item[{dict\mbox{[}str, str\mbox{]}}]{sim\+\_\+modes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render the per-\/node mobility comparison table. 
+
+Compares field and sim mobility labels for each node and marks mismatches.
+
+
+\begin{DoxyParams}{Parameters}
+{\em field} & Field motion dict (node label → \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}). \\
+\hline
+{\em sim} & Sim motion dict (node label → \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion}{Node\+Motion}}). \\
+\hline
+{\em sim\+\_\+modes} & Sim mobility configuration strings from \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abd32a04bd1c1407bd6df564906a16b56}{\+\_\+sim\+\_\+mobility\+\_\+modes}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (table\+\_\+string, mismatch\+\_\+messages)} where {\ttfamily mismatch\+\_\+messages} is a list of human-\/readable descriptions of each mismatch found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a28930cf6a1edd38180738859971d909b}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a28930cf6a1edd38180738859971d909b}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_render\_table@{\_render\_table}}
+\index{\_render\_table@{\_render\_table}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_render\_table()}{\_render\_table()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+render\+\_\+table (\begin{DoxyParamCaption}\item[{tuple\mbox{[}str, ...\mbox{]}}]{header,  }\item[{list\mbox{[}tuple\mbox{[}str, ...\mbox{]}\mbox{]}}]{body }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render a plain-\/text fixed-\/width table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em header} & Tuple of column header strings. \\
+\hline
+{\em body} & List of row tuples matching the header length. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Multi-\/line formatted table string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abd32a04bd1c1407bd6df564906a16b56}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_abd32a04bd1c1407bd6df564906a16b56}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_sim\_mobility\_modes@{\_sim\_mobility\_modes}}
+\index{\_sim\_mobility\_modes@{\_sim\_mobility\_modes}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_sim\_mobility\_modes()}{\_sim\_mobility\_modes()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+sim\+\_\+mobility\+\_\+modes (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+out\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Read the mobility mode string for each node from a snapshotted {\ttfamily nodes.\+json}. 
+
+Used to show what the sim was {\itshape configured} to do, independent of whether the positions CSV confirms it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+out\+\_\+dir} & Scenario output directory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict {\ttfamily \{rab\+\_\+label\+: mobility\+\_\+mode\+\_\+string\}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae22121415414640c55bd96ffa4d51a76}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_ae22121415414640c55bd96ffa4d51a76}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the scenario-\/fidelity checker. 
+
+Iterates all scenarios in a batch output directory, prints per-\/scenario fidelity reports, and summarises which scenarios have mismatches.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & Argument list; defaults to {\ttfamily sys.\+argv\mbox{[}1\+:\mbox{]}} when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if all scenarios passed, 1 if any had mismatches or the batch directory was not found. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a963cf49df7931ab71c63188cad33eb88}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a963cf49df7931ab71c63188cad33eb88}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!\_MOBILE\_BBOX\_M@{\_MOBILE\_BBOX\_M}}
+\index{\_MOBILE\_BBOX\_M@{\_MOBILE\_BBOX\_M}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{\_MOBILE\_BBOX\_M}{\_MOBILE\_BBOX\_M}}
+{\footnotesize\ttfamily float scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+\_\+\+MOBILE\+\_\+\+BBOX\+\_\+M = 20.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Bounding-\/box max-\/dimension threshold (metres) for classifying a node as mobile. 
+
+Path length alone is GPS-\/noise-\/prone, so the bbox extent is used instead. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a203738f642489d54fa12d2389c85f893}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_a203738f642489d54fa12d2389c85f893}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!FIELD\_PER\_DAY\_ROOT@{FIELD\_PER\_DAY\_ROOT}}
+\index{FIELD\_PER\_DAY\_ROOT@{FIELD\_PER\_DAY\_ROOT}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{FIELD\_PER\_DAY\_ROOT}{FIELD\_PER\_DAY\_ROOT}}
+{\footnotesize\ttfamily string scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+FIELD\+\_\+\+PER\+\_\+\+DAY\+\_\+\+ROOT = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_af4b0a697dc54535413eb5eef8eae3bcf}{REPO\+\_\+\+ROOT}} / \char`\"{}data\char`\"{} / \char`\"{}arpo\+\_\+extracted\char`\"{} / \char`\"{}\+\_\+plots\char`\"{} / \char`\"{}per\+\_\+day\char`\"{}}
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_af4b0a697dc54535413eb5eef8eae3bcf}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_af4b0a697dc54535413eb5eef8eae3bcf}} 
+\index{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}!REPO\_ROOT@{REPO\_ROOT}}
+\index{REPO\_ROOT@{REPO\_ROOT}!scratch.mesh-\/sim.scripts.validation.scenario\_fidelity@{scratch.mesh-\/sim.scripts.validation.scenario\_fidelity}}
+\doxysubsubsection{\texorpdfstring{REPO\_ROOT}{REPO\_ROOT}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+validation.\+scenario\+\_\+fidelity.\+REPO\+\_\+\+ROOT = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}}
+

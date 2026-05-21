@@ -1,0 +1,11 @@
+<map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/cli/cli&#45;parser.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/cli/cli&#45;parser.h">
+<area shape="rect" id="node1" title="Command&#45;line parsing and pre&#45;simulation setup helpers." alt="" coords="544,5,752,61"/>
+<area shape="rect" id="node2" href="$sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="285,109,464,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="301,259,360,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="475,259,538,285"/>
+<area shape="rect" id="node3" href="$channel-config_8h.html" title="Radio and channel configuration POD types." alt="" coords="24,184,154,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="56,259,122,285"/>
+<area shape="rect" id="node6" href="$mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="178,184,293,211"/>
+<area shape="rect" id="node7" href="$node-spec_8h.html" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="368,184,469,211"/>
+<area shape="rect" id="node9" title=" " alt="" coords="544,184,610,211"/>
+</map>

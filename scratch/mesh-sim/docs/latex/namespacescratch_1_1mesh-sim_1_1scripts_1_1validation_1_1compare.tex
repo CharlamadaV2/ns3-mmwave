@@ -1,0 +1,436 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare}\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}
+\begin{DoxyCompactList}\small\item\em Specification for one radio metric. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+str$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a7680a2ae72fd86be19588c600ab04245}{sim\+\_\+to\+\_\+field\+\_\+scenario}} (str sim\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Convert a sim scenario name to its corresponding field scenario name. \end{DoxyCompactList}\item 
+np.\+ndarray \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5d69e73831350c6ec3a7872958d1bc7d}{\+\_\+read\+\_\+metric\+\_\+column}} (Path csv\+\_\+path, str column)
+\begin{DoxyCompactList}\small\item\em Read one column from a trace CSV, coercing non-\/numeric values to NaN. \end{DoxyCompactList}\item 
+set\mbox{[}tuple\mbox{[}str, str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aecbefe4aabe1063a72c541b6418c7e9a}{\+\_\+discover\+\_\+pairs}} (Path seed\+\_\+traces\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Discover all unique unordered (src, peer) pairs present in a seed\textquotesingle{}s traces. \end{DoxyCompactList}\item 
+np.\+ndarray \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a0630a70eb1e80e1f67e1530e794a65e6}{\+\_\+pool\+\_\+sim}} (Path scenario\+\_\+dir, str src, str peer, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} spec)
+\begin{DoxyCompactList}\small\item\em Pool metric samples for a (src, peer) link across all sim seeds. \end{DoxyCompactList}\item 
+np.\+ndarray \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a11559f61b033d6bd37f546396400e82a}{\+\_\+pool\+\_\+field}} (Path field\+\_\+scen\+\_\+dir, str src, str peer, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} spec)
+\begin{DoxyCompactList}\small\item\em Pool metric samples for a (src, peer) link from the field trace. \end{DoxyCompactList}\item 
+tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a79dbff9e0a2d726ffc444e58004da974}{\+\_\+ecdf}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Compute the empirical CDF of a sample array. \end{DoxyCompactList}\item 
+tuple\mbox{[}float, float\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aded9aaa52952bffec88121fcaaaf5c16}{\+\_\+ks\+\_\+2samp}} (np.\+ndarray a, np.\+ndarray b)
+\begin{DoxyCompactList}\small\item\em Compute the two-\/sample K-\/S statistic and an asymptotic p-\/value. \end{DoxyCompactList}\item 
+tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a8fa1d12b05182957cf10383d1432b28e}{\+\_\+bootstrap\+\_\+ecdf\+\_\+band}} (np.\+ndarray values, np.\+ndarray x\+\_\+grid, int n\+\_\+boot, float ci\+\_\+pct, np.\+random.\+Generator rng)
+\begin{DoxyCompactList}\small\item\em Compute a bootstrap confidence band for an ECDF on a fixed x-\/grid. \end{DoxyCompactList}\item 
+tuple\mbox{[}float, float\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a3a4786696c54d07bf036812842727f3e}{\+\_\+stats}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Return the median and IQR of a sample array. \end{DoxyCompactList}\item 
+plt.\+Figure \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a409f0c09b8a24dd2c983d8c09857aecd}{\+\_\+plot\+\_\+one}} (np.\+ndarray sim\+\_\+vals, np.\+ndarray field\+\_\+vals, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} spec, str scenario, str src, str peer, float ks\+\_\+d, float ks\+\_\+p, int n\+\_\+boot, float ci\+\_\+pct, np.\+random.\+Generator rng)
+\begin{DoxyCompactList}\small\item\em Render the sim-\/vs-\/field ECDF comparison figure for one (link, metric). \end{DoxyCompactList}\item 
+np.\+ndarray \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5604f6a0ec6368f13aa0212b2033f8b1}{\+\_\+apply\+\_\+mcs\+\_\+cap}} (np.\+ndarray values, int$\vert$None cap)
+\begin{DoxyCompactList}\small\item\em Clip values to the metric\textquotesingle{}s integer cap (if any). \end{DoxyCompactList}\item 
+list\mbox{[}dict\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aedff246be431f05650175630fa3fd18a}{\+\_\+process\+\_\+scenario}} (Path scenario\+\_\+dir, Path field\+\_\+root, list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}\mbox{]} metrics, Path out\+\_\+dir, int n\+\_\+boot, float ci\+\_\+pct, np.\+random.\+Generator rng)
+\begin{DoxyCompactList}\small\item\em Run the comparison pipeline for one scenario directory. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aa9a5e1a4058d81a85ec007859fe7eee7}{main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em CLI entry point for the sim-\/vs-\/field comparison tool. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a038552e8343d81abde2b2a730fe0444c}{REPO\+\_\+\+ROOT}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\item 
+string \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a52ea7cdb39eec67113c441c4f75fc2bd}{FIELD\+\_\+\+TRACES\+\_\+\+ROOT}} = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a038552e8343d81abde2b2a730fe0444c}{REPO\+\_\+\+ROOT}} / \char`\"{}data\char`\"{} / \char`\"{}arpo\+\_\+extracted\char`\"{} / \char`\"{}\+\_\+plots\char`\"{} / \char`\"{}per\+\_\+day\char`\"{}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aeca0f754d2ffef3fa5e2bdea7779c35d}{\+\_\+\+TRACE\+\_\+\+FILE\+\_\+\+RE}}
+\begin{DoxyCompactList}\small\item\em Regex for matching a per-\/link trace CSV filename. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a78b1282cc03e320f848df8ae9ca5aa4c}{\+\_\+\+SIM\+\_\+\+NAME\+\_\+\+RE}} = re.\+compile(r\char`\"{}$^\wedge$arpo-\/(\textbackslash{}d+)-\/(\mbox{[}\textbackslash{}dxX\mbox{]})-\/(.+?)-\/(\textbackslash{}d\{8\})\$\char`\"{})
+\begin{DoxyCompactList}\small\item\em Regex for parsing a sim scenario directory name. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_acec4f0725f7d207c7261775032ffa162}{\+\_\+\+MCS\+\_\+\+FIELD\+\_\+\+CAP}} = 12
+\begin{DoxyCompactList}\small\item\em MCS values above this threshold are clipped before comparison. \end{DoxyCompactList}\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a90c7dc394d724d01d2d30f0e15b14a2c}{\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+SHORT}} = \{m.\+short\+: m for m in \+\_\+\+METRICS\}
+\begin{DoxyCompactList}\small\item\em All metrics supported by the comparison pipeline. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5604f6a0ec6368f13aa0212b2033f8b1}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5604f6a0ec6368f13aa0212b2033f8b1}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_apply\_mcs\_cap@{\_apply\_mcs\_cap}}
+\index{\_apply\_mcs\_cap@{\_apply\_mcs\_cap}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_apply\_mcs\_cap()}{\_apply\_mcs\_cap()}}
+{\footnotesize\ttfamily  np.\+ndarray scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+apply\+\_\+mcs\+\_\+cap (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values,  }\item[{int $\vert$ None}]{cap }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Clip values to the metric\textquotesingle{}s integer cap (if any). 
+
+A no-\/op for metrics with {\ttfamily integer\+\_\+cap=None} or empty arrays.
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & Sample array to clip. \\
+\hline
+{\em cap} & Upper bound, or {\ttfamily None} to skip. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Clipped array (or the original array if no cap applies). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a8fa1d12b05182957cf10383d1432b28e}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a8fa1d12b05182957cf10383d1432b28e}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_bootstrap\_ecdf\_band@{\_bootstrap\_ecdf\_band}}
+\index{\_bootstrap\_ecdf\_band@{\_bootstrap\_ecdf\_band}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_bootstrap\_ecdf\_band()}{\_bootstrap\_ecdf\_band()}}
+{\footnotesize\ttfamily  tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+bootstrap\+\_\+ecdf\+\_\+band (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values,  }\item[{np.\+ndarray}]{x\+\_\+grid,  }\item[{int}]{n\+\_\+boot,  }\item[{float}]{ci\+\_\+pct,  }\item[{np.\+random.\+Generator}]{rng }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute a bootstrap confidence band for an ECDF on a fixed x-\/grid. 
+
+Resamples the input with replacement {\ttfamily n\+\_\+boot} times, evaluates the ECDF at each x-\/grid point, and returns the lower and upper percentile envelopes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & Sample array to bootstrap. \\
+\hline
+{\em x\+\_\+grid} & 1-\/D grid of x values at which to evaluate the ECDF. \\
+\hline
+{\em n\+\_\+boot} & Number of bootstrap resamples. \\
+\hline
+{\em ci\+\_\+pct} & Confidence level as a percentage (e.\+g. 90.\+0). \\
+\hline
+{\em rng} & Num\+Py random generator for reproducibility. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (lower\+\_\+band, upper\+\_\+band)} of float64 arrays the same length as {\ttfamily x\+\_\+grid}. Full-\/\+NaN arrays are returned for empty input. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aecbefe4aabe1063a72c541b6418c7e9a}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aecbefe4aabe1063a72c541b6418c7e9a}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_discover\_pairs@{\_discover\_pairs}}
+\index{\_discover\_pairs@{\_discover\_pairs}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_discover\_pairs()}{\_discover\_pairs()}}
+{\footnotesize\ttfamily  set\mbox{[}tuple\mbox{[}str, str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+discover\+\_\+pairs (\begin{DoxyParamCaption}\item[{Path}]{seed\+\_\+traces\+\_\+root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Discover all unique unordered (src, peer) pairs present in a seed\textquotesingle{}s traces. 
+
+Pairs are sorted so that {\ttfamily (\char`\"{}rab1\char`\"{}, \char`\"{}rab2\char`\"{})} and {\ttfamily (\char`\"{}rab2\char`\"{}, \char`\"{}rab1\char`\"{})} map to the same key, matching the bidirectional pooling done downstream.
+
+
+\begin{DoxyParams}{Parameters}
+{\em seed\+\_\+traces\+\_\+root} & Root directory of one seed\textquotesingle{}s trace output (contains {\ttfamily csvs/$<$src$>$/} subdirectories). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Set of sorted {\ttfamily (rab\+\_\+a, rab\+\_\+b)} tuples. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a79dbff9e0a2d726ffc444e58004da974}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a79dbff9e0a2d726ffc444e58004da974}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_ecdf@{\_ecdf}}
+\index{\_ecdf@{\_ecdf}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_ecdf()}{\_ecdf()}}
+{\footnotesize\ttfamily  tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+ecdf (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the empirical CDF of a sample array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & 1-\/D numeric array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (x, y)} of sorted values and cumulative probabilities. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aded9aaa52952bffec88121fcaaaf5c16}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aded9aaa52952bffec88121fcaaaf5c16}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_ks\_2samp@{\_ks\_2samp}}
+\index{\_ks\_2samp@{\_ks\_2samp}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_ks\_2samp()}{\_ks\_2samp()}}
+{\footnotesize\ttfamily  tuple\mbox{[}float, float\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+ks\+\_\+2samp (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{a,  }\item[{np.\+ndarray}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the two-\/sample K-\/S statistic and an asymptotic p-\/value. 
+
+Uses the Kolmogorov-\/\+Smirnov large-\/sample approximation for the p-\/value\+: {\ttfamily p ≈ 2 · exp(−2 · n\+\_\+e · D²)} where {\ttfamily n\+\_\+e} is the effective sample size.
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & First sample array. \\
+\hline
+{\em b} & Second sample array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (D, p)} where D is in \mbox{[}0, 1\mbox{]} and p is in \mbox{[}0, 1\mbox{]}. Returns {\ttfamily (nan, nan)} if either array is empty. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a409f0c09b8a24dd2c983d8c09857aecd}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a409f0c09b8a24dd2c983d8c09857aecd}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_plot\_one@{\_plot\_one}}
+\index{\_plot\_one@{\_plot\_one}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_plot\_one()}{\_plot\_one()}}
+{\footnotesize\ttfamily  plt.\+Figure scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+plot\+\_\+one (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{sim\+\_\+vals,  }\item[{np.\+ndarray}]{field\+\_\+vals,  }\item[{\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}}]{spec,  }\item[{str}]{scenario,  }\item[{str}]{src,  }\item[{str}]{peer,  }\item[{float}]{ks\+\_\+d,  }\item[{float}]{ks\+\_\+p,  }\item[{int}]{n\+\_\+boot,  }\item[{float}]{ci\+\_\+pct,  }\item[{np.\+random.\+Generator}]{rng }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render the sim-\/vs-\/field ECDF comparison figure for one (link, metric). 
+
+The sim curve is shown in orange with a shaded bootstrap CI band. The field curve is shown in blue. Vertical dotted lines mark each median. The subtitle reports K-\/S distance, median delta, and any applied MCS cap.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sim\+\_\+vals} & Pooled sim samples. \\
+\hline
+{\em field\+\_\+vals} & Field samples. \\
+\hline
+{\em spec} & Metric specification. \\
+\hline
+{\em scenario} & Scenario name for the plot title. \\
+\hline
+{\em src} & Source rab label. \\
+\hline
+{\em peer} & Peer rab label. \\
+\hline
+{\em ks\+\_\+d} & Pre-\/computed K-\/S D statistic. \\
+\hline
+{\em ks\+\_\+p} & Pre-\/computed K-\/S p-\/value. \\
+\hline
+{\em n\+\_\+boot} & Bootstrap iteration count. \\
+\hline
+{\em ci\+\_\+pct} & Confidence level (percent) for the CI band. \\
+\hline
+{\em rng} & Num\+Py random generator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matplotlib Figure (caller saves and closes). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a11559f61b033d6bd37f546396400e82a}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a11559f61b033d6bd37f546396400e82a}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_pool\_field@{\_pool\_field}}
+\index{\_pool\_field@{\_pool\_field}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_pool\_field()}{\_pool\_field()}}
+{\footnotesize\ttfamily  np.\+ndarray scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+pool\+\_\+field (\begin{DoxyParamCaption}\item[{Path}]{field\+\_\+scen\+\_\+dir,  }\item[{str}]{src,  }\item[{str}]{peer,  }\item[{\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}}]{spec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pool metric samples for a (src, peer) link from the field trace. 
+
+Both directions are pooled, matching the treatment of sim data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+scen\+\_\+dir} & Per-\/day field output directory for the scenario. \\
+\hline
+{\em src} & Source rab hostname. \\
+\hline
+{\em peer} & Peer rab hostname. \\
+\hline
+{\em spec} & Metric specification. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Concatenated float64 array of all valid samples, or empty if not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a0630a70eb1e80e1f67e1530e794a65e6}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a0630a70eb1e80e1f67e1530e794a65e6}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_pool\_sim@{\_pool\_sim}}
+\index{\_pool\_sim@{\_pool\_sim}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_pool\_sim()}{\_pool\_sim()}}
+{\footnotesize\ttfamily  np.\+ndarray scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+pool\+\_\+sim (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+dir,  }\item[{str}]{src,  }\item[{str}]{peer,  }\item[{\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}}]{spec }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pool metric samples for a (src, peer) link across all sim seeds. 
+
+Both directions (src→peer and peer→src) are included, as the hardware measures the link bidirectionally.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+dir} & Scenario directory containing a {\ttfamily sim\+\_\+traces/} subdirectory. \\
+\hline
+{\em src} & Source rab hostname. \\
+\hline
+{\em peer} & Peer rab hostname. \\
+\hline
+{\em spec} & Metric specification. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Concatenated float64 array of all valid samples, or empty if none found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aedff246be431f05650175630fa3fd18a}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aedff246be431f05650175630fa3fd18a}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_process\_scenario@{\_process\_scenario}}
+\index{\_process\_scenario@{\_process\_scenario}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_process\_scenario()}{\_process\_scenario()}}
+{\footnotesize\ttfamily  list\mbox{[}dict\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+process\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+dir,  }\item[{Path}]{field\+\_\+root,  }\item[{list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}\mbox{]}}]{metrics,  }\item[{Path}]{out\+\_\+dir,  }\item[{int}]{n\+\_\+boot,  }\item[{float}]{ci\+\_\+pct,  }\item[{np.\+random.\+Generator}]{rng }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Run the comparison pipeline for one scenario directory. 
+
+Discovers link pairs from the first seed\textquotesingle{}s trace directory, then for each (link, metric) pair\+: pools sim and field samples, computes statistics, and saves a PNG. Returns a list of row dicts for the {\ttfamily metrics.\+csv} output.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+dir} & Scenario output directory containing {\ttfamily sim\+\_\+traces/}. \\
+\hline
+{\em field\+\_\+root} & Root of the per-\/day field trace tree. \\
+\hline
+{\em metrics} & List of \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} objects to process. \\
+\hline
+{\em out\+\_\+dir} & Directory to write PNGs and {\ttfamily metrics.\+csv} into. \\
+\hline
+{\em n\+\_\+boot} & Bootstrap iteration count. \\
+\hline
+{\em ci\+\_\+pct} & Confidence level (percent) for the CI band. \\
+\hline
+{\em rng} & Num\+Py random generator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+List of result dicts (one per (link, metric) pair with valid data). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5d69e73831350c6ec3a7872958d1bc7d}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a5d69e73831350c6ec3a7872958d1bc7d}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_read\_metric\_column@{\_read\_metric\_column}}
+\index{\_read\_metric\_column@{\_read\_metric\_column}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_read\_metric\_column()}{\_read\_metric\_column()}}
+{\footnotesize\ttfamily  np.\+ndarray scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+read\+\_\+metric\+\_\+column (\begin{DoxyParamCaption}\item[{Path}]{csv\+\_\+path,  }\item[{str}]{column }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Read one column from a trace CSV, coercing non-\/numeric values to NaN. 
+
+Returns an empty float64 array if the file is absent, unreadable, or does not contain the requested column.
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+\_\+path} & Path to the trace CSV. \\
+\hline
+{\em column} & Column name to extract. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1-\/D float64 array of valid (non-\/\+NaN) values. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a3a4786696c54d07bf036812842727f3e}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a3a4786696c54d07bf036812842727f3e}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_stats@{\_stats}}
+\index{\_stats@{\_stats}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_stats()}{\_stats()}}
+{\footnotesize\ttfamily  tuple\mbox{[}float, float\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+stats (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Return the median and IQR of a sample array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & 1-\/D numeric array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (median, IQR)}; both are NaN for an empty array. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aa9a5e1a4058d81a85ec007859fe7eee7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aa9a5e1a4058d81a85ec007859fe7eee7}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the sim-\/vs-\/field comparison tool. 
+
+Iterates all scenario directories under {\ttfamily batch\+\_\+root} that contain a {\ttfamily sim\+\_\+traces/} subdirectory, runs \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aedff246be431f05650175630fa3fd18a}{\+\_\+process\+\_\+scenario}} for each, and writes {\ttfamily validation/metrics.\+csv} per scenario and {\ttfamily validation\+\_\+summary.\+csv} at the batch root.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & Argument list; defaults to {\ttfamily sys.\+argv\mbox{[}1\+:\mbox{]}} when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 on argument or I/O error. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a7680a2ae72fd86be19588c600ab04245}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a7680a2ae72fd86be19588c600ab04245}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!sim\_to\_field\_scenario@{sim\_to\_field\_scenario}}
+\index{sim\_to\_field\_scenario@{sim\_to\_field\_scenario}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{sim\_to\_field\_scenario()}{sim\_to\_field\_scenario()}}
+{\footnotesize\ttfamily  str $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+sim\+\_\+to\+\_\+field\+\_\+scenario (\begin{DoxyParamCaption}\item[{str}]{sim\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Convert a sim scenario name to its corresponding field scenario name. 
+
+The two naming conventions differ in separator style and case\+:
+\begin{DoxyItemize}
+\item Sim\+: {\ttfamily arpo-\/1-\/1-\/static-\/04172026}
+\item Field\+: {\ttfamily 1-\/1\+\_\+static\+\_\+04172026}
+\end{DoxyItemize}
+
+This function is the single source of truth for that translation and is imported by \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1build__waypoints}{build\+\_\+waypoints}} and \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity}{scenario\+\_\+fidelity}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sim\+\_\+name} & Sim-\/form scenario directory name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Field-\/form scenario name, or {\ttfamily None} if the name does not match the expected pattern. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_acec4f0725f7d207c7261775032ffa162}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_acec4f0725f7d207c7261775032ffa162}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_MCS\_FIELD\_CAP@{\_MCS\_FIELD\_CAP}}
+\index{\_MCS\_FIELD\_CAP@{\_MCS\_FIELD\_CAP}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_MCS\_FIELD\_CAP}{\_MCS\_FIELD\_CAP}}
+{\footnotesize\ttfamily int scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+\+MCS\+\_\+\+FIELD\+\_\+\+CAP = 12\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+MCS values above this threshold are clipped before comparison. 
+
+The field hardware reports MCS indices up to 12; the sim can produce higher values. Capping both distributions at 12 avoids artefacts from the mismatch. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a90c7dc394d724d01d2d30f0e15b14a2c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a90c7dc394d724d01d2d30f0e15b14a2c}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_METRICS\_BY\_SHORT@{\_METRICS\_BY\_SHORT}}
+\index{\_METRICS\_BY\_SHORT@{\_METRICS\_BY\_SHORT}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_METRICS\_BY\_SHORT}{\_METRICS\_BY\_SHORT}}
+{\footnotesize\ttfamily dictionary scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+SHORT = \{m.\+short\+: m for m in \+\_\+\+METRICS\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+All metrics supported by the comparison pipeline. 
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a78b1282cc03e320f848df8ae9ca5aa4c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a78b1282cc03e320f848df8ae9ca5aa4c}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_SIM\_NAME\_RE@{\_SIM\_NAME\_RE}}
+\index{\_SIM\_NAME\_RE@{\_SIM\_NAME\_RE}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_SIM\_NAME\_RE}{\_SIM\_NAME\_RE}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+\+SIM\+\_\+\+NAME\+\_\+\+RE = re.\+compile(r\char`\"{}$^\wedge$arpo-\/(\textbackslash{}d+)-\/(\mbox{[}\textbackslash{}dxX\mbox{]})-\/(.+?)-\/(\textbackslash{}d\{8\})\$\char`\"{})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Regex for parsing a sim scenario directory name. 
+
+Expected form\+: {\ttfamily arpo-\/$<$major$>$-\/$<$minor$>$-\/$<$description$>$-\/$<$MMDDYYYY$>$} Example\+: {\ttfamily arpo-\/1-\/1-\/static-\/04172026} \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aeca0f754d2ffef3fa5e2bdea7779c35d}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_aeca0f754d2ffef3fa5e2bdea7779c35d}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!\_TRACE\_FILE\_RE@{\_TRACE\_FILE\_RE}}
+\index{\_TRACE\_FILE\_RE@{\_TRACE\_FILE\_RE}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{\_TRACE\_FILE\_RE}{\_TRACE\_FILE\_RE}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+\_\+\+TRACE\+\_\+\+FILE\+\_\+\+RE\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  re.compile(}
+\DoxyCodeLine{2     \textcolor{stringliteral}{r"{}\string^bh2\_(?P<metric>[a-\/z]+)\_\_(?P<src>[a-\/z0-\/9]+)\_to\_(?P<peer>[a-\/z0-\/9]+)\_trace\(\backslash\).csv\$"{}}}
+\DoxyCodeLine{3 )}
+
+\end{DoxyCode}
+
+
+Regex for matching a per-\/link trace CSV filename. 
+
+Expected form\+: {\ttfamily bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv} \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a52ea7cdb39eec67113c441c4f75fc2bd}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a52ea7cdb39eec67113c441c4f75fc2bd}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!FIELD\_TRACES\_ROOT@{FIELD\_TRACES\_ROOT}}
+\index{FIELD\_TRACES\_ROOT@{FIELD\_TRACES\_ROOT}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{FIELD\_TRACES\_ROOT}{FIELD\_TRACES\_ROOT}}
+{\footnotesize\ttfamily string scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+FIELD\+\_\+\+TRACES\+\_\+\+ROOT = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a038552e8343d81abde2b2a730fe0444c}{REPO\+\_\+\+ROOT}} / \char`\"{}data\char`\"{} / \char`\"{}arpo\+\_\+extracted\char`\"{} / \char`\"{}\+\_\+plots\char`\"{} / \char`\"{}per\+\_\+day\char`\"{}}
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a038552e8343d81abde2b2a730fe0444c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_a038552e8343d81abde2b2a730fe0444c}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}!REPO\_ROOT@{REPO\_ROOT}}
+\index{REPO\_ROOT@{REPO\_ROOT}!scratch.mesh-\/sim.scripts.validation.compare@{scratch.mesh-\/sim.scripts.validation.compare}}
+\doxysubsubsection{\texorpdfstring{REPO\_ROOT}{REPO\_ROOT}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare.\+REPO\+\_\+\+ROOT = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}}
+

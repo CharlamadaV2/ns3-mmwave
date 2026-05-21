@@ -68,6 +68,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classmesh__sim_1_1LinkEvaluator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">mesh_sim::LinkEvaluator Class Reference</div>  </div>
@@ -78,15 +79,31 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5e0af315989e135767eb4878d08ac61c"><td class="memItemLeft" align="right" valign="top"><a id="a5e0af315989e135767eb4878d08ac61c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Configure</b> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg, ns3::Ptr&lt; ns3::PropagationLossModel &gt; plModel, ns3::Ptr&lt; ns3::ChannelConditionModel &gt; condModel)</td></tr>
+<tr class="memitem:a5e0af315989e135767eb4878d08ac61c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg, ns3::Ptr&lt; ns3::PropagationLossModel &gt; plModel, ns3::Ptr&lt; ns3::ChannelConditionModel &gt; condModel)</td></tr>
 <tr class="separator:a5e0af315989e135767eb4878d08ac61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a132e1068c43059b44087db448606c900"><td class="memItemLeft" align="right" valign="top"><a id="a132e1068c43059b44087db448606c900"></a>
-<a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Evaluate</b> (ns3::Ptr&lt; ns3::MobilityModel &gt; txMob, ns3::Ptr&lt; ns3::MobilityModel &gt; rxMob, uint32_t txIdx, uint32_t rxIdx) const</td></tr>
+<tr class="memitem:a132e1068c43059b44087db448606c900"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">Evaluate</a> (ns3::Ptr&lt; ns3::MobilityModel &gt; txMob, ns3::Ptr&lt; ns3::MobilityModel &gt; rxMob, uint32_t txIdx, uint32_t rxIdx) const</td></tr>
 <tr class="separator:a132e1068c43059b44087db448606c900"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16c39016432fb10dc7358821d4ab3cac"><td class="memItemLeft" align="right" valign="top"><a id="a16c39016432fb10dc7358821d4ab3cac"></a>
-std::vector&lt; <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>EvaluateAll</b> (const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;mobs) const</td></tr>
+<tr class="memitem:a16c39016432fb10dc7358821d4ab3cac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">EvaluateAll</a> (const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;mobs) const</td></tr>
 <tr class="separator:a16c39016432fb10dc7358821d4ab3cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a45a25562108d717b3d8ba595edce96cb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a45a25562108d717b3d8ba595edce96cb">m_txPowerDbm</a> = 30.0</td></tr>
+<tr class="separator:a45a25562108d717b3d8ba595edce96cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35396e23c25c45ee042b4519e8013a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#ab35396e23c25c45ee042b4519e8013a1">m_noiseFloorDbm</a> = -174.0</td></tr>
+<tr class="separator:ab35396e23c25c45ee042b4519e8013a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a47d61ccd593bbb9e05a8cdba3fb463a1">m_bandwidthHz</a> = 400e6</td></tr>
+<tr class="separator:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a9a74eb8092db9bb9e0584662e9e35fa0">m_bfGainDb</a> = 0.0</td></tr>
+<tr class="separator:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af22886f54c0d8c68bf25fda02afc9779"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#af22886f54c0d8c68bf25fda02afc9779">m_amcModel</a> = &quot;shannon&quot;</td></tr>
+<tr class="separator:af22886f54c0d8c68bf25fda02afc9779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03e529739a2b1cf085f32ad510e9e43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#ac03e529739a2b1cf085f32ad510e9e43">m_buildingsEnabled</a> = false</td></tr>
+<tr class="separator:ac03e529739a2b1cf085f32ad510e9e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a550e2c385872ea43e701f8cd13e44185"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a550e2c385872ea43e701f8cd13e44185">m_plModel</a></td></tr>
+<tr class="separator:a550e2c385872ea43e701f8cd13e44185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7002e2e8870aa3ffa0e2b414c3d97b56"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a7002e2e8870aa3ffa0e2b414c3d97b56">m_condModel</a></td></tr>
+<tr class="separator:a7002e2e8870aa3ffa0e2b414c3d97b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Description of what the method does.</p>
@@ -103,9 +120,279 @@ std::vector&lt; <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResu
   </table>
   </dd>
 </dl>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5e0af315989e135767eb4878d08ac61c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e0af315989e135767eb4878d08ac61c">&#9670;&nbsp;</a></span>Configure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::LinkEvaluator::Configure </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;&#160;</td>
+          <td class="paramname"><em>cfg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td>
+          <td class="paramname"><em>plModel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td>
+          <td class="paramname"><em>condModel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a132e1068c43059b44087db448606c900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a132e1068c43059b44087db448606c900">&#9670;&nbsp;</a></span>Evaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> mesh_sim::LinkEvaluator::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">ns3::Ptr&lt; ns3::MobilityModel &gt;&#160;</td>
+          <td class="paramname"><em>txMob</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ns3::Ptr&lt; ns3::MobilityModel &gt;&#160;</td>
+          <td class="paramname"><em>rxMob</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>txIdx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>rxIdx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16c39016432fb10dc7358821d4ab3cac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16c39016432fb10dc7358821d4ab3cac">&#9670;&nbsp;</a></span>EvaluateAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> &gt; mesh_sim::LinkEvaluator::EvaluateAll </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>mobs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af22886f54c0d8c68bf25fda02afc9779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af22886f54c0d8c68bf25fda02afc9779">&#9670;&nbsp;</a></span>m_amcModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string mesh_sim::LinkEvaluator::m_amcModel = &quot;shannon&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47d61ccd593bbb9e05a8cdba3fb463a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47d61ccd593bbb9e05a8cdba3fb463a1">&#9670;&nbsp;</a></span>m_bandwidthHz</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::LinkEvaluator::m_bandwidthHz = 400e6</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a74eb8092db9bb9e0584662e9e35fa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a74eb8092db9bb9e0584662e9e35fa0">&#9670;&nbsp;</a></span>m_bfGainDb</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::LinkEvaluator::m_bfGainDb = 0.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac03e529739a2b1cf085f32ad510e9e43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac03e529739a2b1cf085f32ad510e9e43">&#9670;&nbsp;</a></span>m_buildingsEnabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mesh_sim::LinkEvaluator::m_buildingsEnabled = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7002e2e8870aa3ffa0e2b414c3d97b56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7002e2e8870aa3ffa0e2b414c3d97b56">&#9670;&nbsp;</a></span>m_condModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::ChannelConditionModel&gt; mesh_sim::LinkEvaluator::m_condModel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab35396e23c25c45ee042b4519e8013a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab35396e23c25c45ee042b4519e8013a1">&#9670;&nbsp;</a></span>m_noiseFloorDbm</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::LinkEvaluator::m_noiseFloorDbm = -174.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a550e2c385872ea43e701f8cd13e44185"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a550e2c385872ea43e701f8cd13e44185">&#9670;&nbsp;</a></span>m_plModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::PropagationLossModel&gt; mesh_sim::LinkEvaluator::m_plModel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a45a25562108d717b3d8ba595edce96cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45a25562108d717b3d8ba595edce96cb">&#9670;&nbsp;</a></span>m_txPowerDbm</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::LinkEvaluator::m_txPowerDbm = 30.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/eval/<a class="el" href="link-evaluator_8h_source.html">link-evaluator.h</a></li>
-<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/eval/link-evaluator.cc</li>
+<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/eval/<a class="el" href="link-evaluator_8cc.html">link-evaluator.cc</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

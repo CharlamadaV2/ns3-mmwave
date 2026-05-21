@@ -66,16 +66,62 @@ $(function() {
 <div class="title">src/cli </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md18"></a>
-Run</h1>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<div class="textblock"><p>Command-line parsing and pre-simulation setup for mesh-sim. This module keeps <code>sim.cc</code> focused on orchestration by isolating argument handling, seed resolution, and input archiving into standalone functions with no ns-3 types in their public signatures (except <code>ns3::CommandLine</code> inside the <code>.cc</code>).</p>
+<h1><a class="anchor" id="autotoc_md15"></a>
+Flags</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Flag   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>--run-config=&lt;path&gt;</code>   </td><td class="markdownTableBodyNone"><b>yes</b>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Path to <code>run.ini</code> for the scenario.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>--seeds=&lt;list&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>run.ini</code> value   </td><td class="markdownTableBodyNone">Comma-separated seed list. Each seed runs as an independent simulation with its own output subdirectory.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>--seed=&lt;int&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>run.ini</code> value   </td><td class="markdownTableBodyNone">Single-seed override. Ignored when <code>--seeds</code> is also set.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>--run-id=&lt;int&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>run.ini</code> value   </td><td class="markdownTableBodyNone">Override <code>run_id</code> metadata written to output files.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>--output-dir=&lt;path&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">auto-timestamped   </td><td class="markdownTableBodyNone">Override the batch output root.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>--positions-override=&lt;path&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">JSON file that patches node positions before the simulation starts. Used by the RL controller.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>--debug-links</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable verbose per-link evaluation logging.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>--rl-mode</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable RL mode — the sim exchanges observations and actions via stdin/stdout JSON.   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<p>Each seed produces its own subdirectory under the batch root:</p>
+<div class="fragment"><div class="line">&lt;output-dir&gt;/</div>
+<div class="line">  inputs/          # snapshot of all scenario input files (run.ini, nodes.json)</div>
+<div class="line">  seed-1/</div>
+<div class="line">    links.csv</div>
+<div class="line">    mcs.csv</div>
+<div class="line">    rx-power.csv</div>
+<div class="line">    positions.csv</div>
+<div class="line">    run.log</div>
+<div class="line">  seed-2/</div>
+</div><!-- fragment --><p>The <code>inputs/</code> directory is written by <code>ArchiveScenarioInputs</code> before any seed runs, so re-running with the archived files reproduces the original results exactly.</p>
+<h1><a class="anchor" id="autotoc_md17"></a>
 Module Layout</h1>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="cli-parser_8h.html">cli-parser.h</a>   </td><td class="markdownTableBodyNone">CliArgs struct + three public function declarations    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="cli-parser_8cc.html">cli-parser.cc</a>   </td><td class="markdownTableBodyNone">implementations; the only file in src/ that includes ns3/command-line.h   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md18"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<ul>
+<li><b>No ns-3 types in the public API.</b> <code><a class="el" href="cli-parser_8h.html" title="Command-line parsing and pre-simulation setup helpers.">cli-parser.h</a></code> is included by <code>sim.cc</code> but its declarations use only standard-library types, keeping downstream code (validators, loaders, tests) free of ns-3 build dependencies.</li>
+<li><b>Hard exits on bad input.</b> <code>ParseCommandLine</code> and <code>ResolveSeeds</code> call <code>std::exit(1)</code> with a message to <code>stderr</code> rather than throwing. This matches ns-3 convention for fatal startup errors and means <code>sim.cc</code> never needs to handle missing-flag cases.</li>
+<li><b>Overwrite-safe archiving.</b> <code>ArchiveScenarioInputs</code> uses <code>copy_options::overwrite_existing</code> so re-running into the same output directory is safe.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md19"></a>
 Dependencies</h1>
+<p>Depends on ns3 framework </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

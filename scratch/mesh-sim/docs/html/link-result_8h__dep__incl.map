@@ -1,0 +1,13 @@
+<map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/link&#45;result.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/link&#45;result.h">
+<area shape="rect" id="node1" title="Per&#45;link evaluation result POD type. One instance per ordered pair (tx, rx) per time step...." alt="" coords="237,5,445,61"/>
+<area shape="rect" id="node2" href="$link-evaluator_8h.html" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="51,109,259,165"/>
+<area shape="rect" id="node4" href="$link-table_8h.html" title="LinkTable: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::Evaluat..." alt="" coords="379,109,587,165"/>
+<area shape="rect" id="node10" href="$mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="237,213,445,269"/>
+<area shape="rect" id="node3" href="$link-evaluator_8cc.html" title=" " alt="" coords="5,213,213,269"/>
+<area shape="rect" id="node5" href="$link-table_8cc.html" title=" " alt="" coords="571,213,779,269"/>
+<area shape="rect" id="node6" href="$metrics-writer_8h.html" title="MetricsWriter: accumulates per&#45;tick metrics in&#45;memory during the step loop, then writes summary...." alt="" coords="469,317,677,373"/>
+<area shape="rect" id="node8" href="$viz-writer_8h.html" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="237,317,445,373"/>
+<area shape="rect" id="node7" href="$metrics-writer_8cc.html" title=" " alt="" coords="469,421,677,477"/>
+<area shape="rect" id="node9" href="$viz-writer_8cc.html" title=" " alt="" coords="237,421,445,477"/>
+<area shape="rect" id="node11" href="$mesh-router_8cc.html" title=" " alt="" coords="5,317,213,373"/>
+</map>

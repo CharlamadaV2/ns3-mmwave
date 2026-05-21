@@ -67,6 +67,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">extract.py File Reference</div>  </div>
@@ -76,57 +77,24 @@ $(function() {
 <p>Unzips ARPO data bundle into the configured extraction directory.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract.html">scratch.mesh-sim.scripts.arpo_data.extract</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:acce1260a5fd98946c6033241d397f006"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="extract_8py.html#acce1260a5fd98946c6033241d397f006">scratch.mesh-sim.scripts.arpo_data.extract.extract</a> (DatasetPaths paths=DEFAULT, tuple[str,...] junk_patterns=DEFAULT_JUNK_PATTERNS)</td></tr>
-<tr class="memdesc:acce1260a5fd98946c6033241d397f006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the ARPO data bundle to the configured directory.  <a href="extract_8py.html#acce1260a5fd98946c6033241d397f006">More...</a><br /></td></tr>
+<tr class="memitem:ac0a0f8c159371714c6802774ccbfbb6e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract.html#ac0a0f8c159371714c6802774ccbfbb6e">scratch.mesh-sim.scripts.arpo_data.extract._is_junk</a> (str name, tuple[str,...] patterns)</td></tr>
+<tr class="memdesc:ac0a0f8c159371714c6802774ccbfbb6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">OS-specific metadata files that bundlers commonly leave inside zips.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract.html#ac0a0f8c159371714c6802774ccbfbb6e">More...</a><br /></td></tr>
+<tr class="separator:ac0a0f8c159371714c6802774ccbfbb6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce1260a5fd98946c6033241d397f006"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract.html#acce1260a5fd98946c6033241d397f006">scratch.mesh-sim.scripts.arpo_data.extract.extract</a> (DatasetPaths paths=DEFAULT, tuple[str,...] junk_patterns=DEFAULT_JUNK_PATTERNS)</td></tr>
+<tr class="memdesc:acce1260a5fd98946c6033241d397f006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the ARPO data bundle to the configured directory.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1extract.html#acce1260a5fd98946c6033241d397f006">More...</a><br /></td></tr>
 <tr class="separator:acce1260a5fd98946c6033241d397f006"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unzips ARPO data bundle into the configured extraction directory. </p>
 <p>The extractor skips OS-generated junk files (macOS resource forks, Windows thumbnail caches, etc.) and is idempotent — re-running when the zip is older than the already-extracted tree is a no-op. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="acce1260a5fd98946c6033241d397f006"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acce1260a5fd98946c6033241d397f006">&#9670;&nbsp;</a></span>extract()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> int scratch.mesh-sim.scripts.arpo_data.extract.extract </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths.html">DatasetPaths</a> &#160;</td>
-          <td class="paramname"><em>paths</em> = <code>DEFAULT</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">tuple[str, ...] &#160;</td>
-          <td class="paramname"><em>junk_patterns</em> = <code>DEFAULT_JUNK_PATTERNS</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Extract the ARPO data bundle to the configured directory. </p>
-<p>The function is idempotent: if the extraction directory already exists and its mtime is newer than the zip, extraction is skipped and a summary of the existing CSVs is printed instead.</p>
-<p>After extraction the directory's mtime is updated so subsequent calls can detect that extraction is current.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">paths</td><td>Dataset path configuration; defaults to DEFAULT (the Spring Lake bundle). </td></tr>
-    <tr><td class="paramname">junk_patterns</td><td>Glob patterns for entries to skip; defaults to DEFAULT_JUNK_PATTERNS. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, 1 if the zip file is not found. </dd></dl>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1

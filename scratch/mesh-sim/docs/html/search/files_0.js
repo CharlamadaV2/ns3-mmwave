@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['channel_2dconfig_2eh_226',['channel-config.h',['../channel-config_8h.html',1,'']]],
-  ['cli_2epy_227',['cli.py',['../cli_8py.html',1,'']]]
+  ['bh2_2epy_575',['bh2.py',['../bh2_8py.html',1,'']]],
+  ['build_5fwaypoints_2epy_576',['build_waypoints.py',['../build__waypoints_8py.html',1,'']]]
 ];

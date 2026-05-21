@@ -1,0 +1,48 @@
+\hypertarget{metrics-writer_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.h File Reference}
+\label{metrics-writer_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.h}}
+
+
+Metrics\+Writer\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes.  
+
+
+{\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/eval/link-\/table.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/routing/mesh-\/router.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for metrics-\/writer.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{metrics-writer_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{metrics-writer_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter}{mesh\+\_\+sim\+::\+Metrics\+Writer}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Metrics\+Writer\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes. 
+
+No ns-\/3 headers -- stdlib and nlohmann/json only. 

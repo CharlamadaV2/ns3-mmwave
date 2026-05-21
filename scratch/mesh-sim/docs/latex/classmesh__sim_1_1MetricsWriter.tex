@@ -4,6 +4,22 @@
 
 {\ttfamily \#include $<$metrics-\/writer.\+h$>$}
 
+
+
+Collaboration diagram for mesh\+\_\+sim\+::Metrics\+Writer\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmesh__sim_1_1MetricsWriter__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{Flow\+Stats}}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{Node\+Stats}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -14,6 +30,37 @@ void \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a1d21162533a5bea2eab0eed37
 void \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}} (double time\+\_\+s, const \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{Link\+Table}} \&links, const std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1FlowResult}{Flow\+Result}} $>$ \&flows, uint32\+\_\+t num\+Nodes)
 \item 
 void \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a62a9a193e9c6f182491282265f62f1e0}{Write}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_ab72c6a682de1c36e252e1e454d7d1e40}{m\+\_\+cfg}}
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1TimingInfo}{Timing\+Info}} \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a3390a8407ed0a5ce78528d0c4d44198b}{m\+\_\+timing}}
+\item 
+std\+::map$<$ uint32\+\_\+t, \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{Node\+Stats}} $>$ \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a5eb4b83a50d8ea9aa113dcab02dc63d5}{m\+\_\+node\+Stats}}
+\item 
+std\+::map$<$ std\+::pair$<$ uint32\+\_\+t, uint32\+\_\+t $>$, \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{Flow\+Stats}} $>$ \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a3c3335e6a1953196cd9104eb14717e39}{m\+\_\+flow\+Stats}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a079d2b6fa9f2afcf14ecafd3c316cc8d}{m\+\_\+tick\+Count}} = 0
+\item 
+double \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_add8299f4f5d9561d54c9b07e734dab10}{m\+\_\+net\+Sinr\+Sum}} = 0.\+0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a58d12ddb66046b1c955b78570a0fda3f}{m\+\_\+net\+Sinr\+Count}} = 0
+\item 
+double \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a80a6cf5742fca52e3e5d94da1c2a4567}{m\+\_\+net\+Delivered\+Sum}} = 0.\+0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a429f16a4b622752c02bfceb87927a178}{m\+\_\+connected\+Pairs\+Sum}} = 0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a342d9a3115f50983695bc5ffbcfe6bdf}{m\+\_\+total\+Pairs\+Sum}} = 0
+\item 
+double \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_afb3736c07a56cf14d6cbca84487d95a1}{m\+\_\+hop\+Count\+Sum}} = 0.\+0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_aa0a29725fed80da289b80c2c329f1565}{m\+\_\+hop\+Count\+Count}} = 0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_abf6f09efce20cbca2760c1b381a6e07b}{m\+\_\+flows\+Routed\+Sum}} = 0
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a5df440f0916e0e5c13eb2125e552e0b9}{m\+\_\+flows\+Unroutable\+Sum}} = 0
 \end{DoxyCompactItemize}
 
 
@@ -125,7 +172,94 @@ Description of return value.
 \end{DoxyExceptions}
 
 
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_ab72c6a682de1c36e252e1e454d7d1e40}\label{classmesh__sim_1_1MetricsWriter_ab72c6a682de1c36e252e1e454d7d1e40}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_cfg@{m\_cfg}}
+\index{m\_cfg@{m\_cfg}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_cfg}{m\_cfg}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+cfg\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a429f16a4b622752c02bfceb87927a178}\label{classmesh__sim_1_1MetricsWriter_a429f16a4b622752c02bfceb87927a178}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_connectedPairsSum@{m\_connectedPairsSum}}
+\index{m\_connectedPairsSum@{m\_connectedPairsSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_connectedPairsSum}{m\_connectedPairsSum}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+connected\+Pairs\+Sum = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_abf6f09efce20cbca2760c1b381a6e07b}\label{classmesh__sim_1_1MetricsWriter_abf6f09efce20cbca2760c1b381a6e07b}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_flowsRoutedSum@{m\_flowsRoutedSum}}
+\index{m\_flowsRoutedSum@{m\_flowsRoutedSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_flowsRoutedSum}{m\_flowsRoutedSum}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+flows\+Routed\+Sum = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a3c3335e6a1953196cd9104eb14717e39}\label{classmesh__sim_1_1MetricsWriter_a3c3335e6a1953196cd9104eb14717e39}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_flowStats@{m\_flowStats}}
+\index{m\_flowStats@{m\_flowStats}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_flowStats}{m\_flowStats}}
+{\footnotesize\ttfamily std\+::map$<$std\+::pair$<$uint32\+\_\+t, uint32\+\_\+t$>$, \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{Flow\+Stats}}$>$ mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+flow\+Stats\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a5df440f0916e0e5c13eb2125e552e0b9}\label{classmesh__sim_1_1MetricsWriter_a5df440f0916e0e5c13eb2125e552e0b9}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_flowsUnroutableSum@{m\_flowsUnroutableSum}}
+\index{m\_flowsUnroutableSum@{m\_flowsUnroutableSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_flowsUnroutableSum}{m\_flowsUnroutableSum}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+flows\+Unroutable\+Sum = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_aa0a29725fed80da289b80c2c329f1565}\label{classmesh__sim_1_1MetricsWriter_aa0a29725fed80da289b80c2c329f1565}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_hopCountCount@{m\_hopCountCount}}
+\index{m\_hopCountCount@{m\_hopCountCount}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_hopCountCount}{m\_hopCountCount}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+hop\+Count\+Count = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_afb3736c07a56cf14d6cbca84487d95a1}\label{classmesh__sim_1_1MetricsWriter_afb3736c07a56cf14d6cbca84487d95a1}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_hopCountSum@{m\_hopCountSum}}
+\index{m\_hopCountSum@{m\_hopCountSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_hopCountSum}{m\_hopCountSum}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+hop\+Count\+Sum = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a80a6cf5742fca52e3e5d94da1c2a4567}\label{classmesh__sim_1_1MetricsWriter_a80a6cf5742fca52e3e5d94da1c2a4567}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_netDeliveredSum@{m\_netDeliveredSum}}
+\index{m\_netDeliveredSum@{m\_netDeliveredSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_netDeliveredSum}{m\_netDeliveredSum}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+net\+Delivered\+Sum = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a58d12ddb66046b1c955b78570a0fda3f}\label{classmesh__sim_1_1MetricsWriter_a58d12ddb66046b1c955b78570a0fda3f}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_netSinrCount@{m\_netSinrCount}}
+\index{m\_netSinrCount@{m\_netSinrCount}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_netSinrCount}{m\_netSinrCount}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+net\+Sinr\+Count = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_add8299f4f5d9561d54c9b07e734dab10}\label{classmesh__sim_1_1MetricsWriter_add8299f4f5d9561d54c9b07e734dab10}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_netSinrSum@{m\_netSinrSum}}
+\index{m\_netSinrSum@{m\_netSinrSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_netSinrSum}{m\_netSinrSum}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+net\+Sinr\+Sum = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a5eb4b83a50d8ea9aa113dcab02dc63d5}\label{classmesh__sim_1_1MetricsWriter_a5eb4b83a50d8ea9aa113dcab02dc63d5}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_nodeStats@{m\_nodeStats}}
+\index{m\_nodeStats@{m\_nodeStats}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_nodeStats}{m\_nodeStats}}
+{\footnotesize\ttfamily std\+::map$<$uint32\+\_\+t, \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{Node\+Stats}}$>$ mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+node\+Stats\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a079d2b6fa9f2afcf14ecafd3c316cc8d}\label{classmesh__sim_1_1MetricsWriter_a079d2b6fa9f2afcf14ecafd3c316cc8d}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_tickCount@{m\_tickCount}}
+\index{m\_tickCount@{m\_tickCount}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_tickCount}{m\_tickCount}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+tick\+Count = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a3390a8407ed0a5ce78528d0c4d44198b}\label{classmesh__sim_1_1MetricsWriter_a3390a8407ed0a5ce78528d0c4d44198b}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_timing@{m\_timing}}
+\index{m\_timing@{m\_timing}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_timing}{m\_timing}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1TimingInfo}{Timing\+Info}} mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+timing\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1MetricsWriter_a342d9a3115f50983695bc5ffbcfe6bdf}\label{classmesh__sim_1_1MetricsWriter_a342d9a3115f50983695bc5ffbcfe6bdf}} 
+\index{mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}!m\_totalPairsSum@{m\_totalPairsSum}}
+\index{m\_totalPairsSum@{m\_totalPairsSum}!mesh\_sim::MetricsWriter@{mesh\_sim::MetricsWriter}}
+\doxysubsubsection{\texorpdfstring{m\_totalPairsSum}{m\_totalPairsSum}}
+{\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::m\+\_\+total\+Pairs\+Sum = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.\+h\item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.\+cc\end{DoxyCompactItemize}
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/\mbox{\hyperlink{metrics-writer_8h}{metrics-\/writer.\+h}}\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/\mbox{\hyperlink{metrics-writer_8cc}{metrics-\/writer.\+cc}}\end{DoxyCompactItemize}

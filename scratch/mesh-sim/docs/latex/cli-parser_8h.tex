@@ -1,0 +1,60 @@
+\hypertarget{cli-parser_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/cli/cli-\/parser.h File Reference}
+\label{cli-parser_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/cli/cli-\/parser.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/cli/cli-\/parser.h}}
+
+
+Command-\/line parsing and pre-\/simulation setup helpers.  
+
+
+{\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for cli-\/parser.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cli-parser_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cli-parser_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{mesh\+\_\+sim\+::\+Cli\+Args}}
+\begin{DoxyCompactList}\small\item\em Parsed command-\/line arguments for one simulator invocation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Cli\+Args \mbox{\hyperlink{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}{mesh\+\_\+sim\+::\+Parse\+Command\+Line}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Parse {\ttfamily argv} via {\ttfamily ns3\+::\+Command\+Line} and return a populated \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}}. \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{mesh\+\_\+sim\+::\+Resolve\+Seeds}} (const Cli\+Args \&args, const Sim\+Config \&cfg)
+\begin{DoxyCompactList}\small\item\em Determine the list of random seeds to run from CLI args and config defaults. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{mesh\+\_\+sim\+::\+Archive\+Scenario\+Inputs}} (const std\+::string \&base\+\_\+output\+\_\+dir, const std\+::string \&run\+\_\+config\+\_\+path)
+\begin{DoxyCompactList}\small\item\em Copy all scenario input files into the batch output directory for reproducibility. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Command-\/line parsing and pre-\/simulation setup helpers. 
+
+Separates argument handling and reproducibility bookkeeping from the top-\/level orchestration in {\ttfamily sim.\+cc}.
+
+{\bfseries{Typical call sequence in sim.\+cc}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{CliArgs    args  = \mbox{\hyperlink{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}{ParseCommandLine}}(argc, argv);}
+\DoxyCodeLine{SimConfig  cfg   = ConfigLoader::Load(args.run\_config\_path,}
+\DoxyCodeLine{                                      args.positions\_override\_path);}
+\DoxyCodeLine{\textcolor{keyword}{auto}       seeds = \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{ResolveSeeds}}(args, cfg);}
+\DoxyCodeLine{\mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{ArchiveScenarioInputs}}(args.output\_dir, args.run\_config\_path);}
+
+\end{DoxyCode}
+ 

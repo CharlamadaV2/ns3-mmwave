@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['o2i_5floss_5ftype_316',['o2i_loss_type',['../structmesh__sim_1_1NyuChannelConfig.html#a13ff2998980012ed34d3812347a1f8a8',1,'mesh_sim::NyuChannelConfig']]]
+  ['latency_5fms_892',['latency_ms',['../structmesh__sim_1_1FlowResult.html#aeacaff600606434e68d3894a8aa592b1',1,'mesh_sim::FlowResult']]],
+  ['latency_5fsum_893',['latency_sum',['../structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a70f4bd4a2aa1a290301e34f87c4b2a6b',1,'mesh_sim::MetricsWriter::FlowStats']]],
+  ['los_5flink_5fsum_894',['los_link_sum',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a055979b87352086504220623609c2e1c',1,'mesh_sim::MetricsWriter::NodeStats']]]
 ];

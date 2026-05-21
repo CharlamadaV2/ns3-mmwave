@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['id_307',['id',['../structmesh__sim_1_1NodeSpec.html#a950262852492aff9f300ec5ed3a40704',1,'mesh_sim::NodeSpec::id()'],['../structmesh__sim_1_1BuildingSpec.html#add6b7cab774447938546e243930c804d',1,'mesh_sim::BuildingSpec::id()']]]
+  ['gateway_5fnode_5fid_883',['gateway_node_id',['../structmesh__sim_1_1TrafficConfig.html#a2a8ba7805d165c6efd34edfa08c368a3',1,'mesh_sim::TrafficConfig']]]
 ];

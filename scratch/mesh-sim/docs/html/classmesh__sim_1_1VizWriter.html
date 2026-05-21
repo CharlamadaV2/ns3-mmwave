@@ -68,6 +68,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classmesh__sim_1_1VizWriter-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">mesh_sim::VizWriter Class Reference</div>  </div>
@@ -75,17 +77,70 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="viz-writer_8h_source.html">viz-writer.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for mesh_sim::VizWriter:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmesh__sim_1_1VizWriter__coll__graph.png" border="0" usemap="#amesh__sim_1_1VizWriter_coll__map" alt="Collaboration graph"/></div>
+<map name="amesh__sim_1_1VizWriter_coll__map" id="amesh__sim_1_1VizWriter_coll__map">
+<area shape="rect" title=" " alt="" coords="334,273,491,300"/>
+<area shape="rect" href="structmesh__sim_1_1SimConfig.html" title=" " alt="" coords="331,184,494,211"/>
+<area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title=" " alt="" coords="139,95,313,121"/>
+<area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title=" " alt="" coords="5,5,193,32"/>
+<area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title=" " alt="" coords="217,5,395,32"/>
+<area shape="rect" href="structmesh__sim_1_1RlConfig.html" title=" " alt="" coords="337,95,488,121"/>
+<area shape="rect" href="structmesh__sim_1_1ChannelConfig.html" title="Complete radio and channel configuration for a simulation run." alt="" coords="512,95,703,121"/>
+<area shape="rect" href="structmesh__sim_1_1NyuChannelConfig.html" title="Parameters specific to the NYU mmWave channel model." alt="" coords="499,5,716,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:addc900f2fe99d900750dd98fad5dc287"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#addc900f2fe99d900750dd98fad5dc287">VizWriter</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
 <tr class="separator:addc900f2fe99d900750dd98fad5dc287"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae754a74222236edecf83e706901cbf36"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#ae754a74222236edecf83e706901cbf36">~VizWriter</a> ()</td></tr>
+<tr class="separator:ae754a74222236edecf83e706901cbf36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3224ecbd28665c5badae67974dfb8ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#af3224ecbd28665c5badae67974dfb8ce">Open</a> ()</td></tr>
 <tr class="separator:af3224ecbd28665c5badae67974dfb8ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ea60137bb5d161d4accc1ad4741652b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a8ea60137bb5d161d4accc1ad4741652b">WriteTick</a> (double time_s, const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;mobs, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;flows)</td></tr>
 <tr class="separator:a8ea60137bb5d161d4accc1ad4741652b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a481338af7473f3c9309a02981bbfd5e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a481338af7473f3c9309a02981bbfd5e1">Close</a> ()</td></tr>
 <tr class="separator:a481338af7473f3c9309a02981bbfd5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a94bf378ae3c806e7ea7a7de7e044d91f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a94bf378ae3c806e7ea7a7de7e044d91f">WritePositions</a> (double time_s, const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;mobs)</td></tr>
+<tr class="separator:a94bf378ae3c806e7ea7a7de7e044d91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e8f0d0fdd927d38287f074833e5884"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a44e8f0d0fdd927d38287f074833e5884">WriteLinks</a> (double time_s, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;flows)</td></tr>
+<tr class="separator:a44e8f0d0fdd927d38287f074833e5884"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08fc035015287c121f7239b2a7158bed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a08fc035015287c121f7239b2a7158bed">WriteRxPower</a> (double time_s, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links)</td></tr>
+<tr class="separator:a08fc035015287c121f7239b2a7158bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c5603a3eabc24a4ac062e0d8ade7dcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a9c5603a3eabc24a4ac062e0d8ade7dcf">WriteMcs</a> (double time_s, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links)</td></tr>
+<tr class="separator:a9c5603a3eabc24a4ac062e0d8ade7dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252e4f3f306f473a9473abdd31798998"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a252e4f3f306f473a9473abdd31798998">WriteFlows</a> (double time_s, const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;flows)</td></tr>
+<tr class="separator:a252e4f3f306f473a9473abdd31798998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dc71d3add38a1b8155ff00d830aee26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a5dc71d3add38a1b8155ff00d830aee26">WriteRoutes</a> (double time_s, const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;flows, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links)</td></tr>
+<tr class="separator:a5dc71d3add38a1b8155ff00d830aee26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a3e94ae70ac518168c32c1a59fd9704ef"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a3e94ae70ac518168c32c1a59fd9704ef">m_cfg</a></td></tr>
+<tr class="separator:a3e94ae70ac518168c32c1a59fd9704ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d4e9c0efb7ece10da231fead644122"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a24d4e9c0efb7ece10da231fead644122">m_posFile</a></td></tr>
+<tr class="separator:a24d4e9c0efb7ece10da231fead644122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3922041e526069924c7570cddc62d507"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a3922041e526069924c7570cddc62d507">m_linkFile</a></td></tr>
+<tr class="separator:a3922041e526069924c7570cddc62d507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad08f5b8ac4efd7336d40f40c9aa95b0"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#aad08f5b8ac4efd7336d40f40c9aa95b0">m_rxPowerFile</a></td></tr>
+<tr class="separator:aad08f5b8ac4efd7336d40f40c9aa95b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac54f39f47f76e72cdf3507f09cc56041"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#ac54f39f47f76e72cdf3507f09cc56041">m_mcsFile</a></td></tr>
+<tr class="separator:ac54f39f47f76e72cdf3507f09cc56041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae838a396c20237b4ef12809d89f33c1f"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#ae838a396c20237b4ef12809d89f33c1f">m_flowFile</a></td></tr>
+<tr class="separator:ae838a396c20237b4ef12809d89f33c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a475c1a7d8ed8c0d5f13b55965b9dfabc"><td class="memItemLeft" align="right" valign="top">std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a475c1a7d8ed8c0d5f13b55965b9dfabc">m_routeFile</a></td></tr>
+<tr class="separator:a475c1a7d8ed8c0d5f13b55965b9dfabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d43627179d69fe1624993ad215e551a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a4d43627179d69fe1624993ad215e551a">m_vizTickS</a></td></tr>
+<tr class="separator:a4d43627179d69fe1624993ad215e551a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee4edca8dd04edb73afb82328c9ad22"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html#a5ee4edca8dd04edb73afb82328c9ad22">m_nextWriteS</a></td></tr>
+<tr class="separator:a5ee4edca8dd04edb73afb82328c9ad22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Description of what the method does.</p>
@@ -143,6 +198,23 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ae754a74222236edecf83e706901cbf36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae754a74222236edecf83e706901cbf36">&#9670;&nbsp;</a></span>~VizWriter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mesh_sim::VizWriter::~VizWriter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a481338af7473f3c9309a02981bbfd5e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a481338af7473f3c9309a02981bbfd5e1">&#9670;&nbsp;</a></span>Close()</h2>
@@ -188,6 +260,318 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a252e4f3f306f473a9473abdd31798998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a252e4f3f306f473a9473abdd31798998">&#9670;&nbsp;</a></span>WriteFlows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WriteFlows </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>flows</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a44e8f0d0fdd927d38287f074833e5884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44e8f0d0fdd927d38287f074833e5884">&#9670;&nbsp;</a></span>WriteLinks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WriteLinks </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;&#160;</td>
+          <td class="paramname"><em>links</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>flows</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9c5603a3eabc24a4ac062e0d8ade7dcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c5603a3eabc24a4ac062e0d8ade7dcf">&#9670;&nbsp;</a></span>WriteMcs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WriteMcs </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;&#160;</td>
+          <td class="paramname"><em>links</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a94bf378ae3c806e7ea7a7de7e044d91f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94bf378ae3c806e7ea7a7de7e044d91f">&#9670;&nbsp;</a></span>WritePositions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WritePositions </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>mobs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5dc71d3add38a1b8155ff00d830aee26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dc71d3add38a1b8155ff00d830aee26">&#9670;&nbsp;</a></span>WriteRoutes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WriteRoutes </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>flows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;&#160;</td>
+          <td class="paramname"><em>links</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a08fc035015287c121f7239b2a7158bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08fc035015287c121f7239b2a7158bed">&#9670;&nbsp;</a></span>WriteRxPower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::VizWriter::WriteRxPower </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;&#160;</td>
+          <td class="paramname"><em>links</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -260,9 +644,208 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3e94ae70ac518168c32c1a59fd9704ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e94ae70ac518168c32c1a59fd9704ef">&#9670;&nbsp;</a></span>m_cfg</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a>&amp; mesh_sim::VizWriter::m_cfg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae838a396c20237b4ef12809d89f33c1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae838a396c20237b4ef12809d89f33c1f">&#9670;&nbsp;</a></span>m_flowFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_flowFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3922041e526069924c7570cddc62d507"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3922041e526069924c7570cddc62d507">&#9670;&nbsp;</a></span>m_linkFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_linkFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac54f39f47f76e72cdf3507f09cc56041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac54f39f47f76e72cdf3507f09cc56041">&#9670;&nbsp;</a></span>m_mcsFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_mcsFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ee4edca8dd04edb73afb82328c9ad22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee4edca8dd04edb73afb82328c9ad22">&#9670;&nbsp;</a></span>m_nextWriteS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::VizWriter::m_nextWriteS</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24d4e9c0efb7ece10da231fead644122"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24d4e9c0efb7ece10da231fead644122">&#9670;&nbsp;</a></span>m_posFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_posFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a475c1a7d8ed8c0d5f13b55965b9dfabc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a475c1a7d8ed8c0d5f13b55965b9dfabc">&#9670;&nbsp;</a></span>m_routeFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_routeFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad08f5b8ac4efd7336d40f40c9aa95b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad08f5b8ac4efd7336d40f40c9aa95b0">&#9670;&nbsp;</a></span>m_rxPowerFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ofstream mesh_sim::VizWriter::m_rxPowerFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d43627179d69fe1624993ad215e551a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d43627179d69fe1624993ad215e551a">&#9670;&nbsp;</a></span>m_vizTickS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::VizWriter::m_vizTickS</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/io/<a class="el" href="viz-writer_8h_source.html">viz-writer.h</a></li>
-<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/io/viz-writer.cc</li>
+<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/io/<a class="el" href="viz-writer_8cc.html">viz-writer.cc</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

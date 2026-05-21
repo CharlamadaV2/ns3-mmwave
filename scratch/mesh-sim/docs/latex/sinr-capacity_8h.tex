@@ -1,0 +1,46 @@
+\hypertarget{sinr-capacity_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/sinr-\/capacity.h File Reference}
+\label{sinr-capacity_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/sinr-\/capacity.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/sinr-\/capacity.h}}
+
+
+SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by Link\+Evaluator and testable standalone.  
+
+
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for sinr-\/capacity.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=273pt]{sinr-capacity_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{sinr-capacity_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1McsEntry}{mesh\+\_\+sim\+::\+Mcs\+Entry}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{mesh\+\_\+sim\+::\+Sinr\+To\+Mcs\+Index}} (double sinr\+\_\+db)
+\item 
+double \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{mesh\+\_\+sim\+::\+Sinr\+To\+Capacity}} (double sinr\+\_\+db, double bandwidth\+\_\+hz, const std\+::string \&amc\+\_\+model)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by Link\+Evaluator and testable standalone. 
+

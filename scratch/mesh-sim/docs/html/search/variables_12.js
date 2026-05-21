@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['y_341',['y',['../structmesh__sim_1_1Position.html#ab054bac63f58903290a8a032556f2b35',1,'mesh_sim::Position::y()'],['../structmesh__sim_1_1Waypoint.html#a2a75915205187788e3788d4a1d65c7e2',1,'mesh_sim::Waypoint::y()']]],
-  ['y_5fmax_342',['y_max',['../structmesh__sim_1_1RandomWalkParams.html#a46dae603f6cbecdd8fb18facc1464607',1,'mesh_sim::RandomWalkParams::y_max()'],['../structmesh__sim_1_1BuildingSpec.html#a73a494ad1b1573d91b0ceab5b2010ed9',1,'mesh_sim::BuildingSpec::y_max()']]],
-  ['y_5fmin_343',['y_min',['../structmesh__sim_1_1RandomWalkParams.html#aa082a78a496b7ada23bc0517f95dc8b1',1,'mesh_sim::RandomWalkParams::y_min()'],['../structmesh__sim_1_1BuildingSpec.html#a758f8f446a316fe458fe1c2c84b3c951',1,'mesh_sim::BuildingSpec::y_min()']]]
+  ['velocity_1013',['velocity',['../structmesh__sim_1_1NodeSpec.html#a1b12dcff6f2970af61495782f68dc77a',1,'mesh_sim::NodeSpec']]],
+  ['viz_5ftick_5fms_1014',['viz_tick_ms',['../structmesh__sim_1_1SimConfig.html#ac5c9744af5cb54e83c2cc7e23342c37e',1,'mesh_sim::SimConfig']]],
+  ['vx_1015',['vx',['../structmesh__sim_1_1Velocity.html#adb201a8f95d974cec15d632cda0d6487',1,'mesh_sim::Velocity']]],
+  ['vy_1016',['vy',['../structmesh__sim_1_1Velocity.html#a2ce031a6fb3c7cf1806b7fd311658d88',1,'mesh_sim::Velocity']]],
+  ['vz_1017',['vz',['../structmesh__sim_1_1Velocity.html#aadd9a2644da8a4938be13fe100b6af35',1,'mesh_sim::Velocity']]]
 ];

@@ -68,11 +68,24 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classmesh__sim_1_1TrafficMatrix-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">mesh_sim::TrafficMatrix Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="traffic-matrix_8h_source.html">traffic-matrix.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for mesh_sim::TrafficMatrix:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmesh__sim_1_1TrafficMatrix__coll__graph.png" border="0" usemap="#amesh__sim_1_1TrafficMatrix_coll__map" alt="Collaboration graph"/></div>
+<map name="amesh__sim_1_1TrafficMatrix_coll__map" id="amesh__sim_1_1TrafficMatrix_coll__map">
+<area shape="rect" title=" " alt="" coords="5,95,184,121"/>
+<area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title=" " alt="" coords="6,5,183,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -86,6 +99,38 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5128ce2f890d3ace9f0ab5a0ae10cfe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158372ed579012cb0478e15f61ca2d3b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a158372ed579012cb0478e15f61ca2d3b">GetDemand</a> (uint32_t src, uint32_t dst) const</td></tr>
 <tr class="separator:a158372ed579012cb0478e15f61ca2d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a909202facea0da1000232026e6177949"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a909202facea0da1000232026e6177949">InitAllPairs</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="separator:a909202facea0da1000232026e6177949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8880d1b1509aea9ebe5154acf98c86d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af8880d1b1509aea9ebe5154acf98c86d">InitRandomPairs</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="separator:af8880d1b1509aea9ebe5154acf98c86d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98dc9cd9637de63d708fe5514ba65206"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a98dc9cd9637de63d708fe5514ba65206">InitGateway</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="separator:a98dc9cd9637de63d708fe5514ba65206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9460a0782813101acebb0eabc4ff0f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1Flow.html">Flow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af9460a0782813101acebb0eabc4ff0f3">MakeFlow</a> (uint32_t src, uint32_t dst, double currentTime) const</td></tr>
+<tr class="separator:af9460a0782813101acebb0eabc4ff0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab235b56f20a6a4b6bfb1316454a18ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aab235b56f20a6a4b6bfb1316454a18ba">TickOnOff</a> (double currentTime)</td></tr>
+<tr class="separator:aab235b56f20a6a4b6bfb1316454a18ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa53dc92cc2f0947112186758d6bb2542"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aa53dc92cc2f0947112186758d6bb2542">TickPoisson</a> (double currentTime)</td></tr>
+<tr class="separator:aa53dc92cc2f0947112186758d6bb2542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a5cc00b6d88a38d10ec8ea8a304e24cea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a5cc00b6d88a38d10ec8ea8a304e24cea">m_trafficCfg</a></td></tr>
+<tr class="separator:a5cc00b6d88a38d10ec8ea8a304e24cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af71ce41c79e75d1be5dbb87a1358bba7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af71ce41c79e75d1be5dbb87a1358bba7">m_nodeSpecs</a></td></tr>
+<tr class="separator:af71ce41c79e75d1be5dbb87a1358bba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a735e225e84efbeba494b4f5374958e6c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a735e225e84efbeba494b4f5374958e6c">m_numNodes</a> = 0</td></tr>
+<tr class="separator:a735e225e84efbeba494b4f5374958e6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c089a99c69ced57980dd3f6b89b638"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ac4c089a99c69ced57980dd3f6b89b638">m_tickS</a> = 0.1</td></tr>
+<tr class="separator:ac4c089a99c69ced57980dd3f6b89b638"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2840845854f7eb0b7ffb46e39702e75"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ae2840845854f7eb0b7ffb46e39702e75">m_flows</a></td></tr>
+<tr class="separator:ae2840845854f7eb0b7ffb46e39702e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7424e791bdc3c1f4251adbe6315f945"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::UniformRandomVariable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ad7424e791bdc3c1f4251adbe6315f945">m_uniformRng</a></td></tr>
+<tr class="separator:ad7424e791bdc3c1f4251adbe6315f945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ca35ea87191729a9b29fcc09d2b673"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ExponentialRandomVariable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a99ca35ea87191729a9b29fcc09d2b673">m_expRng</a></td></tr>
+<tr class="separator:a99ca35ea87191729a9b29fcc09d2b673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0a7c8781ba6c9b942c6897e49832bbaa"></a>
@@ -202,6 +247,106 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a909202facea0da1000232026e6177949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a909202facea0da1000232026e6177949">&#9670;&nbsp;</a></span>InitAllPairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TrafficMatrix::InitAllPairs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>numNodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a98dc9cd9637de63d708fe5514ba65206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98dc9cd9637de63d708fe5514ba65206">&#9670;&nbsp;</a></span>InitGateway()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TrafficMatrix::InitGateway </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>numNodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a514a72803c32cc585ad03cd99474a683"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a514a72803c32cc585ad03cd99474a683">&#9670;&nbsp;</a></span>Initialize()</h2>
 
@@ -226,6 +371,112 @@ Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af8880d1b1509aea9ebe5154acf98c86d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8880d1b1509aea9ebe5154acf98c86d">&#9670;&nbsp;</a></span>InitRandomPairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TrafficMatrix::InitRandomPairs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>numNodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af9460a0782813101acebb0eabc4ff0f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9460a0782813101acebb0eabc4ff0f3">&#9670;&nbsp;</a></span>MakeFlow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> mesh_sim::TrafficMatrix::MakeFlow </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -276,9 +527,272 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aab235b56f20a6a4b6bfb1316454a18ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab235b56f20a6a4b6bfb1316454a18ba">&#9670;&nbsp;</a></span>TickOnOff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TrafficMatrix::TickOnOff </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa53dc92cc2f0947112186758d6bb2542"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa53dc92cc2f0947112186758d6bb2542">&#9670;&nbsp;</a></span>TickPoisson()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TrafficMatrix::TickPoisson </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>currentTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a99ca35ea87191729a9b29fcc09d2b673"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ca35ea87191729a9b29fcc09d2b673">&#9670;&nbsp;</a></span>m_expRng</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::ExponentialRandomVariable&gt; mesh_sim::TrafficMatrix::m_expRng</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae2840845854f7eb0b7ffb46e39702e75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2840845854f7eb0b7ffb46e39702e75">&#9670;&nbsp;</a></span>m_flows</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structmesh__sim_1_1Flow.html">Flow</a>&gt; mesh_sim::TrafficMatrix::m_flows</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af71ce41c79e75d1be5dbb87a1358bba7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af71ce41c79e75d1be5dbb87a1358bba7">&#9670;&nbsp;</a></span>m_nodeSpecs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a>&gt; mesh_sim::TrafficMatrix::m_nodeSpecs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a735e225e84efbeba494b4f5374958e6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a735e225e84efbeba494b4f5374958e6c">&#9670;&nbsp;</a></span>m_numNodes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mesh_sim::TrafficMatrix::m_numNodes = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac4c089a99c69ced57980dd3f6b89b638"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c089a99c69ced57980dd3f6b89b638">&#9670;&nbsp;</a></span>m_tickS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double mesh_sim::TrafficMatrix::m_tickS = 0.1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5cc00b6d88a38d10ec8ea8a304e24cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cc00b6d88a38d10ec8ea8a304e24cea">&#9670;&nbsp;</a></span>m_trafficCfg</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a> mesh_sim::TrafficMatrix::m_trafficCfg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad7424e791bdc3c1f4251adbe6315f945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7424e791bdc3c1f4251adbe6315f945">&#9670;&nbsp;</a></span>m_uniformRng</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::UniformRandomVariable&gt; mesh_sim::TrafficMatrix::m_uniformRng</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/traffic/<a class="el" href="traffic-matrix_8h_source.html">traffic-matrix.h</a></li>
-<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/traffic/traffic-matrix.cc</li>
+<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/traffic/<a class="el" href="traffic-matrix_8cc.html">traffic-matrix.cc</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

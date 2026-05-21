@@ -1,5 +1,18 @@
 \hypertarget{classmesh__sim_1_1TrafficMatrix}{}\doxysection{mesh\+\_\+sim\+::Traffic\+Matrix Class Reference}
 \label{classmesh__sim_1_1TrafficMatrix}\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+
+
+{\ttfamily \#include $<$traffic-\/matrix.\+h$>$}
+
+
+
+Collaboration diagram for mesh\+\_\+sim\+::Traffic\+Matrix\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classmesh__sim_1_1TrafficMatrix__coll__graph}
+\end{center}
+\end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -12,6 +25,38 @@ void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a9921b0d01fde96abf35c11428
 const std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}} $>$ \& \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a5128ce2f890d3ace9f0ab5a0ae10cfe4}{Get\+Active\+Flows}} () const
 \item 
 double \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a158372ed579012cb0478e15f61ca2d3b}{Get\+Demand}} (uint32\+\_\+t src, uint32\+\_\+t dst) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a909202facea0da1000232026e6177949}{Init\+All\+Pairs}} (uint32\+\_\+t num\+Nodes, double current\+Time)
+\item 
+void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_af8880d1b1509aea9ebe5154acf98c86d}{Init\+Random\+Pairs}} (uint32\+\_\+t num\+Nodes, double current\+Time)
+\item 
+void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a98dc9cd9637de63d708fe5514ba65206}{Init\+Gateway}} (uint32\+\_\+t num\+Nodes, double current\+Time)
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}} \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_af9460a0782813101acebb0eabc4ff0f3}{Make\+Flow}} (uint32\+\_\+t src, uint32\+\_\+t dst, double current\+Time) const
+\item 
+void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_aab235b56f20a6a4b6bfb1316454a18ba}{Tick\+On\+Off}} (double current\+Time)
+\item 
+void \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_aa53dc92cc2f0947112186758d6bb2542}{Tick\+Poisson}} (double current\+Time)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmesh__sim_1_1TrafficConfig}{Traffic\+Config}} \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a5cc00b6d88a38d10ec8ea8a304e24cea}{m\+\_\+traffic\+Cfg}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}} $>$ \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_af71ce41c79e75d1be5dbb87a1358bba7}{m\+\_\+node\+Specs}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a735e225e84efbeba494b4f5374958e6c}{m\+\_\+num\+Nodes}} = 0
+\item 
+double \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_ac4c089a99c69ced57980dd3f6b89b638}{m\+\_\+tickS}} = 0.\+1
+\item 
+std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}} $>$ \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_ae2840845854f7eb0b7ffb46e39702e75}{m\+\_\+flows}}
+\item 
+ns3\+::\+Ptr$<$ ns3\+::\+Uniform\+Random\+Variable $>$ \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_ad7424e791bdc3c1f4251adbe6315f945}{m\+\_\+uniform\+Rng}}
+\item 
+ns3\+::\+Ptr$<$ ns3\+::\+Exponential\+Random\+Variable $>$ \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix_a99ca35ea87191729a9b29fcc09d2b673}{m\+\_\+exp\+Rng}}
 \end{DoxyCompactItemize}
 
 
@@ -82,11 +127,95 @@ Description of return value.
 {\em Exception} & Description of exception. \\
 \hline
 \end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a909202facea0da1000232026e6177949}\label{classmesh__sim_1_1TrafficMatrix_a909202facea0da1000232026e6177949}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!InitAllPairs@{InitAllPairs}}
+\index{InitAllPairs@{InitAllPairs}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{InitAllPairs()}{InitAllPairs()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Init\+All\+Pairs (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{num\+Nodes,  }\item[{double}]{current\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a98dc9cd9637de63d708fe5514ba65206}\label{classmesh__sim_1_1TrafficMatrix_a98dc9cd9637de63d708fe5514ba65206}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!InitGateway@{InitGateway}}
+\index{InitGateway@{InitGateway}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{InitGateway()}{InitGateway()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Init\+Gateway (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{num\+Nodes,  }\item[{double}]{current\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
 \mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a514a72803c32cc585ad03cd99474a683}\label{classmesh__sim_1_1TrafficMatrix_a514a72803c32cc585ad03cd99474a683}} 
 \index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!Initialize@{Initialize}}
 \index{Initialize@{Initialize}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
 \doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
 {\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Initialize (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{num\+Nodes,  }\item[{double}]{current\+Time }\end{DoxyParamCaption})}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_af8880d1b1509aea9ebe5154acf98c86d}\label{classmesh__sim_1_1TrafficMatrix_af8880d1b1509aea9ebe5154acf98c86d}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!InitRandomPairs@{InitRandomPairs}}
+\index{InitRandomPairs@{InitRandomPairs}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{InitRandomPairs()}{InitRandomPairs()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Init\+Random\+Pairs (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{num\+Nodes,  }\item[{double}]{current\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_af9460a0782813101acebb0eabc4ff0f3}\label{classmesh__sim_1_1TrafficMatrix_af9460a0782813101acebb0eabc4ff0f3}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!MakeFlow@{MakeFlow}}
+\index{MakeFlow@{MakeFlow}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{MakeFlow()}{MakeFlow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}} mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Make\+Flow (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{src,  }\item[{uint32\+\_\+t}]{dst,  }\item[{double}]{current\+Time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
 
 Description of what the method does.
 
@@ -124,9 +253,126 @@ Description of return value.
 {\em Exception} & Description of exception. \\
 \hline
 \end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_aab235b56f20a6a4b6bfb1316454a18ba}\label{classmesh__sim_1_1TrafficMatrix_aab235b56f20a6a4b6bfb1316454a18ba}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!TickOnOff@{TickOnOff}}
+\index{TickOnOff@{TickOnOff}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{TickOnOff()}{TickOnOff()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Tick\+On\+Off (\begin{DoxyParamCaption}\item[{double}]{current\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_aa53dc92cc2f0947112186758d6bb2542}\label{classmesh__sim_1_1TrafficMatrix_aa53dc92cc2f0947112186758d6bb2542}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!TickPoisson@{TickPoisson}}
+\index{TickPoisson@{TickPoisson}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{TickPoisson()}{TickPoisson()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Traffic\+Matrix\+::\+Tick\+Poisson (\begin{DoxyParamCaption}\item[{double}]{current\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a99ca35ea87191729a9b29fcc09d2b673}\label{classmesh__sim_1_1TrafficMatrix_a99ca35ea87191729a9b29fcc09d2b673}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_expRng@{m\_expRng}}
+\index{m\_expRng@{m\_expRng}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_expRng}{m\_expRng}}
+{\footnotesize\ttfamily ns3\+::\+Ptr$<$ns3\+::\+Exponential\+Random\+Variable$>$ mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+exp\+Rng\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_ae2840845854f7eb0b7ffb46e39702e75}\label{classmesh__sim_1_1TrafficMatrix_ae2840845854f7eb0b7ffb46e39702e75}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_flows@{m\_flows}}
+\index{m\_flows@{m\_flows}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_flows}{m\_flows}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}}$>$ mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+flows\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_af71ce41c79e75d1be5dbb87a1358bba7}\label{classmesh__sim_1_1TrafficMatrix_af71ce41c79e75d1be5dbb87a1358bba7}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_nodeSpecs@{m\_nodeSpecs}}
+\index{m\_nodeSpecs@{m\_nodeSpecs}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_nodeSpecs}{m\_nodeSpecs}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}}$>$ mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+node\+Specs\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a735e225e84efbeba494b4f5374958e6c}\label{classmesh__sim_1_1TrafficMatrix_a735e225e84efbeba494b4f5374958e6c}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_numNodes@{m\_numNodes}}
+\index{m\_numNodes@{m\_numNodes}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_numNodes}{m\_numNodes}}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+num\+Nodes = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_ac4c089a99c69ced57980dd3f6b89b638}\label{classmesh__sim_1_1TrafficMatrix_ac4c089a99c69ced57980dd3f6b89b638}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_tickS@{m\_tickS}}
+\index{m\_tickS@{m\_tickS}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_tickS}{m\_tickS}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+tickS = 0.\+1\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_a5cc00b6d88a38d10ec8ea8a304e24cea}\label{classmesh__sim_1_1TrafficMatrix_a5cc00b6d88a38d10ec8ea8a304e24cea}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_trafficCfg@{m\_trafficCfg}}
+\index{m\_trafficCfg@{m\_trafficCfg}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_trafficCfg}{m\_trafficCfg}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1TrafficConfig}{Traffic\+Config}} mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+traffic\+Cfg\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1TrafficMatrix_ad7424e791bdc3c1f4251adbe6315f945}\label{classmesh__sim_1_1TrafficMatrix_ad7424e791bdc3c1f4251adbe6315f945}} 
+\index{mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}!m\_uniformRng@{m\_uniformRng}}
+\index{m\_uniformRng@{m\_uniformRng}!mesh\_sim::TrafficMatrix@{mesh\_sim::TrafficMatrix}}
+\doxysubsubsection{\texorpdfstring{m\_uniformRng}{m\_uniformRng}}
+{\footnotesize\ttfamily ns3\+::\+Ptr$<$ns3\+::\+Uniform\+Random\+Variable$>$ mesh\+\_\+sim\+::\+Traffic\+Matrix\+::m\+\_\+uniform\+Rng\hspace{0.3cm}{\ttfamily [private]}}
+
+Description of what the method does.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Description of parameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Description of return value. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & Description of exception. \\
+\hline
+\end{DoxyExceptions}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/traffic-\/matrix.\+h\item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/traffic-\/matrix.\+cc\end{DoxyCompactItemize}
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/\mbox{\hyperlink{traffic-matrix_8h}{traffic-\/matrix.\+h}}\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/\mbox{\hyperlink{traffic-matrix_8cc}{traffic-\/matrix.\+cc}}\end{DoxyCompactItemize}

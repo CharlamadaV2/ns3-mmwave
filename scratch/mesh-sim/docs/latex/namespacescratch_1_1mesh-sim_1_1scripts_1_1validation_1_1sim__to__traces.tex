@@ -1,0 +1,216 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces}\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+dict\mbox{[}int, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a69241d4e988e0be15cb8118ce84613f8}{\+\_\+load\+\_\+node\+\_\+id\+\_\+map}} (Path seed\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Build the integer-\/node-\/\+ID → rab-\/label map from the snapshotted {\ttfamily nodes.\+json}. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4e201bc00793c77bf81e5a4bab4959b1}{\+\_\+read\+\_\+warmup\+\_\+s}} (Path seed\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Read the {\ttfamily warmup\+\_\+s} setting from a snapshotted {\ttfamily run.\+ini}. \end{DoxyCompactList}\item 
+pd.\+Data\+Frame \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_adffd6122be6eff68c69bb886ff410011}{\+\_\+convert\+\_\+one}} (Path csv\+\_\+path, str value\+\_\+col, str trace\+\_\+col, dict\mbox{[}int, str\mbox{]} node\+\_\+map, float warmup\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Convert one sim metric CSV into a normalised per-\/link Data\+Frame. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4813b4c3f1dafbe56751ae2fbedf8d65}{convert\+\_\+seed}} (Path seed\+\_\+dir, Path out\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Convert all metric CSVs for one seed directory into per-\/link trace CSVs. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a411139b112de4bbb551db7b3f6ffb74e}{convert\+\_\+scenario}} (Path scenario\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Convert all seed directories for one scenario into trace CSVs. \end{DoxyCompactList}\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a7b3fa36901380203d7e83c65761f1363}{convert\+\_\+batch}} (Path batch\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Convert all scenarios in a batch output directory. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a5a6e4a62fc3e3ff4cbedde577541db1c}{main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em CLI entry point for the sim-\/to-\/traces converter. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_ac05574c8bde32280b016da43a577efba}{\+\_\+\+METRIC\+\_\+\+SPECS}}
+\begin{DoxyCompactList}\small\item\em Mapping from sim CSV stem/column names to trace file names/column names. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_adffd6122be6eff68c69bb886ff410011}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_adffd6122be6eff68c69bb886ff410011}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!\_convert\_one@{\_convert\_one}}
+\index{\_convert\_one@{\_convert\_one}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{\_convert\_one()}{\_convert\_one()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+\_\+convert\+\_\+one (\begin{DoxyParamCaption}\item[{Path}]{csv\+\_\+path,  }\item[{str}]{value\+\_\+col,  }\item[{str}]{trace\+\_\+col,  }\item[{dict\mbox{[}int, str\mbox{]}}]{node\+\_\+map,  }\item[{float}]{warmup\+\_\+s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Convert one sim metric CSV into a normalised per-\/link Data\+Frame. 
+
+Steps performed\+:
+\begin{DoxyEnumerate}
+\item Guard against missing files or columns.
+\item Drop rows before {\ttfamily warmup\+\_\+s}.
+\item Map integer node IDs to rab labels; drop rows with unknown IDs.
+\item Reindex columns to match the trace CSV schema.
+\end{DoxyEnumerate}
+
+The output Data\+Frame always has columns\+: {\ttfamily sec}, {\ttfamily source}, {\ttfamily peer}, {\ttfamily tag\+\_\+local\+\_\+mac}, {\ttfamily tag\+\_\+sta\+\_\+mac}, {\ttfamily tag\+\_\+interface}, {\ttfamily $<$trace\+\_\+column$>$}. The MAC/interface columns are empty strings because sim output has no hardware-\/level identifiers; downstream tools handle their absence gracefully.
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+\_\+path} & Path to the sim metric CSV. \\
+\hline
+{\em value\+\_\+col} & Column in the CSV holding the numeric metric value. \\
+\hline
+{\em trace\+\_\+col} & Column name to use in the output trace Data\+Frame. \\
+\hline
+{\em node\+\_\+map} & Dict mapping integer node IDs to rab labels. \\
+\hline
+{\em warmup\+\_\+s} & Seconds to discard from the start of the trace. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Normalised Data\+Frame, or an empty Data\+Frame if the input is unusable. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a69241d4e988e0be15cb8118ce84613f8}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a69241d4e988e0be15cb8118ce84613f8}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!\_load\_node\_id\_map@{\_load\_node\_id\_map}}
+\index{\_load\_node\_id\_map@{\_load\_node\_id\_map}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{\_load\_node\_id\_map()}{\_load\_node\_id\_map()}}
+{\footnotesize\ttfamily  dict\mbox{[}int, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+\_\+load\+\_\+node\+\_\+id\+\_\+map (\begin{DoxyParamCaption}\item[{Path}]{seed\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Build the integer-\/node-\/\+ID → rab-\/label map from the snapshotted {\ttfamily nodes.\+json}. 
+
+The sim assigns node IDs by position in the {\ttfamily nodes.\+json} array, so index 0 maps to the first node spec\textquotesingle{}s {\ttfamily id} field.
+
+
+\begin{DoxyParams}{Parameters}
+{\em seed\+\_\+dir} & One seed output directory; {\ttfamily nodes.\+json} is read from its parent\textquotesingle{}s {\ttfamily inputs/} subdirectory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict {\ttfamily \{node\+\_\+id\+: rab\+\_\+label\+\_\+string\}}. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em File\+Not\+Found\+Error} & if {\ttfamily inputs/nodes.\+json} is absent. \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4e201bc00793c77bf81e5a4bab4959b1}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4e201bc00793c77bf81e5a4bab4959b1}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!\_read\_warmup\_s@{\_read\_warmup\_s}}
+\index{\_read\_warmup\_s@{\_read\_warmup\_s}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{\_read\_warmup\_s()}{\_read\_warmup\_s()}}
+{\footnotesize\ttfamily  float scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+\_\+read\+\_\+warmup\+\_\+s (\begin{DoxyParamCaption}\item[{Path}]{seed\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Read the {\ttfamily warmup\+\_\+s} setting from a snapshotted {\ttfamily run.\+ini}. 
+
+Returns 0.\+0 if the file is absent or the key is not in the {\ttfamily \mbox{[}scenario\mbox{]}} section, so callers can unconditionally subtract it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em seed\+\_\+dir} & One seed output directory; {\ttfamily run.\+ini} is read from its parent\textquotesingle{}s {\ttfamily inputs/} subdirectory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Warmup duration in seconds. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a7b3fa36901380203d7e83c65761f1363}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a7b3fa36901380203d7e83c65761f1363}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!convert\_batch@{convert\_batch}}
+\index{convert\_batch@{convert\_batch}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{convert\_batch()}{convert\_batch()}}
+{\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+convert\+\_\+batch (\begin{DoxyParamCaption}\item[{Path}]{batch\+\_\+root }\end{DoxyParamCaption})}
+
+
+
+Convert all scenarios in a batch output directory. 
+
+A directory qualifies as a scenario if it contains an {\ttfamily inputs/} subdirectory (written by \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1run__batch}{run\+\_\+batch}}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em batch\+\_\+root} & Top-\/level batch output directory. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a411139b112de4bbb551db7b3f6ffb74e}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a411139b112de4bbb551db7b3f6ffb74e}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!convert\_scenario@{convert\_scenario}}
+\index{convert\_scenario@{convert\_scenario}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{convert\_scenario()}{convert\_scenario()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+convert\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scenario\+\_\+dir }\end{DoxyParamCaption})}
+
+
+
+Convert all seed directories for one scenario into trace CSVs. 
+
+Discovers {\ttfamily seed-\/$\ast$} subdirectories, converts each via \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4813b4c3f1dafbe56751ae2fbedf8d65}{convert\+\_\+seed}}, and writes results under {\ttfamily $<$scenario\+\_\+dir$>$/sim\+\_\+traces/$<$seed$>$/}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scenario\+\_\+dir} & Top-\/level scenario output directory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Total number of trace CSV files written across all seeds. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4813b4c3f1dafbe56751ae2fbedf8d65}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a4813b4c3f1dafbe56751ae2fbedf8d65}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!convert\_seed@{convert\_seed}}
+\index{convert\_seed@{convert\_seed}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{convert\_seed()}{convert\_seed()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+convert\+\_\+seed (\begin{DoxyParamCaption}\item[{Path}]{seed\+\_\+dir,  }\item[{Path}]{out\+\_\+root }\end{DoxyParamCaption})}
+
+
+
+Convert all metric CSVs for one seed directory into per-\/link trace CSVs. 
+
+Iterates \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_ac05574c8bde32280b016da43a577efba}{\+\_\+\+METRIC\+\_\+\+SPECS}}, converts each metric, splits the result by {\ttfamily (source, peer)} pair, and writes one trace CSV per pair under {\ttfamily $<$out\+\_\+root$>$/csvs/$<$src$>$/bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em seed\+\_\+dir} & One seed output directory containing the sim metric CSVs. \\
+\hline
+{\em out\+\_\+root} & Destination root for the trace CSV tree. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Total number of trace CSV files written. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a5a6e4a62fc3e3ff4cbedde577541db1c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_a5a6e4a62fc3e3ff4cbedde577541db1c}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the sim-\/to-\/traces converter. 
+
+Converts all scenarios under the given batch root and prints a per-\/seed and per-\/scenario count of CSV files written.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & Argument list; defaults to {\ttfamily sys.\+argv\mbox{[}1\+:\mbox{]}} when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Always 0 (errors are printed to stderr but do not abort). 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_ac05574c8bde32280b016da43a577efba}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces_ac05574c8bde32280b016da43a577efba}} 
+\index{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}!\_METRIC\_SPECS@{\_METRIC\_SPECS}}
+\index{\_METRIC\_SPECS@{\_METRIC\_SPECS}!scratch.mesh-\/sim.scripts.validation.sim\_to\_traces@{scratch.mesh-\/sim.scripts.validation.sim\_to\_traces}}
+\doxysubsubsection{\texorpdfstring{\_METRIC\_SPECS}{\_METRIC\_SPECS}}
+{\footnotesize\ttfamily tuple scratch.\+mesh-\/sim.\+scripts.\+validation.\+sim\+\_\+to\+\_\+traces.\+\_\+\+METRIC\+\_\+\+SPECS\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  (}
+\DoxyCodeLine{2     (\textcolor{stringliteral}{"{}links"{}},    \textcolor{stringliteral}{"{}sinr\_db"{}},      \textcolor{stringliteral}{"{}snr"{}},  \textcolor{stringliteral}{"{}snr\_db"{}}),}
+\DoxyCodeLine{3     (\textcolor{stringliteral}{"{}mcs"{}},      \textcolor{stringliteral}{"{}mcs\_index"{}},    \textcolor{stringliteral}{"{}mcs"{}},  \textcolor{stringliteral}{"{}mcs\_tx"{}}),}
+\DoxyCodeLine{4     (\textcolor{stringliteral}{"{}rx-\/power"{}}, \textcolor{stringliteral}{"{}rx\_power\_dbm"{}}, \textcolor{stringliteral}{"{}rcpi"{}}, \textcolor{stringliteral}{"{}rcpi\_dbm"{}}),}
+\DoxyCodeLine{5 )}
+
+\end{DoxyCode}
+
+
+Mapping from sim CSV stem/column names to trace file names/column names. 
+
+Each entry is a tuple {\ttfamily (sim\+\_\+csv\+\_\+stem, sim\+\_\+value\+\_\+column, metric\+\_\+short, trace\+\_\+column)}\+:
+\begin{DoxyItemize}
+\item {\ttfamily sim\+\_\+csv\+\_\+stem} — basename of the sim output CSV (without {\ttfamily .csv}).
+\item {\ttfamily sim\+\_\+value\+\_\+column} — column in that CSV holding the metric value.
+\item {\ttfamily metric\+\_\+short} — short name used in the trace filename (e.\+g. {\ttfamily \char`\"{}snr\char`\"{}}).
+\item {\ttfamily trace\+\_\+column} — column name in the output trace CSV. 
+\end{DoxyItemize}

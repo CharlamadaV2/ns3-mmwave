@@ -1,14 +1,10 @@
 var searchData=
 [
-  ['parsecommandline_92',['ParseCommandLine',['../namespacemesh__sim.html#aa4b2ecd87a1d107fde936d7039ba25d3',1,'mesh_sim']]],
-  ['parseini_93',['parseIni',['../namespacemesh__sim.html#ada70fef996cce331ae7239ddbe118ddd',1,'mesh_sim']]],
-  ['parseseedlist_94',['parseSeedList',['../namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623',1,'mesh_sim']]],
-  ['path_95',['Path',['../classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths.html#a391456f3d71dcc38a36fec60b1bc7bf6',1,'scratch::mesh-sim::scripts::arpo_data::paths::DatasetPaths']]],
-  ['paths_2epy_96',['paths.py',['../paths_8py.html',1,'']]],
-  ['per_5fday_5fdir_97',['per_day_dir',['../classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths.html#a4928de6be67c8a8907c1aba8c49aaae1',1,'scratch::mesh-sim::scripts::arpo_data::paths::DatasetPaths']]],
-  ['plots_5fdir_98',['plots_dir',['../classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths_1_1DatasetPaths.html#a83332ecab03d1920f72705b10fd702f9',1,'scratch::mesh-sim::scripts::arpo_data::paths::DatasetPaths']]],
-  ['position_99',['Position',['../structmesh__sim_1_1Position.html',1,'mesh_sim']]],
-  ['position_100',['position',['../structmesh__sim_1_1NodeSpec.html#abbdb0e3af176cbb0aeb06710b9d41637',1,'mesh_sim::NodeSpec']]],
-  ['pressure_5fmbar_101',['pressure_mbar',['../structmesh__sim_1_1NyuChannelConfig.html#a956c2d021c475fa8fa9a42d6591305af',1,'mesh_sim::NyuChannelConfig']]],
-  ['progresslogger_102',['ProgressLogger',['../structmesh__sim_1_1ProgressLogger.html',1,'mesh_sim']]]
+  ['o2i_5floss_5ftype_333',['o2i_loss_type',['../structmesh__sim_1_1NyuChannelConfig.html#a13ff2998980012ed34d3812347a1f8a8',1,'mesh_sim::NyuChannelConfig']]],
+  ['off_5ftime_5fs_334',['off_time_s',['../structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9',1,'mesh_sim::TrafficConfig']]],
+  ['ok_335',['ok',['../structmesh__sim_1_1ValidationResult.html#a68d91f6b81fc7cf63bba5bf9dfbaf96c',1,'mesh_sim::ValidationResult']]],
+  ['on_5ftime_5fs_336',['on_time_s',['../structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249',1,'mesh_sim::TrafficConfig']]],
+  ['open_337',['Open',['../classmesh__sim_1_1VizWriter.html#af3224ecbd28665c5badae67974dfb8ce',1,'mesh_sim::VizWriter']]],
+  ['output_5fdir_338',['output_dir',['../structmesh__sim_1_1CliArgs.html#a2db95ee907a5216cb95249d46403de9b',1,'mesh_sim::CliArgs::output_dir()'],['../structmesh__sim_1_1SimConfig.html#a114989a068597302c49c37251a7ed0f5',1,'mesh_sim::SimConfig::output_dir()']]],
+  ['outputs_5froot_339',['OUTPUTS_ROOT',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs.html#a37e5f6920d0145c3b03ebcea9389d49e',1,'scratch::mesh-sim::scripts::validation::compare_runs']]]
 ];

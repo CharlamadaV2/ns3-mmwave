@@ -67,6 +67,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -77,69 +78,45 @@ $(function() {
 <p>Day-vs-day variance table from arpo_data's pairwise K-S CSV.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html">scratch.mesh-sim.scripts.arpo_data.multiday_variance</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad52c59c6defc6c2a0e4c6ecf0b6d20d5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multiday__variance_8py.html#ad52c59c6defc6c2a0e4c6ecf0b6d20d5">scratch.mesh-sim.scripts.arpo_data.multiday_variance.main</a> (list[str]|None argv=None)</td></tr>
-<tr class="memdesc:ad52c59c6defc6c2a0e4c6ecf0b6d20d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages command line interface parameters for creating tables.  <a href="multiday__variance_8py.html#ad52c59c6defc6c2a0e4c6ecf0b6d20d5">More...</a><br /></td></tr>
+<tr class="memitem:a7e382db8430d0a4e097d958a1e8cc609"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a7e382db8430d0a4e097d958a1e8cc609">scratch.mesh-sim.scripts.arpo_data.multiday_variance._fmt_day</a> (str day)</td></tr>
+<tr class="memdesc:a7e382db8430d0a4e097d958a1e8cc609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reformats the date of the scenario to month/day/year.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a7e382db8430d0a4e097d958a1e8cc609">More...</a><br /></td></tr>
+<tr class="separator:a7e382db8430d0a4e097d958a1e8cc609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22666effcb93696aca1f68948c302b65"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a22666effcb93696aca1f68948c302b65">scratch.mesh-sim.scripts.arpo_data.multiday_variance._render_table</a> (tuple[str,...] header, list[tuple[str,...]] body)</td></tr>
+<tr class="memdesc:a22666effcb93696aca1f68948c302b65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Joins header and each row in body together.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a22666effcb93696aca1f68948c302b65">More...</a><br /></td></tr>
+<tr class="separator:a22666effcb93696aca1f68948c302b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae903ef81ab7c3a120df9152a5f8bff1c"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ae903ef81ab7c3a120df9152a5f8bff1c">scratch.mesh-sim.scripts.arpo_data.multiday_variance._summary_table</a> (pd.DataFrame df, str unit)</td></tr>
+<tr class="memdesc:ae903ef81ab7c3a120df9152a5f8bff1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">One row per (family, link, day-pair), sorted by |Δmed| desc.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ae903ef81ab7c3a120df9152a5f8bff1c">More...</a><br /></td></tr>
+<tr class="separator:ae903ef81ab7c3a120df9152a5f8bff1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad95f32cb8780ff509f0548ca2d4997f7"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ad95f32cb8780ff509f0548ca2d4997f7">scratch.mesh-sim.scripts.arpo_data.multiday_variance._link_rollup</a> (pd.DataFrame df, str unit)</td></tr>
+<tr class="memdesc:ad95f32cb8780ff509f0548ca2d4997f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">per-link summary across families: how unstable is each link, on average?  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ad95f32cb8780ff509f0548ca2d4997f7">More...</a><br /></td></tr>
+<tr class="separator:ad95f32cb8780ff509f0548ca2d4997f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f79a497ccc2b3d7304b6e1c94fd3c8a"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a7f79a497ccc2b3d7304b6e1c94fd3c8a">scratch.mesh-sim.scripts.arpo_data.multiday_variance._family_rollup</a> (pd.DataFrame df, str unit)</td></tr>
+<tr class="memdesc:a7f79a497ccc2b3d7304b6e1c94fd3c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-family summary: which scenarios show the biggest day-to-day swings?  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a7f79a497ccc2b3d7304b6e1c94fd3c8a">More...</a><br /></td></tr>
+<tr class="separator:a7f79a497ccc2b3d7304b6e1c94fd3c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad52c59c6defc6c2a0e4c6ecf0b6d20d5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ad52c59c6defc6c2a0e4c6ecf0b6d20d5">scratch.mesh-sim.scripts.arpo_data.multiday_variance.main</a> (list[str]|None argv=None)</td></tr>
+<tr class="memdesc:ad52c59c6defc6c2a0e4c6ecf0b6d20d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages command line interface parameters for creating tables.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#ad52c59c6defc6c2a0e4c6ecf0b6d20d5">More...</a><br /></td></tr>
 <tr class="separator:ad52c59c6defc6c2a0e4c6ecf0b6d20d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a88fb8ee5daae3c42ece8bc39be37a774"><td class="memItemLeft" align="right" valign="top"><a id="a88fb8ee5daae3c42ece8bc39be37a774"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>scratch.mesh-sim.scripts.arpo_data.multiday_variance.REPO_ROOT</b> = Path(__file__).resolve().parents[2]</td></tr>
+<tr class="memitem:a88fb8ee5daae3c42ece8bc39be37a774"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a88fb8ee5daae3c42ece8bc39be37a774">scratch.mesh-sim.scripts.arpo_data.multiday_variance.REPO_ROOT</a> = Path(__file__).resolve().parents[2]</td></tr>
 <tr class="separator:a88fb8ee5daae3c42ece8bc39be37a774"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c3aa9138b2649babb72b6a753e110f2"><td class="memItemLeft" align="right" valign="top">tuple&#160;</td><td class="memItemRight" valign="bottom"><b>scratch.mesh-sim.scripts.arpo_data.multiday_variance.DEFAULT_KS_CSV</b></td></tr>
+<tr class="memitem:a8c3aa9138b2649babb72b6a753e110f2"><td class="memItemLeft" align="right" valign="top">tuple&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a8c3aa9138b2649babb72b6a753e110f2">scratch.mesh-sim.scripts.arpo_data.multiday_variance.DEFAULT_KS_CSV</a></td></tr>
 <tr class="separator:a8c3aa9138b2649babb72b6a753e110f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95f01168fa90bdfdc50e4cd654fe9ebc"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a95f01168fa90bdfdc50e4cd654fe9ebc">scratch.mesh-sim.scripts.arpo_data.multiday_variance._UNIT_BY_METRIC</a> = {&quot;snr&quot;: &quot;dB&quot;, &quot;rcpi&quot;: &quot;dB&quot;, &quot;mcs&quot;: &quot;&quot;, &quot;per&quot;: &quot;&quot;, &quot;throughput&quot;: &quot;Mbps&quot;}</td></tr>
+<tr class="separator:a95f01168fa90bdfdc50e4cd654fe9ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Day-vs-day variance table from arpo_data's pairwise K-S CSV. </p>
 <p>A command line interface that creates day-vs-day variance. The command line interface can take parameters change the metric, file paths, or to only show specific families </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="ad52c59c6defc6c2a0e4c6ecf0b6d20d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad52c59c6defc6c2a0e4c6ecf0b6d20d5">&#9670;&nbsp;</a></span>main()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> int scratch.mesh-sim.scripts.arpo_data.multiday_variance.main </td>
-          <td>(</td>
-          <td class="paramtype">list[str] | None &#160;</td>
-          <td class="paramname"><em>argv</em> = <code>None</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Manages command line interface parameters for creating tables. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">argv</td><td>List of parameters to be taken from the command line </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>On success returns 0, 1 if df is empty or csv is not found </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a8c3aa9138b2649babb72b6a753e110f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c3aa9138b2649babb72b6a753e110f2">&#9670;&nbsp;</a></span>DEFAULT_KS_CSV</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">tuple scratch.mesh-sim.scripts.arpo_data.multiday_variance.DEFAULT_KS_CSV</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;=  (REPO_ROOT / <span class="stringliteral">&quot;data&quot;</span> / <span class="stringliteral">&quot;arpo_extracted&quot;</span> / <span class="stringliteral">&quot;_plots&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;                  / <span class="stringliteral">&quot;multi_day&quot;</span> / <span class="stringliteral">&quot;_pairwise_ks.csv&quot;</span>)</div>
-</div><!-- fragment -->
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1

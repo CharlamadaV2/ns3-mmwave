@@ -7,23 +7,24 @@
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}\label{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}} 
-void {\bfseries Update} (uint32\+\_\+t num\+Nodes, const std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ \&results)
+void \mbox{\hyperlink{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}{Update}} (uint32\+\_\+t num\+Nodes, const std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ \&results)
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a7db6ae6d383fef99cf0660aaa662459b}\label{classmesh__sim_1_1LinkTable_a7db6ae6d383fef99cf0660aaa662459b}} 
-uint32\+\_\+t {\bfseries Num\+Nodes} () const
+uint32\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1LinkTable_a7db6ae6d383fef99cf0660aaa662459b}{Num\+Nodes}} () const
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a17a9e4dfbbdc13fa00a72124242305e8}\label{classmesh__sim_1_1LinkTable_a17a9e4dfbbdc13fa00a72124242305e8}} 
-const \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} \& {\bfseries Get} (uint32\+\_\+t i, uint32\+\_\+t j) const
+const \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} \& \mbox{\hyperlink{classmesh__sim_1_1LinkTable_a17a9e4dfbbdc13fa00a72124242305e8}{Get}} (uint32\+\_\+t i, uint32\+\_\+t j) const
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a989f3efca5f5c344b1113605680e9e1e}\label{classmesh__sim_1_1LinkTable_a989f3efca5f5c344b1113605680e9e1e}} 
-double {\bfseries Max\+Capacity} () const
+double \mbox{\hyperlink{classmesh__sim_1_1LinkTable_a989f3efca5f5c344b1113605680e9e1e}{Max\+Capacity}} () const
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a0d03b2a34e5dc2ced941b9b47c33edfc}\label{classmesh__sim_1_1LinkTable_a0d03b2a34e5dc2ced941b9b47c33edfc}} 
-uint32\+\_\+t {\bfseries Connected\+Link\+Count} (double sinr\+Threshold\+Db=-\/6.\+7) const
+uint32\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1LinkTable_a0d03b2a34e5dc2ced941b9b47c33edfc}{Connected\+Link\+Count}} (double sinr\+Threshold\+Db=-\/6.\+7) const
 \item 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_aae4e41485e676ef6d80244a65df1f903}\label{classmesh__sim_1_1LinkTable_aae4e41485e676ef6d80244a65df1f903}} 
-bool {\bfseries Is\+Connected} (uint32\+\_\+t i, uint32\+\_\+t j, double sinr\+Threshold\+Db=-\/6.\+7) const
+bool \mbox{\hyperlink{classmesh__sim_1_1LinkTable_aae4e41485e676ef6d80244a65df1f903}{Is\+Connected}} (uint32\+\_\+t i, uint32\+\_\+t j, double sinr\+Threshold\+Db=-\/6.\+7) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{classmesh__sim_1_1LinkTable_ab47b9f4bd29d7ac3ba9f8ef5183804f9}{m\+\_\+num\+Nodes}} = 0
+\item 
+std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkTable_ae1438ad5aec0807dfa9750f7140c29b4}{m\+\_\+table}}
 \end{DoxyCompactItemize}
 
 
@@ -45,7 +46,61 @@ Description of return value.
 \end{DoxyExceptions}
 
 
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a0d03b2a34e5dc2ced941b9b47c33edfc}\label{classmesh__sim_1_1LinkTable_a0d03b2a34e5dc2ced941b9b47c33edfc}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!ConnectedLinkCount@{ConnectedLinkCount}}
+\index{ConnectedLinkCount@{ConnectedLinkCount}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{ConnectedLinkCount()}{ConnectedLinkCount()}}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Link\+Table\+::\+Connected\+Link\+Count (\begin{DoxyParamCaption}\item[{double}]{sinr\+Threshold\+Db = {\ttfamily -\/6.7} }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a17a9e4dfbbdc13fa00a72124242305e8}\label{classmesh__sim_1_1LinkTable_a17a9e4dfbbdc13fa00a72124242305e8}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!Get@{Get}}
+\index{Get@{Get}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{Get()}{Get()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} \& mesh\+\_\+sim\+::\+Link\+Table\+::\+Get (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i,  }\item[{uint32\+\_\+t}]{j }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_aae4e41485e676ef6d80244a65df1f903}\label{classmesh__sim_1_1LinkTable_aae4e41485e676ef6d80244a65df1f903}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!IsConnected@{IsConnected}}
+\index{IsConnected@{IsConnected}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{IsConnected()}{IsConnected()}}
+{\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Link\+Table\+::\+Is\+Connected (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{i,  }\item[{uint32\+\_\+t}]{j,  }\item[{double}]{sinr\+Threshold\+Db = {\ttfamily -\/6.7} }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a989f3efca5f5c344b1113605680e9e1e}\label{classmesh__sim_1_1LinkTable_a989f3efca5f5c344b1113605680e9e1e}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!MaxCapacity@{MaxCapacity}}
+\index{MaxCapacity@{MaxCapacity}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{MaxCapacity()}{MaxCapacity()}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Table\+::\+Max\+Capacity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_a7db6ae6d383fef99cf0660aaa662459b}\label{classmesh__sim_1_1LinkTable_a7db6ae6d383fef99cf0660aaa662459b}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!NumNodes@{NumNodes}}
+\index{NumNodes@{NumNodes}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{NumNodes()}{NumNodes()}}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Link\+Table\+::\+Num\+Nodes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}\label{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!Update@{Update}}
+\index{Update@{Update}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Link\+Table\+::\+Update (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{num\+Nodes,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ \&}]{results }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_ab47b9f4bd29d7ac3ba9f8ef5183804f9}\label{classmesh__sim_1_1LinkTable_ab47b9f4bd29d7ac3ba9f8ef5183804f9}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!m\_numNodes@{m\_numNodes}}
+\index{m\_numNodes@{m\_numNodes}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{m\_numNodes}{m\_numNodes}}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Link\+Table\+::m\+\_\+num\+Nodes = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkTable_ae1438ad5aec0807dfa9750f7140c29b4}\label{classmesh__sim_1_1LinkTable_ae1438ad5aec0807dfa9750f7140c29b4}} 
+\index{mesh\_sim::LinkTable@{mesh\_sim::LinkTable}!m\_table@{m\_table}}
+\index{m\_table@{m\_table}!mesh\_sim::LinkTable@{mesh\_sim::LinkTable}}
+\doxysubsubsection{\texorpdfstring{m\_table}{m\_table}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}}$>$ $>$ mesh\+\_\+sim\+::\+Link\+Table\+::m\+\_\+table\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/table.\+h\item 
-/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/table.\+cc\end{DoxyCompactItemize}
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/\mbox{\hyperlink{link-table_8h}{link-\/table.\+h}}\item 
+/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/\mbox{\hyperlink{link-table_8cc}{link-\/table.\+cc}}\end{DoxyCompactItemize}

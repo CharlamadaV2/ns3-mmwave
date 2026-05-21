@@ -1,4 +1,18 @@
 var searchData=
 [
-  ['ext_5fwalls_302',['ext_walls',['../structmesh__sim_1_1BuildingSpec.html#a88fc8734273c0fca62936f4b9ed782b1',1,'mesh_sim::BuildingSpec']]]
+  ['data_5fdir_855',['DATA_DIR',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths.html#aca948fa37d8078c348649075fe251880',1,'scratch::mesh-sim::scripts::arpo_data::paths']]],
+  ['debug_5flinks_856',['debug_links',['../structmesh__sim_1_1CliArgs.html#a34ab4d431afe11e0c206aa6df3a40408',1,'mesh_sim::CliArgs']]],
+  ['default_857',['DEFAULT',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths.html#a2f78da34790e7ad7af1276f04643d23e',1,'scratch::mesh-sim::scripts::arpo_data::paths']]],
+  ['default_5fextract_5fdir_858',['DEFAULT_EXTRACT_DIR',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths.html#aca9a390dde96e7e08c3b595666faa61c',1,'scratch::mesh-sim::scripts::arpo_data::paths']]],
+  ['default_5fks_5fcsv_859',['DEFAULT_KS_CSV',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a8c3aa9138b2649babb72b6a753e110f2',1,'scratch::mesh-sim::scripts::arpo_data::multiday_variance']]],
+  ['default_5fscenarios_5fdir_860',['DEFAULT_SCENARIOS_DIR',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1run__batch.html#a908191f10ce0b28c9757e1a59ef13152',1,'scratch::mesh-sim::scripts::validation::run_batch']]],
+  ['default_5fseeds_861',['DEFAULT_SEEDS',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1run__batch.html#acd374bd7559b44b5f60db52611fc3184',1,'scratch::mesh-sim::scripts::validation::run_batch']]],
+  ['default_5fzip_5fpath_862',['DEFAULT_ZIP_PATH',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1paths.html#a45273fe2864ff6e58a7968e8d79edb56',1,'scratch::mesh-sim::scripts::arpo_data::paths']]],
+  ['delivered_5fmbps_863',['delivered_mbps',['../structmesh__sim_1_1FlowResult.html#abe21444b810036fb24443672f508f4a0',1,'mesh_sim::FlowResult']]],
+  ['delivered_5fsum_864',['delivered_sum',['../structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#ae4d271e01aa99b2c9111c456692ff28d',1,'mesh_sim::MetricsWriter::FlowStats']]],
+  ['demand_5fmbps_865',['demand_mbps',['../structmesh__sim_1_1Flow.html#accd345f898db9ad4f6ac5a5d6a3c9816',1,'mesh_sim::Flow::demand_mbps()'],['../structmesh__sim_1_1FlowResult.html#a03b3856fd5b166eec840792253d24dc7',1,'mesh_sim::FlowResult::demand_mbps()'],['../structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679',1,'mesh_sim::TrafficConfig::demand_mbps()']]],
+  ['demand_5fsum_866',['demand_sum',['../structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a500520c7017a771b8e9b58b6da9e7add',1,'mesh_sim::MetricsWriter::FlowStats']]],
+  ['distance_5fm_867',['distance_m',['../structmesh__sim_1_1LinkResult.html#a0f805500ff96006af714e42b2be88f49',1,'mesh_sim::LinkResult']]],
+  ['dst_868',['dst',['../structmesh__sim_1_1Flow.html#adacff1d0c3ef715072d43c2baefbea26',1,'mesh_sim::Flow::dst()'],['../structmesh__sim_1_1FlowResult.html#a671d64e1854438d9a7ed5463ac2c032b',1,'mesh_sim::FlowResult::dst()']]],
+  ['duration_5fs_869',['duration_s',['../structmesh__sim_1_1SimConfig.html#ab8dd75898df21622829cb205e3396968',1,'mesh_sim::SimConfig::duration_s()'],['../structmesh__sim_1_1ProgressLogger.html#abed35571192cd76946a4dee37c7128a0',1,'mesh_sim::ProgressLogger::duration_s()']]]
 ];

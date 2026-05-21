@@ -1,0 +1,44 @@
+\hypertarget{viz-writer_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/viz-\/writer.h File Reference}
+\label{viz-writer_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/viz-\/writer.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/viz-\/writer.h}}
+
+
+Viz\+Writer\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals.  
+
+
+{\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/eval/link-\/table.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/routing/mesh-\/router.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ns3/mobility-\/model.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for viz-\/writer.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{viz-writer_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{viz-writer_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmesh__sim_1_1VizWriter}{mesh\+\_\+sim\+::\+Viz\+Writer}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Viz\+Writer\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals. 
+
+Output files\+: positions.\+csv -- time\+\_\+s, node\+\_\+id, x, y, z, node\+\_\+type, active links.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, dist\+\_\+m, sinr\+\_\+db, condition, condition\+\_\+reason, capacity\+\_\+mbps, delivered\+\_\+mbps, hop\+\_\+count rx-\/power.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, rx\+\_\+power\+\_\+dbm mcs.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, mcs\+\_\+index, spectral\+\_\+eff flows.\+csv -- time\+\_\+s, src, dst, demand\+\_\+mbps, delivered\+\_\+mbps, latency\+\_\+ms, hop\+\_\+count, routable routes.\+csv -- time\+\_\+s, src, dst, path, bottleneck\+\_\+mbps, hop\+\_\+count, routable 

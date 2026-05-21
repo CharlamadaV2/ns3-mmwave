@@ -1,0 +1,104 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli}\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_ae60b64cc363fdd27504f3f565f78136b}{\+\_\+save}} (result, Path png\+\_\+path, Path$\vert$None csv\+\_\+path=None)
+\begin{DoxyCompactList}\small\item\em Save a figure (and an optional trace CSV) returned from a plot fn. \end{DoxyCompactList}\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aa786b86ecae5a115e179926745abbc3a}{\+\_\+save\+\_\+pairs}} (results, Path scen\+\_\+dir, str base\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Saves the (src, peer, fig, trace) tuples emitted by per-\/radio plot fns. \end{DoxyCompactList}\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_a32eee3c4188c061f4b920c4c3d47a9ab}{\+\_\+plot\+\_\+one}} (Path scen\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em plots different metrics for specific scenario of given day \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_af02fc347a42cd0fbaccf4362c53d039c}{\+\_\+cmd\+\_\+plot}} (argparse.\+Namespace args)
+\begin{DoxyCompactList}\small\item\em manages command line argument for multi or single plot generator \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aec6d2ce5b2e265c08b8cb984165611f7}{main}} ()
+\begin{DoxyCompactList}\small\item\em Takes command line arguements to interact with ARPO data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_af02fc347a42cd0fbaccf4362c53d039c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_af02fc347a42cd0fbaccf4362c53d039c}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}!\_cmd\_plot@{\_cmd\_plot}}
+\index{\_cmd\_plot@{\_cmd\_plot}!scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsubsection{\texorpdfstring{\_cmd\_plot()}{\_cmd\_plot()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+cmd\+\_\+plot (\begin{DoxyParamCaption}\item[{argparse.\+Namespace}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+manages command line argument for multi or single plot generator 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & contains argument for which scenario to plot or all scenarios. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success returns 0, while 1 for errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_a32eee3c4188c061f4b920c4c3d47a9ab}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_a32eee3c4188c061f4b920c4c3d47a9ab}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}!\_plot\_one@{\_plot\_one}}
+\index{\_plot\_one@{\_plot\_one}!scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsubsection{\texorpdfstring{\_plot\_one()}{\_plot\_one()}}
+{\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+plot\+\_\+one (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+plots different metrics for specific scenario of given day 
+
+
+\begin{DoxyParams}{Parameters}
+{\em scen\+\_\+dir} & directory path where scenario is stored \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_ae60b64cc363fdd27504f3f565f78136b}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_ae60b64cc363fdd27504f3f565f78136b}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}!\_save@{\_save}}
+\index{\_save@{\_save}!scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsubsection{\texorpdfstring{\_save()}{\_save()}}
+{\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+save (\begin{DoxyParamCaption}\item[{}]{result,  }\item[{Path}]{png\+\_\+path,  }\item[{Path $\vert$ None }]{csv\+\_\+path = {\ttfamily None} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Save a figure (and an optional trace CSV) returned from a plot fn. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em result} & contains figure and trace of specific scenario \\
+\hline
+{\em png\+\_\+path} & path to store the resultant figure \\
+\hline
+{\em csv\+\_\+path} & path to store the resultant trace\\
+\hline
+\end{DoxyParams}
+Plot fns may return either {\ttfamily Figure} or {\ttfamily (Figure, trace\+\_\+df)}. The PNG lands at {\ttfamily png\+\_\+path}; if a trace is present it goes to {\ttfamily csv\+\_\+path} when supplied, otherwise next to the PNG as {\ttfamily $<$stem$>$\+\_\+trace.\+csv}. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aa786b86ecae5a115e179926745abbc3a}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aa786b86ecae5a115e179926745abbc3a}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}!\_save\_pairs@{\_save\_pairs}}
+\index{\_save\_pairs@{\_save\_pairs}!scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsubsection{\texorpdfstring{\_save\_pairs()}{\_save\_pairs()}}
+{\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+save\+\_\+pairs (\begin{DoxyParamCaption}\item[{}]{results,  }\item[{Path}]{scen\+\_\+dir,  }\item[{str}]{base\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Saves the (src, peer, fig, trace) tuples emitted by per-\/radio plot fns. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em results} & contains src, peer, fig, and trace tuples produced by per-\/radio plot \\
+\hline
+{\em scen\+\_\+dir} & directory path where scenario is stored \\
+\hline
+{\em base\+\_\+name} & name of the bh2 metric\\
+\hline
+\end{DoxyParams}
+PNGs land under {\ttfamily pngs/$<$src$>$/} and traces under {\ttfamily csvs/$<$src$>$/} so the outputs for each source rab live together. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aec6d2ce5b2e265c08b8cb984165611f7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aec6d2ce5b2e265c08b8cb984165611f7}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.arpo\_data.cli@{scratch.mesh-\/sim.scripts.arpo\_data.cli}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Takes command line arguements to interact with ARPO data. 
+
+There are three arguments to be taken\+: \char`\"{}extract\char`\"{}, \char`\"{}plot\char`\"{}, or \char`\"{}multi-\/day\char`\"{} The extract arg will execute the extraction script The plot arg will execute the \+\_\+com\+\_\+plot function passing args for all or specific scenario The multi-\/day will execute the \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day}{multi\+\_\+day}} script
+
+\begin{DoxyReturn}{Returns}
+result of \char`\"{}extract\char`\"{}, \char`\"{}\+\_\+cmd\+\_\+plot\char`\"{}, or \char`\"{}multi\+\_\+day\char`\"{} on success, returns 1 if the argument does not exist 
+\end{DoxyReturn}

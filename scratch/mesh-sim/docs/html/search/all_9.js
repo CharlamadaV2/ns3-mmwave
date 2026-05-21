@@ -1,10 +1,22 @@
 var searchData=
 [
-  ['id_47',['id',['../structmesh__sim_1_1NodeSpec.html#a950262852492aff9f300ec5ed3a40704',1,'mesh_sim::NodeSpec::id()'],['../structmesh__sim_1_1BuildingSpec.html#add6b7cab774447938546e243930c804d',1,'mesh_sim::BuildingSpec::id()']]],
-  ['iniget_48',['iniGet',['../namespacemesh__sim.html#a4265a363240776b14f624c437b274c61',1,'mesh_sim']]],
-  ['inigetbool_49',['iniGetBool',['../namespacemesh__sim.html#ae04531924c26c3e87354a22203eaaa2e',1,'mesh_sim']]],
-  ['inimap_50',['IniMap',['../namespacemesh__sim.html#a187f939986d0aa62413484ee399ec184',1,'mesh_sim']]],
-  ['initialize_51',['Initialize',['../classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683',1,'mesh_sim::TrafficMatrix']]],
-  ['io_2f_52',['io/',['../md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_CLAUDE.html',1,'']]],
-  ['is_5fmobile_53',['is_mobile',['../classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion.html#ae1a03addf80ab57816b29b51be5d3019',1,'scratch::mesh-sim::scripts::validation::scenario_fidelity::NodeMotion']]]
+  ['id_212',['id',['../structmesh__sim_1_1NodeSpec.html#a950262852492aff9f300ec5ed3a40704',1,'mesh_sim::NodeSpec::id()'],['../structmesh__sim_1_1BuildingSpec.html#add6b7cab774447938546e243930c804d',1,'mesh_sim::BuildingSpec::id()']]],
+  ['in_5fon_5fphase_213',['in_on_phase',['../structmesh__sim_1_1Flow.html#a485fea50a3c69afb13a19d0bfb8fa9ec',1,'mesh_sim::Flow']]],
+  ['ini_2dparser_2ecc_214',['ini-parser.cc',['../ini-parser_8cc.html',1,'']]],
+  ['ini_2dparser_2eh_215',['ini-parser.h',['../ini-parser_8h.html',1,'']]],
+  ['iniget_216',['iniGet',['../namespacemesh__sim.html#a4265a363240776b14f624c437b274c61',1,'mesh_sim']]],
+  ['inigetbool_217',['iniGetBool',['../namespacemesh__sim.html#ae04531924c26c3e87354a22203eaaa2e',1,'mesh_sim']]],
+  ['inimap_218',['IniMap',['../namespacemesh__sim.html#a187f939986d0aa62413484ee399ec184',1,'mesh_sim']]],
+  ['initallpairs_219',['InitAllPairs',['../classmesh__sim_1_1TrafficMatrix.html#a909202facea0da1000232026e6177949',1,'mesh_sim::TrafficMatrix']]],
+  ['initgateway_220',['InitGateway',['../classmesh__sim_1_1TrafficMatrix.html#a98dc9cd9637de63d708fe5514ba65206',1,'mesh_sim::TrafficMatrix']]],
+  ['initialize_221',['Initialize',['../classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683',1,'mesh_sim::TrafficMatrix']]],
+  ['initrandompairs_222',['InitRandomPairs',['../classmesh__sim_1_1TrafficMatrix.html#af8880d1b1509aea9ebe5154acf98c86d',1,'mesh_sim::TrafficMatrix']]],
+  ['installmobilityconstantvelocity_223',['InstallMobilityConstantVelocity',['../classmesh__sim_1_1TopologyBuilder.html#a28d6212f456c6db5aa6532e0fbec9cd7',1,'mesh_sim::TopologyBuilder']]],
+  ['installmobilityfixed_224',['InstallMobilityFixed',['../classmesh__sim_1_1TopologyBuilder.html#ab0e079b00d134a82fec8d3dcb394e22c',1,'mesh_sim::TopologyBuilder']]],
+  ['installmobilityrandomwalk_225',['InstallMobilityRandomWalk',['../classmesh__sim_1_1TopologyBuilder.html#ae7cdfe8d79d68709a60274919c753b9f',1,'mesh_sim::TopologyBuilder']]],
+  ['installmobilitywaypoint_226',['InstallMobilityWaypoint',['../classmesh__sim_1_1TopologyBuilder.html#a32700d192e42c7e629ff99726d5b9b16',1,'mesh_sim::TopologyBuilder']]],
+  ['interval_5fticks_227',['interval_ticks',['../structmesh__sim_1_1ProgressLogger.html#a9e6e0fa38b7253148ef42ab7e734bc3b',1,'mesh_sim::ProgressLogger']]],
+  ['is_5flos_228',['is_los',['../structmesh__sim_1_1LinkResult.html#a9018ba829e5e79ec4f5b965115d79141',1,'mesh_sim::LinkResult']]],
+  ['is_5fmobile_229',['is_mobile',['../classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion.html#ae1a03addf80ab57816b29b51be5d3019',1,'scratch::mesh-sim::scripts::validation::scenario_fidelity::NodeMotion']]],
+  ['isconnected_230',['IsConnected',['../classmesh__sim_1_1LinkTable.html#aae4e41485e676ef6d80244a65df1f903',1,'mesh_sim::LinkTable']]]
 ];

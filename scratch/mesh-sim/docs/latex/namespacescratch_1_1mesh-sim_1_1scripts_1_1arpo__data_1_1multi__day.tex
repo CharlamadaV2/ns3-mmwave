@@ -1,0 +1,320 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day}\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}
+\begin{DoxyCompactList}\small\item\em Specification for loading and rendering one radio metric. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}
+\begin{DoxyCompactList}\small\item\em All pooled samples for one (family, day, link, metric) combination. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+tuple\mbox{[}str, str\mbox{]}$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a985c7bbe01a9ed8da783b8fcb7e9abdb}{\+\_\+parse\+\_\+scenario}} (str name)
+\begin{DoxyCompactList}\small\item\em Parse a scenario name into its family and date components. \end{DoxyCompactList}\item 
+dict\mbox{[}str, dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a9cbbb5fe41095ba630ce514887532ff1}{\+\_\+scenarios\+\_\+by\+\_\+family}} (Path per\+\_\+day\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Group scenario directories under a per-\/day root by family and date. \end{DoxyCompactList}\item 
+dict\mbox{[}tuple\mbox{[}str, str, str, str\mbox{]}, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8b9997a6932d0af1888918e7f2945af3}{\+\_\+load\+\_\+traces\+\_\+for\+\_\+family}} (dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]} days)
+\begin{DoxyCompactList}\small\item\em Load and pool trace CSVs across all scenarios for one family. \end{DoxyCompactList}\item 
+dict \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2d96dd6eaaf290eb6bbb48df6347b6c3}{\+\_\+summary}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Compute quantile summary statistics for an array of values. \end{DoxyCompactList}\item 
+tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ae63443213ea5f0428b601243f1c683ed}{\+\_\+ecdf}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Compute the empirical CDF of a sample array. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_aaa0d2c89085334d215e55d0367ffea5c}{\+\_\+ks\+\_\+2samp}} (np.\+ndarray a, np.\+ndarray b)
+\begin{DoxyCompactList}\small\item\em Compute the two-\/sample Kolmogorov-\/\+Smirnov statistic without scipy. \end{DoxyCompactList}\item 
+plt.\+Figure \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_adf099d960ce8144a7a415317959fd03d}{\+\_\+plot\+\_\+ecdfs}} (str family, str src, str peer, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} metric, dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}\mbox{]} bags\+\_\+by\+\_\+day, float$\vert$None ks\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Metric unit strings for axis and legend annotation. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a6a28845bd619766b2ba15b21c3e74776}{\+\_\+fmt\+\_\+day}} (str day)
+\begin{DoxyCompactList}\small\item\em Format an 8-\/digit date string as {\ttfamily MM/\+DD/\+YYYY} for display. \end{DoxyCompactList}\item 
+tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a609a778db51740e3f382851719215734}{run\+\_\+multi\+\_\+day}} (Path per\+\_\+day\+\_\+root, Path multi\+\_\+day\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Run the full multi-\/day analysis and write all output files. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ab3f446623d746d7e4fcffb2c289647d7}{multi\+\_\+day}} ()
+\begin{DoxyCompactList}\small\item\em CLI entry point for the {\ttfamily multi-\/day} subcommand. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_af01dcd89eb4732822bb63fc405cf2861}{\+\_\+\+SUFFIX\+\_\+\+RE}} = re.\+compile(r\char`\"{}\+\_\+(?\+:baseline\+\_\+\textbackslash{}d+\+\_\+)?(\textbackslash{}d\{8\})\$\char`\"{})
+\begin{DoxyCompactList}\small\item\em Regex matching the date suffix of a scenario directory name. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8db72746083c42f969ebdabf0f888792}{\+\_\+\+TRACE\+\_\+\+RE}} = re.\+compile(r\char`\"{}$^\wedge$bh2\+\_\+(\mbox{[}a-\/z\mbox{]}+)\+\_\+\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+to\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+trace\textbackslash{}.\+csv\$\char`\"{})
+\begin{DoxyCompactList}\small\item\em Regex matching a per-\/source trace CSV filename. \end{DoxyCompactList}\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a13e82ee148c957026abdb35016736a9c}{\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+PREFIX}} = \{m.\+prefix\+: m for m in \+\_\+\+METRICS\}
+\begin{DoxyCompactList}\small\item\em All supported backhaul metrics, in display order. \end{DoxyCompactList}\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a3dd3c2c3de5adcf743a2db329e0b17c7}{\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+SHORT}} = \{m.\+short\+: m for m in \+\_\+\+METRICS\}
+\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2e78952a1e299dc124d2e122076f4bf6}{\+\_\+\+MIN\+\_\+\+SAMPLES\+\_\+\+PER\+\_\+\+DAY}} = 100
+\begin{DoxyCompactList}\small\item\em Minimum samples per day for a bag to be included in ECDF/\+K-\/S analysis. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ae63443213ea5f0428b601243f1c683ed}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ae63443213ea5f0428b601243f1c683ed}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_ecdf@{\_ecdf}}
+\index{\_ecdf@{\_ecdf}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_ecdf()}{\_ecdf()}}
+{\footnotesize\ttfamily  tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+ecdf (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the empirical CDF of a sample array. 
+
+Uses a step ECDF\+: x is the sorted data; y(i) = (i+1)/n.
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & 1-\/D numeric array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (x, y)} of sorted values and their cumulative probabilities. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a6a28845bd619766b2ba15b21c3e74776}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a6a28845bd619766b2ba15b21c3e74776}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_fmt\_day@{\_fmt\_day}}
+\index{\_fmt\_day@{\_fmt\_day}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_fmt\_day()}{\_fmt\_day()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+fmt\+\_\+day (\begin{DoxyParamCaption}\item[{str}]{day }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format an 8-\/digit date string as {\ttfamily MM/\+DD/\+YYYY} for display. 
+
+Falls back to the raw string if it does not match the expected format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em day} & 8-\/character string such as {\ttfamily \char`\"{}04162026\char`\"{}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted string such as {\ttfamily \char`\"{}04/16/2026\char`\"{}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_aaa0d2c89085334d215e55d0367ffea5c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_aaa0d2c89085334d215e55d0367ffea5c}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_ks\_2samp@{\_ks\_2samp}}
+\index{\_ks\_2samp@{\_ks\_2samp}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_ks\_2samp()}{\_ks\_2samp()}}
+{\footnotesize\ttfamily  float scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+ks\+\_\+2samp (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{a,  }\item[{np.\+ndarray}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the two-\/sample Kolmogorov-\/\+Smirnov statistic without scipy. 
+
+Evaluates {\ttfamily max $\vert$\+F\+\_\+a(x) − F\+\_\+b(x)$\vert$} over the joint support by merging both sorted arrays and using binary search to evaluate each empirical CDF.
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & First sample array. \\
+\hline
+{\em b} & Second sample array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+K-\/S statistic in \mbox{[}0, 1\mbox{]}; larger values indicate greater distributional distance between the two days. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8b9997a6932d0af1888918e7f2945af3}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8b9997a6932d0af1888918e7f2945af3}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_load\_traces\_for\_family@{\_load\_traces\_for\_family}}
+\index{\_load\_traces\_for\_family@{\_load\_traces\_for\_family}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_load\_traces\_for\_family()}{\_load\_traces\_for\_family()}}
+{\footnotesize\ttfamily  dict\mbox{[}tuple\mbox{[}str, str, str, str\mbox{]}, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+load\+\_\+traces\+\_\+for\+\_\+family (\begin{DoxyParamCaption}\item[{dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]}}]{days }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Load and pool trace CSVs across all scenarios for one family. 
+
+Iterates every per-\/day directory, finds trace CSVs matching \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8db72746083c42f969ebdabf0f888792}{\+\_\+\+TRACE\+\_\+\+RE}}, and accumulates samples into \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}} objects keyed by {\ttfamily (day, src, peer, metric\+\_\+short)}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em days} & Mapping {\ttfamily \{date\+\_\+str\+: \mbox{[}scenario\+\_\+dir, ...\mbox{]}\}} for one family. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict keyed by {\ttfamily (day, src\+\_\+rab, peer\+\_\+rab, metric\+\_\+short)} → \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a985c7bbe01a9ed8da783b8fcb7e9abdb}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a985c7bbe01a9ed8da783b8fcb7e9abdb}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_parse\_scenario@{\_parse\_scenario}}
+\index{\_parse\_scenario@{\_parse\_scenario}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_parse\_scenario()}{\_parse\_scenario()}}
+{\footnotesize\ttfamily  tuple\mbox{[}str, str\mbox{]} $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+parse\+\_\+scenario (\begin{DoxyParamCaption}\item[{str}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Parse a scenario name into its family and date components. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Scenario directory name, e.\+g. {\ttfamily \char`\"{}1-\/1\+\_\+static\+\_\+baseline\+\_\+2\+\_\+04162026\char`\"{}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily (family, date\+\_\+str)} tuple such as {\ttfamily (\char`\"{}1-\/1\+\_\+static\char`\"{}, \char`\"{}04162026\char`\"{})}, or {\ttfamily None} if the name does not match the expected pattern. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_adf099d960ce8144a7a415317959fd03d}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_adf099d960ce8144a7a415317959fd03d}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_plot\_ecdfs@{\_plot\_ecdfs}}
+\index{\_plot\_ecdfs@{\_plot\_ecdfs}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_plot\_ecdfs()}{\_plot\_ecdfs()}}
+{\footnotesize\ttfamily  plt.\+Figure scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+plot\+\_\+ecdfs (\begin{DoxyParamCaption}\item[{str}]{family,  }\item[{str}]{src,  }\item[{str}]{peer,  }\item[{\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}}}]{metric,  }\item[{dict\mbox{[}str, \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}\mbox{]}}]{bags\+\_\+by\+\_\+day,  }\item[{float $\vert$ None}]{ks\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Metric unit strings for axis and legend annotation. 
+
+Render an ECDF overlay figure for one (family, link, metric) combination.
+
+One step-\/curve is drawn per day, with a vertical dotted line at the median. A subtitle line shows the median delta and, for two-\/day comparisons, the K-\/S statistic.
+
+
+\begin{DoxyParams}{Parameters}
+{\em family} & Scenario family name (used in the title). \\
+\hline
+{\em src} & Source rab hostname. \\
+\hline
+{\em peer} & Peer rab hostname. \\
+\hline
+{\em metric} & \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec}{\+\_\+\+Metric\+Spec}} describing the metric being plotted. \\
+\hline
+{\em bags\+\_\+by\+\_\+day} & Mapping from date string to \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}}. \\
+\hline
+{\em ks\+\_\+value} & Pre-\/computed K-\/S statistic to annotate, or {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matplotlib Figure object (caller is responsible for saving/closing). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a9cbbb5fe41095ba630ce514887532ff1}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a9cbbb5fe41095ba630ce514887532ff1}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_scenarios\_by\_family@{\_scenarios\_by\_family}}
+\index{\_scenarios\_by\_family@{\_scenarios\_by\_family}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_scenarios\_by\_family()}{\_scenarios\_by\_family()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+scenarios\+\_\+by\+\_\+family (\begin{DoxyParamCaption}\item[{Path}]{per\+\_\+day\+\_\+root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Group scenario directories under a per-\/day root by family and date. 
+
+Scenarios listed in KNOWN\+\_\+\+BAD\+\_\+\+SCENARIOS are silently excluded.
+
+
+\begin{DoxyParams}{Parameters}
+{\em per\+\_\+day\+\_\+root} & Root directory produced by the {\ttfamily plot} subcommand. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Nested mapping {\ttfamily \{family\+: \{date\+\_\+str\+: \mbox{[}scenario\+\_\+dir, ...\mbox{]}\}\}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2d96dd6eaaf290eb6bbb48df6347b6c3}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2d96dd6eaaf290eb6bbb48df6347b6c3}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_summary@{\_summary}}
+\index{\_summary@{\_summary}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_summary()}{\_summary()}}
+{\footnotesize\ttfamily  dict scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+summary (\begin{DoxyParamCaption}\item[{np.\+ndarray}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute quantile summary statistics for an array of values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em values} & 1-\/D numeric array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict with keys {\ttfamily n\+\_\+samples}, {\ttfamily mean}, {\ttfamily std}, {\ttfamily min}, {\ttfamily q05}, {\ttfamily q25}, {\ttfamily median}, {\ttfamily q75}, {\ttfamily q95}, {\ttfamily max}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ab3f446623d746d7e4fcffb2c289647d7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ab3f446623d746d7e4fcffb2c289647d7}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!multi\_day@{multi\_day}}
+\index{multi\_day@{multi\_day}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{multi\_day()}{multi\_day()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the {\ttfamily multi-\/day} subcommand. 
+
+Delegates to \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a609a778db51740e3f382851719215734}{run\+\_\+multi\+\_\+day}} using the default PER\+\_\+\+DAY\+\_\+\+DIR and MULTI\+\_\+\+DAY\+\_\+\+DIR paths.
+
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a609a778db51740e3f382851719215734}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a609a778db51740e3f382851719215734}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!run\_multi\_day@{run\_multi\_day}}
+\index{run\_multi\_day@{run\_multi\_day}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{run\_multi\_day()}{run\_multi\_day()}}
+{\footnotesize\ttfamily  tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day (\begin{DoxyParamCaption}\item[{Path}]{per\+\_\+day\+\_\+root,  }\item[{Path}]{multi\+\_\+day\+\_\+root }\end{DoxyParamCaption})}
+
+
+
+Run the full multi-\/day analysis and write all output files. 
+
+For each scenario family that has at least two days of data\+:
+\begin{DoxyEnumerate}
+\item Pool trace CSVs into \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{\+\_\+\+Day\+Bag}} objects via \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8b9997a6932d0af1888918e7f2945af3}{\+\_\+load\+\_\+traces\+\_\+for\+\_\+family}}.
+\item Compute quantile summaries for {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}.
+\item Compute K-\/S statistics for every day pair for {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}.
+\item Render and save an ECDF overlay PNG per (link, metric).
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em per\+\_\+day\+\_\+root} & Directory of per-\/day plot output (produced by {\ttfamily plot}). \\
+\hline
+{\em multi\+\_\+day\+\_\+root} & Output directory for multi-\/day results. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tuple {\ttfamily (per\+\_\+day\+\_\+rows, pairwise\+\_\+rows)} of the raw dicts written to CSV, useful for testing or downstream processing. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em File\+Not\+Found\+Error} & if {\ttfamily per\+\_\+day\+\_\+root} does not exist. \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a13e82ee148c957026abdb35016736a9c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a13e82ee148c957026abdb35016736a9c}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_METRICS\_BY\_PREFIX@{\_METRICS\_BY\_PREFIX}}
+\index{\_METRICS\_BY\_PREFIX@{\_METRICS\_BY\_PREFIX}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_METRICS\_BY\_PREFIX}{\_METRICS\_BY\_PREFIX}}
+{\footnotesize\ttfamily dictionary scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+PREFIX = \{m.\+prefix\+: m for m in \+\_\+\+METRICS\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+All supported backhaul metrics, in display order. 
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a3dd3c2c3de5adcf743a2db329e0b17c7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a3dd3c2c3de5adcf743a2db329e0b17c7}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_METRICS\_BY\_SHORT@{\_METRICS\_BY\_SHORT}}
+\index{\_METRICS\_BY\_SHORT@{\_METRICS\_BY\_SHORT}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_METRICS\_BY\_SHORT}{\_METRICS\_BY\_SHORT}}
+{\footnotesize\ttfamily dictionary scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+SHORT = \{m.\+short\+: m for m in \+\_\+\+METRICS\}\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2e78952a1e299dc124d2e122076f4bf6}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2e78952a1e299dc124d2e122076f4bf6}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_MIN\_SAMPLES\_PER\_DAY@{\_MIN\_SAMPLES\_PER\_DAY}}
+\index{\_MIN\_SAMPLES\_PER\_DAY@{\_MIN\_SAMPLES\_PER\_DAY}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_MIN\_SAMPLES\_PER\_DAY}{\_MIN\_SAMPLES\_PER\_DAY}}
+{\footnotesize\ttfamily int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+MIN\+\_\+\+SAMPLES\+\_\+\+PER\+\_\+\+DAY = 100\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Minimum samples per day for a bag to be included in ECDF/\+K-\/S analysis. 
+
+Bags below this threshold produce unreliable ECDFs and noisy K-\/S statistics. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_af01dcd89eb4732822bb63fc405cf2861}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_af01dcd89eb4732822bb63fc405cf2861}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_SUFFIX\_RE@{\_SUFFIX\_RE}}
+\index{\_SUFFIX\_RE@{\_SUFFIX\_RE}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_SUFFIX\_RE}{\_SUFFIX\_RE}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+SUFFIX\+\_\+\+RE = re.\+compile(r\char`\"{}\+\_\+(?\+:baseline\+\_\+\textbackslash{}d+\+\_\+)?(\textbackslash{}d\{8\})\$\char`\"{})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Regex matching the date suffix of a scenario directory name. 
+
+Handles two naming conventions\+:
+\begin{DoxyItemize}
+\item {\ttfamily $<$family$>$\+\_\+$<$MMDDYYYY$>$}
+\item {\ttfamily $<$family$>$\+\_\+baseline\+\_\+$<$N$>$\+\_\+$<$MMDDYYYY$>$} 
+\end{DoxyItemize}\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8db72746083c42f969ebdabf0f888792}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8db72746083c42f969ebdabf0f888792}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}!\_TRACE\_RE@{\_TRACE\_RE}}
+\index{\_TRACE\_RE@{\_TRACE\_RE}!scratch.mesh-\/sim.scripts.arpo\_data.multi\_day@{scratch.mesh-\/sim.scripts.arpo\_data.multi\_day}}
+\doxysubsubsection{\texorpdfstring{\_TRACE\_RE}{\_TRACE\_RE}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+TRACE\+\_\+\+RE = re.\+compile(r\char`\"{}$^\wedge$bh2\+\_\+(\mbox{[}a-\/z\mbox{]}+)\+\_\+\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+to\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+trace\textbackslash{}.\+csv\$\char`\"{})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Regex matching a per-\/source trace CSV filename. 
+
+Expected form\+: {\ttfamily bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv} 

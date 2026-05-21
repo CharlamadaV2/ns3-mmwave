@@ -1,0 +1,363 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs}\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}
+\begin{DoxyCompactList}\small\item\em Aggregated validation results for one batch run. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac83bcb90c421631e22472938875ed690}{\+\_\+read\+\_\+run\+\_\+ini}} (Path ini\+\_\+path)
+\begin{DoxyCompactList}\small\item\em Parse a {\ttfamily run.\+ini} file and return its key-\/value pairs as a flat dict. \end{DoxyCompactList}\item 
+dict\mbox{[}str, float$\vert$str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_adc6dce015020f8f460b5470e7eab787d}{\+\_\+sniff\+\_\+batch\+\_\+config}} (Path batch\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Sniff channel model and gain/power settings from the first scenario\textquotesingle{}s {\ttfamily run.\+ini}. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ada3ca62798f0a8de3e39647fbaaac275}{\+\_\+classify}} (str src, str peer)
+\begin{DoxyCompactList}\small\item\em Classify a link as {\ttfamily \char`\"{}close\char`\"{}} or {\ttfamily \char`\"{}far\char`\"{}} based on whether rab3 is involved. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a8b3d09e7a22b4151bb9b2a2f7f1fcac5}{\+\_\+batch\+\_\+label}} (Path batch\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Derive a compact run label from the batch directory name. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_afd548e87ba1eaefe2999f6b2e61fca23}{\+\_\+summarize\+\_\+batch}} (Path batch\+\_\+dir, str metric)
+\begin{DoxyCompactList}\small\item\em Summarise one batch\textquotesingle{}s validation results into a \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}. \end{DoxyCompactList}\item 
+list\mbox{[}Path\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aff86e490702bb7fa2844300253696d54}{\+\_\+discover\+\_\+batches}} (Path root)
+\begin{DoxyCompactList}\small\item\em Recursively discover all batch directories under a root. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aca9f59fb811e68fb24dcb512b7cb86a3}{\+\_\+fmt}} (float v, int digits=2)
+\begin{DoxyCompactList}\small\item\em Format a float for table display, returning {\ttfamily \char`\"{}—\char`\"{}} for non-\/finite values. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_af2ba574206d0233ef146e0b452bcfc4e}{\+\_\+render\+\_\+table}} (tuple\mbox{[}str,...\mbox{]} header, list\mbox{[}tuple\mbox{[}str,...\mbox{]}\mbox{]} body)
+\begin{DoxyCompactList}\small\item\em Render a plain-\/text fixed-\/width table. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_abf3a77c16faf663314e2f6ab8918aedd}{\+\_\+render\+\_\+main}} (list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]} rows)
+\begin{DoxyCompactList}\small\item\em Render the top-\/level batch summary table. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a78b4b25bebb6b26d72c37333f1c856c5}{\+\_\+render\+\_\+link\+\_\+class}} (list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]} rows)
+\begin{DoxyCompactList}\small\item\em Render the close-\/vs-\/far link-\/class breakdown table. \end{DoxyCompactList}\item 
+list\mbox{[}str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a91129f8ebcc729d7f187ddf86c4764b7}{\+\_\+scenario\+\_\+order}} (list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]} rows)
+\begin{DoxyCompactList}\small\item\em Collect the union of all field-\/scenario names across all batches, sorted. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a891a8b8fe3627bdf55ecec2772d9fc66}{\+\_\+render\+\_\+per\+\_\+scenario}} (list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]} rows, picker, str value\+\_\+suffix, int digits=2)
+\begin{DoxyCompactList}\small\item\em Render a per-\/scenario cross-\/batch comparison table. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac5fffa58508694c666b9366d692821c5}{main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em CLI entry point for the cross-\/batch comparison tool. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a0f3e6ce746e59f086235b006b1214d68}{REPO\+\_\+\+ROOT}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\item 
+string \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a37e5f6920d0145c3b03ebcea9389d49e}{OUTPUTS\+\_\+\+ROOT}} = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a0f3e6ce746e59f086235b006b1214d68}{REPO\+\_\+\+ROOT}} / \char`\"{}outputs\char`\"{}
+\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a07b37e703d554a71f9875c727c673e13}{\+\_\+\+DEFAULT\+\_\+\+TX\+\_\+\+POWER\+\_\+\+DBM}} = 10.\+0
+\begin{DoxyCompactList}\small\item\em Default TX power used when {\ttfamily run.\+ini} does not specify it (d\+Bm). \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a2375ed2afb9c383059118c0eb07c62b8}{\+\_\+\+DEFAULT\+\_\+\+GAIN\+\_\+\+DBI}} = 12.\+0
+\begin{DoxyCompactList}\small\item\em Default array gain used when {\ttfamily run.\+ini} does not specify it (d\+Bi). \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a38d556dfbead5460edcadbc1150ee7af}{\+\_\+\+RAB3}} = \char`\"{}rab3\char`\"{}
+\begin{DoxyCompactList}\small\item\em Hostname of the \char`\"{}far\char`\"{} rab; any link involving this node is classified as \char`\"{}far\char`\"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a8b3d09e7a22b4151bb9b2a2f7f1fcac5}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a8b3d09e7a22b4151bb9b2a2f7f1fcac5}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_batch\_label@{\_batch\_label}}
+\index{\_batch\_label@{\_batch\_label}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_batch\_label()}{\_batch\_label()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+batch\+\_\+label (\begin{DoxyParamCaption}\item[{Path}]{batch\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Derive a compact run label from the batch directory name. 
+
+Strips the {\ttfamily -\/validation} suffix so the label fits neatly in narrow table columns.
+
+
+\begin{DoxyParams}{Parameters}
+{\em batch\+\_\+dir} & Batch directory path. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Label string such as {\ttfamily \char`\"{}14-\/01-\/40\char`\"{}} from {\ttfamily \char`\"{}14-\/01-\/40-\/validation\char`\"{}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ada3ca62798f0a8de3e39647fbaaac275}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ada3ca62798f0a8de3e39647fbaaac275}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_classify@{\_classify}}
+\index{\_classify@{\_classify}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_classify()}{\_classify()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+classify (\begin{DoxyParamCaption}\item[{str}]{src,  }\item[{str}]{peer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Classify a link as {\ttfamily \char`\"{}close\char`\"{}} or {\ttfamily \char`\"{}far\char`\"{}} based on whether rab3 is involved. 
+
+Links involving \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a38d556dfbead5460edcadbc1150ee7af}{\+\_\+\+RAB3}} are \char`\"{}far\char`\"{} (physically more distant in the Spring Lake deployment); all other links are \char`\"{}close\char`\"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & Source rab hostname. \\
+\hline
+{\em peer} & Peer rab hostname. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily \char`\"{}far\char`\"{}} or {\ttfamily \char`\"{}close\char`\"{}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aff86e490702bb7fa2844300253696d54}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aff86e490702bb7fa2844300253696d54}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_discover\_batches@{\_discover\_batches}}
+\index{\_discover\_batches@{\_discover\_batches}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_discover\_batches()}{\_discover\_batches()}}
+{\footnotesize\ttfamily  list\mbox{[}Path\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+discover\+\_\+batches (\begin{DoxyParamCaption}\item[{Path}]{root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Recursively discover all batch directories under a root. 
+
+A directory qualifies if it contains a {\ttfamily validation\+\_\+summary.\+csv}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em root} & Directory to search. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sorted list of batch directory paths. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aca9f59fb811e68fb24dcb512b7cb86a3}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_aca9f59fb811e68fb24dcb512b7cb86a3}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_fmt@{\_fmt}}
+\index{\_fmt@{\_fmt}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_fmt()}{\_fmt()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+fmt (\begin{DoxyParamCaption}\item[{float}]{v,  }\item[{int }]{digits = {\ttfamily 2} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format a float for table display, returning {\ttfamily \char`\"{}—\char`\"{}} for non-\/finite values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Value to format. \\
+\hline
+{\em digits} & Decimal places (default 2). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac83bcb90c421631e22472938875ed690}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac83bcb90c421631e22472938875ed690}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_read\_run\_ini@{\_read\_run\_ini}}
+\index{\_read\_run\_ini@{\_read\_run\_ini}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_read\_run\_ini()}{\_read\_run\_ini()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+read\+\_\+run\+\_\+ini (\begin{DoxyParamCaption}\item[{Path}]{ini\+\_\+path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Parse a {\ttfamily run.\+ini} file and return its key-\/value pairs as a flat dict. 
+
+Only the {\ttfamily \mbox{[}scenario\mbox{]}} and {\ttfamily \mbox{[}channel\mbox{]}} sections are read.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ini\+\_\+path} & Path to the {\ttfamily run.\+ini} file. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict of {\ttfamily \{key\+: value\+\_\+string\}} for all keys in the two sections. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a78b4b25bebb6b26d72c37333f1c856c5}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a78b4b25bebb6b26d72c37333f1c856c5}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_render\_link\_class@{\_render\_link\_class}}
+\index{\_render\_link\_class@{\_render\_link\_class}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_render\_link\_class()}{\_render\_link\_class()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+render\+\_\+link\+\_\+class (\begin{DoxyParamCaption}\item[{list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]}}]{rows }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render the close-\/vs-\/far link-\/class breakdown table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & List of \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}} objects. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted table string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_abf3a77c16faf663314e2f6ab8918aedd}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_abf3a77c16faf663314e2f6ab8918aedd}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_render\_main@{\_render\_main}}
+\index{\_render\_main@{\_render\_main}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_render\_main()}{\_render\_main()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+render\+\_\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]}}]{rows }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render the top-\/level batch summary table. 
+
+Columns\+: run label, run directory, channel model, scenario, gain per side, total gain, pair count, mean $\vert$Δmedian$\vert$, mean K-\/S.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & List of \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}} objects (one per batch). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted table string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a891a8b8fe3627bdf55ecec2772d9fc66}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a891a8b8fe3627bdf55ecec2772d9fc66}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_render\_per\_scenario@{\_render\_per\_scenario}}
+\index{\_render\_per\_scenario@{\_render\_per\_scenario}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_render\_per\_scenario()}{\_render\_per\_scenario()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+render\+\_\+per\+\_\+scenario (\begin{DoxyParamCaption}\item[{list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]}}]{rows,  }\item[{}]{picker,  }\item[{str}]{value\+\_\+suffix,  }\item[{int }]{digits = {\ttfamily 2} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render a per-\/scenario cross-\/batch comparison table. 
+
+Rows are scenarios; columns are batch runs. The {\ttfamily picker} callable selects which per-\/scenario dict to read from each \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & List of \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}} objects. \\
+\hline
+{\em picker} & Callable {\ttfamily (\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}) -\/$>$ dict\mbox{[}str, float\mbox{]}}. \\
+\hline
+{\em value\+\_\+suffix} & String appended to each formatted cell (e.\+g. {\ttfamily \char`\"{} d\+B\char`\"{}}). \\
+\hline
+{\em digits} & Decimal places for each value (default 2). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Formatted table string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_af2ba574206d0233ef146e0b452bcfc4e}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_af2ba574206d0233ef146e0b452bcfc4e}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_render\_table@{\_render\_table}}
+\index{\_render\_table@{\_render\_table}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_render\_table()}{\_render\_table()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+render\+\_\+table (\begin{DoxyParamCaption}\item[{tuple\mbox{[}str, ...\mbox{]}}]{header,  }\item[{list\mbox{[}tuple\mbox{[}str, ...\mbox{]}\mbox{]}}]{body }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Render a plain-\/text fixed-\/width table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em header} & Tuple of column header strings. \\
+\hline
+{\em body} & List of row tuples, each matching the header length. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Multi-\/line string with header, separator, and rows. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a91129f8ebcc729d7f187ddf86c4764b7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a91129f8ebcc729d7f187ddf86c4764b7}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_scenario\_order@{\_scenario\_order}}
+\index{\_scenario\_order@{\_scenario\_order}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_scenario\_order()}{\_scenario\_order()}}
+{\footnotesize\ttfamily  list\mbox{[}str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+scenario\+\_\+order (\begin{DoxyParamCaption}\item[{list\mbox{[}\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}\mbox{]}}]{rows }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Collect the union of all field-\/scenario names across all batches, sorted. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & List of \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}} objects. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sorted list of unique scenario name strings. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_adc6dce015020f8f460b5470e7eab787d}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_adc6dce015020f8f460b5470e7eab787d}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_sniff\_batch\_config@{\_sniff\_batch\_config}}
+\index{\_sniff\_batch\_config@{\_sniff\_batch\_config}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_sniff\_batch\_config()}{\_sniff\_batch\_config()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, float $\vert$ str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+sniff\+\_\+batch\+\_\+config (\begin{DoxyParamCaption}\item[{Path}]{batch\+\_\+dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Sniff channel model and gain/power settings from the first scenario\textquotesingle{}s {\ttfamily run.\+ini}. 
+
+Walks the batch directory and reads the first snapshotted {\ttfamily inputs/run.\+ini} it finds. Falls back to sentinel values if no ini is present.
+
+
+\begin{DoxyParams}{Parameters}
+{\em batch\+\_\+dir} & Batch output directory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dict with keys {\ttfamily channel}, {\ttfamily scenario}, {\ttfamily tx\+\_\+power\+\_\+dbm}, {\ttfamily tx\+\_\+gain\+\_\+dbi}, {\ttfamily rx\+\_\+gain\+\_\+dbi}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_afd548e87ba1eaefe2999f6b2e61fca23}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_afd548e87ba1eaefe2999f6b2e61fca23}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_summarize\_batch@{\_summarize\_batch}}
+\index{\_summarize\_batch@{\_summarize\_batch}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_summarize\_batch()}{\_summarize\_batch()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}} $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+summarize\+\_\+batch (\begin{DoxyParamCaption}\item[{Path}]{batch\+\_\+dir,  }\item[{str}]{metric }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Summarise one batch\textquotesingle{}s validation results into a \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}. 
+
+Reads {\ttfamily validation\+\_\+summary.\+csv}, filters to the requested metric, and computes overall and per-\/scenario/per-\/link-\/class aggregates.
+
+
+\begin{DoxyParams}{Parameters}
+{\em batch\+\_\+dir} & Batch output directory containing {\ttfamily validation\+\_\+summary.\+csv}. \\
+\hline
+{\em metric} & Short metric name to filter on (e.\+g. {\ttfamily \char`\"{}snr\char`\"{}}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Populated \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow}{Batch\+Row}}, or {\ttfamily None} if the CSV is absent or has no matching rows. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac5fffa58508694c666b9366d692821c5}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_ac5fffa58508694c666b9366d692821c5}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+CLI entry point for the cross-\/batch comparison tool. 
+
+Auto-\/discovers batches under \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a37e5f6920d0145c3b03ebcea9389d49e}{OUTPUTS\+\_\+\+ROOT}} when no explicit paths are given. Prints several comparison tables and optionally writes CSV exports.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & Argument list; defaults to {\ttfamily sys.\+argv\mbox{[}1\+:\mbox{]}} when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 on error. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a2375ed2afb9c383059118c0eb07c62b8}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a2375ed2afb9c383059118c0eb07c62b8}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_DEFAULT\_GAIN\_DBI@{\_DEFAULT\_GAIN\_DBI}}
+\index{\_DEFAULT\_GAIN\_DBI@{\_DEFAULT\_GAIN\_DBI}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_DEFAULT\_GAIN\_DBI}{\_DEFAULT\_GAIN\_DBI}}
+{\footnotesize\ttfamily float scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+\+DEFAULT\+\_\+\+GAIN\+\_\+\+DBI = 12.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Default array gain used when {\ttfamily run.\+ini} does not specify it (d\+Bi). 
+
+Matches the pre-\/knob hardcoded value of {\ttfamily BF\+\_\+\+ELEMENTS\+\_\+\+PER\+\_\+\+NODE=16}. \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a07b37e703d554a71f9875c727c673e13}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a07b37e703d554a71f9875c727c673e13}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_DEFAULT\_TX\_POWER\_DBM@{\_DEFAULT\_TX\_POWER\_DBM}}
+\index{\_DEFAULT\_TX\_POWER\_DBM@{\_DEFAULT\_TX\_POWER\_DBM}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_DEFAULT\_TX\_POWER\_DBM}{\_DEFAULT\_TX\_POWER\_DBM}}
+{\footnotesize\ttfamily float scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+\+DEFAULT\+\_\+\+TX\+\_\+\+POWER\+\_\+\+DBM = 10.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Default TX power used when {\ttfamily run.\+ini} does not specify it (d\+Bm). 
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a38d556dfbead5460edcadbc1150ee7af}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a38d556dfbead5460edcadbc1150ee7af}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!\_RAB3@{\_RAB3}}
+\index{\_RAB3@{\_RAB3}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{\_RAB3}{\_RAB3}}
+{\footnotesize\ttfamily string scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+\_\+\+RAB3 = \char`\"{}rab3\char`\"{}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Hostname of the \char`\"{}far\char`\"{} rab; any link involving this node is classified as \char`\"{}far\char`\"{}. 
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a37e5f6920d0145c3b03ebcea9389d49e}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a37e5f6920d0145c3b03ebcea9389d49e}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!OUTPUTS\_ROOT@{OUTPUTS\_ROOT}}
+\index{OUTPUTS\_ROOT@{OUTPUTS\_ROOT}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{OUTPUTS\_ROOT}{OUTPUTS\_ROOT}}
+{\footnotesize\ttfamily string scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+OUTPUTS\+\_\+\+ROOT = \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a0f3e6ce746e59f086235b006b1214d68}{REPO\+\_\+\+ROOT}} / \char`\"{}outputs\char`\"{}}
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a0f3e6ce746e59f086235b006b1214d68}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_a0f3e6ce746e59f086235b006b1214d68}} 
+\index{scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}!REPO\_ROOT@{REPO\_ROOT}}
+\index{REPO\_ROOT@{REPO\_ROOT}!scratch.mesh-\/sim.scripts.validation.compare\_runs@{scratch.mesh-\/sim.scripts.validation.compare\_runs}}
+\doxysubsubsection{\texorpdfstring{REPO\_ROOT}{REPO\_ROOT}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+validation.\+compare\+\_\+runs.\+REPO\+\_\+\+ROOT = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}}
+

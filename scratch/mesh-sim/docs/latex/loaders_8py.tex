@@ -5,19 +5,26 @@
 Per-\/scenario CSV loaders for backhaul-\/radio and GPS data.  
 
 
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-pd.\+Series \mbox{\hyperlink{loaders_8py_a6c59a0c51f1d90990065aa5b68224cca}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+to\+\_\+datetime}} (pd.\+Data\+Frame df)
+pd.\+Series \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_a6c59a0c51f1d90990065aa5b68224cca}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+to\+\_\+datetime}} (pd.\+Data\+Frame df)
 \begin{DoxyCompactList}\small\item\em Convert a {\ttfamily timestamp} column (nanoseconds since epoch) to UTC datetimes. \end{DoxyCompactList}\item 
-pd.\+Series \mbox{\hyperlink{loaders_8py_aafb2c61715a8b342f0644968dc467943}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+session\+\_\+relative\+\_\+seconds}} (pd.\+Data\+Frame df)
+pd.\+Series \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_aafb2c61715a8b342f0644968dc467943}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+session\+\_\+relative\+\_\+seconds}} (pd.\+Data\+Frame df)
 \begin{DoxyCompactList}\small\item\em Compute seconds elapsed since each session\textquotesingle{}s earliest {\ttfamily \+\_\+\+\_\+t\+\_\+\+\_\+} value. \end{DoxyCompactList}\item 
-pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{loaders_8py_a735f9bf1d0d7b2a24e2bc9c576d69041}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+bh2\+\_\+scenario}} (Path scen\+\_\+dir)
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_a735f9bf1d0d7b2a24e2bc9c576d69041}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+bh2\+\_\+scenario}} (Path scen\+\_\+dir)
 \begin{DoxyCompactList}\small\item\em Load and concatenate every node\textquotesingle{}s {\ttfamily bh2.\+csv} for a scenario. \end{DoxyCompactList}\item 
-pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{loaders_8py_ac84f3a2c6216084c0018ddaee24eedf4}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+mcm\+\_\+scenario}} (Path scen\+\_\+dir)
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_ac84f3a2c6216084c0018ddaee24eedf4}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+mcm\+\_\+scenario}} (Path scen\+\_\+dir)
 \begin{DoxyCompactList}\small\item\em Load and concatenate every node\textquotesingle{}s {\ttfamily mcm.\+csv} for a scenario. \end{DoxyCompactList}\item 
-pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{loaders_8py_a41830ac8afbe6e2aa04ab6e6182343c2}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+gps\+\_\+scenario}} (Path scen\+\_\+dir)
-\begin{DoxyCompactList}\small\item\em Load and concatenate GPS fixes for every node in a scenario. \end{DoxyCompactList}\end{DoxyCompactItemize}
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_a41830ac8afbe6e2aa04ab6e6182343c2}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+gps\+\_\+scenario}} (Path scen\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Load and concatenate GPS fixes for every node in a scenario. \end{DoxyCompactList}\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders_af4a9d634c7517db7ab87a7c0a696f0c2}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+\_\+load\+\_\+node\+\_\+gps}} (Path node)
+\begin{DoxyCompactList}\small\item\em Load GPS data for a single node directory, trying both source formats. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -46,120 +53,3 @@ Per-\/scenario CSV loaders for backhaul-\/radio and GPS data.
 
 
 All public loaders return {\ttfamily Data\+Frame $\vert$ None}; {\ttfamily None} means no usable data was found for this scenario. 
-
-\doxysubsection{Function Documentation}
-\mbox{\Hypertarget{loaders_8py_a735f9bf1d0d7b2a24e2bc9c576d69041}\label{loaders_8py_a735f9bf1d0d7b2a24e2bc9c576d69041}} 
-\index{loaders.py@{loaders.py}!load\_bh2\_scenario@{load\_bh2\_scenario}}
-\index{load\_bh2\_scenario@{load\_bh2\_scenario}!loaders.py@{loaders.py}}
-\doxysubsubsection{\texorpdfstring{load\_bh2\_scenario()}{load\_bh2\_scenario()}}
-{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+bh2\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})}
-
-
-
-Load and concatenate every node\textquotesingle{}s {\ttfamily bh2.\+csv} for a scenario. 
-
-Backhaul-\/2 (bh2) logs contain per-\/link radio metrics sampled at the driver level\+: SNR, RCPI, MCS (TX/\+RX), byte counters, PER, and AGC.
-
-Steps performed\+:
-\begin{DoxyEnumerate}
-\item Discover all node subdirectories (skipping {\ttfamily sdwan}).
-\item Coerce all numeric field columns with {\ttfamily errors=\char`\"{}coerce\char`\"{}} so bad rows become NaN rather than causing type errors downstream.
-\item Resolve peer MACs to human-\/readable labels via build\+\_\+topology.
-\item Add {\ttfamily \+\_\+\+\_\+sec\+\_\+\+\_\+} via session\+\_\+relative\+\_\+seconds.
-\item Store the topology map in {\ttfamily df.\+attrs\mbox{[}\char`\"{}topology\char`\"{}\mbox{]}} for plot functions.
-\end{DoxyEnumerate}
-
-
-\begin{DoxyParams}{Parameters}
-{\em scen\+\_\+dir} & Path to the scenario directory (contains one subdir per node). \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Concatenated Data\+Frame, or {\ttfamily None} if no {\ttfamily bh2.\+csv} files were found. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{loaders_8py_a41830ac8afbe6e2aa04ab6e6182343c2}\label{loaders_8py_a41830ac8afbe6e2aa04ab6e6182343c2}} 
-\index{loaders.py@{loaders.py}!load\_gps\_scenario@{load\_gps\_scenario}}
-\index{load\_gps\_scenario@{load\_gps\_scenario}!loaders.py@{loaders.py}}
-\doxysubsubsection{\texorpdfstring{load\_gps\_scenario()}{load\_gps\_scenario()}}
-{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+gps\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})}
-
-
-
-Load and concatenate GPS fixes for every node in a scenario. 
-
-Two GPS source formats are supported, in priority order\+:
-\begin{DoxyEnumerate}
-\item {\ttfamily geotak\+\_\+gps.\+csv} — columns {\ttfamily lat}, {\ttfamily lon}, {\ttfamily time} (ISO-\/8601).
-\item {\ttfamily gps.\+csv} — columns {\ttfamily field\+\_\+lat}, {\ttfamily field\+\_\+lon}, {\ttfamily timestamp} (nanoseconds since epoch).
-\end{DoxyEnumerate}
-
-Rows with latitude=0 {\bfseries{and}} longitude=0 are dropped as \char`\"{}no fix\char`\"{} sentinels.
-
-
-\begin{DoxyParams}{Parameters}
-{\em scen\+\_\+dir} & Path to the scenario directory. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Concatenated Data\+Frame with {\ttfamily \+\_\+\+\_\+lat\+\_\+\+\_\+}, {\ttfamily \+\_\+\+\_\+lon\+\_\+\+\_\+}, {\ttfamily \+\_\+\+\_\+sec\+\_\+\+\_\+} columns, or {\ttfamily None} if no GPS data is available. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{loaders_8py_ac84f3a2c6216084c0018ddaee24eedf4}\label{loaders_8py_ac84f3a2c6216084c0018ddaee24eedf4}} 
-\index{loaders.py@{loaders.py}!load\_mcm\_scenario@{load\_mcm\_scenario}}
-\index{load\_mcm\_scenario@{load\_mcm\_scenario}!loaders.py@{loaders.py}}
-\doxysubsubsection{\texorpdfstring{load\_mcm\_scenario()}{load\_mcm\_scenario()}}
-{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+load\+\_\+mcm\+\_\+scenario (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})}
-
-
-
-Load and concatenate every node\textquotesingle{}s {\ttfamily mcm.\+csv} for a scenario. 
-
-Mesh-\/\+Client-\/\+Manager (MCM) logs contain per-\/radio state\+: channel, beacon RSSI, connected-\/client count, and sample rate. {\ttfamily field\+\_\+mac} is required; files missing that column are skipped.
-
-
-\begin{DoxyParams}{Parameters}
-{\em scen\+\_\+dir} & Path to the scenario directory. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Concatenated Data\+Frame, or {\ttfamily None} if no usable {\ttfamily mcm.\+csv} files exist. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{loaders_8py_aafb2c61715a8b342f0644968dc467943}\label{loaders_8py_aafb2c61715a8b342f0644968dc467943}} 
-\index{loaders.py@{loaders.py}!session\_relative\_seconds@{session\_relative\_seconds}}
-\index{session\_relative\_seconds@{session\_relative\_seconds}!loaders.py@{loaders.py}}
-\doxysubsubsection{\texorpdfstring{session\_relative\_seconds()}{session\_relative\_seconds()}}
-{\footnotesize\ttfamily  pd.\+Series scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+session\+\_\+relative\+\_\+seconds (\begin{DoxyParamCaption}\item[{pd.\+Data\+Frame}]{df }\end{DoxyParamCaption})}
-
-
-
-Compute seconds elapsed since each session\textquotesingle{}s earliest {\ttfamily \+\_\+\+\_\+t\+\_\+\+\_\+} value. 
-
-Groups by {\ttfamily \+\_\+\+\_\+session\+\_\+\+\_\+} if present, otherwise by {\ttfamily \+\_\+\+\_\+node\+\_\+\+\_\+}. This normalises clock skew so that t=0 is the first sample for each node.
-
-
-\begin{DoxyParams}{Parameters}
-{\em df} & Data\+Frame with {\ttfamily \+\_\+\+\_\+t\+\_\+\+\_\+} (datetime) and either {\ttfamily \+\_\+\+\_\+session\+\_\+\+\_\+} or {\ttfamily \+\_\+\+\_\+node\+\_\+\+\_\+} columns. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Float Series of relative seconds, aligned to the input index. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{loaders_8py_a6c59a0c51f1d90990065aa5b68224cca}\label{loaders_8py_a6c59a0c51f1d90990065aa5b68224cca}} 
-\index{loaders.py@{loaders.py}!to\_datetime@{to\_datetime}}
-\index{to\_datetime@{to\_datetime}!loaders.py@{loaders.py}}
-\doxysubsubsection{\texorpdfstring{to\_datetime()}{to\_datetime()}}
-{\footnotesize\ttfamily  pd.\+Series scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+loaders.\+to\+\_\+datetime (\begin{DoxyParamCaption}\item[{pd.\+Data\+Frame}]{df }\end{DoxyParamCaption})}
-
-
-
-Convert a {\ttfamily timestamp} column (nanoseconds since epoch) to UTC datetimes. 
-
-Non-\/numeric values are coerced to NaT rather than raising.
-
-
-\begin{DoxyParams}{Parameters}
-{\em df} & Data\+Frame containing a {\ttfamily timestamp} column. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Series of timezone-\/aware UTC datetimes. 
-\end{DoxyReturn}

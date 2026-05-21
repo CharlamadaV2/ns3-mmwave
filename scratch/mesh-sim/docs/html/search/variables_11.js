@@ -1,6 +1,14 @@
 var searchData=
 [
-  ['x_338',['x',['../structmesh__sim_1_1Position.html#a8626609f78967bc63a71cab3bd809057',1,'mesh_sim::Position::x()'],['../structmesh__sim_1_1Waypoint.html#a6c78e88b5bf3a41c534e6eb5bc3b183d',1,'mesh_sim::Waypoint::x()']]],
-  ['x_5fmax_339',['x_max',['../structmesh__sim_1_1RandomWalkParams.html#a9a93e86424c399066c9a0e2073cbfea1',1,'mesh_sim::RandomWalkParams::x_max()'],['../structmesh__sim_1_1BuildingSpec.html#a02c709d32e3fb19f3a9447e94b7f7d5c',1,'mesh_sim::BuildingSpec::x_max()']]],
-  ['x_5fmin_340',['x_min',['../structmesh__sim_1_1RandomWalkParams.html#a2a3d7f4b7134fb7ae5154d5ab66ac72b',1,'mesh_sim::RandomWalkParams::x_min()'],['../structmesh__sim_1_1BuildingSpec.html#aa4415a3ede71946018020b9c247eb14b',1,'mesh_sim::BuildingSpec::x_min()']]]
+  ['t_1002',['t',['../structmesh__sim_1_1Waypoint.html#a817c872ad79be6dc7d1374063a32152a',1,'mesh_sim::Waypoint']]],
+  ['temperature_5fc_1003',['temperature_c',['../structmesh__sim_1_1NyuChannelConfig.html#acfa242dd15390376baec4951b85c04e1',1,'mesh_sim::NyuChannelConfig']]],
+  ['tick_5fcount_1004',['tick_count',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ac46ab384be40f2ca55b17703d8d0bc07',1,'mesh_sim::MetricsWriter::NodeStats::tick_count()'],['../structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a60a3666af0639ba9a669ade26372b37a',1,'mesh_sim::MetricsWriter::FlowStats::tick_count()']]],
+  ['tick_5fs_1005',['tick_s',['../structmesh__sim_1_1SimConfig.html#a1b1169831081b79a02f7a6400110cafe',1,'mesh_sim::SimConfig::tick_s()'],['../structmesh__sim_1_1ProgressLogger.html#a5ff558e1e90703d1f169de94ca1685dc',1,'mesh_sim::ProgressLogger::tick_s()']]],
+  ['total_5fticks_1006',['total_ticks',['../structmesh__sim_1_1ProgressLogger.html#abe59d208b309e7afcf45cb5f62b90a62',1,'mesh_sim::ProgressLogger']]],
+  ['traffic_1007',['traffic',['../structmesh__sim_1_1MeshConfig.html#ac52c56a9e29389de8d26bdd510c7f71f',1,'mesh_sim::MeshConfig']]],
+  ['tx_5farray_5fgain_5fdbi_1008',['tx_array_gain_dbi',['../structmesh__sim_1_1ChannelConfig.html#a63fdc79768d957215b0059347804c11a',1,'mesh_sim::ChannelConfig']]],
+  ['tx_5fdelivered_1009',['tx_delivered',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a5031f488794e522c5c5dfc96a7fa1c10',1,'mesh_sim::MetricsWriter::NodeStats']]],
+  ['tx_5fid_1010',['tx_id',['../structmesh__sim_1_1LinkResult.html#a5eac09f0bea61612785de78f2ee04ed3',1,'mesh_sim::LinkResult']]],
+  ['tx_5fpower_5fdbm_1011',['tx_power_dbm',['../structmesh__sim_1_1ChannelConfig.html#a73ba58e55344b3d8e1097372320705db',1,'mesh_sim::ChannelConfig']]],
+  ['type_1012',['type',['../structmesh__sim_1_1BuildingSpec.html#ad80b368f2ff10c2c5ad75c1f1829015f',1,'mesh_sim::BuildingSpec']]]
 ];

@@ -68,7 +68,9 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">multi_day.py File Reference</div>  </div>
 </div><!--header-->
@@ -86,14 +88,60 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All pooled samples for one (family, day, link, metric) combination.  <a href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html">scratch.mesh-sim.scripts.arpo_data.multi_day</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a609a778db51740e3f382851719215734"><td class="memItemLeft" align="right" valign="top">tuple[list[dict], list[dict]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multi__day_8py.html#a609a778db51740e3f382851719215734">scratch.mesh-sim.scripts.arpo_data.multi_day.run_multi_day</a> (Path per_day_root, Path multi_day_root)</td></tr>
-<tr class="memdesc:a609a778db51740e3f382851719215734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the full multi-day analysis and write all output files.  <a href="multi__day_8py.html#a609a778db51740e3f382851719215734">More...</a><br /></td></tr>
+<tr class="memitem:a985c7bbe01a9ed8da783b8fcb7e9abdb"><td class="memItemLeft" align="right" valign="top">tuple[str, str]|None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a985c7bbe01a9ed8da783b8fcb7e9abdb">scratch.mesh-sim.scripts.arpo_data.multi_day._parse_scenario</a> (str name)</td></tr>
+<tr class="memdesc:a985c7bbe01a9ed8da783b8fcb7e9abdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a scenario name into its family and date components.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a985c7bbe01a9ed8da783b8fcb7e9abdb">More...</a><br /></td></tr>
+<tr class="separator:a985c7bbe01a9ed8da783b8fcb7e9abdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cbbb5fe41095ba630ce514887532ff1"><td class="memItemLeft" align="right" valign="top">dict[str, dict[str, list[Path]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a9cbbb5fe41095ba630ce514887532ff1">scratch.mesh-sim.scripts.arpo_data.multi_day._scenarios_by_family</a> (Path per_day_root)</td></tr>
+<tr class="memdesc:a9cbbb5fe41095ba630ce514887532ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Group scenario directories under a per-day root by family and date.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a9cbbb5fe41095ba630ce514887532ff1">More...</a><br /></td></tr>
+<tr class="separator:a9cbbb5fe41095ba630ce514887532ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b9997a6932d0af1888918e7f2945af3"><td class="memItemLeft" align="right" valign="top">dict[tuple[str, str, str, str], _DayBag]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3">scratch.mesh-sim.scripts.arpo_data.multi_day._load_traces_for_family</a> (dict[str, list[Path]] days)</td></tr>
+<tr class="memdesc:a8b9997a6932d0af1888918e7f2945af3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load and pool trace CSVs across all scenarios for one family.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3">More...</a><br /></td></tr>
+<tr class="separator:a8b9997a6932d0af1888918e7f2945af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="memItemLeft" align="right" valign="top">dict&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2d96dd6eaaf290eb6bbb48df6347b6c3">scratch.mesh-sim.scripts.arpo_data.multi_day._summary</a> (np.ndarray values)</td></tr>
+<tr class="memdesc:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute quantile summary statistics for an array of values.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2d96dd6eaaf290eb6bbb48df6347b6c3">More...</a><br /></td></tr>
+<tr class="separator:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae63443213ea5f0428b601243f1c683ed"><td class="memItemLeft" align="right" valign="top">tuple[np.ndarray, np.ndarray]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae63443213ea5f0428b601243f1c683ed">scratch.mesh-sim.scripts.arpo_data.multi_day._ecdf</a> (np.ndarray values)</td></tr>
+<tr class="memdesc:ae63443213ea5f0428b601243f1c683ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the empirical CDF of a sample array.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae63443213ea5f0428b601243f1c683ed">More...</a><br /></td></tr>
+<tr class="separator:ae63443213ea5f0428b601243f1c683ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa0d2c89085334d215e55d0367ffea5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#aaa0d2c89085334d215e55d0367ffea5c">scratch.mesh-sim.scripts.arpo_data.multi_day._ks_2samp</a> (np.ndarray a, np.ndarray b)</td></tr>
+<tr class="memdesc:aaa0d2c89085334d215e55d0367ffea5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the two-sample Kolmogorov-Smirnov statistic without scipy.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#aaa0d2c89085334d215e55d0367ffea5c">More...</a><br /></td></tr>
+<tr class="separator:aaa0d2c89085334d215e55d0367ffea5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf099d960ce8144a7a415317959fd03d"><td class="memItemLeft" align="right" valign="top">plt.Figure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#adf099d960ce8144a7a415317959fd03d">scratch.mesh-sim.scripts.arpo_data.multi_day._plot_ecdfs</a> (str family, str src, str peer, _MetricSpec metric, dict[str, _DayBag] bags_by_day, float|None ks_value)</td></tr>
+<tr class="memdesc:adf099d960ce8144a7a415317959fd03d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metric unit strings for axis and legend annotation.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#adf099d960ce8144a7a415317959fd03d">More...</a><br /></td></tr>
+<tr class="separator:adf099d960ce8144a7a415317959fd03d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a28845bd619766b2ba15b21c3e74776"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a6a28845bd619766b2ba15b21c3e74776">scratch.mesh-sim.scripts.arpo_data.multi_day._fmt_day</a> (str day)</td></tr>
+<tr class="memdesc:a6a28845bd619766b2ba15b21c3e74776"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format an 8-digit date string as <code>MM/DD/YYYY</code> for display.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a6a28845bd619766b2ba15b21c3e74776">More...</a><br /></td></tr>
+<tr class="separator:a6a28845bd619766b2ba15b21c3e74776"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a609a778db51740e3f382851719215734"><td class="memItemLeft" align="right" valign="top">tuple[list[dict], list[dict]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734">scratch.mesh-sim.scripts.arpo_data.multi_day.run_multi_day</a> (Path per_day_root, Path multi_day_root)</td></tr>
+<tr class="memdesc:a609a778db51740e3f382851719215734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the full multi-day analysis and write all output files.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734">More...</a><br /></td></tr>
 <tr class="separator:a609a778db51740e3f382851719215734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3f446623d746d7e4fcffb2c289647d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="multi__day_8py.html#ab3f446623d746d7e4fcffb2c289647d7">scratch.mesh-sim.scripts.arpo_data.multi_day.multi_day</a> ()</td></tr>
-<tr class="memdesc:ab3f446623d746d7e4fcffb2c289647d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLI entry point for the <code>multi-day</code> subcommand.  <a href="multi__day_8py.html#ab3f446623d746d7e4fcffb2c289647d7">More...</a><br /></td></tr>
+<tr class="memitem:ab3f446623d746d7e4fcffb2c289647d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ab3f446623d746d7e4fcffb2c289647d7">scratch.mesh-sim.scripts.arpo_data.multi_day.multi_day</a> ()</td></tr>
+<tr class="memdesc:ab3f446623d746d7e4fcffb2c289647d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLI entry point for the <code>multi-day</code> subcommand.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ab3f446623d746d7e4fcffb2c289647d7">More...</a><br /></td></tr>
 <tr class="separator:ab3f446623d746d7e4fcffb2c289647d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:af01dcd89eb4732822bb63fc405cf2861"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#af01dcd89eb4732822bb63fc405cf2861">scratch.mesh-sim.scripts.arpo_data.multi_day._SUFFIX_RE</a> = re.compile(r&quot;_(?:baseline_\d+_)?(\d{8})$&quot;)</td></tr>
+<tr class="memdesc:af01dcd89eb4732822bb63fc405cf2861"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regex matching the date suffix of a scenario directory name.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#af01dcd89eb4732822bb63fc405cf2861">More...</a><br /></td></tr>
+<tr class="separator:af01dcd89eb4732822bb63fc405cf2861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8db72746083c42f969ebdabf0f888792"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8db72746083c42f969ebdabf0f888792">scratch.mesh-sim.scripts.arpo_data.multi_day._TRACE_RE</a> = re.compile(r&quot;^bh2_([a-z]+)__([a-z0-9]+)_to_([a-z0-9]+)_trace\.csv$&quot;)</td></tr>
+<tr class="memdesc:a8db72746083c42f969ebdabf0f888792"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regex matching a per-source trace CSV filename.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8db72746083c42f969ebdabf0f888792">More...</a><br /></td></tr>
+<tr class="separator:a8db72746083c42f969ebdabf0f888792"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e82ee148c957026abdb35016736a9c"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a13e82ee148c957026abdb35016736a9c">scratch.mesh-sim.scripts.arpo_data.multi_day._METRICS_BY_PREFIX</a> = {m.prefix: m for m in _METRICS}</td></tr>
+<tr class="memdesc:a13e82ee148c957026abdb35016736a9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">All supported backhaul metrics, in display order.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a13e82ee148c957026abdb35016736a9c">More...</a><br /></td></tr>
+<tr class="separator:a13e82ee148c957026abdb35016736a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dd3c2c3de5adcf743a2db329e0b17c7"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a3dd3c2c3de5adcf743a2db329e0b17c7">scratch.mesh-sim.scripts.arpo_data.multi_day._METRICS_BY_SHORT</a> = {m.short: m for m in _METRICS}</td></tr>
+<tr class="separator:a3dd3c2c3de5adcf743a2db329e0b17c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e78952a1e299dc124d2e122076f4bf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6">scratch.mesh-sim.scripts.arpo_data.multi_day._MIN_SAMPLES_PER_DAY</a> = 100</td></tr>
+<tr class="memdesc:a2e78952a1e299dc124d2e122076f4bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum samples per day for a bag to be included in ECDF/K-S analysis.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6">More...</a><br /></td></tr>
+<tr class="separator:a2e78952a1e299dc124d2e122076f4bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Day-vs-day comparison for the same scenario family. </p>
@@ -108,79 +156,7 @@ Functions</h2></td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>_pairwise_ks.csv</code>   </td><td class="markdownTableBodyNone">K-S statistic + median delta for every day pair.   </td></tr>
 </table>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="ab3f446623d746d7e4fcffb2c289647d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3f446623d746d7e4fcffb2c289647d7">&#9670;&nbsp;</a></span>multi_day()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> int scratch.mesh-sim.scripts.arpo_data.multi_day.multi_day </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>CLI entry point for the <code>multi-day</code> subcommand. </p>
-<p>Delegates to run_multi_day using the default PER_DAY_DIR and MULTI_DAY_DIR paths.</p>
-<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
-
-</div>
-</div>
-<a id="a609a778db51740e3f382851719215734"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a609a778db51740e3f382851719215734">&#9670;&nbsp;</a></span>run_multi_day()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[list[dict], list[dict]] scratch.mesh-sim.scripts.arpo_data.multi_day.run_multi_day </td>
-          <td>(</td>
-          <td class="paramtype">Path&#160;</td>
-          <td class="paramname"><em>per_day_root</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Path&#160;</td>
-          <td class="paramname"><em>multi_day_root</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Run the full multi-day analysis and write all output files. </p>
-<p>For each scenario family that has at least two days of data:</p><ol type="1">
-<li>Pool trace CSVs into _DayBag objects via _load_traces_for_family.</li>
-<li>Compute quantile summaries for <code>_per_day_stats.csv</code>.</li>
-<li>Compute K-S statistics for every day pair for <code>_pairwise_ks.csv</code>.</li>
-<li>Render and save an ECDF overlay PNG per (link, metric).</li>
-</ol>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">per_day_root</td><td>Directory of per-day plot output (produced by <code>plot</code>). </td></tr>
-    <tr><td class="paramname">multi_day_root</td><td>Output directory for multi-day results. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(per_day_rows, pairwise_rows)</code> of the raw dicts written to CSV, useful for testing or downstream processing. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">FileNotFoundError</td><td>if <code>per_day_root</code> does not exist. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1

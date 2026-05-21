@@ -70,39 +70,49 @@ $(function() {
 <div class="title">link-table.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;src/domain/link-result.h&quot;</span></div>
+<a href="link-table_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1LinkTable.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="classmesh__sim_1_1LinkTable.html">LinkTable</a></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">void</span> Update(uint32_t numNodes, <span class="keyword">const</span> std::vector&lt;LinkResult&gt;&amp; results);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    uint32_t NumNodes() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="link-result_8h.html">src/domain/link-result.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1LinkTable.html">   26</a></span>&#160;<span class="keyword">class </span><a class="code" href="classmesh__sim_1_1LinkTable.html">LinkTable</a></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classmesh__sim_1_1LinkTable.html#ae2d4c11e57c3abdebb48d7be853d25b4">Update</a>(uint32_t numNodes, <span class="keyword">const</span> std::vector&lt;LinkResult&gt;&amp; results);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// O(1) lookup. Symmetric: Get(i,j) == Get(j,i). Diagonal returns a default LinkResult.</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">const</span> <a class="code" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>&amp; Get(uint32_t i, uint32_t j) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="comment">// Aggregate queries.</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">double</span>   MaxCapacity() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    uint32_t ConnectedLinkCount(<span class="keywordtype">double</span> sinrThresholdDb = -6.7) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">bool</span>     IsConnected(uint32_t i, uint32_t j, <span class="keywordtype">double</span> sinrThresholdDb = -6.7) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    uint32_t m_numNodes = 0;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    std::vector&lt;std::vector&lt;LinkResult&gt;&gt; m_table; <span class="comment">// NxN, symmetric</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
-<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html">mesh_sim::LinkTable</a></div><div class="ttdef"><b>Definition:</b> link-table.h:25</div></div>
-<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdoc">ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S...</div><div class="ttdef"><b>Definition:</b> cli-parser.cc:19</div></div>
-<div class="ttc" id="astructmesh__sim_1_1LinkResult_html"><div class="ttname"><a href="structmesh__sim_1_1LinkResult.html">mesh_sim::LinkResult</a></div><div class="ttdef"><b>Definition:</b> link-result.h:22</div></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    uint32_t <a class="code" href="classmesh__sim_1_1LinkTable.html#a7db6ae6d383fef99cf0660aaa662459b">NumNodes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">// O(1) lookup. Symmetric: Get(i,j) == Get(j,i). Diagonal returns a default LinkResult.</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">const</span> <a class="code" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>&amp; <a class="code" href="classmesh__sim_1_1LinkTable.html#a17a9e4dfbbdc13fa00a72124242305e8">Get</a>(uint32_t i, uint32_t j) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">// Aggregate queries.</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">double</span>   <a class="code" href="classmesh__sim_1_1LinkTable.html#a989f3efca5f5c344b1113605680e9e1e">MaxCapacity</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    uint32_t <a class="code" href="classmesh__sim_1_1LinkTable.html#a0d03b2a34e5dc2ced941b9b47c33edfc">ConnectedLinkCount</a>(<span class="keywordtype">double</span> sinrThresholdDb = -6.7) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">bool</span>     <a class="code" href="classmesh__sim_1_1LinkTable.html#aae4e41485e676ef6d80244a65df1f903">IsConnected</a>(uint32_t i, uint32_t j, <span class="keywordtype">double</span> sinrThresholdDb = -6.7) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1LinkTable.html#ab47b9f4bd29d7ac3ba9f8ef5183804f9">   42</a></span>&#160;    uint32_t <a class="code" href="classmesh__sim_1_1LinkTable.html#ab47b9f4bd29d7ac3ba9f8ef5183804f9">m_numNodes</a> = 0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1LinkTable.html#ae1438ad5aec0807dfa9750f7140c29b4">   43</a></span>&#160;    std::vector&lt;std::vector&lt;LinkResult&gt;&gt; <a class="code" href="classmesh__sim_1_1LinkTable.html#ae1438ad5aec0807dfa9750f7140c29b4">m_table</a>; <span class="comment">// NxN, symmetric</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html">mesh_sim::LinkTable</a></div><div class="ttdef"><b>Definition:</b> link-table.h:27</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_a0d03b2a34e5dc2ced941b9b47c33edfc"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#a0d03b2a34e5dc2ced941b9b47c33edfc">mesh_sim::LinkTable::ConnectedLinkCount</a></div><div class="ttdeci">uint32_t ConnectedLinkCount(double sinrThresholdDb=-6.7) const</div><div class="ttdef"><b>Definition:</b> link-table.cc:86</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_a17a9e4dfbbdc13fa00a72124242305e8"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#a17a9e4dfbbdc13fa00a72124242305e8">mesh_sim::LinkTable::Get</a></div><div class="ttdeci">const LinkResult &amp; Get(uint32_t i, uint32_t j) const</div><div class="ttdef"><b>Definition:</b> link-table.cc:63</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_a7db6ae6d383fef99cf0660aaa662459b"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#a7db6ae6d383fef99cf0660aaa662459b">mesh_sim::LinkTable::NumNodes</a></div><div class="ttdeci">uint32_t NumNodes() const</div><div class="ttdef"><b>Definition:</b> link-table.cc:57</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_a989f3efca5f5c344b1113605680e9e1e"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#a989f3efca5f5c344b1113605680e9e1e">mesh_sim::LinkTable::MaxCapacity</a></div><div class="ttdeci">double MaxCapacity() const</div><div class="ttdef"><b>Definition:</b> link-table.cc:69</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_aae4e41485e676ef6d80244a65df1f903"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#aae4e41485e676ef6d80244a65df1f903">mesh_sim::LinkTable::IsConnected</a></div><div class="ttdeci">bool IsConnected(uint32_t i, uint32_t j, double sinrThresholdDb=-6.7) const</div><div class="ttdef"><b>Definition:</b> link-table.cc:103</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_ab47b9f4bd29d7ac3ba9f8ef5183804f9"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#ab47b9f4bd29d7ac3ba9f8ef5183804f9">mesh_sim::LinkTable::m_numNodes</a></div><div class="ttdeci">uint32_t m_numNodes</div><div class="ttdef"><b>Definition:</b> link-table.h:42</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_ae1438ad5aec0807dfa9750f7140c29b4"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#ae1438ad5aec0807dfa9750f7140c29b4">mesh_sim::LinkTable::m_table</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; LinkResult &gt; &gt; m_table</div><div class="ttdef"><b>Definition:</b> link-table.h:43</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1LinkTable_html_ae2d4c11e57c3abdebb48d7be853d25b4"><div class="ttname"><a href="classmesh__sim_1_1LinkTable.html#ae2d4c11e57c3abdebb48d7be853d25b4">mesh_sim::LinkTable::Update</a></div><div class="ttdeci">void Update(uint32_t numNodes, const std::vector&lt; LinkResult &gt; &amp;results)</div><div class="ttdef"><b>Definition:</b> link-table.cc:18</div></div>
+<div class="ttc" id="alink-result_8h_html"><div class="ttname"><a href="link-result_8h.html">link-result.h</a></div><div class="ttdoc">Per-link evaluation result POD type. One instance per ordered pair (tx, rx) per time step....</div></div>
+<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdef"><b>Definition:</b> cli-parser.cc:16</div></div>
+<div class="ttc" id="astructmesh__sim_1_1LinkResult_html"><div class="ttname"><a href="structmesh__sim_1_1LinkResult.html">mesh_sim::LinkResult</a></div><div class="ttdef"><b>Definition:</b> link-result.h:24</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -68,11 +68,30 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classmesh__sim_1_1TopologyBuilder-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">mesh_sim::TopologyBuilder Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="topology-builder_8h_source.html">topology-builder.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for mesh_sim::TopologyBuilder:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmesh__sim_1_1TopologyBuilder__coll__graph.png" border="0" usemap="#amesh__sim_1_1TopologyBuilder_coll__map" alt="Collaboration graph"/></div>
+<map name="amesh__sim_1_1TopologyBuilder_coll__map" id="amesh__sim_1_1TopologyBuilder_coll__map">
+<area shape="rect" title=" " alt="" coords="312,273,513,300"/>
+<area shape="rect" href="structmesh__sim_1_1SimConfig.html" title=" " alt="" coords="331,184,494,211"/>
+<area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title=" " alt="" coords="139,95,313,121"/>
+<area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title=" " alt="" coords="5,5,193,32"/>
+<area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title=" " alt="" coords="217,5,395,32"/>
+<area shape="rect" href="structmesh__sim_1_1RlConfig.html" title=" " alt="" coords="337,95,488,121"/>
+<area shape="rect" href="structmesh__sim_1_1ChannelConfig.html" title="Complete radio and channel configuration for a simulation run." alt="" coords="512,95,703,121"/>
+<area shape="rect" href="structmesh__sim_1_1NyuChannelConfig.html" title="Parameters specific to the NYU mmWave channel model." alt="" coords="499,5,716,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -86,6 +105,36 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa1a9b78577d635fc1924d1c7821d31c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cbc52d0694c6e7e4082f314eb131d50"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a9cbc52d0694c6e7e4082f314eb131d50">GetConditionModel</a> () const</td></tr>
 <tr class="separator:a9cbc52d0694c6e7e4082f314eb131d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ae756126bafd73421de221ba309ed27d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ae756126bafd73421de221ba309ed27d9">CreateNodesAndMobility</a> ()</td></tr>
+<tr class="separator:ae756126bafd73421de221ba309ed27d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131eb71dcaf4ecfd67ed1f7e054ef4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a131eb71dcaf4ecfd67ed1f7e054ef4ca">CreateBuildings</a> ()</td></tr>
+<tr class="separator:a131eb71dcaf4ecfd67ed1f7e054ef4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade5c504b923cab50af63c0f49c8ee35b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ade5c504b923cab50af63c0f49c8ee35b">ConfigurePropagationModel</a> ()</td></tr>
+<tr class="separator:ade5c504b923cab50af63c0f49c8ee35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0e079b00d134a82fec8d3dcb394e22c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ab0e079b00d134a82fec8d3dcb394e22c">InstallMobilityFixed</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="separator:ab0e079b00d134a82fec8d3dcb394e22c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28d6212f456c6db5aa6532e0fbec9cd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a28d6212f456c6db5aa6532e0fbec9cd7">InstallMobilityConstantVelocity</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="separator:a28d6212f456c6db5aa6532e0fbec9cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7cdfe8d79d68709a60274919c753b9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ae7cdfe8d79d68709a60274919c753b9f">InstallMobilityRandomWalk</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="separator:ae7cdfe8d79d68709a60274919c753b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32700d192e42c7e629ff99726d5b9b16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a32700d192e42c7e629ff99726d5b9b16">InstallMobilityWaypoint</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="separator:a32700d192e42c7e629ff99726d5b9b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:af617ee5d0702cd14d196523f934776bf"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#af617ee5d0702cd14d196523f934776bf">m_cfg</a></td></tr>
+<tr class="separator:af617ee5d0702cd14d196523f934776bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc3684aac2b770de5c23929d5cdd8d1c"><td class="memItemLeft" align="right" valign="top">ns3::NodeContainer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#abc3684aac2b770de5c23929d5cdd8d1c">m_nodes</a></td></tr>
+<tr class="separator:abc3684aac2b770de5c23929d5cdd8d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a510c5f5b85203fe5c90e976cca1ac4cc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a510c5f5b85203fe5c90e976cca1ac4cc">m_mobilityModels</a></td></tr>
+<tr class="separator:a510c5f5b85203fe5c90e976cca1ac4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba196a5c3823f52ed0bedfd9736da8b6"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#aba196a5c3823f52ed0bedfd9736da8b6">m_propagationModel</a></td></tr>
+<tr class="separator:aba196a5c3823f52ed0bedfd9736da8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f6a7de855f309ef42a02a4c8b259895"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a4f6a7de855f309ef42a02a4c8b259895">m_conditionModel</a></td></tr>
+<tr class="separator:a4f6a7de855f309ef42a02a4c8b259895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa8e34c9a99b447b8b80f8d449b91d504"></a>
@@ -142,6 +191,123 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ade5c504b923cab50af63c0f49c8ee35b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade5c504b923cab50af63c0f49c8ee35b">&#9670;&nbsp;</a></span>ConfigurePropagationModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::ConfigurePropagationModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a131eb71dcaf4ecfd67ed1f7e054ef4ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131eb71dcaf4ecfd67ed1f7e054ef4ca">&#9670;&nbsp;</a></span>CreateBuildings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::CreateBuildings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae756126bafd73421de221ba309ed27d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae756126bafd73421de221ba309ed27d9">&#9670;&nbsp;</a></span>CreateNodesAndMobility()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::CreateNodesAndMobility </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -253,9 +419,320 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a28d6212f456c6db5aa6532e0fbec9cd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28d6212f456c6db5aa6532e0fbec9cd7">&#9670;&nbsp;</a></span>InstallMobilityConstantVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::InstallMobilityConstantVelocity </td>
+          <td>(</td>
+          <td class="paramtype">const ns3::Ptr&lt; ns3::Node &gt; &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;&#160;</td>
+          <td class="paramname"><em>spec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab0e079b00d134a82fec8d3dcb394e22c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0e079b00d134a82fec8d3dcb394e22c">&#9670;&nbsp;</a></span>InstallMobilityFixed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::InstallMobilityFixed </td>
+          <td>(</td>
+          <td class="paramtype">const ns3::Ptr&lt; ns3::Node &gt; &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;&#160;</td>
+          <td class="paramname"><em>spec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae7cdfe8d79d68709a60274919c753b9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7cdfe8d79d68709a60274919c753b9f">&#9670;&nbsp;</a></span>InstallMobilityRandomWalk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::InstallMobilityRandomWalk </td>
+          <td>(</td>
+          <td class="paramtype">const ns3::Ptr&lt; ns3::Node &gt; &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;&#160;</td>
+          <td class="paramname"><em>spec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a32700d192e42c7e629ff99726d5b9b16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32700d192e42c7e629ff99726d5b9b16">&#9670;&nbsp;</a></span>InstallMobilityWaypoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mesh_sim::TopologyBuilder::InstallMobilityWaypoint </td>
+          <td>(</td>
+          <td class="paramtype">const ns3::Ptr&lt; ns3::Node &gt; &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;&#160;</td>
+          <td class="paramname"><em>spec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Description of what the method does.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af617ee5d0702cd14d196523f934776bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af617ee5d0702cd14d196523f934776bf">&#9670;&nbsp;</a></span>m_cfg</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a>&amp; mesh_sim::TopologyBuilder::m_cfg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f6a7de855f309ef42a02a4c8b259895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f6a7de855f309ef42a02a4c8b259895">&#9670;&nbsp;</a></span>m_conditionModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::ChannelConditionModel&gt; mesh_sim::TopologyBuilder::m_conditionModel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a510c5f5b85203fe5c90e976cca1ac4cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a510c5f5b85203fe5c90e976cca1ac4cc">&#9670;&nbsp;</a></span>m_mobilityModels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;ns3::Ptr&lt;ns3::MobilityModel&gt; &gt; mesh_sim::TopologyBuilder::m_mobilityModels</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc3684aac2b770de5c23929d5cdd8d1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc3684aac2b770de5c23929d5cdd8d1c">&#9670;&nbsp;</a></span>m_nodes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::NodeContainer mesh_sim::TopologyBuilder::m_nodes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba196a5c3823f52ed0bedfd9736da8b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba196a5c3823f52ed0bedfd9736da8b6">&#9670;&nbsp;</a></span>m_propagationModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ns3::Ptr&lt;ns3::PropagationLossModel&gt; mesh_sim::TopologyBuilder::m_propagationModel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/setup/<a class="el" href="topology-builder_8h_source.html">topology-builder.h</a></li>
-<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/setup/topology-builder.cc</li>
+<li>/home/kimson/ns3-mmwave/scratch/mesh-sim/src/setup/<a class="el" href="topology-builder_8cc.html">topology-builder.cc</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

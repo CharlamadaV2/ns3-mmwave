@@ -12,13 +12,47 @@ class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1mult
 \begin{DoxyCompactList}\small\item\em Specification for loading and rendering one radio metric. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+Day\+Bag}}
 \begin{DoxyCompactList}\small\item\em All pooled samples for one (family, day, link, metric) combination. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} \mbox{\hyperlink{multi__day_8py_a609a778db51740e3f382851719215734}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day}} (Path per\+\_\+day\+\_\+root, Path multi\+\_\+day\+\_\+root)
+tuple\mbox{[}str, str\mbox{]}$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a985c7bbe01a9ed8da783b8fcb7e9abdb}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+parse\+\_\+scenario}} (str name)
+\begin{DoxyCompactList}\small\item\em Parse a scenario name into its family and date components. \end{DoxyCompactList}\item 
+dict\mbox{[}str, dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a9cbbb5fe41095ba630ce514887532ff1}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+scenarios\+\_\+by\+\_\+family}} (Path per\+\_\+day\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Group scenario directories under a per-\/day root by family and date. \end{DoxyCompactList}\item 
+dict\mbox{[}tuple\mbox{[}str, str, str, str\mbox{]}, \+\_\+\+Day\+Bag\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8b9997a6932d0af1888918e7f2945af3}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+load\+\_\+traces\+\_\+for\+\_\+family}} (dict\mbox{[}str, list\mbox{[}Path\mbox{]}\mbox{]} days)
+\begin{DoxyCompactList}\small\item\em Load and pool trace CSVs across all scenarios for one family. \end{DoxyCompactList}\item 
+dict \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2d96dd6eaaf290eb6bbb48df6347b6c3}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+summary}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Compute quantile summary statistics for an array of values. \end{DoxyCompactList}\item 
+tuple\mbox{[}np.\+ndarray, np.\+ndarray\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ae63443213ea5f0428b601243f1c683ed}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+ecdf}} (np.\+ndarray values)
+\begin{DoxyCompactList}\small\item\em Compute the empirical CDF of a sample array. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_aaa0d2c89085334d215e55d0367ffea5c}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+ks\+\_\+2samp}} (np.\+ndarray a, np.\+ndarray b)
+\begin{DoxyCompactList}\small\item\em Compute the two-\/sample Kolmogorov-\/\+Smirnov statistic without scipy. \end{DoxyCompactList}\item 
+plt.\+Figure \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_adf099d960ce8144a7a415317959fd03d}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+plot\+\_\+ecdfs}} (str family, str src, str peer, \+\_\+\+Metric\+Spec metric, dict\mbox{[}str, \+\_\+\+Day\+Bag\mbox{]} bags\+\_\+by\+\_\+day, float$\vert$None ks\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Metric unit strings for axis and legend annotation. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a6a28845bd619766b2ba15b21c3e74776}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+fmt\+\_\+day}} (str day)
+\begin{DoxyCompactList}\small\item\em Format an 8-\/digit date string as {\ttfamily MM/\+DD/\+YYYY} for display. \end{DoxyCompactList}\item 
+tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a609a778db51740e3f382851719215734}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day}} (Path per\+\_\+day\+\_\+root, Path multi\+\_\+day\+\_\+root)
 \begin{DoxyCompactList}\small\item\em Run the full multi-\/day analysis and write all output files. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day}} ()
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_ab3f446623d746d7e4fcffb2c289647d7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day}} ()
 \begin{DoxyCompactList}\small\item\em CLI entry point for the {\ttfamily multi-\/day} subcommand. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_af01dcd89eb4732822bb63fc405cf2861}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+SUFFIX\+\_\+\+RE}} = re.\+compile(r\char`\"{}\+\_\+(?\+:baseline\+\_\+\textbackslash{}d+\+\_\+)?(\textbackslash{}d\{8\})\$\char`\"{})
+\begin{DoxyCompactList}\small\item\em Regex matching the date suffix of a scenario directory name. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a8db72746083c42f969ebdabf0f888792}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+TRACE\+\_\+\+RE}} = re.\+compile(r\char`\"{}$^\wedge$bh2\+\_\+(\mbox{[}a-\/z\mbox{]}+)\+\_\+\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+to\+\_\+(\mbox{[}a-\/z0-\/9\mbox{]}+)\+\_\+trace\textbackslash{}.\+csv\$\char`\"{})
+\begin{DoxyCompactList}\small\item\em Regex matching a per-\/source trace CSV filename. \end{DoxyCompactList}\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a13e82ee148c957026abdb35016736a9c}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+PREFIX}} = \{m.\+prefix\+: m for m in \+\_\+\+METRICS\}
+\begin{DoxyCompactList}\small\item\em All supported backhaul metrics, in display order. \end{DoxyCompactList}\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a3dd3c2c3de5adcf743a2db329e0b17c7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+METRICS\+\_\+\+BY\+\_\+\+SHORT}} = \{m.\+short\+: m for m in \+\_\+\+METRICS\}
+\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_a2e78952a1e299dc124d2e122076f4bf6}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+\_\+\+MIN\+\_\+\+SAMPLES\+\_\+\+PER\+\_\+\+DAY}} = 100
+\begin{DoxyCompactList}\small\item\em Minimum samples per day for a bag to be included in ECDF/\+K-\/S analysis. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -40,54 +74,3 @@ Pools per-\/day trace CSVs at the (link, metric) level, then renders ECDF overla
 {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}   &Quantile summary per (family, day, link, metric).    \\\cline{1-2}
 {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   &K-\/S statistic + median delta for every day pair.   \\\cline{1-2}
 \end{longtabu}
-
-
-\doxysubsection{Function Documentation}
-\mbox{\Hypertarget{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}\label{multi__day_8py_ab3f446623d746d7e4fcffb2c289647d7}} 
-\index{multi\_day.py@{multi\_day.py}!multi\_day@{multi\_day}}
-\index{multi\_day@{multi\_day}!multi\_day.py@{multi\_day.py}}
-\doxysubsubsection{\texorpdfstring{multi\_day()}{multi\_day()}}
-{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+multi\+\_\+day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-CLI entry point for the {\ttfamily multi-\/day} subcommand. 
-
-Delegates to run\+\_\+multi\+\_\+day using the default PER\+\_\+\+DAY\+\_\+\+DIR and MULTI\+\_\+\+DAY\+\_\+\+DIR paths.
-
-\begin{DoxyReturn}{Returns}
-0 on success. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{multi__day_8py_a609a778db51740e3f382851719215734}\label{multi__day_8py_a609a778db51740e3f382851719215734}} 
-\index{multi\_day.py@{multi\_day.py}!run\_multi\_day@{run\_multi\_day}}
-\index{run\_multi\_day@{run\_multi\_day}!multi\_day.py@{multi\_day.py}}
-\doxysubsubsection{\texorpdfstring{run\_multi\_day()}{run\_multi\_day()}}
-{\footnotesize\ttfamily  tuple\mbox{[}list\mbox{[}dict\mbox{]}, list\mbox{[}dict\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multi\+\_\+day.\+run\+\_\+multi\+\_\+day (\begin{DoxyParamCaption}\item[{Path}]{per\+\_\+day\+\_\+root,  }\item[{Path}]{multi\+\_\+day\+\_\+root }\end{DoxyParamCaption})}
-
-
-
-Run the full multi-\/day analysis and write all output files. 
-
-For each scenario family that has at least two days of data\+:
-\begin{DoxyEnumerate}
-\item Pool trace CSVs into \+\_\+\+Day\+Bag objects via \+\_\+load\+\_\+traces\+\_\+for\+\_\+family.
-\item Compute quantile summaries for {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv}.
-\item Compute K-\/S statistics for every day pair for {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}.
-\item Render and save an ECDF overlay PNG per (link, metric).
-\end{DoxyEnumerate}
-
-
-\begin{DoxyParams}{Parameters}
-{\em per\+\_\+day\+\_\+root} & Directory of per-\/day plot output (produced by {\ttfamily plot}). \\
-\hline
-{\em multi\+\_\+day\+\_\+root} & Output directory for multi-\/day results. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Tuple {\ttfamily (per\+\_\+day\+\_\+rows, pairwise\+\_\+rows)} of the raw dicts written to CSV, useful for testing or downstream processing. 
-\end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em File\+Not\+Found\+Error} & if {\ttfamily per\+\_\+day\+\_\+root} does not exist. \\
-\hline
-\end{DoxyExceptions}

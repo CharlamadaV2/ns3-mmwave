@@ -1,5 +1,20 @@
 var searchData=
 [
-  ['o2i_5floss_5ftype_90',['o2i_loss_type',['../structmesh__sim_1_1NyuChannelConfig.html#a13ff2998980012ed34d3812347a1f8a8',1,'mesh_sim::NyuChannelConfig']]],
-  ['open_91',['Open',['../classmesh__sim_1_1VizWriter.html#af3224ecbd28665c5badae67974dfb8ce',1,'mesh_sim::VizWriter']]]
+  ['n_5ffloors_316',['n_floors',['../structmesh__sim_1_1BuildingSpec.html#afb977d397a08e7faa9c29406e31de4e2',1,'mesh_sim::BuildingSpec']]],
+  ['n_5frooms_5fx_317',['n_rooms_x',['../structmesh__sim_1_1BuildingSpec.html#af011db7e7f046cca7f7e21d889624225',1,'mesh_sim::BuildingSpec']]],
+  ['n_5frooms_5fy_318',['n_rooms_y',['../structmesh__sim_1_1BuildingSpec.html#a5976de118269893baa5a111606dec3ba',1,'mesh_sim::BuildingSpec']]],
+  ['netdev_5forientation_319',['netdev_orientation',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a9203327bd3963aff2a731cd71d6ff953',1,'scratch::mesh-sim::scripts::arpo_data::topology']]],
+  ['node_2dspec_2eh_320',['node-spec.h',['../node-spec_8h.html',1,'']]],
+  ['node_5fcolor_321',['node_color',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a0e7d2239c00dbf42758b5692bf2b3cc4',1,'scratch::mesh-sim::scripts::arpo_data::topology']]],
+  ['node_5ftype_322',['node_type',['../structmesh__sim_1_1NodeSpec.html#a4e780fb1fb9e62a927f571a591342dd0',1,'mesh_sim::NodeSpec']]],
+  ['nodemotion_323',['NodeMotion',['../classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion.html',1,'scratch::mesh-sim::scripts::validation::scenario_fidelity']]],
+  ['nodes_324',['nodes',['../structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d',1,'mesh_sim::SimConfig']]],
+  ['nodespec_325',['NodeSpec',['../structmesh__sim_1_1NodeSpec.html',1,'mesh_sim']]],
+  ['nodestats_326',['NodeStats',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html',1,'mesh_sim::MetricsWriter']]],
+  ['noise_5ffigure_5fdb_327',['noise_figure_db',['../structmesh__sim_1_1ChannelConfig.html#a0f58e4f6d039874fc38225561705124e',1,'mesh_sim::ChannelConfig']]],
+  ['none_328',['None',['../classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html#a9e08f2adeb3769808f1aa643fc6287d6',1,'scratch::mesh-sim::scripts::validation::compare::_MetricSpec']]],
+  ['ns_5flog_5fcomponent_5fdefine_329',['NS_LOG_COMPONENT_DEFINE',['../link-evaluator_8cc.html#aa90c3f00b812b417b8654ef3b75f2868',1,'NS_LOG_COMPONENT_DEFINE(&quot;LinkEvaluator&quot;):&#160;link-evaluator.cc'],['../link-table_8cc.html#a74bde91c57442948070b190e6fe1a830',1,'NS_LOG_COMPONENT_DEFINE(&quot;LinkTable&quot;):&#160;link-table.cc']]],
+  ['numnodes_330',['NumNodes',['../classmesh__sim_1_1LinkTable.html#a7db6ae6d383fef99cf0660aaa662459b',1,'mesh_sim::LinkTable']]],
+  ['nyu_331',['nyu',['../structmesh__sim_1_1ChannelConfig.html#a5827b36e2126974b2967c52654597201',1,'mesh_sim::ChannelConfig']]],
+  ['nyuchannelconfig_332',['NyuChannelConfig',['../structmesh__sim_1_1NyuChannelConfig.html',1,'mesh_sim']]]
 ];

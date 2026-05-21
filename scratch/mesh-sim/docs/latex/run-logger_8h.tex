@@ -1,0 +1,38 @@
+\hypertarget{run-logger_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/run-\/logger.h File Reference}
+\label{run-logger_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/run-\/logger.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/run-\/logger.h}}
+
+
+Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}). No ns-\/3 dependency.  
+
+
+{\ttfamily \#include \char`\"{}src/cli/cli-\/parser.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}src/util/string-\/utils.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for run-\/logger.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{run-logger_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}{mesh\+\_\+sim\+::\+Write\+Run\+Log}} (const std\+::string \&base\+\_\+output\+\_\+dir, const Cli\+Args \&args, const Sim\+Config \&cfg, const std\+::vector$<$ uint32\+\_\+t $>$ \&seeds)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}). No ns-\/3 dependency. 
+

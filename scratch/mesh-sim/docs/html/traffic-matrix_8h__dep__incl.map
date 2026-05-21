@@ -1,0 +1,10 @@
+<map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/traffic/traffic&#45;matrix.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/traffic/traffic&#45;matrix.h">
+<area shape="rect" id="node1" title="TrafficMatrix: flow&#45;level traffic demand generation for the mesh. Supports constant&#45;rate,..." alt="" coords="353,5,561,61"/>
+<area shape="rect" id="node2" href="$mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="237,109,445,165"/>
+<area shape="rect" id="node8" href="$traffic-matrix_8cc.html" title=" " alt="" coords="469,109,677,165"/>
+<area shape="rect" id="node3" href="$metrics-writer_8h.html" title="MetricsWriter: accumulates per&#45;tick metrics in&#45;memory during the step loop, then writes summary...." alt="" coords="5,213,213,269"/>
+<area shape="rect" id="node5" href="$viz-writer_8h.html" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="237,213,445,269"/>
+<area shape="rect" id="node7" href="$mesh-router_8cc.html" title=" " alt="" coords="469,213,677,269"/>
+<area shape="rect" id="node4" href="$metrics-writer_8cc.html" title=" " alt="" coords="5,317,213,373"/>
+<area shape="rect" id="node6" href="$viz-writer_8cc.html" title=" " alt="" coords="237,317,445,373"/>
+</map>

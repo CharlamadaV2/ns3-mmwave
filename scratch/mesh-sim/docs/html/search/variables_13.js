@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['z_344',['z',['../structmesh__sim_1_1Position.html#ad21c75414de8f6c5c45d5168e7fee900',1,'mesh_sim::Position::z()'],['../structmesh__sim_1_1Waypoint.html#ac23a13cbdc551c74dc500c57be2b2a9a',1,'mesh_sim::Waypoint::z()']]],
-  ['z_5fmax_345',['z_max',['../structmesh__sim_1_1BuildingSpec.html#a8861da997c9f6084fb952f8900b6f113',1,'mesh_sim::BuildingSpec']]],
-  ['z_5fmin_346',['z_min',['../structmesh__sim_1_1BuildingSpec.html#a8bdbc76de360669c5365b8015c7d0b3d',1,'mesh_sim::BuildingSpec']]]
+  ['wall_5fstart_1018',['wall_start',['../structmesh__sim_1_1ProgressLogger.html#add18d33c19e53cea1c6f57bb76761fa8',1,'mesh_sim::ProgressLogger']]],
+  ['warmup_5fs_1019',['warmup_s',['../structmesh__sim_1_1SimConfig.html#a570ed017a25501890d2a1ca2e4efa073',1,'mesh_sim::SimConfig']]],
+  ['waypoints_1020',['waypoints',['../structmesh__sim_1_1NodeSpec.html#a80786d2b403d20b06661059d28341476',1,'mesh_sim::NodeSpec']]]
 ];

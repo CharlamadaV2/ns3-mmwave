@@ -70,13 +70,11 @@ $(function() {
 <div class="title">mesh_sim Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><a class="el" href="classmesh__sim_1_1ConfigLoader.html">ConfigLoader</a>: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> struct.  
-<a href="namespacemesh__sim.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsed command-line arguments for one simulator invocation.  <a href="structmesh__sim_1_1CliArgs.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1ConfigLoader.html">ConfigLoader</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,12 +149,16 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa4b2ecd87a1d107fde936d7039ba25d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#aa4b2ecd87a1d107fde936d7039ba25d3">ParseCommandLine</a> (int argc, char *argv[])</td></tr>
+<tr class="memdesc:aa4b2ecd87a1d107fde936d7039ba25d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse <code>argv</code> via <code>ns3::CommandLine</code> and return a populated <a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a>.  <a href="namespacemesh__sim.html#aa4b2ecd87a1d107fde936d7039ba25d3">More...</a><br /></td></tr>
 <tr class="separator:aa4b2ecd87a1d107fde936d7039ba25d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accda71be7646550a00f0f0492a9c93ed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#accda71be7646550a00f0f0492a9c93ed">ResolveSeeds</a> (const <a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a> &amp;args, const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:accda71be7646550a00f0f0492a9c93ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the list of random seeds to run from CLI args and config defaults.  <a href="namespacemesh__sim.html#accda71be7646550a00f0f0492a9c93ed">More...</a><br /></td></tr>
 <tr class="separator:accda71be7646550a00f0f0492a9c93ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1d04f3bb0ee54771ce1ee82f2b3cd27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#aa1d04f3bb0ee54771ce1ee82f2b3cd27">ArchiveScenarioInputs</a> (const std::string &amp;base_output_dir, const std::string &amp;run_config_path)</td></tr>
+<tr class="memdesc:aa1d04f3bb0ee54771ce1ee82f2b3cd27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy all scenario input files into the batch output directory for reproducibility.  <a href="namespacemesh__sim.html#aa1d04f3bb0ee54771ce1ee82f2b3cd27">More...</a><br /></td></tr>
 <tr class="separator:aa1d04f3bb0ee54771ce1ee82f2b3cd27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09050ff52e549176ef6ec6f11b137eea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1ValidationResult.html">ValidationResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">ValidateConfig</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:a09050ff52e549176ef6ec6f11b137eea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> after loading. Returns all errors found (not just the first) so the user can fix them in one pass.  <a href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">More...</a><br /></td></tr>
 <tr class="separator:a09050ff52e549176ef6ec6f11b137eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2a6f1ff9d88d47a0edc29deaa4b1a41"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#af2a6f1ff9d88d47a0edc29deaa4b1a41">MaxSpeedForType</a> (const std::string &amp;node_type)</td></tr>
 <tr class="memdesc:af2a6f1ff9d88d47a0edc29deaa4b1a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the maximum speed (m/s) allowed for a given node type.  <a href="namespacemesh__sim.html#af2a6f1ff9d88d47a0edc29deaa4b1a41">More...</a><br /></td></tr>
@@ -186,26 +188,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a00ba117c4e068667da22c29d3b8ae623"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">parseSeedList</a> (const std::string &amp;arg)</td></tr>
 <tr class="separator:a00ba117c4e068667da22c29d3b8ae623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classmesh__sim_1_1ConfigLoader.html">ConfigLoader</a>: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> struct. </p>
-<p><a class="el" href="classmesh__sim_1_1TopologyBuilder.html">TopologyBuilder</a>: creates ns-3 mobility models, buildings, and propagation models for the mesh topology. This is the only layer that creates ns-3 objects. No EPC, RRC, MAC, or protocol stack.</p>
-<p><a class="el" href="classmesh__sim_1_1MeshRouter.html">MeshRouter</a>: routes flows over the mesh link graph. Supports Dijkstra shortest-path, widest-path (max throughput), and min-hop (BFS) algorithms. Applies proportional-fairness congestion scaling when links are overloaded.</p>
-<p><a class="el" href="classmesh__sim_1_1VizWriter.html">VizWriter</a>: writes per-tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz_tick_ms intervals.</p>
-<p>RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-only (same pattern as <a class="el" href="progress-logger_8h_source.html">progress-logger.h</a>). No ns-3 dependency.</p>
-<p><a class="el" href="structmesh__sim_1_1ProgressLogger.html">ProgressLogger</a>: prints simulation progress to stderr. Called directly from the step loop (no Simulator::Schedule). Header-only.</p>
-<p><a class="el" href="classmesh__sim_1_1MetricsWriter.html">MetricsWriter</a>: accumulates per-tick metrics in-memory during the step loop, then writes summary.json after the simulation completes.</p>
-<p>SINR-to-capacity mapping functions. Pure math, no ns-3 dependency. Used by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html">LinkEvaluator</a> and testable standalone.</p>
-<p><a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a>: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::EvaluateAll() into a symmetric matrix with O(1) per-link lookup.</p>
-<p><a class="el" href="classmesh__sim_1_1LinkEvaluator.html">LinkEvaluator</a>: wraps ns-3 propagation models to compute per-link path loss, SINR, and capacity. Core physics engine of mesh-sim.</p>
-<p>Top-level simulation configuration and runtime metadata POD types. No ns-3 headers included — keeps compilation fast and allows use in post-run IO code without ns-3 linkage.</p>
-<p>Mesh-specific configuration POD types: traffic generation and routing. No ns-3 headers included.</p>
-<p>Per-link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-3 headers included.</p>
-<p>Config validation: checks a fully-loaded <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> for invalid or inconsistent values before the simulation runs. No ns-3 headers &ndash; can be tested independently.</p>
-<p>Command-line parsing and pre-simulation setup helpers. Keeps sim.cc focused on orchestration.</p>
-<p>No ns-3 headers included — this code can be compiled and tested independently of the ns-3 build.</p>
-<p>No ns-3 headers &ndash; stdlib and nlohmann/json only.</p>
-<p>Output files: positions.csv &ndash; time_s, node_id, x, y, z, node_type, active links.csv &ndash; time_s, node_a, node_b, dist_m, sinr_db, condition, condition_reason, capacity_mbps, delivered_mbps, hop_count rx-power.csv &ndash; time_s, node_a, node_b, rx_power_dbm mcs.csv &ndash; time_s, node_a, node_b, mcs_index, spectral_eff flows.csv &ndash; time_s, src, dst, demand_mbps, delivered_mbps, latency_ms, hop_count, routable routes.csv &ndash; time_s, src, dst, path, bottleneck_mbps, hop_count, routable </p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
+<h2 class="groupheader">Typedef Documentation</h2>
 <a id="a187f939986d0aa62413484ee399ec184"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a187f939986d0aa62413484ee399ec184">&#9670;&nbsp;</a></span>IniMap</h2>
 
@@ -247,7 +230,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Copy all regular files from the scenario input directory into &lt;base_output_dir&gt;/inputs/ for reproducibility. </p>
+
+<p>Copy all scenario input files into the batch output directory for reproducibility. </p>
+<p>Creates <code></code> &lt;base_output_dir&gt;/inputs/ and copies every regular file from the directory containing <code>run_config_path</code> (typically <code>nodes.json</code>, <code>buildings.json</code>, and <code>run.ini</code> itself). Subdirectories are not traversed. Existing files in the destination are silently overwritten.</p>
+<p>This ensures every batch output directory is self-contained: re-running with the archived inputs produces identical results without needing the original scenario directory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">base_output_dir</td><td>Root output directory for this batch run. </td></tr>
+    <tr><td class="paramname">run_config_path</td><td>Path to <code>run.ini</code>; its parent directory is the source of files to archive. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -266,20 +259,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Return the parent directory of the given path. Returns "." if the path contains no directory separator. Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -476,7 +455,41 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parse command-line arguments via ns3::CommandLine. Exits with error if &ndash;run-config is not provided. </p>
+
+<p>Parse <code>argv</code> via <code>ns3::CommandLine</code> and return a populated <a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a>. </p>
+<p>Registered flags: </p><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Flag   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&ndash;run-config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">yes   </td><td class="markdownTableBodyNone">Path to <code>run.ini</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&ndash;positions-override</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Path to positions-override JSON (RL hook).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&ndash;seeds</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Comma-separated seed list (e.g. <code>"1,2,3"</code>).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&ndash;seed</code>   </td><td class="markdownTableBodyNone">int   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Single-seed override.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&ndash;run-id</code>   </td><td class="markdownTableBodyNone">int   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Run-ID override.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&ndash;output-dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Output directory override.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&ndash;debug-links</code>   </td><td class="markdownTableBodyNone">bool   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Enable verbose link-evaluation logging.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&ndash;rl-mode</code>   </td><td class="markdownTableBodyNone">bool   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">Enable RL stdin/stdout JSON exchange.   </td></tr>
+</table>
+<p>Exits with code 1 if:</p><ul>
+<li><code>&ndash;run-config</code> is not provided.</li>
+<li>The <code>run-config</code> file does not exist on disk.</li>
+<li><code>&ndash;positions-override</code> is provided but the file does not exist.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>Argument count from <code>main</code>. </td></tr>
+    <tr><td class="paramname">argv</td><td>Argument vector from <code>main</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Populated <a class="el" href="structmesh__sim_1_1CliArgs.html">CliArgs</a> struct. </dd></dl>
 
 </div>
 </div>
@@ -527,20 +540,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Parse a comma-separated string of seed values into a vector. Skips empty tokens (e.g. "1,,3" -&gt; {1, 3}). Exits with an error message if any token is not a valid unsigned integer. Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -583,20 +582,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Resolve a possibly-relative path against a base directory. Returns the path unchanged if it is already absolute or empty. Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -639,7 +624,22 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Determine the seed list from CLI args and config defaults. Priority: &ndash;seeds &gt; &ndash;seed &gt; cfg.seed. </p>
+
+<p>Determine the list of random seeds to run from CLI args and config defaults. </p>
+<p>Resolution priority (highest to lowest):</p><ol type="1">
+<li><code>&ndash;seeds</code> (comma-separated list) — parsed via <code><a class="el" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">parseSeedList()</a></code>.</li>
+<li><code>&ndash;seed</code> (single integer override).</li>
+<li><code>cfg.seed</code> (value from <code>run.ini</code>).</li>
+</ol>
+<p>Exits with code 1 if the resolved list is empty (e.g. <code>&ndash;seeds</code> was supplied but contained no valid integers after parsing).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>Parsed CLI arguments from <a class="el" href="namespacemesh__sim.html#aa4b2ecd87a1d107fde936d7039ba25d3">ParseCommandLine</a>. </td></tr>
+    <tr><td class="paramname">cfg</td><td>Fully loaded simulation config from <code><a class="el" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809" title="Load a complete SimConfig from a run.ini file.">ConfigLoader::Load</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Non-empty vector of seed values in the order they should be run. </dd></dl>
 
 </div>
 </div>
@@ -746,20 +746,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Split a string by tab characters and return the tokens. Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -792,20 +778,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Format a time_point as an ISO 8601 UTC string (e.g. "2026-03-27T14:30:00Z"). Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -838,20 +810,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception.</td></tr>
-  </table>
-  </dd>
-</dl>
 <p>Trim leading and trailing whitespace from a string. Description of what the method does.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -884,7 +842,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Validate a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> after loading. Returns all errors found (not just the first) so the user can fix them in one pass. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

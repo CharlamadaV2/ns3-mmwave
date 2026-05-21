@@ -70,61 +70,75 @@ $(function() {
 <div class="title">mesh-config.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;{</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// How traffic demands are generated between node pairs.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html">   15</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    std::string model = <span class="stringliteral">&quot;constant&quot;</span>;  <span class="comment">// &quot;constant&quot;, &quot;poisson&quot;, &quot;on_off&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="comment">// -- constant model --</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">double</span> demand_mbps = 10.0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">// -- poisson model --</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordtype">double</span> arrival_rate_hz = 1.0;  <span class="comment">// flow arrivals per second (network-wide)</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// -- on_off model (bursty traffic) --</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">double</span> on_time_s  = 1.0;  <span class="comment">// mean ON duration</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">double</span> off_time_s = 1.0;  <span class="comment">// mean OFF duration</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="comment">// -- holding time (all models) --</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">// 0 = flow lasts the entire simulation.</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">double</span> holding_time_s = 0.0;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">// -- flow topology --</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    std::string flow_topology     = <span class="stringliteral">&quot;all_pairs&quot;</span>;  <span class="comment">// &quot;all_pairs&quot;, &quot;random_pairs&quot;, &quot;gateway&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    uint32_t    random_pair_count = 3;             <span class="comment">// for &quot;random_pairs&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::string gateway_node_id   = <span class="stringliteral">&quot;&quot;</span>;            <span class="comment">// for &quot;gateway&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1RoutingConfig.html">   39</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">// &quot;shortest_path&quot;:  Dijkstra on link capacity graph.</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// &quot;max_throughput&quot;: widest-path (maximize bottleneck capacity).</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// &quot;min_hop&quot;:        fewest hops (ignore link quality).</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::string algorithm = <span class="stringliteral">&quot;shortest_path&quot;</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    uint32_t max_hops = 5;  <span class="comment">// 0 = unlimited</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1MeshConfig.html">   49</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1MeshConfig.html">MeshConfig</a></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a> traffic;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a> routing;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
-<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdoc">ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S...</div><div class="ttdef"><b>Definition:</b> cli-parser.cc:19</div></div>
-<div class="ttc" id="astructmesh__sim_1_1MeshConfig_html"><div class="ttname"><a href="structmesh__sim_1_1MeshConfig.html">mesh_sim::MeshConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:50</div></div>
-<div class="ttc" id="astructmesh__sim_1_1RoutingConfig_html"><div class="ttname"><a href="structmesh__sim_1_1RoutingConfig.html">mesh_sim::RoutingConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:40</div></div>
-<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html">mesh_sim::TrafficConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:16</div></div>
+<a href="mesh-config_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// How traffic demands are generated between node pairs.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html">   17</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#af21f47eb33a40cac975d964c5469f6ca">   19</a></span>&#160;    std::string <a class="code" href="structmesh__sim_1_1TrafficConfig.html#af21f47eb33a40cac975d964c5469f6ca">model</a> = <span class="stringliteral">&quot;constant&quot;</span>;  <span class="comment">// &quot;constant&quot;, &quot;poisson&quot;, &quot;on_off&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">// -- constant model --</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">   22</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">demand_mbps</a> = 10.0;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="comment">// -- poisson model --</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#addd560e3c4c07d97672b66820f637b30">   25</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmesh__sim_1_1TrafficConfig.html#addd560e3c4c07d97672b66820f637b30">arrival_rate_hz</a> = 1.0;  <span class="comment">// flow arrivals per second (network-wide)</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="comment">// -- on_off model (bursty traffic) --</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249">   28</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249">on_time_s</a>  = 1.0;  <span class="comment">// mean ON duration</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9">   29</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9">off_time_s</a> = 1.0;  <span class="comment">// mean OFF duration</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// -- holding time (all models) --</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">// 0 = flow lasts the entire simulation.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#a24f36f1ba3e2211afde4d6778c25b831">   33</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmesh__sim_1_1TrafficConfig.html#a24f36f1ba3e2211afde4d6778c25b831">holding_time_s</a> = 0.0;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">// -- flow topology --</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#a00bfca9630b9b8d2efd0e1f00006cdfd">   36</a></span>&#160;    std::string <a class="code" href="structmesh__sim_1_1TrafficConfig.html#a00bfca9630b9b8d2efd0e1f00006cdfd">flow_topology</a>     = <span class="stringliteral">&quot;all_pairs&quot;</span>;  <span class="comment">// &quot;all_pairs&quot;, &quot;random_pairs&quot;, &quot;gateway&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#a4355f0c7788e6f383bd26b137c92d4b3">   37</a></span>&#160;    uint32_t    <a class="code" href="structmesh__sim_1_1TrafficConfig.html#a4355f0c7788e6f383bd26b137c92d4b3">random_pair_count</a> = 3;             <span class="comment">// for &quot;random_pairs&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1TrafficConfig.html#a2a8ba7805d165c6efd34edfa08c368a3">   38</a></span>&#160;    std::string <a class="code" href="structmesh__sim_1_1TrafficConfig.html#a2a8ba7805d165c6efd34edfa08c368a3">gateway_node_id</a>   = <span class="stringliteral">&quot;&quot;</span>;            <span class="comment">// for &quot;gateway&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1RoutingConfig.html">   41</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// &quot;shortest_path&quot;:  Dijkstra on link capacity graph.</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// &quot;max_throughput&quot;: widest-path (maximize bottleneck capacity).</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// &quot;min_hop&quot;:        fewest hops (ignore link quality).</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1RoutingConfig.html#af0f64d12d4838a395cd7a5f8725ea341">   46</a></span>&#160;    std::string <a class="code" href="structmesh__sim_1_1RoutingConfig.html#af0f64d12d4838a395cd7a5f8725ea341">algorithm</a> = <span class="stringliteral">&quot;shortest_path&quot;</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1RoutingConfig.html#abb2492a079f4c3315c2f93e43e19efe8">   48</a></span>&#160;    uint32_t <a class="code" href="structmesh__sim_1_1RoutingConfig.html#abb2492a079f4c3315c2f93e43e19efe8">max_hops</a> = 5;  <span class="comment">// 0 = unlimited</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1MeshConfig.html">   51</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmesh__sim_1_1MeshConfig.html">MeshConfig</a></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1MeshConfig.html#ac52c56a9e29389de8d26bdd510c7f71f">   53</a></span>&#160;    <a class="code" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a> <a class="code" href="structmesh__sim_1_1MeshConfig.html#ac52c56a9e29389de8d26bdd510c7f71f">traffic</a>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="structmesh__sim_1_1MeshConfig.html#ab6d199c6a89c849c1d015c0434a78324">   54</a></span>&#160;    <a class="code" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a> <a class="code" href="structmesh__sim_1_1MeshConfig.html#ab6d199c6a89c849c1d015c0434a78324">routing</a>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
+<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdef"><b>Definition:</b> cli-parser.cc:16</div></div>
+<div class="ttc" id="astructmesh__sim_1_1MeshConfig_html"><div class="ttname"><a href="structmesh__sim_1_1MeshConfig.html">mesh_sim::MeshConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:52</div></div>
+<div class="ttc" id="astructmesh__sim_1_1MeshConfig_html_ab6d199c6a89c849c1d015c0434a78324"><div class="ttname"><a href="structmesh__sim_1_1MeshConfig.html#ab6d199c6a89c849c1d015c0434a78324">mesh_sim::MeshConfig::routing</a></div><div class="ttdeci">RoutingConfig routing</div><div class="ttdef"><b>Definition:</b> mesh-config.h:54</div></div>
+<div class="ttc" id="astructmesh__sim_1_1MeshConfig_html_ac52c56a9e29389de8d26bdd510c7f71f"><div class="ttname"><a href="structmesh__sim_1_1MeshConfig.html#ac52c56a9e29389de8d26bdd510c7f71f">mesh_sim::MeshConfig::traffic</a></div><div class="ttdeci">TrafficConfig traffic</div><div class="ttdef"><b>Definition:</b> mesh-config.h:53</div></div>
+<div class="ttc" id="astructmesh__sim_1_1RoutingConfig_html"><div class="ttname"><a href="structmesh__sim_1_1RoutingConfig.html">mesh_sim::RoutingConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:42</div></div>
+<div class="ttc" id="astructmesh__sim_1_1RoutingConfig_html_abb2492a079f4c3315c2f93e43e19efe8"><div class="ttname"><a href="structmesh__sim_1_1RoutingConfig.html#abb2492a079f4c3315c2f93e43e19efe8">mesh_sim::RoutingConfig::max_hops</a></div><div class="ttdeci">uint32_t max_hops</div><div class="ttdef"><b>Definition:</b> mesh-config.h:48</div></div>
+<div class="ttc" id="astructmesh__sim_1_1RoutingConfig_html_af0f64d12d4838a395cd7a5f8725ea341"><div class="ttname"><a href="structmesh__sim_1_1RoutingConfig.html#af0f64d12d4838a395cd7a5f8725ea341">mesh_sim::RoutingConfig::algorithm</a></div><div class="ttdeci">std::string algorithm</div><div class="ttdef"><b>Definition:</b> mesh-config.h:46</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html">mesh_sim::TrafficConfig</a></div><div class="ttdef"><b>Definition:</b> mesh-config.h:18</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_a00bfca9630b9b8d2efd0e1f00006cdfd"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#a00bfca9630b9b8d2efd0e1f00006cdfd">mesh_sim::TrafficConfig::flow_topology</a></div><div class="ttdeci">std::string flow_topology</div><div class="ttdef"><b>Definition:</b> mesh-config.h:36</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_a24f36f1ba3e2211afde4d6778c25b831"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#a24f36f1ba3e2211afde4d6778c25b831">mesh_sim::TrafficConfig::holding_time_s</a></div><div class="ttdeci">double holding_time_s</div><div class="ttdef"><b>Definition:</b> mesh-config.h:33</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_a2a8ba7805d165c6efd34edfa08c368a3"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#a2a8ba7805d165c6efd34edfa08c368a3">mesh_sim::TrafficConfig::gateway_node_id</a></div><div class="ttdeci">std::string gateway_node_id</div><div class="ttdef"><b>Definition:</b> mesh-config.h:38</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_a4355f0c7788e6f383bd26b137c92d4b3"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#a4355f0c7788e6f383bd26b137c92d4b3">mesh_sim::TrafficConfig::random_pair_count</a></div><div class="ttdeci">uint32_t random_pair_count</div><div class="ttdef"><b>Definition:</b> mesh-config.h:37</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_a5cf2c89d671412a79f89bacc5abb5da9"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9">mesh_sim::TrafficConfig::off_time_s</a></div><div class="ttdeci">double off_time_s</div><div class="ttdef"><b>Definition:</b> mesh-config.h:29</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_aca15ac6c3d33a250bb1a2d463698f679"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">mesh_sim::TrafficConfig::demand_mbps</a></div><div class="ttdeci">double demand_mbps</div><div class="ttdef"><b>Definition:</b> mesh-config.h:22</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_adc9b9af8726f872228eed7f6f1af0249"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249">mesh_sim::TrafficConfig::on_time_s</a></div><div class="ttdeci">double on_time_s</div><div class="ttdef"><b>Definition:</b> mesh-config.h:28</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_addd560e3c4c07d97672b66820f637b30"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#addd560e3c4c07d97672b66820f637b30">mesh_sim::TrafficConfig::arrival_rate_hz</a></div><div class="ttdeci">double arrival_rate_hz</div><div class="ttdef"><b>Definition:</b> mesh-config.h:25</div></div>
+<div class="ttc" id="astructmesh__sim_1_1TrafficConfig_html_af21f47eb33a40cac975d964c5469f6ca"><div class="ttname"><a href="structmesh__sim_1_1TrafficConfig.html#af21f47eb33a40cac975d964c5469f6ca">mesh_sim::TrafficConfig::model</a></div><div class="ttdeci">std::string model</div><div class="ttdef"><b>Definition:</b> mesh-config.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

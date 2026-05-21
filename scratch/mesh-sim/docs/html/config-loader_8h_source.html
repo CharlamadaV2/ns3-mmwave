@@ -70,27 +70,29 @@ $(function() {
 <div class="title">config-loader.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;src/domain/sim-config.h&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1ConfigLoader.html">   17</a></span>&#160;<span class="keyword">class </span><a class="code" href="classmesh__sim_1_1ConfigLoader.html">ConfigLoader</a></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">static</span> <a class="code" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> <a class="code" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">Load</a>(<span class="keyword">const</span> std::string&amp; run_config_path,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                          <span class="keyword">const</span> std::string&amp; positions_override_path = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;};</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
-<div class="ttc" id="aclassmesh__sim_1_1ConfigLoader_html"><div class="ttname"><a href="classmesh__sim_1_1ConfigLoader.html">mesh_sim::ConfigLoader</a></div><div class="ttdef"><b>Definition:</b> config-loader.h:18</div></div>
-<div class="ttc" id="aclassmesh__sim_1_1ConfigLoader_html_af4aedd6c4bb1368e4ac53e7483b19809"><div class="ttname"><a href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">mesh_sim::ConfigLoader::Load</a></div><div class="ttdeci">static SimConfig Load(const std::string &amp;run_config_path, const std::string &amp;positions_override_path=&quot;&quot;)</div><div class="ttdef"><b>Definition:</b> config-loader.cc:113</div></div>
-<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdoc">ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S...</div><div class="ttdef"><b>Definition:</b> cli-parser.cc:19</div></div>
-<div class="ttc" id="astructmesh__sim_1_1SimConfig_html"><div class="ttname"><a href="structmesh__sim_1_1SimConfig.html">mesh_sim::SimConfig</a></div><div class="ttdef"><b>Definition:</b> sim-config.h:55</div></div>
+<a href="config-loader_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="sim-config_8h.html">src/domain/sim-config.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;{</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classmesh__sim_1_1ConfigLoader.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="classmesh__sim_1_1ConfigLoader.html">ConfigLoader</a></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">static</span> <a class="code" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> <a class="code" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">Load</a>(<span class="keyword">const</span> std::string&amp; run_config_path,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                          <span class="keyword">const</span> std::string&amp; positions_override_path = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;};</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
+<div class="ttc" id="aclassmesh__sim_1_1ConfigLoader_html"><div class="ttname"><a href="classmesh__sim_1_1ConfigLoader.html">mesh_sim::ConfigLoader</a></div><div class="ttdef"><b>Definition:</b> config-loader.h:20</div></div>
+<div class="ttc" id="aclassmesh__sim_1_1ConfigLoader_html_af4aedd6c4bb1368e4ac53e7483b19809"><div class="ttname"><a href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">mesh_sim::ConfigLoader::Load</a></div><div class="ttdeci">static SimConfig Load(const std::string &amp;run_config_path, const std::string &amp;positions_override_path=&quot;&quot;)</div><div class="ttdoc">Load a complete SimConfig from a run.ini file.</div><div class="ttdef"><b>Definition:</b> config-loader.cc:109</div></div>
+<div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdef"><b>Definition:</b> cli-parser.cc:16</div></div>
+<div class="ttc" id="asim-config_8h_html"><div class="ttname"><a href="sim-config_8h.html">sim-config.h</a></div><div class="ttdoc">Top-level simulation configuration and runtime metadata POD types. No ns-3 headers included — keeps c...</div></div>
+<div class="ttc" id="astructmesh__sim_1_1SimConfig_html"><div class="ttname"><a href="structmesh__sim_1_1SimConfig.html">mesh_sim::SimConfig</a></div><div class="ttdef"><b>Definition:</b> sim-config.h:57</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

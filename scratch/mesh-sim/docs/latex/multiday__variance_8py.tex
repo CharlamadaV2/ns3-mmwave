@@ -5,18 +5,34 @@
 Day-\/vs-\/day variance table from arpo\+\_\+data\textquotesingle{}s pairwise K-\/S CSV.  
 
 
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7e382db8430d0a4e097d958a1e8cc609}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+fmt\+\_\+day}} (str day)
+\begin{DoxyCompactList}\small\item\em Reformats the date of the scenario to month/day/year. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a22666effcb93696aca1f68948c302b65}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+render\+\_\+table}} (tuple\mbox{[}str,...\mbox{]} header, list\mbox{[}tuple\mbox{[}str,...\mbox{]}\mbox{]} body)
+\begin{DoxyCompactList}\small\item\em Joins header and each row in body together. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ae903ef81ab7c3a120df9152a5f8bff1c}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+summary\+\_\+table}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em One row per (family, link, day-\/pair), sorted by $\vert$Δmed$\vert$ desc. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad95f32cb8780ff509f0548ca2d4997f7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+link\+\_\+rollup}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em per-\/link summary across families\+: how unstable is each link, on average? \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7f79a497ccc2b3d7304b6e1c94fd3c8a}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+family\+\_\+rollup}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em Per-\/family summary\+: which scenarios show the biggest day-\/to-\/day swings? \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
 \begin{DoxyCompactList}\small\item\em Manages command line interface parameters for creating tables. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{multiday__variance_8py_a88fb8ee5daae3c42ece8bc39be37a774}\label{multiday__variance_8py_a88fb8ee5daae3c42ece8bc39be37a774}} 
-{\bfseries scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+REPO\+\_\+\+ROOT} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a88fb8ee5daae3c42ece8bc39be37a774}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+REPO\+\_\+\+ROOT}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
 \item 
-tuple {\bfseries scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}
+tuple \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a8c3aa9138b2649babb72b6a753e110f2}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}}
+\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a95f01168fa90bdfdc50e4cd654fe9ebc}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+\+UNIT\+\_\+\+BY\+\_\+\+METRIC}} = \{\char`\"{}snr\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}rcpi\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}mcs\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}per\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}throughput\char`\"{}\+: \char`\"{}Mbps\char`\"{}\}
 \end{DoxyCompactItemize}
 
 
@@ -24,38 +40,3 @@ tuple {\bfseries scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\
 Day-\/vs-\/day variance table from arpo\+\_\+data\textquotesingle{}s pairwise K-\/S CSV. 
 
 A command line interface that creates day-\/vs-\/day variance. The command line interface can take parameters change the metric, file paths, or to only show specific families 
-
-\doxysubsection{Function Documentation}
-\mbox{\Hypertarget{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}\label{multiday__variance_8py_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}} 
-\index{multiday\_variance.py@{multiday\_variance.py}!main@{main}}
-\index{main@{main}!multiday\_variance.py@{multiday\_variance.py}}
-\doxysubsubsection{\texorpdfstring{main()}{main()}}
-{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
-
-
-
-Manages command line interface parameters for creating tables. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em argv} & List of parameters to be taken from the command line \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-On success returns 0, 1 if df is empty or csv is not found 
-\end{DoxyReturn}
-
-
-\doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{multiday__variance_8py_a8c3aa9138b2649babb72b6a753e110f2}\label{multiday__variance_8py_a8c3aa9138b2649babb72b6a753e110f2}} 
-\index{multiday\_variance.py@{multiday\_variance.py}!DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}}
-\index{DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}!multiday\_variance.py@{multiday\_variance.py}}
-\doxysubsubsection{\texorpdfstring{DEFAULT\_KS\_CSV}{DEFAULT\_KS\_CSV}}
-{\footnotesize\ttfamily tuple scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}
-
-{\bfseries Initial value\+:}
-\begin{DoxyCode}{0}
-\DoxyCodeLine{1 =  (REPO\_ROOT / \textcolor{stringliteral}{"{}data"{}} / \textcolor{stringliteral}{"{}arpo\_extracted"{}} / \textcolor{stringliteral}{"{}\_plots"{}}}
-\DoxyCodeLine{2                   / \textcolor{stringliteral}{"{}multi\_day"{}} / \textcolor{stringliteral}{"{}\_pairwise\_ks.csv"{}})}
-
-\end{DoxyCode}

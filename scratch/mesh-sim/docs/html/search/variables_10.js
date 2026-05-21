@@ -1,4 +1,22 @@
 var searchData=
 [
-  ['waypoints_337',['waypoints',['../structmesh__sim_1_1NodeSpec.html#a80786d2b403d20b06661059d28341476',1,'mesh_sim::NodeSpec']]]
+  ['scenario_983',['scenario',['../structmesh__sim_1_1ChannelConfig.html#a46faa875060c3b19c65291cadf3a523d',1,'mesh_sim::ChannelConfig']]],
+  ['scenario_5fname_984',['scenario_name',['../structmesh__sim_1_1SimConfig.html#a39db45a0e1c8cc5dcc7ada81e58b8674',1,'mesh_sim::SimConfig']]],
+  ['scenarios_5froot_985',['SCENARIOS_ROOT',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1build__waypoints.html#aa768c4459b9347a167e255b366bcc105',1,'scratch::mesh-sim::scripts::validation::build_waypoints']]],
+  ['seed_986',['seed',['../structmesh__sim_1_1ProgressLogger.html#a535a35c5c7c946076128cae6ea49b150',1,'mesh_sim::ProgressLogger::seed()'],['../structmesh__sim_1_1SimConfig.html#a37fb915b2bfd049c40ea83fa3701130c',1,'mesh_sim::SimConfig::seed()']]],
+  ['seed_5foverride_987',['seed_override',['../structmesh__sim_1_1CliArgs.html#a449ab8f083adf436245bfde0ab34140f',1,'mesh_sim::CliArgs']]],
+  ['seeds_5farg_988',['seeds_arg',['../structmesh__sim_1_1CliArgs.html#a683c460f4a5b36f6fb65334a140198ee',1,'mesh_sim::CliArgs']]],
+  ['shadowing_5fenabled_989',['shadowing_enabled',['../structmesh__sim_1_1NyuChannelConfig.html#a6fa9fd68a85e6986628d2b70163674cb',1,'mesh_sim::NyuChannelConfig']]],
+  ['sinr_5fcount_990',['sinr_count',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ab981357b4a40cdd81ef285e5348197fd',1,'mesh_sim::MetricsWriter::NodeStats']]],
+  ['sinr_5fdb_991',['sinr_db',['../structmesh__sim_1_1LinkResult.html#a302dec73819368a16ff10407d8f0d6ff',1,'mesh_sim::LinkResult']]],
+  ['sinr_5fmax_992',['sinr_max',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#aed344344f13b37383e88a543292b1f50',1,'mesh_sim::MetricsWriter::NodeStats']]],
+  ['sinr_5fmin_993',['sinr_min',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a2eb6c6d9d5b237719288880206088236',1,'mesh_sim::MetricsWriter::NodeStats']]],
+  ['sinr_5fmin_5fdb_994',['sinr_min_db',['../structmesh__sim_1_1McsEntry.html#a6921b06a11ddbd487d28c10eb23a9d34',1,'mesh_sim::McsEntry']]],
+  ['sinr_5fsum_995',['sinr_sum',['../structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a7a2b38371544468399be0414f8756459',1,'mesh_sim::MetricsWriter::NodeStats']]],
+  ['spectral_5feff_996',['spectral_eff',['../structmesh__sim_1_1McsEntry.html#a0bee483eea98ff39ea8b7e34bba4cbb8',1,'mesh_sim::McsEntry']]],
+  ['speed_5fmps_997',['speed_mps',['../structmesh__sim_1_1RandomWalkParams.html#adc0572267ec3fda5073a86c5ff9749b1',1,'mesh_sim::RandomWalkParams']]],
+  ['src_998',['src',['../structmesh__sim_1_1FlowResult.html#a1aa5f06e1be0038034f2c372a5c3e35b',1,'mesh_sim::FlowResult::src()'],['../structmesh__sim_1_1Flow.html#a610cb0429055636adee73e9ce55fecd5',1,'mesh_sim::Flow::src()']]],
+  ['start_999',['start',['../structmesh__sim_1_1TimingInfo.html#a34fbf68a1ab72419c50d1e0c9d63d830',1,'mesh_sim::TimingInfo']]],
+  ['start_5ftime_5fs_1000',['start_time_s',['../structmesh__sim_1_1Flow.html#a14f3a507916d5ac0b83169f99e589b5e',1,'mesh_sim::Flow']]],
+  ['step_5fsize_5fm_1001',['step_size_m',['../structmesh__sim_1_1RlConfig.html#a8adc9ab415737f057fc5aae02009548a',1,'mesh_sim::RlConfig']]]
 ];

@@ -1,0 +1,22 @@
+\hypertarget{dir_5081caf4253f166c37035217032e821c}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval Directory Reference}
+\label{dir_5081caf4253f166c37035217032e821c}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval Directory Reference@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval Directory Reference}}
+Directory dependency graph for eval\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=166pt]{dir_5081caf4253f166c37035217032e821c_dep}
+\end{center}
+\end{figure}
+\doxysubsection*{Files}
+\begin{DoxyCompactItemize}
+\item 
+file \mbox{\hyperlink{link-evaluator_8cc}{link-\/evaluator.\+cc}}
+\item 
+file \mbox{\hyperlink{link-evaluator_8h}{link-\/evaluator.\+h}}
+\begin{DoxyCompactList}\small\item\em Link\+Evaluator\+: wraps ns-\/3 propagation models to compute per-\/link path loss, SINR, and capacity. Core physics engine of mesh-\/sim. \end{DoxyCompactList}\item 
+file \mbox{\hyperlink{link-table_8cc}{link-\/table.\+cc}}
+\item 
+file \mbox{\hyperlink{link-table_8h}{link-\/table.\+h}}
+\begin{DoxyCompactList}\small\item\em Link\+Table\+: NxN link quality matrix updated each tick. Wraps the flat output of Link\+Evaluator\+::\+Evaluate\+All() into a symmetric matrix with O(1) per-\/link lookup. \end{DoxyCompactList}\item 
+file \mbox{\hyperlink{sinr-capacity_8h}{sinr-\/capacity.\+h}}
+\begin{DoxyCompactList}\small\item\em SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by Link\+Evaluator and testable standalone. \end{DoxyCompactList}\end{DoxyCompactItemize}

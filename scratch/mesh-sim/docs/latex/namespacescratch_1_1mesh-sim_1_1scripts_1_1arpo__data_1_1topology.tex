@@ -1,0 +1,288 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology}\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+str$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a9203327bd3963aff2a731cd71d6ff953}{netdev\+\_\+orientation}} (str rab, str netdev)
+\begin{DoxyCompactList}\small\item\em Fixed matplotlib colour for each well-\/known node label. \end{DoxyCompactList}\item 
+dict\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ad7fafb07da0a03705ddc4cfea47566b9}{\+\_\+rab\+\_\+netdevs}} (Path csv\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Build the global \{rab\+: sorted\+\_\+netdevs\} map from a CSV root, with caching. \end{DoxyCompactList}\item 
+int$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a681a7d7ef34c18f98dd0246058233021}{radio\+\_\+index}} (str rab, str netdev, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Return the 1-\/based position of a netdev in its rab\textquotesingle{}s sorted list. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a06665ab6680c5342211daa86aa07bf58}{radio\+\_\+label}} (str rab, str netdev, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Return the human-\/readable {\ttfamily rab\+N.\+M} label for a (rab, netdev) pair. \end{DoxyCompactList}\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aece051d73b5792f6912be3bc860823d1}{\+\_\+global\+\_\+mac\+\_\+netdevs}} (Path csv\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Build the global \{mac\+: netdev\} map across all scenarios, with caching. \end{DoxyCompactList}\item 
+str$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aba3402870cc86790151c3c942ca62f12}{mac\+\_\+radio\+\_\+label}} (str mac, Path$\vert$None csv\+\_\+root=None)
+\begin{DoxyCompactList}\small\item\em Resolve a MAC address to its {\ttfamily rab\+N.\+M} radio label. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a0e7d2239c00dbf42758b5692bf2b3cc4}{node\+\_\+color}} (str label)
+\begin{DoxyCompactList}\small\item\em Return the matplotlib colour string for a node label. \end{DoxyCompactList}\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a694532db90264b9c6e4fe35b6ca66111}{\+\_\+global\+\_\+local\+\_\+macs}} (Path csv\+\_\+root)
+\begin{DoxyCompactList}\small\item\em Build the global \{mac\+: hostname\} map for every local MAC, with caching. \end{DoxyCompactList}\item 
+dict\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac9eee33ea46e060f34cf213d28bc7298}{build\+\_\+topology}} (Path scen\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em Build the \{mac\+: label\} topology map for a single scenario directory. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a1a580f5cccded40f10bd3f9e95cf3a05}{resolve\+\_\+peer}} (mac, dict\mbox{[}str, str\mbox{]} topo)
+\begin{DoxyCompactList}\small\item\em Resolve a peer MAC to its label using a pre-\/built topology map. \end{DoxyCompactList}\item 
+list\mbox{[}list\mbox{[}str\mbox{]}\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a02318f6ffe20795b3e33af2065784e84}{\+\_\+cluster\+\_\+macs}} (list\mbox{[}str\mbox{]} macs)
+\begin{DoxyCompactList}\small\item\em Group MAC addresses whose last byte is within 3 of any group member. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac5087423b8b1cac1044ac6404e44c617}{\+\_\+last\+\_\+byte}} (str mac)
+\begin{DoxyCompactList}\small\item\em Parse the last octet of a colon-\/separated MAC address as an integer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a02318f6ffe20795b3e33af2065784e84}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a02318f6ffe20795b3e33af2065784e84}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!\_cluster\_macs@{\_cluster\_macs}}
+\index{\_cluster\_macs@{\_cluster\_macs}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{\_cluster\_macs()}{\_cluster\_macs()}}
+{\footnotesize\ttfamily  list\mbox{[}list\mbox{[}str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+\_\+cluster\+\_\+macs (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]}}]{macs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Group MAC addresses whose last byte is within 3 of any group member. 
+
+This heuristic clusters MACs that belong to the same physical device, which often increments its last byte across radios (e.\+g. {\ttfamily aa\+:bb\+:01}, {\ttfamily aa\+:bb\+:02}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em macs} & List of MAC address strings to cluster. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+List of groups, each group being a list of related MAC strings. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a694532db90264b9c6e4fe35b6ca66111}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a694532db90264b9c6e4fe35b6ca66111}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!\_global\_local\_macs@{\_global\_local\_macs}}
+\index{\_global\_local\_macs@{\_global\_local\_macs}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{\_global\_local\_macs()}{\_global\_local\_macs()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+\_\+global\+\_\+local\+\_\+macs (\begin{DoxyParamCaption}\item[{Path}]{csv\+\_\+root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Build the global \{mac\+: hostname\} map for every local MAC, with caching. 
+
+A MAC is \char`\"{}local\char`\"{} if it ever appeared in {\ttfamily tag\+\_\+local\+\_\+mac} for a node\textquotesingle{}s {\ttfamily bh2.\+csv}. The first hostname that claims a MAC wins (setdefault).
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+\_\+root} & Root of the per-\/scenario CSV tree. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapping from MAC address string to chassis hostname. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aece051d73b5792f6912be3bc860823d1}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aece051d73b5792f6912be3bc860823d1}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!\_global\_mac\_netdevs@{\_global\_mac\_netdevs}}
+\index{\_global\_mac\_netdevs@{\_global\_mac\_netdevs}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{\_global\_mac\_netdevs()}{\_global\_mac\_netdevs()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+\_\+global\+\_\+mac\+\_\+netdevs (\begin{DoxyParamCaption}\item[{Path}]{csv\+\_\+root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Build the global \{mac\+: netdev\} map across all scenarios, with caching. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+\_\+root} & Root of the per-\/scenario CSV tree. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapping from MAC address string to the netdev name that owns it. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac5087423b8b1cac1044ac6404e44c617}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac5087423b8b1cac1044ac6404e44c617}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!\_last\_byte@{\_last\_byte}}
+\index{\_last\_byte@{\_last\_byte}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{\_last\_byte()}{\_last\_byte()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+\_\+last\+\_\+byte (\begin{DoxyParamCaption}\item[{str}]{mac }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Parse the last octet of a colon-\/separated MAC address as an integer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & MAC address string (e.\+g. {\ttfamily \char`\"{}aa\+:bb\+:cc\+:dd\+:ee\+:ff\char`\"{}}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Integer value of the last byte. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ad7fafb07da0a03705ddc4cfea47566b9}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ad7fafb07da0a03705ddc4cfea47566b9}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!\_rab\_netdevs@{\_rab\_netdevs}}
+\index{\_rab\_netdevs@{\_rab\_netdevs}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{\_rab\_netdevs()}{\_rab\_netdevs()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, list\mbox{[}str\mbox{]}\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+\_\+rab\+\_\+netdevs (\begin{DoxyParamCaption}\item[{Path}]{csv\+\_\+root }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Build the global \{rab\+: sorted\+\_\+netdevs\} map from a CSV root, with caching. 
+
+Scans every {\ttfamily bh2.\+csv} under {\ttfamily csv\+\_\+root} for {\ttfamily tag\+\_\+interface} values and groups them by node directory name. Results are cached keyed by {\ttfamily csv\+\_\+root} so repeated calls within one process pay the I/O cost only once.
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+\_\+root} & Root of the per-\/scenario CSV tree (see Dataset\+Paths.\+csv\+\_\+root). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapping from rab hostname to its sorted list of observed netdev names. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac9eee33ea46e060f34cf213d28bc7298}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac9eee33ea46e060f34cf213d28bc7298}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!build\_topology@{build\_topology}}
+\index{build\_topology@{build\_topology}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{build\_topology()}{build\_topology()}}
+{\footnotesize\ttfamily  dict\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+build\+\_\+topology (\begin{DoxyParamCaption}\item[{Path}]{scen\+\_\+dir }\end{DoxyParamCaption})}
+
+
+
+Build the \{mac\+: label\} topology map for a single scenario directory. 
+
+Labels known MACs from the global local-\/\+MAC table, then groups any remaining peer-\/only MACs by last-\/byte proximity and assigns them {\ttfamily ext1}, {\ttfamily ext2}, …
+
+
+\begin{DoxyParams}{Parameters}
+{\em scen\+\_\+dir} & Path to one scenario directory (parent is assumed to be csv\+\_\+root). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mapping from MAC address string to human-\/readable node label. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aba3402870cc86790151c3c942ca62f12}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_aba3402870cc86790151c3c942ca62f12}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!mac\_radio\_label@{mac\_radio\_label}}
+\index{mac\_radio\_label@{mac\_radio\_label}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{mac\_radio\_label()}{mac\_radio\_label()}}
+{\footnotesize\ttfamily  str $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+mac\+\_\+radio\+\_\+label (\begin{DoxyParamCaption}\item[{str}]{mac,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Resolve a MAC address to its {\ttfamily rab\+N.\+M} radio label. 
+
+Returns {\ttfamily None} if no rab ever claimed this MAC as a local MAC, meaning it is a peer-\/only address that cannot be tied to a specific radio.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & MAC address string (colon-\/separated hex). \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily \char`\"{}rab\+N.\+M\char`\"{}} label or {\ttfamily None}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a9203327bd3963aff2a731cd71d6ff953}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a9203327bd3963aff2a731cd71d6ff953}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!netdev\_orientation@{netdev\_orientation}}
+\index{netdev\_orientation@{netdev\_orientation}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{netdev\_orientation()}{netdev\_orientation()}}
+{\footnotesize\ttfamily  str $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+netdev\+\_\+orientation (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev }\end{DoxyParamCaption})}
+
+
+
+Fixed matplotlib colour for each well-\/known node label. 
+
+Unmapped labels fall back to {\ttfamily \char`\"{}0.\+4\char`\"{}} (medium grey). {\ttfamily \char`\"{}?\char`\"{}} is the sentinel used when a MAC cannot be resolved at all.
+
+Netdev-\/to-\/antenna-\/face mapping for rab2 only.
+
+rab1 and rab3 carry extra lowercase {\ttfamily wlp$\ast$} netdevs that this layout cannot describe, so orientation is only defined for rab2. Source\+: {\ttfamily data/titan01-\/mw.\+json}.
+
+Return the antenna-\/face orientation for a (rab, netdev) pair.
+
+Only rab2 has a known orientation table; all other rabs return None.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname (e.\+g. {\ttfamily \char`\"{}rab2\char`\"{}}). \\
+\hline
+{\em netdev} & Linux netdev name (e.\+g. {\ttfamily \char`\"{}wl\+P1p1s0f0\char`\"{}}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Orientation string ({\ttfamily \char`\"{}front\char`\"{}}, {\ttfamily \char`\"{}rear\char`\"{}}, {\ttfamily \char`\"{}left\char`\"{}}, {\ttfamily \char`\"{}right\char`\"{}}) or {\ttfamily None} if unknown. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a0e7d2239c00dbf42758b5692bf2b3cc4}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a0e7d2239c00dbf42758b5692bf2b3cc4}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!node\_color@{node\_color}}
+\index{node\_color@{node\_color}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{node\_color()}{node\_color()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+node\+\_\+color (\begin{DoxyParamCaption}\item[{str}]{label }\end{DoxyParamCaption})}
+
+
+
+Return the matplotlib colour string for a node label. 
+
+Unmapped labels (not in FIXED\+\_\+\+COLORS) return {\ttfamily \char`\"{}0.\+4\char`\"{}} (medium grey).
+
+
+\begin{DoxyParams}{Parameters}
+{\em label} & Node label such as {\ttfamily \char`\"{}rab1\char`\"{}} or {\ttfamily \char`\"{}ext2\char`\"{}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matplotlib colour string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a681a7d7ef34c18f98dd0246058233021}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a681a7d7ef34c18f98dd0246058233021}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!radio\_index@{radio\_index}}
+\index{radio\_index@{radio\_index}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{radio\_index()}{radio\_index()}}
+{\footnotesize\ttfamily  int $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+index (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Return the 1-\/based position of a netdev in its rab\textquotesingle{}s sorted list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname. \\
+\hline
+{\em netdev} & Linux netdev name. \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1-\/based index, or {\ttfamily None} if the netdev is not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a06665ab6680c5342211daa86aa07bf58}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a06665ab6680c5342211daa86aa07bf58}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!radio\_label@{radio\_label}}
+\index{radio\_label@{radio\_label}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{radio\_label()}{radio\_label()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+radio\+\_\+label (\begin{DoxyParamCaption}\item[{str}]{rab,  }\item[{str}]{netdev,  }\item[{Path $\vert$ None }]{csv\+\_\+root = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Return the human-\/readable {\ttfamily rab\+N.\+M} label for a (rab, netdev) pair. 
+
+Falls back to {\ttfamily \char`\"{}\{rab\}.?\char`\"{}} when the netdev index cannot be determined.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rab} & Chassis hostname. \\
+\hline
+{\em netdev} & Linux netdev name. \\
+\hline
+{\em csv\+\_\+root} & CSV root to scan; defaults to CSV\+\_\+\+ROOT when {\ttfamily None}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Label string such as {\ttfamily \char`\"{}rab2.\+3\char`\"{}} or {\ttfamily \char`\"{}rab1.?\char`\"{}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a1a580f5cccded40f10bd3f9e95cf3a05}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_a1a580f5cccded40f10bd3f9e95cf3a05}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}!resolve\_peer@{resolve\_peer}}
+\index{resolve\_peer@{resolve\_peer}!scratch.mesh-\/sim.scripts.arpo\_data.topology@{scratch.mesh-\/sim.scripts.arpo\_data.topology}}
+\doxysubsubsection{\texorpdfstring{resolve\_peer()}{resolve\_peer()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+topology.\+resolve\+\_\+peer (\begin{DoxyParamCaption}\item[{}]{mac,  }\item[{dict\mbox{[}str, str\mbox{]}}]{topo }\end{DoxyParamCaption})}
+
+
+
+Resolve a peer MAC to its label using a pre-\/built topology map. 
+
+Returns {\ttfamily \char`\"{}?\char`\"{}} for Na\+N/\+None MACs and {\ttfamily \char`\"{}?\+:$<$last5$>$\char`\"{}} for MACs absent from the topology, providing enough context to identify the device in logs.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & MAC address value (may be {\ttfamily float(\char`\"{}nan\char`\"{})} from pandas). \\
+\hline
+{\em topo} & Topology map produced by \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology_ac9eee33ea46e060f34cf213d28bc7298}{build\+\_\+topology}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Human-\/readable label string. 
+\end{DoxyReturn}

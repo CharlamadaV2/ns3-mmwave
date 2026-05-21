@@ -1,0 +1,44 @@
+\hypertarget{config-validator_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/validator.h File Reference}
+\label{config-validator_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/validator.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/validator.h}}
+
+
+Config validation\+: checks a fully-\/loaded Sim\+Config for invalid or inconsistent values before the simulation runs. No ns-\/3 headers -- can be tested independently.  
+
+
+{\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for config-\/validator.h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{config-validator_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{config-validator_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{mesh\+\_\+sim\+::\+Validation\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacemesh__sim}{mesh\+\_\+sim}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Validation\+Result \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{mesh\+\_\+sim\+::\+Validate\+Config}} (const Sim\+Config \&cfg)
+\begin{DoxyCompactList}\small\item\em Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after loading. Returns all errors found (not just the first) so the user can fix them in one pass. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Config validation\+: checks a fully-\/loaded Sim\+Config for invalid or inconsistent values before the simulation runs. No ns-\/3 headers -- can be tested independently. 
+

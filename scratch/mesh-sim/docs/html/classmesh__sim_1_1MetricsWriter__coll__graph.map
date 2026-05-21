@@ -1,0 +1,11 @@
+<map id="mesh_sim::MetricsWriter" name="mesh_sim::MetricsWriter">
+<area shape="rect" id="node1" title=" " alt="" coords="415,273,600,300"/>
+<area shape="rect" id="node2" href="$structmesh__sim_1_1SimConfig.html" title=" " alt="" coords="331,184,494,211"/>
+<area shape="rect" id="node3" href="$structmesh__sim_1_1MeshConfig.html" title=" " alt="" coords="139,95,313,121"/>
+<area shape="rect" id="node4" href="$structmesh__sim_1_1RoutingConfig.html" title=" " alt="" coords="5,5,193,32"/>
+<area shape="rect" id="node5" href="$structmesh__sim_1_1TrafficConfig.html" title=" " alt="" coords="217,5,395,32"/>
+<area shape="rect" id="node6" href="$structmesh__sim_1_1RlConfig.html" title=" " alt="" coords="337,95,488,121"/>
+<area shape="rect" id="node7" href="$structmesh__sim_1_1ChannelConfig.html" title="Complete radio and channel configuration for a simulation run." alt="" coords="512,95,703,121"/>
+<area shape="rect" id="node8" href="$structmesh__sim_1_1NyuChannelConfig.html" title="Parameters specific to the NYU mmWave channel model." alt="" coords="499,5,716,32"/>
+<area shape="rect" id="node9" href="$structmesh__sim_1_1TimingInfo.html" title=" " alt="" coords="519,184,685,211"/>
+</map>

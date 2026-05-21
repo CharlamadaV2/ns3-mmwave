@@ -1,0 +1,172 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance}\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7e382db8430d0a4e097d958a1e8cc609}{\+\_\+fmt\+\_\+day}} (str day)
+\begin{DoxyCompactList}\small\item\em Reformats the date of the scenario to month/day/year. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a22666effcb93696aca1f68948c302b65}{\+\_\+render\+\_\+table}} (tuple\mbox{[}str,...\mbox{]} header, list\mbox{[}tuple\mbox{[}str,...\mbox{]}\mbox{]} body)
+\begin{DoxyCompactList}\small\item\em Joins header and each row in body together. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ae903ef81ab7c3a120df9152a5f8bff1c}{\+\_\+summary\+\_\+table}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em One row per (family, link, day-\/pair), sorted by $\vert$Δmed$\vert$ desc. \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad95f32cb8780ff509f0548ca2d4997f7}{\+\_\+link\+\_\+rollup}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em per-\/link summary across families\+: how unstable is each link, on average? \end{DoxyCompactList}\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7f79a497ccc2b3d7304b6e1c94fd3c8a}{\+\_\+family\+\_\+rollup}} (pd.\+Data\+Frame df, str unit)
+\begin{DoxyCompactList}\small\item\em Per-\/family summary\+: which scenarios show the biggest day-\/to-\/day swings? \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}{main}} (list\mbox{[}str\mbox{]}$\vert$None argv=None)
+\begin{DoxyCompactList}\small\item\em Manages command line interface parameters for creating tables. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a88fb8ee5daae3c42ece8bc39be37a774}{REPO\+\_\+\+ROOT}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}
+\item 
+tuple \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a8c3aa9138b2649babb72b6a753e110f2}{DEFAULT\+\_\+\+KS\+\_\+\+CSV}}
+\item 
+dictionary \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a95f01168fa90bdfdc50e4cd654fe9ebc}{\+\_\+\+UNIT\+\_\+\+BY\+\_\+\+METRIC}} = \{\char`\"{}snr\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}rcpi\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}mcs\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}per\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}throughput\char`\"{}\+: \char`\"{}Mbps\char`\"{}\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7f79a497ccc2b3d7304b6e1c94fd3c8a}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7f79a497ccc2b3d7304b6e1c94fd3c8a}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_family\_rollup@{\_family\_rollup}}
+\index{\_family\_rollup@{\_family\_rollup}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_family\_rollup()}{\_family\_rollup()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+family\+\_\+rollup (\begin{DoxyParamCaption}\item[{pd.\+Data\+Frame}]{df,  }\item[{str}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Per-\/family summary\+: which scenarios show the biggest day-\/to-\/day swings? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em df} & dataframe of scenario of the two compared days \\
+\hline
+{\em metric} & unit of the scenarios data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+\_\+render\+\_\+table Result of rendered table with params from formatted header and body 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7e382db8430d0a4e097d958a1e8cc609}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a7e382db8430d0a4e097d958a1e8cc609}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_fmt\_day@{\_fmt\_day}}
+\index{\_fmt\_day@{\_fmt\_day}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_fmt\_day()}{\_fmt\_day()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+fmt\+\_\+day (\begin{DoxyParamCaption}\item[{str}]{day }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Reformats the date of the scenario to month/day/year. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em date} & The given day/month/year of the scenario \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string The scenarios date formatted in month/day/year 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad95f32cb8780ff509f0548ca2d4997f7}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad95f32cb8780ff509f0548ca2d4997f7}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_link\_rollup@{\_link\_rollup}}
+\index{\_link\_rollup@{\_link\_rollup}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_link\_rollup()}{\_link\_rollup()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+link\+\_\+rollup (\begin{DoxyParamCaption}\item[{pd.\+Data\+Frame}]{df,  }\item[{str}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+per-\/link summary across families\+: how unstable is each link, on average? 
+
+
+\begin{DoxyParams}{Parameters}
+{\em df} & dataframe of scenario of the two compared days \\
+\hline
+{\em metric} & unit of the scenarios data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+\_\+render\+\_\+table Result of rendered table with params from formatted header and body 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a22666effcb93696aca1f68948c302b65}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a22666effcb93696aca1f68948c302b65}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_render\_table@{\_render\_table}}
+\index{\_render\_table@{\_render\_table}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_render\_table()}{\_render\_table()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+render\+\_\+table (\begin{DoxyParamCaption}\item[{tuple\mbox{[}str, ...\mbox{]}}]{header,  }\item[{list\mbox{[}tuple\mbox{[}str, ...\mbox{]}\mbox{]}}]{body }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Joins header and each row in body together. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em header} & Row of column headers to be linked to body \\
+\hline
+{\em body} & Rows of data to be linked together \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Result of the assembled table 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ae903ef81ab7c3a120df9152a5f8bff1c}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ae903ef81ab7c3a120df9152a5f8bff1c}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_summary\_table@{\_summary\_table}}
+\index{\_summary\_table@{\_summary\_table}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_summary\_table()}{\_summary\_table()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+summary\+\_\+table (\begin{DoxyParamCaption}\item[{pd.\+Data\+Frame}]{df,  }\item[{str}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+One row per (family, link, day-\/pair), sorted by $\vert$Δmed$\vert$ desc. 
+
+\#\# 
+\begin{DoxyParams}{Parameters}
+{\em df} & dataframe of scenario of the two compared days \\
+\hline
+{\em metric} & unit of the scenarios data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+\_\+render\+\_\+table Result of rendered table with params from formatted header and body 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_ad52c59c6defc6c2a0e4c6ecf0b6d20d5}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!main@{main}}
+\index{main@{main}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily  int scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+main (\begin{DoxyParamCaption}\item[{list\mbox{[}str\mbox{]} $\vert$ None }]{argv = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Manages command line interface parameters for creating tables. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv} & List of parameters to be taken from the command line \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+On success returns 0, 1 if df is empty or csv is not found 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a95f01168fa90bdfdc50e4cd654fe9ebc}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a95f01168fa90bdfdc50e4cd654fe9ebc}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!\_UNIT\_BY\_METRIC@{\_UNIT\_BY\_METRIC}}
+\index{\_UNIT\_BY\_METRIC@{\_UNIT\_BY\_METRIC}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{\_UNIT\_BY\_METRIC}{\_UNIT\_BY\_METRIC}}
+{\footnotesize\ttfamily dictionary scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+\_\+\+UNIT\+\_\+\+BY\+\_\+\+METRIC = \{\char`\"{}snr\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}rcpi\char`\"{}\+: \char`\"{}dB\char`\"{}, \char`\"{}mcs\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}per\char`\"{}\+: \char`\"{}\char`\"{}, \char`\"{}throughput\char`\"{}\+: \char`\"{}Mbps\char`\"{}\}\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a8c3aa9138b2649babb72b6a753e110f2}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a8c3aa9138b2649babb72b6a753e110f2}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}}
+\index{DEFAULT\_KS\_CSV@{DEFAULT\_KS\_CSV}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_KS\_CSV}{DEFAULT\_KS\_CSV}}
+{\footnotesize\ttfamily tuple scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+DEFAULT\+\_\+\+KS\+\_\+\+CSV}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  (REPO\_ROOT / \textcolor{stringliteral}{"{}data"{}} / \textcolor{stringliteral}{"{}arpo\_extracted"{}} / \textcolor{stringliteral}{"{}\_plots"{}}}
+\DoxyCodeLine{2                   / \textcolor{stringliteral}{"{}multi\_day"{}} / \textcolor{stringliteral}{"{}\_pairwise\_ks.csv"{}})}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a88fb8ee5daae3c42ece8bc39be37a774}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance_a88fb8ee5daae3c42ece8bc39be37a774}} 
+\index{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}!REPO\_ROOT@{REPO\_ROOT}}
+\index{REPO\_ROOT@{REPO\_ROOT}!scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance@{scratch.mesh-\/sim.scripts.arpo\_data.multiday\_variance}}
+\doxysubsubsection{\texorpdfstring{REPO\_ROOT}{REPO\_ROOT}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance.\+REPO\+\_\+\+ROOT = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parents\mbox{[}2\mbox{]}}
+

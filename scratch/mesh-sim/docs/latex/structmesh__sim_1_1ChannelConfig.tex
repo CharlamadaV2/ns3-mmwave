@@ -21,15 +21,12 @@ Collaboration diagram for mesh\+\_\+sim\+::Channel\+Config\+:\nopagebreak
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a3ed072eb150a3c9070b68931a310cc59}\label{structmesh__sim_1_1ChannelConfig_a3ed072eb150a3c9070b68931a310cc59}} 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a3ed072eb150a3c9070b68931a310cc59}{frequency\+\_\+ghz}} = 28.\+0
 \begin{DoxyCompactList}\small\item\em Carrier frequency in GHz. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a73ba58e55344b3d8e1097372320705db}\label{structmesh__sim_1_1ChannelConfig_a73ba58e55344b3d8e1097372320705db}} 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a73ba58e55344b3d8e1097372320705db}{tx\+\_\+power\+\_\+dbm}} = 30.\+0
 \begin{DoxyCompactList}\small\item\em Per-\/node transmit power in d\+Bm. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a46faa875060c3b19c65291cadf3a523d}{scenario}} = \char`\"{}UMi\char`\"{}
 \begin{DoxyCompactList}\small\item\em {\ttfamily \char`\"{}\+UMa\char`\"{}}, {\ttfamily \char`\"{}\+RMa\char`\"{}}, {\ttfamily \char`\"{}\+In\+H\char`\"{}}, or {\ttfamily \char`\"{}\+In\+F\char`\"{}}. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}\label{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}} 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}{channel\+\_\+model}} = \char`\"{}3gpp\char`\"{}
 \begin{DoxyCompactList}\small\item\em Model selection\+: {\ttfamily \char`\"{}3gpp\char`\"{}} or {\ttfamily \char`\"{}nyu\char`\"{}}. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a723e294ef9c6b82ba45a5ee11474dc07}{blockage\+\_\+enabled}} = true
@@ -38,18 +35,14 @@ std\+::string \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_aad590e90b726a59
 \begin{DoxyCompactList}\small\item\em mesh-\/sim uses a simplified SVD implementation). \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_ab986e1e926a8416248f97eb9693f9c93}{amc\+\_\+model}} = \char`\"{}shannon\char`\"{}
 \item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a0f58e4f6d039874fc38225561705124e}\label{structmesh__sim_1_1ChannelConfig_a0f58e4f6d039874fc38225561705124e}} 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a0f58e4f6d039874fc38225561705124e}{noise\+\_\+figure\+\_\+db}} = 5.\+0
 \begin{DoxyCompactList}\small\item\em Receiver noise figure in dB. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a140ace79b2f0926605e8b2da3efdf474}{bandwidth\+\_\+mhz}} = 400.\+0
 \begin{DoxyCompactList}\small\item\em and Shannon-\/capacity calculations. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a63fdc79768d957215b0059347804c11a}\label{structmesh__sim_1_1ChannelConfig_a63fdc79768d957215b0059347804c11a}} 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a63fdc79768d957215b0059347804c11a}{tx\+\_\+array\+\_\+gain\+\_\+dbi}} = 12.\+0
 \begin{DoxyCompactList}\small\item\em Peak TX array gain in d\+Bi (per side). \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a669268605fcb3227231ad80def49ab57}\label{structmesh__sim_1_1ChannelConfig_a669268605fcb3227231ad80def49ab57}} 
 double \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a669268605fcb3227231ad80def49ab57}{rx\+\_\+array\+\_\+gain\+\_\+dbi}} = 12.\+0
 \begin{DoxyCompactList}\small\item\em Peak RX array gain in d\+Bi (per side). \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a5827b36e2126974b2967c52654597201}\label{structmesh__sim_1_1ChannelConfig_a5827b36e2126974b2967c52654597201}} 
 \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig}{Nyu\+Channel\+Config}} \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig_a5827b36e2126974b2967c52654597201}{nyu}}
 \begin{DoxyCompactList}\small\item\em NYU model parameters; ignored when {\ttfamily channel\+\_\+model} is {\ttfamily \char`\"{}3gpp\char`\"{}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -94,7 +87,57 @@ Beamforming scheme label (for reference; \mbox{\Hypertarget{structmesh__sim_1_1C
 \doxysubsubsection{\texorpdfstring{blockage\_enabled}{blockage\_enabled}}
 {\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Channel\+Config\+::blockage\+\_\+enabled = true}
 
-Enable human-\/body / dynamic blockage. 3GPP\+: Three\+Gpp\+Channel\+Model\+::\+Blockage. NYU\+: NYUChannel\+Model\+::\+Blockage. \mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a46faa875060c3b19c65291cadf3a523d}\label{structmesh__sim_1_1ChannelConfig_a46faa875060c3b19c65291cadf3a523d}} 
+Enable human-\/body / dynamic blockage. 3GPP\+: Three\+Gpp\+Channel\+Model\+::\+Blockage. NYU\+: NYUChannel\+Model\+::\+Blockage. \mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}\label{structmesh__sim_1_1ChannelConfig_ab1142b76dda22af0ceefa35424e6fe48}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!channel\_model@{channel\_model}}
+\index{channel\_model@{channel\_model}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{channel\_model}{channel\_model}}
+{\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Channel\+Config\+::channel\+\_\+model = \char`\"{}3gpp\char`\"{}}
+
+
+
+Model selection\+: {\ttfamily \char`\"{}3gpp\char`\"{}} or {\ttfamily \char`\"{}nyu\char`\"{}}. 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a3ed072eb150a3c9070b68931a310cc59}\label{structmesh__sim_1_1ChannelConfig_a3ed072eb150a3c9070b68931a310cc59}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!frequency\_ghz@{frequency\_ghz}}
+\index{frequency\_ghz@{frequency\_ghz}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{frequency\_ghz}{frequency\_ghz}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Channel\+Config\+::frequency\+\_\+ghz = 28.\+0}
+
+
+
+Carrier frequency in GHz. 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a0f58e4f6d039874fc38225561705124e}\label{structmesh__sim_1_1ChannelConfig_a0f58e4f6d039874fc38225561705124e}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!noise\_figure\_db@{noise\_figure\_db}}
+\index{noise\_figure\_db@{noise\_figure\_db}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{noise\_figure\_db}{noise\_figure\_db}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Channel\+Config\+::noise\+\_\+figure\+\_\+db = 5.\+0}
+
+
+
+Receiver noise figure in dB. 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a5827b36e2126974b2967c52654597201}\label{structmesh__sim_1_1ChannelConfig_a5827b36e2126974b2967c52654597201}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!nyu@{nyu}}
+\index{nyu@{nyu}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{nyu}{nyu}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig}{Nyu\+Channel\+Config}} mesh\+\_\+sim\+::\+Channel\+Config\+::nyu}
+
+
+
+NYU model parameters; ignored when {\ttfamily channel\+\_\+model} is {\ttfamily \char`\"{}3gpp\char`\"{}}. 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a669268605fcb3227231ad80def49ab57}\label{structmesh__sim_1_1ChannelConfig_a669268605fcb3227231ad80def49ab57}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!rx\_array\_gain\_dbi@{rx\_array\_gain\_dbi}}
+\index{rx\_array\_gain\_dbi@{rx\_array\_gain\_dbi}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{rx\_array\_gain\_dbi}{rx\_array\_gain\_dbi}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Channel\+Config\+::rx\+\_\+array\+\_\+gain\+\_\+dbi = 12.\+0}
+
+
+
+Peak RX array gain in d\+Bi (per side). 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a46faa875060c3b19c65291cadf3a523d}\label{structmesh__sim_1_1ChannelConfig_a46faa875060c3b19c65291cadf3a523d}} 
 \index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!scenario@{scenario}}
 \index{scenario@{scenario}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
 \doxysubsubsection{\texorpdfstring{scenario}{scenario}}
@@ -104,7 +147,27 @@ Enable human-\/body / dynamic blockage. 3GPP\+: Three\+Gpp\+Channel\+Model\+::\+
 
 {\ttfamily \char`\"{}\+UMa\char`\"{}}, {\ttfamily \char`\"{}\+RMa\char`\"{}}, {\ttfamily \char`\"{}\+In\+H\char`\"{}}, or {\ttfamily \char`\"{}\+In\+F\char`\"{}}. 
 
-Propagation scenario\+: {\ttfamily \char`\"{}\+UMi\char`\"{}}, 
+Propagation scenario\+: {\ttfamily \char`\"{}\+UMi\char`\"{}}, \mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a63fdc79768d957215b0059347804c11a}\label{structmesh__sim_1_1ChannelConfig_a63fdc79768d957215b0059347804c11a}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!tx\_array\_gain\_dbi@{tx\_array\_gain\_dbi}}
+\index{tx\_array\_gain\_dbi@{tx\_array\_gain\_dbi}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{tx\_array\_gain\_dbi}{tx\_array\_gain\_dbi}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Channel\+Config\+::tx\+\_\+array\+\_\+gain\+\_\+dbi = 12.\+0}
+
+
+
+Peak TX array gain in d\+Bi (per side). 
+
+\mbox{\Hypertarget{structmesh__sim_1_1ChannelConfig_a73ba58e55344b3d8e1097372320705db}\label{structmesh__sim_1_1ChannelConfig_a73ba58e55344b3d8e1097372320705db}} 
+\index{mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}!tx\_power\_dbm@{tx\_power\_dbm}}
+\index{tx\_power\_dbm@{tx\_power\_dbm}!mesh\_sim::ChannelConfig@{mesh\_sim::ChannelConfig}}
+\doxysubsubsection{\texorpdfstring{tx\_power\_dbm}{tx\_power\_dbm}}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Channel\+Config\+::tx\+\_\+power\+\_\+dbm = 30.\+0}
+
+
+
+Per-\/node transmit power in d\+Bm. 
+
+
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

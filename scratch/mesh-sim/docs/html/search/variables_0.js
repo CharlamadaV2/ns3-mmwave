@@ -1,5 +1,19 @@
 var searchData=
 [
-  ['amc_5fmodel_295',['amc_model',['../structmesh__sim_1_1ChannelConfig.html#ab986e1e926a8416248f97eb9693f9c93',1,'mesh_sim::ChannelConfig']]],
-  ['atmospheric_5floss_5fenabled_296',['atmospheric_loss_enabled',['../structmesh__sim_1_1NyuChannelConfig.html#a85388f3a2007e0dc84aa19987c3edbf4',1,'mesh_sim::NyuChannelConfig']]]
+  ['_5fbh2_5fpairresult_821',['_BH2_PairResult',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1bh2.html#a51cd8ec59baf0e8ecab536112914502c',1,'scratch::mesh-sim::scripts::arpo_data::plots::bh2']]],
+  ['_5fdefault_5fgain_5fdbi_822',['_DEFAULT_GAIN_DBI',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs.html#a2375ed2afb9c383059118c0eb07c62b8',1,'scratch::mesh-sim::scripts::validation::compare_runs']]],
+  ['_5fdefault_5ftx_5fpower_5fdbm_823',['_DEFAULT_TX_POWER_DBM',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs.html#a07b37e703d554a71f9875c727c673e13',1,'scratch::mesh-sim::scripts::validation::compare_runs']]],
+  ['_5fmcs_5ffield_5fcap_824',['_MCS_FIELD_CAP',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#acec4f0725f7d207c7261775032ffa162',1,'scratch::mesh-sim::scripts::validation::compare']]],
+  ['_5fmetric_5fspecs_825',['_METRIC_SPECS',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1sim__to__traces.html#ac05574c8bde32280b016da43a577efba',1,'scratch::mesh-sim::scripts::validation::sim_to_traces']]],
+  ['_5fmetrics_5fby_5fprefix_826',['_METRICS_BY_PREFIX',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a13e82ee148c957026abdb35016736a9c',1,'scratch::mesh-sim::scripts::arpo_data::multi_day']]],
+  ['_5fmetrics_5fby_5fshort_827',['_METRICS_BY_SHORT',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a3dd3c2c3de5adcf743a2db329e0b17c7',1,'scratch.mesh-sim.scripts.arpo_data.multi_day._METRICS_BY_SHORT()'],['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a90c7dc394d724d01d2d30f0e15b14a2c',1,'scratch.mesh-sim.scripts.validation.compare._METRICS_BY_SHORT()']]],
+  ['_5fmin_5fsamples_5fper_5fday_828',['_MIN_SAMPLES_PER_DAY',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6',1,'scratch::mesh-sim::scripts::arpo_data::multi_day']]],
+  ['_5fmin_5fsamples_5fper_5fpeer_5fmac_829',['_MIN_SAMPLES_PER_PEER_MAC',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1bh2.html#a5f561f7d73d75c20c03d82c7793ca7fe',1,'scratch::mesh-sim::scripts::arpo_data::plots::bh2']]],
+  ['_5fmobile_5fbbox_5fm_830',['_MOBILE_BBOX_M',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1build__waypoints.html#a75964c1c82235e61686edd1ebd1d4a01',1,'scratch.mesh-sim.scripts.validation.build_waypoints._MOBILE_BBOX_M()'],['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity.html#a963cf49df7931ab71c63188cad33eb88',1,'scratch.mesh-sim.scripts.validation.scenario_fidelity._MOBILE_BBOX_M()']]],
+  ['_5frab3_831',['_RAB3',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs.html#a38d556dfbead5460edcadbc1150ee7af',1,'scratch::mesh-sim::scripts::validation::compare_runs']]],
+  ['_5fsim_5fname_5fre_832',['_SIM_NAME_RE',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a78b1282cc03e320f848df8ae9ca5aa4c',1,'scratch::mesh-sim::scripts::validation::compare']]],
+  ['_5fsuffix_5fre_833',['_SUFFIX_RE',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#af01dcd89eb4732822bb63fc405cf2861',1,'scratch::mesh-sim::scripts::arpo_data::multi_day']]],
+  ['_5ftrace_5ffile_5fre_834',['_TRACE_FILE_RE',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aeca0f754d2ffef3fa5e2bdea7779c35d',1,'scratch::mesh-sim::scripts::validation::compare']]],
+  ['_5ftrace_5fre_835',['_TRACE_RE',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8db72746083c42f969ebdabf0f888792',1,'scratch::mesh-sim::scripts::arpo_data::multi_day']]],
+  ['_5funit_5fby_5fmetric_836',['_UNIT_BY_METRIC',['../namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html#a95f01168fa90bdfdc50e4cd654fe9ebc',1,'scratch::mesh-sim::scripts::arpo_data::multiday_variance']]]
 ];
