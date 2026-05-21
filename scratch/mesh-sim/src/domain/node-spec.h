@@ -4,9 +4,6 @@
  * @file node-spec.h
  * @brief Topology and geometry POD types: nodes, buildings, and spatial properties.
  *
- * No ns-3 headers are included — keeps compilation fast and allows these
- * types to be used in post-run I/O code without ns-3 linkage.
- *
  * **Coordinate convention**
  * All positions are stored as (x, y, z) triples in metres.
  * - 2-D scenarios: set z to a constant height for all nodes.

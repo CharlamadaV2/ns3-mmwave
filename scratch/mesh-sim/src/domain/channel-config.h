@@ -4,8 +4,6 @@
  * @file channel-config.h
  * @brief Radio and channel configuration POD types.
  *
- * No ns-3 headers are included — keeps compilation fast and allows use in
- * post-run I/O code without ns-3 linkage.
  *
  * Two channel models are supported, selected by @ref ChannelConfig::channel_model:
  * - @c "3gpp" — 3GPP TR 38.901 statistical model (default).
