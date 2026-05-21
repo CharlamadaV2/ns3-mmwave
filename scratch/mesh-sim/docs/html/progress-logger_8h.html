@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>ProgressLogger: prints simulation progress to stderr. Called directly from the step loop (no Simulator::Schedule). Header-only.  
+<p>Lightweight simulation progress reporter.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
@@ -85,7 +85,7 @@ Include dependency graph for progress-logger.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="progress-logger_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2progress-logger_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2progress-logger_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2progress-logger_8h">
-<area shape="rect" title="ProgressLogger: prints simulation progress to stderr. Called directly from the step loop (no Simulato..." alt="" coords="72,5,280,61"/>
+<area shape="rect" title="Lightweight simulation progress reporter." alt="" coords="72,5,280,61"/>
 <area shape="rect" title=" " alt="" coords="5,109,72,136"/>
 <area shape="rect" title=" " alt="" coords="96,109,163,136"/>
 <area shape="rect" title=" " alt="" coords="187,109,261,136"/>
@@ -98,6 +98,7 @@ Include dependency graph for progress-logger.h:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1ProgressLogger.html">mesh_sim::ProgressLogger</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints sim-time progress, wall-clock elapsed time, and ETA to stderr.  <a href="structmesh__sim_1_1ProgressLogger.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -106,7 +107,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>ProgressLogger: prints simulation progress to stderr. Called directly from the step loop (no Simulator::Schedule). Header-only. </p>
+<div class="textblock"><p>Lightweight simulation progress reporter. </p>
+<p>ProgressLogger is called directly from the step loop — not via <code>ns3::Simulator::Schedule</code> — so it has zero overhead on non-reporting ticks (a single modulo check per tick). </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

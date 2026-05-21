@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>TopologyBuilder: creates ns-3 mobility models, buildings, and propagation models for the mesh topology. This is the only layer that creates ns-3 objects. No EPC, RRC, MAC, or protocol stack.  
+<p>Creates ns-3 mobility models, buildings, and propagation models for the mesh topology.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="sim-config_8h_source.html">src/domain/sim-config.h</a>&quot;</code><br />
 <code>#include &quot;ns3/channel-condition-model.h&quot;</code><br />
@@ -87,7 +87,7 @@ Include dependency graph for topology-builder.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="topology-builder_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8h">
-<area shape="rect" title="TopologyBuilder: creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topolog..." alt="" coords="757,5,965,61"/>
+<area shape="rect" title="Creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topology." alt="" coords="757,5,965,61"/>
 <area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="297,117,476,143"/>
 <area shape="rect" title=" " alt="" coords="566,273,628,300"/>
 <area shape="rect" title=" " alt="" coords="685,109,850,151"/>
@@ -107,7 +107,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="topology-builder_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2setup_2topology-builder_8hdep">
-<area shape="rect" title="TopologyBuilder: creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topolog..." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topology." alt="" coords="5,5,213,61"/>
 <area shape="rect" href="topology-builder_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 </map>
 </div>
@@ -117,6 +117,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html">mesh_sim::TopologyBuilder</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> into ns-3 mobility, building, and propagation model objects.  <a href="classmesh__sim_1_1TopologyBuilder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -125,7 +126,53 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>TopologyBuilder: creates ns-3 mobility models, buildings, and propagation models for the mesh topology. This is the only layer that creates ns-3 objects. No EPC, RRC, MAC, or protocol stack. </p>
+<div class="textblock"><p>Creates ns-3 mobility models, buildings, and propagation models for the mesh topology. </p>
+<p>TopologyBuilder is the <b>only layer in mesh-sim that creates ns-3 objects</b>. All other subsystems receive the resulting pointers via the accessor methods and operate entirely through the domain types defined in <code>src/domain/</code>. No EPC, RRC, MAC, or protocol stack is created.</p>
+<p><b>Build sequence</b> </p><div class="fragment"><div class="line">TopologyBuilder builder(cfg);</div>
+<div class="line">builder.Build();   <span class="comment">// must be called before any accessor</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> mobs    = builder.GetMobilityModels();   <span class="comment">// one per cfg.nodes entry</span></div>
+<div class="line"><span class="keyword">auto</span> plModel = builder.GetPropagationModel();</div>
+<div class="line"><span class="keyword">auto</span> ccModel = builder.GetConditionModel();</div>
+<div class="line"> </div>
+<div class="line">evaluator.Configure(cfg, plModel, ccModel);</div>
+</div><!-- fragment --><p><b>Mobility models</b></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">NodeSpec::mobility   </th><th class="markdownTableHeadNone">ns-3 class   </th><th class="markdownTableHeadNone">Notes    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"fixed"</code>   </td><td class="markdownTableBodyNone"><code>ConstantPositionMobilityModel</code>   </td><td class="markdownTableBodyNone">Position set from <code>NodeSpec::position</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"constant_velocity"</code>   </td><td class="markdownTableBodyNone"><code>ConstantVelocityMobilityModel</code>   </td><td class="markdownTableBodyNone">Position and velocity set after install.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"random_walk"</code>   </td><td class="markdownTableBodyNone"><code>RandomWalk2dMobilityModel</code>   </td><td class="markdownTableBodyNone">Direction changes every 1 simulated second; bounds and speed from RandomWalkParams.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"waypoint"</code>   </td><td class="markdownTableBodyNone"><code>WaypointMobilityModel</code>   </td><td class="markdownTableBodyNone">All Waypoint entries added via <code>ns3::Seconds</code>(wp.t).   </td></tr>
+</table>
+<p><b>Channel condition model selection</b> When <code>cfg.buildings</code> is non-empty a <code>BuildingsChannelConditionModel</code> is installed, giving deterministic LOS/NLOS based on building geometry. When no buildings are configured the propagation model's default statistical condition model is used instead.</p>
+<p><b>Propagation model selection</b></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>channel_model</code>   </th><th class="markdownTableHeadNone"><code>scenario</code>   </th><th class="markdownTableHeadNone">ns-3 class    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"3gpp"</code>   </td><td class="markdownTableBodyNone"><code>"UMi"</code>   </td><td class="markdownTableBodyNone"><code>ThreeGppUmiStreetCanyonPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"3gpp"</code>   </td><td class="markdownTableBodyNone"><code>"UMa"</code>   </td><td class="markdownTableBodyNone"><code>ThreeGppUmaPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"3gpp"</code>   </td><td class="markdownTableBodyNone"><code>"RMa"</code>   </td><td class="markdownTableBodyNone"><code>ThreeGppRmaPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"3gpp"</code>   </td><td class="markdownTableBodyNone"><code>"InH"</code> / <code>"InH-Mixed"</code> / <code>"InH-Open"</code>   </td><td class="markdownTableBodyNone"><code>ThreeGppIndoorOfficePropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"nyu"</code>   </td><td class="markdownTableBodyNone"><code>"UMi"</code>   </td><td class="markdownTableBodyNone"><code>NYUUmiPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"nyu"</code>   </td><td class="markdownTableBodyNone"><code>"UMa"</code>   </td><td class="markdownTableBodyNone"><code>NYUUmaPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"nyu"</code>   </td><td class="markdownTableBodyNone"><code>"RMa"</code>   </td><td class="markdownTableBodyNone"><code>NYURmaPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"nyu"</code>   </td><td class="markdownTableBodyNone"><code>"InH"</code>   </td><td class="markdownTableBodyNone"><code>NYUInHPropagationLossModel</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"nyu"</code>   </td><td class="markdownTableBodyNone"><code>"InF"</code>   </td><td class="markdownTableBodyNone"><code>NYUInFPropagationLossModel</code>   </td></tr>
+</table>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

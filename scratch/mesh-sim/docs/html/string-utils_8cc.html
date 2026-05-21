@@ -89,7 +89,7 @@ Include dependency graph for string-utils.cc:</div>
 <div class="center"><img src="string-utils_8cc__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8cc" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8cc" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8cc">
 <area shape="rect" title=" " alt="" coords="317,5,525,61"/>
-<area shape="rect" href="string-utils_8h.html" title=" " alt="" coords="68,109,220,136"/>
+<area shape="rect" href="string-utils_8h.html" title="String and path manipulation utilities shared across all modules." alt="" coords="68,109,220,136"/>
 <area shape="rect" title=" " alt="" coords="5,184,72,211"/>
 <area shape="rect" title=" " alt="" coords="193,184,252,211"/>
 <area shape="rect" title=" " alt="" coords="277,184,339,211"/>
@@ -111,16 +111,22 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">mesh_sim::trimStr</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strip leading and trailing ASCII whitespace from a string.  <a href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">More...</a><br /></td></tr>
 <tr class="separator:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">mesh_sim::splitTab</a> (const std::string &amp;line)</td></tr>
+<tr class="memdesc:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a string on tab characters and return all tokens.  <a href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">More...</a><br /></td></tr>
 <tr class="separator:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d5701a7dead70a3d2c278df41b267f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">mesh_sim::toIso8601</a> (const std::chrono::system_clock::time_point &amp;tp)</td></tr>
+<tr class="memdesc:a8d5701a7dead70a3d2c278df41b267f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a <code>system_clock::time_point</code> as an ISO 8601 UTC string.  <a href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">More...</a><br /></td></tr>
 <tr class="separator:a8d5701a7dead70a3d2c278df41b267f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">mesh_sim::resolvePath</a> (const std::string &amp;base_dir, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve a possibly-relative path against a base directory.  <a href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">More...</a><br /></td></tr>
 <tr class="separator:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">mesh_sim::dirOf</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the parent directory component of a file path.  <a href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">More...</a><br /></td></tr>
 <tr class="separator:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00ba117c4e068667da22c29d3b8ae623"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">mesh_sim::parseSeedList</a> (const std::string &amp;arg)</td></tr>
+<tr class="memdesc:a00ba117c4e068667da22c29d3b8ae623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a comma-separated string of seed values into a <code>uint32_t</code> vector.  <a href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">More...</a><br /></td></tr>
 <tr class="separator:a00ba117c4e068667da22c29d3b8ae623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

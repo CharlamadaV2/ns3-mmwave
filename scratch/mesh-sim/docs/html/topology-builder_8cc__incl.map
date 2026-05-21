@@ -1,6 +1,6 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/setup/topology&#45;builder.cc" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/setup/topology&#45;builder.cc">
 <area shape="rect" id="node1" title=" " alt="" coords="1882,5,2090,61"/>
-<area shape="rect" id="node2" href="$topology-builder_8h.html" title="TopologyBuilder: creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topolog..." alt="" coords="790,109,932,151"/>
+<area shape="rect" id="node2" href="$topology-builder_8h.html" title="Creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topology." alt="" coords="790,109,932,151"/>
 <area shape="rect" id="node15" title=" " alt="" coords="956,117,1070,143"/>
 <area shape="rect" id="node16" title=" " alt="" coords="1094,117,1260,143"/>
 <area shape="rect" id="node17" title=" " alt="" coords="1284,117,1459,143"/>

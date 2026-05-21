@@ -2,55 +2,47 @@
 \label{classmesh__sim_1_1LinkEvaluator}\index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 
 
+Computes per-\/link radio metrics using ns-\/3 propagation models.  
+
+
+
+
 {\ttfamily \#include $<$link-\/evaluator.\+h$>$}
 
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}} (const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg, ns3\+::\+Ptr$<$ ns3\+::\+Propagation\+Loss\+Model $>$ pl\+Model, ns3\+::\+Ptr$<$ ns3\+::\+Channel\+Condition\+Model $>$ cond\+Model)
-\item 
+\begin{DoxyCompactList}\small\item\em Bind ns-\/3 propagation models and extract scalar radio parameters. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}{Evaluate}} (ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$ tx\+Mob, ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$ rx\+Mob, uint32\+\_\+t tx\+Idx, uint32\+\_\+t rx\+Idx) const
-\item 
+\begin{DoxyCompactList}\small\item\em Evaluate one directed (tx → rx) link at the current node positions. \end{DoxyCompactList}\item 
 std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a16c39016432fb10dc7358821d4ab3cac}{Evaluate\+All}} (const std\+::vector$<$ ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$$>$ \&mobs) const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Evaluate all N·(N−1)/2 unordered node pairs in index order. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a45a25562108d717b3d8ba595edce96cb}{m\+\_\+tx\+Power\+Dbm}} = 30.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em TX power in d\+Bm (from \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}}). \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_ab35396e23c25c45ee042b4519e8013a1}{m\+\_\+noise\+Floor\+Dbm}} = -\/174.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}} from bandwidth and noise figure. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a47d61ccd593bbb9e05a8cdba3fb463a1}{m\+\_\+bandwidth\+Hz}} = 400e6
-\item 
+\begin{DoxyCompactList}\small\item\em System bandwidth in Hz. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}{m\+\_\+bf\+Gain\+Db}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Combined TX + RX array gain in dB. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_af22886f54c0d8c68bf25fda02afc9779}{m\+\_\+amc\+Model}} = \char`\"{}shannon\char`\"{}
-\item 
+\begin{DoxyCompactList}\small\item\em Capacity model\+: {\ttfamily \char`\"{}shannon\char`\"{}} or {\ttfamily \char`\"{}table\char`\"{}}. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}{m\+\_\+buildings\+Enabled}} = false
 \item 
 ns3\+::\+Ptr$<$ ns3\+::\+Propagation\+Loss\+Model $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}{m\+\_\+pl\+Model}}
-\item 
+\begin{DoxyCompactList}\small\item\em ns-\/3 path-\/loss model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). \end{DoxyCompactList}\item 
 ns3\+::\+Ptr$<$ ns3\+::\+Channel\+Condition\+Model $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a7002e2e8870aa3ffa0e2b414c3d97b56}{m\+\_\+cond\+Model}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em ns-\/3 LOS/\+NLOS model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Description of what the method does.
+Computes per-\/link radio metrics using ns-\/3 propagation models. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Description of return value. 
-\end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
-
+Stateless between calls (all per-\/call state lives in \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}}). The ns-\/3 model pointers are set once by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}} and reused across every subsequent \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}{Evaluate}} / \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a16c39016432fb10dc7358821d4ab3cac}{Evaluate\+All}} call. 
 
 \doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}\label{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}} 
@@ -59,18 +51,87 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{Configure()}{Configure()}}
 {\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Link\+Evaluator\+::\+Configure (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&}]{cfg,  }\item[{ns3\+::\+Ptr$<$ ns3\+::\+Propagation\+Loss\+Model $>$}]{pl\+Model,  }\item[{ns3\+::\+Ptr$<$ ns3\+::\+Channel\+Condition\+Model $>$}]{cond\+Model }\end{DoxyParamCaption})}
 
+
+
+Bind ns-\/3 propagation models and extract scalar radio parameters. 
+
+Computes and caches\+:
+\begin{DoxyItemize}
+\item Thermal noise floor\+: {\ttfamily −174} + 10·log₁₀(bandwidth\+\_\+\+Hz) + noise\+\_\+figure\+\_\+dB.
+\item Combined beamforming gain\+: {\ttfamily tx\+\_\+array\+\_\+gain\+\_\+d\+Bi} + rx\+\_\+array\+\_\+gain\+\_\+d\+Bi.
+\end{DoxyItemize}
+
+Must be called once before \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}{Evaluate}} or \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a16c39016432fb10dc7358821d4ab3cac}{Evaluate\+All}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & Fully loaded and validated simulation configuration. \\
+\hline
+{\em pl\+Model} & ns-\/3 propagation loss model (3GPP or NYU); must not be null. \\
+\hline
+{\em cond\+Model} & ns-\/3 channel condition model for LOS/\+NLOS determination; must not be null. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & if either model pointer is null. \\
+\hline
+\end{DoxyExceptions}
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}\label{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!Evaluate@{Evaluate}}
 \index{Evaluate@{Evaluate}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{Evaluate()}{Evaluate()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} mesh\+\_\+sim\+::\+Link\+Evaluator\+::\+Evaluate (\begin{DoxyParamCaption}\item[{ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$}]{tx\+Mob,  }\item[{ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$}]{rx\+Mob,  }\item[{uint32\+\_\+t}]{tx\+Idx,  }\item[{uint32\+\_\+t}]{rx\+Idx }\end{DoxyParamCaption}) const}
 
+
+
+Evaluate one directed (tx → rx) link at the current node positions. 
+
+{\bfseries{Co-\/location guard}}\+: if the 3-\/D distance between {\ttfamily tx\+Mob} and {\ttfamily rx\+Mob} is less than 1 m, path loss is set to 0 dB and the full TX power plus beamforming gain is returned directly, bypassing the propagation model. This prevents undefined behaviour from {\ttfamily log10(0)} in distance-\/dependent models.
+
+For all other distances\+:
+\begin{DoxyEnumerate}
+\item The channel condition model determines LOS vs. NLOS.
+\item The propagation loss model computes {\ttfamily rx\+\_\+power\+\_\+d\+Bm}.
+\item Beamforming gain is added\+: {\ttfamily rx\+\_\+power} += bf\+\_\+gain\+\_\+dB.
+\item SINR is computed against the thermal noise floor only (no ICI).
+\item \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{Sinr\+To\+Capacity}} and \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}} translate SINR to capacity and MCS index using the configured AMC model.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em tx\+Mob} & Mobility model of the transmitting node. \\
+\hline
+{\em rx\+Mob} & Mobility model of the receiving node. \\
+\hline
+{\em tx\+Idx} & Index of the transmitter in \mbox{\hyperlink{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}{Sim\+Config\+::nodes}}. \\
+\hline
+{\em rx\+Idx} & Index of the receiver in \mbox{\hyperlink{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}{Sim\+Config\+::nodes}}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Fully populated \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} for this directed pair. 
+\end{DoxyReturn}
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a16c39016432fb10dc7358821d4ab3cac}\label{classmesh__sim_1_1LinkEvaluator_a16c39016432fb10dc7358821d4ab3cac}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!EvaluateAll@{EvaluateAll}}
 \index{EvaluateAll@{EvaluateAll}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{EvaluateAll()}{EvaluateAll()}}
 {\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} $>$ mesh\+\_\+sim\+::\+Link\+Evaluator\+::\+Evaluate\+All (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ ns3\+::\+Ptr$<$ ns3\+::\+Mobility\+Model $>$$>$ \&}]{mobs }\end{DoxyParamCaption}) const}
 
+
+
+Evaluate all N·(N−1)/2 unordered node pairs in index order. 
+
+Iterates pairs (i, j) with i $<$ j, calling \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a132e1068c43059b44087db448606c900}{Evaluate}} for each. The returned vector is in the same order and has the same size as expected by \mbox{\hyperlink{classmesh__sim_1_1LinkTable_ae2d4c11e57c3abdebb48d7be853d25b4}{Link\+Table\+::\+Update}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mobs} & Mobility models for all {\ttfamily N} nodes, in node-\/index order (i.\+e. {\ttfamily mobs}\mbox{[}k\mbox{]} corresponds to \mbox{\hyperlink{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}{Sim\+Config\+::nodes}}\mbox{[}k\mbox{]}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Flat vector of N·(N−1)/2 \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}} objects. 
+\end{DoxyReturn}
 
 
 \doxysubsection{Member Data Documentation}
@@ -80,11 +141,19 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{m\_amcModel}{m\_amcModel}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+amc\+Model = \char`\"{}shannon\char`\"{}\hspace{0.3cm}{\ttfamily [private]}}
 
+
+
+Capacity model\+: {\ttfamily \char`\"{}shannon\char`\"{}} or {\ttfamily \char`\"{}table\char`\"{}}. 
+
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a47d61ccd593bbb9e05a8cdba3fb463a1}\label{classmesh__sim_1_1LinkEvaluator_a47d61ccd593bbb9e05a8cdba3fb463a1}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_bandwidthHz@{m\_bandwidthHz}}
 \index{m\_bandwidthHz@{m\_bandwidthHz}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{m\_bandwidthHz}{m\_bandwidthHz}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+bandwidth\+Hz = 400e6\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+System bandwidth in Hz. 
 
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}\label{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_bfGainDb@{m\_bfGainDb}}
@@ -92,17 +161,25 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{m\_bfGainDb}{m\_bfGainDb}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+bf\+Gain\+Db = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
 
+
+
+Combined TX + RX array gain in dB. 
+
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}\label{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_buildingsEnabled@{m\_buildingsEnabled}}
 \index{m\_buildingsEnabled@{m\_buildingsEnabled}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{m\_buildingsEnabled}{m\_buildingsEnabled}}
 {\footnotesize\ttfamily bool mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+buildings\+Enabled = false\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a7002e2e8870aa3ffa0e2b414c3d97b56}\label{classmesh__sim_1_1LinkEvaluator_a7002e2e8870aa3ffa0e2b414c3d97b56}} 
+{\ttfamily true} when buildings are present; written to \mbox{\hyperlink{structmesh__sim_1_1LinkResult_af4d8f79dacb43aa9aacc88e7f8be661a}{Link\+Result\+::condition\+\_\+from\+\_\+buildings}}. \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a7002e2e8870aa3ffa0e2b414c3d97b56}\label{classmesh__sim_1_1LinkEvaluator_a7002e2e8870aa3ffa0e2b414c3d97b56}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_condModel@{m\_condModel}}
 \index{m\_condModel@{m\_condModel}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{m\_condModel}{m\_condModel}}
 {\footnotesize\ttfamily ns3\+::\+Ptr$<$ns3\+::\+Channel\+Condition\+Model$>$ mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+cond\+Model\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+ns-\/3 LOS/\+NLOS model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). 
 
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_ab35396e23c25c45ee042b4519e8013a1}\label{classmesh__sim_1_1LinkEvaluator_ab35396e23c25c45ee042b4519e8013a1}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_noiseFloorDbm@{m\_noiseFloorDbm}}
@@ -110,17 +187,29 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{m\_noiseFloorDbm}{m\_noiseFloorDbm}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+noise\+Floor\+Dbm = -\/174.\+0\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}\label{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}} 
+
+
+\mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}} from bandwidth and noise figure. 
+
+Thermal noise floor in d\+Bm; computed by \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}\label{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_plModel@{m\_plModel}}
 \index{m\_plModel@{m\_plModel}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{m\_plModel}{m\_plModel}}
 {\footnotesize\ttfamily ns3\+::\+Ptr$<$ns3\+::\+Propagation\+Loss\+Model$>$ mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+pl\+Model\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+ns-\/3 path-\/loss model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). 
 
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a45a25562108d717b3d8ba595edce96cb}\label{classmesh__sim_1_1LinkEvaluator_a45a25562108d717b3d8ba595edce96cb}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_txPowerDbm@{m\_txPowerDbm}}
 \index{m\_txPowerDbm@{m\_txPowerDbm}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
 \doxysubsubsection{\texorpdfstring{m\_txPowerDbm}{m\_txPowerDbm}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+tx\+Power\+Dbm = 30.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+TX power in d\+Bm (from \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}}). 
 
 
 

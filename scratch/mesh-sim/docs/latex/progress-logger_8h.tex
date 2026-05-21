@@ -2,14 +2,15 @@
 \label{progress-logger_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/progress-\/logger.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/progress-\/logger.h}}
 
 
-Progress\+Logger\+: prints simulation progress to stderr. Called directly from the step loop (no Simulator\+::\+Schedule). Header-\/only.  
+Lightweight simulation progress reporter.  
 
 
 {\ttfamily \#include $<$chrono$>$}\newline
 {\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$iomanip$>$}\newline
 {\ttfamily \#include $<$iostream$>$}\newline
-Include dependency graph for progress-\/logger.h\+:\nopagebreak
+Include dependency graph for progress-\/logger.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -20,7 +21,7 @@ Include dependency graph for progress-\/logger.h\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger}{mesh\+\_\+sim\+::\+Progress\+Logger}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Prints sim-\/time progress, wall-\/clock elapsed time, and ETA to stderr. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -29,5 +30,6 @@ struct \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger}{mesh\+\_\+sim\+::\+Pr
 
 
 \doxysubsection{Detailed Description}
-Progress\+Logger\+: prints simulation progress to stderr. Called directly from the step loop (no Simulator\+::\+Schedule). Header-\/only. 
+Lightweight simulation progress reporter. 
 
+Progress\+Logger is called directly from the step loop — not via {\ttfamily ns3\+::\+Simulator\+::\+Schedule} — so it has zero overhead on non-\/reporting ticks (a single modulo check per tick). 

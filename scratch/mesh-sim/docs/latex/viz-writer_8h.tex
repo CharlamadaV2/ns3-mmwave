@@ -2,7 +2,7 @@
 \label{viz-writer_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/viz-\/writer.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/viz-\/writer.h}}
 
 
-Viz\+Writer\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals.  
+Writes per-\/tick CSV snapshots for GUI and offline plotting.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
@@ -20,7 +20,8 @@ Include dependency graph for viz-\/writer.h\+:
 \includegraphics[width=350pt]{viz-writer_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,7 +32,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1VizWriter}{mesh\+\_\+sim\+::\+Viz\+Writer}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Streams per-\/tick simulation state to six CSV files. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -40,6 +41,26 @@ class \mbox{\hyperlink{classmesh__sim_1_1VizWriter}{mesh\+\_\+sim\+::\+Viz\+Writ
 
 
 \doxysubsection{Detailed Description}
-Viz\+Writer\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals. 
+Writes per-\/tick CSV snapshots for GUI and offline plotting. 
 
-Output files\+: positions.\+csv -- time\+\_\+s, node\+\_\+id, x, y, z, node\+\_\+type, active links.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, dist\+\_\+m, sinr\+\_\+db, condition, condition\+\_\+reason, capacity\+\_\+mbps, delivered\+\_\+mbps, hop\+\_\+count rx-\/power.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, rx\+\_\+power\+\_\+dbm mcs.\+csv -- time\+\_\+s, node\+\_\+a, node\+\_\+b, mcs\+\_\+index, spectral\+\_\+eff flows.\+csv -- time\+\_\+s, src, dst, demand\+\_\+mbps, delivered\+\_\+mbps, latency\+\_\+ms, hop\+\_\+count, routable routes.\+csv -- time\+\_\+s, src, dst, path, bottleneck\+\_\+mbps, hop\+\_\+count, routable 
+Viz\+Writer maintains six open CSV files for the duration of the simulation and appends one row (or one row per node/link/flow) each time Write\+Tick is called. Writes are rate-\/limited to {\ttfamily viz\+\_\+tick\+\_\+ms} intervals so a small tick step ({\ttfamily tick\+\_\+s}) does not inflate file sizes unnecessarily.
+
+{\bfseries{Output files}} (all written to {\ttfamily cfg.\+output\+\_\+dir})
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Columns    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Columns    }\\\cline{1-2}
+\endhead
+{\ttfamily positions.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily node\+\_\+id}, {\ttfamily x}, {\ttfamily y}, {\ttfamily z}, {\ttfamily node\+\_\+type}, {\ttfamily active}    \\\cline{1-2}
+{\ttfamily links.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily node\+\_\+a}, {\ttfamily node\+\_\+b}, {\ttfamily dist\+\_\+m}, {\ttfamily sinr\+\_\+db}, {\ttfamily condition}, {\ttfamily condition\+\_\+reason}, {\ttfamily capacity\+\_\+mbps}, {\ttfamily delivered\+\_\+mbps}, {\ttfamily hop\+\_\+count}    \\\cline{1-2}
+{\ttfamily rx-\/power.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily node\+\_\+a}, {\ttfamily node\+\_\+b}, {\ttfamily rx\+\_\+power\+\_\+dbm}    \\\cline{1-2}
+{\ttfamily mcs.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily node\+\_\+a}, {\ttfamily node\+\_\+b}, {\ttfamily mcs\+\_\+index}, {\ttfamily spectral\+\_\+eff}    \\\cline{1-2}
+{\ttfamily flows.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily src}, {\ttfamily dst}, {\ttfamily demand\+\_\+mbps}, {\ttfamily delivered\+\_\+mbps}, {\ttfamily latency\+\_\+ms}, {\ttfamily hop\+\_\+count}, {\ttfamily routable}    \\\cline{1-2}
+{\ttfamily routes.\+csv}   &{\ttfamily time\+\_\+s}, {\ttfamily src}, {\ttfamily dst}, {\ttfamily path}, {\ttfamily bottleneck\+\_\+mbps}, {\ttfamily hop\+\_\+count}, {\ttfamily routable}   \\\cline{1-2}
+\end{longtabu}

@@ -100,18 +100,18 @@ Files</h2></td></tr>
 <tr class="memitem:metrics-writer_8cc"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="metrics-writer_8cc.html">metrics-writer.cc</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:metrics-writer_8h"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="metrics-writer_8h.html">metrics-writer.h</a> <a href="metrics-writer_8h_source.html">[code]</a></td></tr>
-<tr class="memdesc:metrics-writer_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">MetricsWriter: accumulates per-tick metrics in-memory during the step loop, then writes summary.json after the simulation completes. <br /></td></tr>
+<tr class="memdesc:metrics-writer_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accumulates per-tick simulation metrics and writes summary.json. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:progress-logger_8h"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="progress-logger_8h.html">progress-logger.h</a> <a href="progress-logger_8h_source.html">[code]</a></td></tr>
-<tr class="memdesc:progress-logger_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">ProgressLogger: prints simulation progress to stderr. Called directly from the step loop (no Simulator::Schedule). Header-only. <br /></td></tr>
+<tr class="memdesc:progress-logger_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lightweight simulation progress reporter. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:run-logger_8h"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="run-logger_8h.html">run-logger.h</a> <a href="run-logger_8h_source.html">[code]</a></td></tr>
-<tr class="memdesc:run-logger_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-only (same pattern as <a class="el" href="progress-logger_8h.html" title="ProgressLogger: prints simulation progress to stderr. Called directly from the step loop (no Simulato...">progress-logger.h</a>). No ns-3 dependency. <br /></td></tr>
+<tr class="memdesc:run-logger_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a human-readable run.log capturing seeds, CLI overrides, and the fully resolved configuration for reproducibility. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:viz-writer_8cc"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="viz-writer_8cc.html">viz-writer.cc</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:viz-writer_8h"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="viz-writer_8h.html">viz-writer.h</a> <a href="viz-writer_8h_source.html">[code]</a></td></tr>
-<tr class="memdesc:viz-writer_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">VizWriter: writes per-tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz_tick_ms intervals. <br /></td></tr>
+<tr class="memdesc:viz-writer_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes per-tick CSV snapshots for GUI and offline plotting. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

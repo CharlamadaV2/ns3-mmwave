@@ -13,12 +13,12 @@ Directory dependency graph for io\+:\nopagebreak
 file \mbox{\hyperlink{metrics-writer_8cc}{metrics-\/writer.\+cc}}
 \item 
 file \mbox{\hyperlink{metrics-writer_8h}{metrics-\/writer.\+h}}
-\begin{DoxyCompactList}\small\item\em Metrics\+Writer\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Accumulates per-\/tick simulation metrics and writes summary.\+json. \end{DoxyCompactList}\item 
 file \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}
-\begin{DoxyCompactList}\small\item\em Progress\+Logger\+: prints simulation progress to stderr. Called directly from the step loop (no Simulator\+::\+Schedule). Header-\/only. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Lightweight simulation progress reporter. \end{DoxyCompactList}\item 
 file \mbox{\hyperlink{run-logger_8h}{run-\/logger.\+h}}
-\begin{DoxyCompactList}\small\item\em Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}). No ns-\/3 dependency. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Writes a human-\/readable run.\+log capturing seeds, CLI overrides, and the fully resolved configuration for reproducibility. \end{DoxyCompactList}\item 
 file \mbox{\hyperlink{viz-writer_8cc}{viz-\/writer.\+cc}}
 \item 
 file \mbox{\hyperlink{viz-writer_8h}{viz-\/writer.\+h}}
-\begin{DoxyCompactList}\small\item\em Viz\+Writer\+: writes per-\/tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz\+\_\+tick\+\_\+ms intervals. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Writes per-\/tick CSV snapshots for GUI and offline plotting. \end{DoxyCompactList}\end{DoxyCompactItemize}

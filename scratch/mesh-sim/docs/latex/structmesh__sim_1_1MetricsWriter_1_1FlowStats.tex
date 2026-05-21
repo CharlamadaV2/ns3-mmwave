@@ -1,19 +1,29 @@
 \hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{}\doxysection{mesh\+\_\+sim\+::Metrics\+Writer\+::Flow\+Stats Struct Reference}
 \label{structmesh__sim_1_1MetricsWriter_1_1FlowStats}\index{mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}}
+
+
+Per-\/flow-\/pair running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}.  
+
+
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a500520c7017a771b8e9b58b6da9e7add}{demand\+\_\+sum}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of demand\+\_\+mbps across ticks. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ae4d271e01aa99b2c9111c456692ff28d}{delivered\+\_\+sum}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of delivered\+\_\+mbps across ticks. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a70f4bd4a2aa1a290301e34f87c4b2a6b}{latency\+\_\+sum}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of latency\+\_\+ms across ticks. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ab6ed6c54c7f7859ba0675fb23724cb32}{hop\+\_\+count\+\_\+sum}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of hop\+\_\+count across ticks. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a60a3666af0639ba9a669ade26372b37a}{tick\+\_\+count}} = 0
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of ticks this flow pair was observed. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Per-\/flow-\/pair running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}. 
+
+Keyed by {\ttfamily }(src\+\_\+idx, dst\+\_\+idx); time-\/averages computed in \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a62a9a193e9c6f182491282265f62f1e0}{Write}}. 
 
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ae4d271e01aa99b2c9111c456692ff28d}\label{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ae4d271e01aa99b2c9111c456692ff28d}} 
@@ -22,11 +32,19 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a60
 \doxysubsubsection{\texorpdfstring{delivered\_sum}{delivered\_sum}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats\+::delivered\+\_\+sum = 0.\+0}
 
+
+
+Sum of delivered\+\_\+mbps across ticks. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a500520c7017a771b8e9b58b6da9e7add}\label{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a500520c7017a771b8e9b58b6da9e7add}} 
 \index{mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}!demand\_sum@{demand\_sum}}
 \index{demand\_sum@{demand\_sum}!mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}}
 \doxysubsubsection{\texorpdfstring{demand\_sum}{demand\_sum}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats\+::demand\+\_\+sum = 0.\+0}
+
+
+
+Sum of demand\+\_\+mbps across ticks. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ab6ed6c54c7f7859ba0675fb23724cb32}\label{structmesh__sim_1_1MetricsWriter_1_1FlowStats_ab6ed6c54c7f7859ba0675fb23724cb32}} 
 \index{mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}!hop\_count\_sum@{hop\_count\_sum}}
@@ -34,17 +52,29 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a60
 \doxysubsubsection{\texorpdfstring{hop\_count\_sum}{hop\_count\_sum}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats\+::hop\+\_\+count\+\_\+sum = 0.\+0}
 
+
+
+Sum of hop\+\_\+count across ticks. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a70f4bd4a2aa1a290301e34f87c4b2a6b}\label{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a70f4bd4a2aa1a290301e34f87c4b2a6b}} 
 \index{mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}!latency\_sum@{latency\_sum}}
 \index{latency\_sum@{latency\_sum}!mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}}
 \doxysubsubsection{\texorpdfstring{latency\_sum}{latency\_sum}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats\+::latency\+\_\+sum = 0.\+0}
 
+
+
+Sum of latency\+\_\+ms across ticks. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a60a3666af0639ba9a669ade26372b37a}\label{structmesh__sim_1_1MetricsWriter_1_1FlowStats_a60a3666af0639ba9a669ade26372b37a}} 
 \index{mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}!tick\_count@{tick\_count}}
 \index{tick\_count@{tick\_count}!mesh\_sim::MetricsWriter::FlowStats@{mesh\_sim::MetricsWriter::FlowStats}}
 \doxysubsubsection{\texorpdfstring{tick\_count}{tick\_count}}
 {\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats\+::tick\+\_\+count = 0}
+
+
+
+Number of ticks this flow pair was observed. 
 
 
 

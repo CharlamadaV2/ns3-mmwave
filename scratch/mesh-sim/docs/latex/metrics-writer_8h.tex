@@ -2,7 +2,7 @@
 \label{metrics-writer_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/metrics-\/writer.h}}
 
 
-Metrics\+Writer\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes.  
+Accumulates per-\/tick simulation metrics and writes summary.\+json.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
@@ -20,7 +20,8 @@ Include dependency graph for metrics-\/writer.h\+:
 \includegraphics[width=350pt]{metrics-writer_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,11 +32,11 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter}{mesh\+\_\+sim\+::\+Metrics\+Writer}}
-\item 
+\begin{DoxyCompactList}\small\item\em Accumulates per-\/tick radio and flow metrics, then writes summary.\+json. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats}}
-\item 
+\begin{DoxyCompactList}\small\item\em Per-\/node running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Flow\+Stats}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Per-\/flow-\/pair running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -44,6 +45,22 @@ struct \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1FlowStats}{mesh\+\_\
 
 
 \doxysubsection{Detailed Description}
-Metrics\+Writer\+: accumulates per-\/tick metrics in-\/memory during the step loop, then writes summary.\+json after the simulation completes. 
+Accumulates per-\/tick simulation metrics and writes summary.\+json. 
 
-No ns-\/3 headers -- stdlib and nlohmann/json only. 
+{\bfseries{Output\+: summary.\+json}} Written to {\ttfamily cfg.\+output\+\_\+dir/summary}.json by Write.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ JSON key   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Value    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ JSON key   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Value    }\\\cline{1-2}
+\endhead
+{\ttfamily per\+\_\+node}\mbox{[}id\mbox{]}   &{\ttfamily mean/min/max\+\_\+sinr\+\_\+db}, {\ttfamily num\+\_\+links}, {\ttfamily num\+\_\+los\+\_\+links}, {\ttfamily tx/rx\+\_\+throughput\+\_\+mbps} — all time-\/averaged over post-\/warmup ticks. SINR fields are {\ttfamily null} if the node had no measurable links.    \\\cline{1-2}
+{\ttfamily per\+\_\+flow}\mbox{[}\char`\"{}\+A-\/$>$\+B\char`\"{}\mbox{]}   &{\ttfamily demand\+\_\+mbps}, {\ttfamily delivered\+\_\+mbps}, {\ttfamily latency\+\_\+ms}, {\ttfamily hop\+\_\+count} — time-\/averaged.    \\\cline{1-2}
+{\ttfamily network}   &{\ttfamily sum\+\_\+throughput\+\_\+mbps}, {\ttfamily mean\+\_\+sinr\+\_\+db}, {\ttfamily connectivity} (fraction of node pairs above −6.7 dB), {\ttfamily mean\+\_\+hop\+\_\+count}, {\ttfamily flows\+\_\+routed}, {\ttfamily flows\+\_\+unroutable} — all time-\/averaged.    \\\cline{1-2}
+{\ttfamily wall\+\_\+clock\+\_\+$\ast$}   &ISO-\/8601 start/end timestamps and {\ttfamily wall\+\_\+elapsed\+\_\+s}. Present only when Set\+Timing has been called with a non-\/zero elapsed time.   \\\cline{1-2}
+\end{longtabu}

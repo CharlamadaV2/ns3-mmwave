@@ -1,5 +1,5 @@
 <map id="mesh_sim::VizWriter" name="mesh_sim::VizWriter">
-<area shape="rect" id="node1" title=" " alt="" coords="334,273,491,300"/>
+<area shape="rect" id="node1" title="Streams per&#45;tick simulation state to six CSV files." alt="" coords="334,273,491,300"/>
 <area shape="rect" id="node2" href="$structmesh__sim_1_1SimConfig.html" title="Root simulation configuration aggregating all subsystem parameters." alt="" coords="331,184,494,211"/>
 <area shape="rect" id="node3" href="$structmesh__sim_1_1MeshConfig.html" title="Aggregates all mesh&#45;layer configuration." alt="" coords="139,95,313,121"/>
 <area shape="rect" id="node4" href="$structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>

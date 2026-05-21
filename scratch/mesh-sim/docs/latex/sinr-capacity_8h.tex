@@ -2,20 +2,22 @@
 \label{sinr-capacity_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/sinr-\/capacity.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/sinr-\/capacity.h}}
 
 
-SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by Link\+Evaluator and testable standalone.  
+SINR-\/to-\/capacity and SINR-\/to-\/\+MCS mapping functions.  
 
 
 {\ttfamily \#include $<$cmath$>$}\newline
 {\ttfamily \#include $<$stdexcept$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
-Include dependency graph for sinr-\/capacity.h\+:\nopagebreak
+Include dependency graph for sinr-\/capacity.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=273pt]{sinr-capacity_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -26,7 +28,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1McsEntry}{mesh\+\_\+sim\+::\+Mcs\+Entry}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em One entry in the NR CQI / MCS table. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -36,11 +38,29 @@ struct \mbox{\hyperlink{structmesh__sim_1_1McsEntry}{mesh\+\_\+sim\+::\+Mcs\+Ent
 \begin{DoxyCompactItemize}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{mesh\+\_\+sim\+::\+Sinr\+To\+Mcs\+Index}} (double sinr\+\_\+db)
-\item 
+\begin{DoxyCompactList}\small\item\em Map a SINR value to the highest supportable MCS / CQI index. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{mesh\+\_\+sim\+::\+Sinr\+To\+Capacity}} (double sinr\+\_\+db, double bandwidth\+\_\+hz, const std\+::string \&amc\+\_\+model)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Compute link capacity in Mbps from SINR and bandwidth. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-SINR-\/to-\/capacity mapping functions. Pure math, no ns-\/3 dependency. Used by Link\+Evaluator and testable standalone. 
+SINR-\/to-\/capacity and SINR-\/to-\/\+MCS mapping functions. 
 
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\ttfamily amc\+\_\+model}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Method    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\ttfamily amc\+\_\+model}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Method    }\\\cline{1-2}
+\endhead
+{\ttfamily \char`\"{}shannon\char`\"{}}   &Shannon-\/\+Hartley theorem\+: {\ttfamily B·log₂}(1+SNR). Theoretical upper    \\\cline{1-2}
+&bound; real systems achieve roughly 60–80\% of this value.    \\\cline{1-2}
+{\ttfamily \char`\"{}table\char`\"{}}   &3GPP TS 38.\+214 NR CQI table (15 entries). Spectral efficiency    \\\cline{1-2}
+&steps match the discrete MCS levels used by the field hardware.   \\\cline{1-2}
+\end{longtabu}
+
+
+The MCS table is derived from 3GPP TS 38.\+214 Table 5.\+1.\+3.\+1-\/1 and uses the same SINR thresholds and spectral efficiencies as {\ttfamily Mm\+Wave\+Amc\+::\+Create\+Cqi\+Feedback\+Wb\+Tdma()} in ns3-\/mmwave. 

@@ -2,7 +2,7 @@
 \label{run-logger_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/run-\/logger.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/io/run-\/logger.h}}
 
 
-Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}). No ns-\/3 dependency.  
+Writes a human-\/readable run.\+log capturing seeds, CLI overrides, and the fully resolved configuration for reproducibility.  
 
 
 {\ttfamily \#include \char`\"{}src/cli/cli-\/parser.\+h\char`\"{}}\newline
@@ -31,9 +31,30 @@ Include dependency graph for run-\/logger.h\+:
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}{mesh\+\_\+sim\+::\+Write\+Run\+Log}} (const std\+::string \&base\+\_\+output\+\_\+dir, const Cli\+Args \&args, const Sim\+Config \&cfg, const std\+::vector$<$ uint32\+\_\+t $>$ \&seeds)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Write a human-\/readable reproducibility log for a batch run. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Run\+Logger\+: writes a run.\+log capturing seeds, CLI overrides, and resolved config for reproducibility. Header-\/only (same pattern as \mbox{\hyperlink{progress-logger_8h}{progress-\/logger.\+h}}). No ns-\/3 dependency. 
+Writes a human-\/readable run.\+log capturing seeds, CLI overrides, and the fully resolved configuration for reproducibility. 
 
+Call Write\+Run\+Log once per batch run (not per seed) immediately after Resolve\+Seeds, before the per-\/seed simulation loop begins. The log captures the state of Cli\+Args and Sim\+Config at that point so that any subsequent seed run can be reproduced from the archived inputs alone.
+
+{\bfseries{Output\+: $<$base\+\_\+output\+\_\+dir$>$/run.log}}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Section   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Section   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Contents    }\\\cline{1-2}
+\endhead
+Header   &ISO-\/8601 timestamp, scenario name, run\+\_\+config path.    \\\cline{1-2}
+Seeds   &The resolved seed list and which source provided them    \\\cline{1-2}
+&({\ttfamily --seeds} / {\ttfamily --seed} / config default).    \\\cline{1-2}
+CLI overrides   &Every Cli\+Args field, with {\ttfamily \char`\"{}(not set)\char`\"{}} for unused flags.    \\\cline{1-2}
+Resolved config   &Key Sim\+Config scalar fields\+: timing, channel, traffic,    \\\cline{1-2}
+&routing, node/building counts.   \\\cline{1-2}
+\end{longtabu}

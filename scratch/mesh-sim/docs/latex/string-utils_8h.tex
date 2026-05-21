@@ -1,17 +1,24 @@
 \hypertarget{string-utils_8h}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/util/string-\/utils.h File Reference}
 \label{string-utils_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/util/string-\/utils.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/util/string-\/utils.h}}
+
+
+String and path manipulation utilities shared across all modules.  
+
+
 {\ttfamily \#include $<$chrono$>$}\newline
 {\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
 {\ttfamily \#include $<$vector$>$}\newline
-Include dependency graph for string-\/utils.h\+:\nopagebreak
+Include dependency graph for string-\/utils.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=326pt]{string-utils_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -27,14 +34,19 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}{mesh\+\_\+sim\+::trim\+Str}} (const std\+::string \&s)
-\item 
+\begin{DoxyCompactList}\small\item\em Strip leading and trailing ASCII whitespace from a string. \end{DoxyCompactList}\item 
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}{mesh\+\_\+sim\+::split\+Tab}} (const std\+::string \&line)
-\item 
+\begin{DoxyCompactList}\small\item\em Split a string on tab characters and return all tokens. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}{mesh\+\_\+sim\+::to\+Iso8601}} (const std\+::chrono\+::system\+\_\+clock\+::time\+\_\+point \&tp)
-\item 
+\begin{DoxyCompactList}\small\item\em Format a {\ttfamily system\+\_\+clock\+::time\+\_\+point} as an ISO 8601 UTC string. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}{mesh\+\_\+sim\+::resolve\+Path}} (const std\+::string \&base\+\_\+dir, const std\+::string \&path)
-\item 
+\begin{DoxyCompactList}\small\item\em Resolve a possibly-\/relative path against a base directory. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_acd22cd5edefb2bc7bca48d593f0a87f4}{mesh\+\_\+sim\+::dir\+Of}} (const std\+::string \&path)
-\item 
+\begin{DoxyCompactList}\small\item\em Return the parent directory component of a file path. \end{DoxyCompactList}\item 
 std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}{mesh\+\_\+sim\+::parse\+Seed\+List}} (const std\+::string \&arg)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Parse a comma-\/separated string of seed values into a {\ttfamily uint32\+\_\+t} vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+String and path manipulation utilities shared across all modules. 
+

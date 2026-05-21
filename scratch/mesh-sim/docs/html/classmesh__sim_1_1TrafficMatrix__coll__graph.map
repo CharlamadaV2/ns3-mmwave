@@ -1,4 +1,4 @@
 <map id="mesh_sim::TrafficMatrix" name="mesh_sim::TrafficMatrix">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,184,121"/>
+<area shape="rect" id="node1" title="Generates and maintains the set of active flows each simulation tick." alt="" coords="5,95,184,121"/>
 <area shape="rect" id="node2" href="$structmesh__sim_1_1TrafficConfig.html" title="Flow&#45;level traffic demand configuration." alt="" coords="6,5,183,32"/>
 </map>

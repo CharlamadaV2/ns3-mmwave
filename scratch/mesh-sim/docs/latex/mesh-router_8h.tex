@@ -2,7 +2,7 @@
 \label{mesh-router_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/routing/mesh-\/router.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/routing/mesh-\/router.h}}
 
 
-Mesh\+Router\+: routes flows over the mesh link graph. Supports Dijkstra shortest-\/path, widest-\/path (max throughput), and min-\/hop (BFS) algorithms. Applies proportional-\/fairness congestion scaling when links are overloaded.  
+Flow-\/level routing over the mesh link graph.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/link-\/result.\+h\char`\"{}}\newline
@@ -19,7 +19,8 @@ Include dependency graph for mesh-\/router.h\+:
 \includegraphics[width=350pt]{mesh-router_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,9 +31,9 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1FlowResult}{mesh\+\_\+sim\+::\+Flow\+Result}}
-\item 
+\begin{DoxyCompactList}\small\item\em Routing result for one flow at one simulation tick. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1MeshRouter}{mesh\+\_\+sim\+::\+Mesh\+Router}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Routes flows over the mesh link graph and applies congestion scaling. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -41,5 +42,24 @@ class \mbox{\hyperlink{classmesh__sim_1_1MeshRouter}{mesh\+\_\+sim\+::\+Mesh\+Ro
 
 
 \doxysubsection{Detailed Description}
-Mesh\+Router\+: routes flows over the mesh link graph. Supports Dijkstra shortest-\/path, widest-\/path (max throughput), and min-\/hop (BFS) algorithms. Applies proportional-\/fairness congestion scaling when links are overloaded. 
+Flow-\/level routing over the mesh link graph. 
 
+Mesh\+Router takes the current Link\+Table and a list of active Flow objects, finds a path for each flow using the configured algorithm, then applies proportional-\/fairness congestion scaling to produce a Flow\+Result for every flow.
+
+{\bfseries{Routing algorithms}} (selected by Routing\+Config\+::algorithm)
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Algorithm   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Strategy   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Data structure    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Algorithm   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Strategy   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Data structure    }\\\cline{1-3}
+\endhead
+{\ttfamily \char`\"{}shortest\+\_\+path\char`\"{}}   &Dijkstra with edge weight {\ttfamily 1/capacity\+\_\+mbps}.   &min-\/heap    \\\cline{1-3}
+&Prefers high-\/capacity links; default.   &\\\cline{1-3}
+{\ttfamily \char`\"{}max\+\_\+throughput\char`\"{}}   &Widest-\/path\+: maximises the bottleneck link capacity.   &max-\/heap    \\\cline{1-3}
+{\ttfamily \char`\"{}min\+\_\+hop\char`\"{}}   &BFS; minimises hop count, ignoring link quality entirely.   &FIFO queue   \\\cline{1-3}
+\end{longtabu}

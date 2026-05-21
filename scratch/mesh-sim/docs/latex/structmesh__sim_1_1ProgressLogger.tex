@@ -2,29 +2,39 @@
 \label{structmesh__sim_1_1ProgressLogger}\index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 
 
+Prints sim-\/time progress, wall-\/clock elapsed time, and ETA to stderr.  
+
+
+
+
 {\ttfamily \#include $<$progress-\/logger.\+h$>$}
 
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a52f4712a31140e60dfa339dcc38dc1d3}{Tick}} (uint32\+\_\+t tick\+\_\+index)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Report progress if this tick falls on a reporting boundary. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}{total\+\_\+ticks}}
-\item 
-uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a9e6e0fa38b7253148ef42ab7e734bc3b}{interval\+\_\+ticks}}
-\item 
-uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}{seed}}
-\item 
-double \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_abed35571192cd76946a4dee37c7128a0}{duration\+\_\+s}}
-\item 
-double \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a5ff558e1e90703d1f169de94ca1685dc}{tick\+\_\+s}}
-\item 
+uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}{total\+\_\+ticks}} = 0
+\begin{DoxyCompactList}\small\item\em Total number of simulation ticks (duration\+\_\+s / tick\+\_\+s). \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a9e6e0fa38b7253148ef42ab7e734bc3b}{interval\+\_\+ticks}} = 1
+\begin{DoxyCompactList}\small\item\em {\ttfamily total\+\_\+ticks/N} for roughly N progress lines. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}{seed}} = 0
+\begin{DoxyCompactList}\small\item\em Seed shown in the log prefix ({\ttfamily \char`\"{}\mbox{[}seed N\mbox{]}\char`\"{}}). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_abed35571192cd76946a4dee37c7128a0}{duration\+\_\+s}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Total simulated duration in seconds. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a5ff558e1e90703d1f169de94ca1685dc}{tick\+\_\+s}} = 0.\+1
+\begin{DoxyCompactList}\small\item\em {\ttfamily tick\+\_\+index} to a sim-\/time value. \end{DoxyCompactList}\item 
 std\+::chrono\+::time\+\_\+point$<$ std\+::chrono\+::steady\+\_\+clock $>$ \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_add18d33c19e53cea1c6f57bb76761fa8}{wall\+\_\+start}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Wall-\/clock reference point captured before the step loop starts. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Prints sim-\/time progress, wall-\/clock elapsed time, and ETA to stderr. 
+
+All fields must be set before the first call to \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_a52f4712a31140e60dfa339dcc38dc1d3}{Tick}}. The struct has no constructor — use aggregate initialisation or set fields directly. 
 
 \doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_a52f4712a31140e60dfa339dcc38dc1d3}\label{structmesh__sim_1_1ProgressLogger_a52f4712a31140e60dfa339dcc38dc1d3}} 
@@ -33,21 +43,25 @@ std\+::chrono\+::time\+\_\+point$<$ std\+::chrono\+::steady\+\_\+clock $>$ \mbox
 \doxysubsubsection{\texorpdfstring{Tick()}{Tick()}}
 {\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Progress\+Logger\+::\+Tick (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{tick\+\_\+index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Description of what the method does.
+
+
+Report progress if this tick falls on a reporting boundary. 
+
+Prints to {\ttfamily stderr} when {\ttfamily tick\+\_\+index} is a multiple of {\ttfamily interval\+\_\+ticks} {\itshape or} when {\ttfamily tick\+\_\+index} equals {\ttfamily total\+\_\+ticks} (ensuring the 100\% line is always printed). All other ticks are a single modulo check and return immediately.
+
+The ETA is estimated as\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{rate  = wall\_elapsed / sim\_elapsed    (wall seconds per sim second)}
+\DoxyCodeLine{eta\_s = (\mbox{\hyperlink{structmesh__sim_1_1ProgressLogger_abed35571192cd76946a4dee37c7128a0}{duration\_s}} -\/ sim\_t) * rate}
+
+\end{DoxyCode}
+ ETA is 0 when {\ttfamily sim\+\_\+t} == 0 (avoids division by zero at tick 0).
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em tick\+\_\+index} & Zero-\/based index of the current tick. \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Description of return value. 
-\end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 
 
 \doxysubsection{Member Data Documentation}
@@ -55,37 +69,61 @@ Description of return value.
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!duration\_s@{duration\_s}}
 \index{duration\_s@{duration\_s}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{duration\_s}{duration\_s}}
-{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Progress\+Logger\+::duration\+\_\+s}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Progress\+Logger\+::duration\+\_\+s = 0.\+0}
+
+
+
+Total simulated duration in seconds. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_a9e6e0fa38b7253148ef42ab7e734bc3b}\label{structmesh__sim_1_1ProgressLogger_a9e6e0fa38b7253148ef42ab7e734bc3b}} 
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!interval\_ticks@{interval\_ticks}}
 \index{interval\_ticks@{interval\_ticks}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{interval\_ticks}{interval\_ticks}}
-{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::interval\+\_\+ticks}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::interval\+\_\+ticks = 1}
 
-\mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}\label{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}} 
+
+
+{\ttfamily total\+\_\+ticks/N} for roughly N progress lines. 
+
+Print every {\ttfamily interval\+\_\+ticks} ticks. Set to \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}\label{structmesh__sim_1_1ProgressLogger_a535a35c5c7c946076128cae6ea49b150}} 
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!seed@{seed}}
 \index{seed@{seed}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{seed}{seed}}
-{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::seed}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::seed = 0}
+
+
+
+Seed shown in the log prefix ({\ttfamily \char`\"{}\mbox{[}seed N\mbox{]}\char`\"{}}). 
 
 \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_a5ff558e1e90703d1f169de94ca1685dc}\label{structmesh__sim_1_1ProgressLogger_a5ff558e1e90703d1f169de94ca1685dc}} 
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!tick\_s@{tick\_s}}
 \index{tick\_s@{tick\_s}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{tick\_s}{tick\_s}}
-{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Progress\+Logger\+::tick\+\_\+s}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Progress\+Logger\+::tick\+\_\+s = 0.\+1}
 
-\mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}\label{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}} 
+
+
+{\ttfamily tick\+\_\+index} to a sim-\/time value. 
+
+Simulation time step in seconds; used to convert \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}\label{structmesh__sim_1_1ProgressLogger_abe59d208b309e7afcf45cb5f62b90a62}} 
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!total\_ticks@{total\_ticks}}
 \index{total\_ticks@{total\_ticks}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{total\_ticks}{total\_ticks}}
-{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::total\+\_\+ticks}
+{\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Progress\+Logger\+::total\+\_\+ticks = 0}
+
+
+
+Total number of simulation ticks (duration\+\_\+s / tick\+\_\+s). 
 
 \mbox{\Hypertarget{structmesh__sim_1_1ProgressLogger_add18d33c19e53cea1c6f57bb76761fa8}\label{structmesh__sim_1_1ProgressLogger_add18d33c19e53cea1c6f57bb76761fa8}} 
 \index{mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}!wall\_start@{wall\_start}}
 \index{wall\_start@{wall\_start}!mesh\_sim::ProgressLogger@{mesh\_sim::ProgressLogger}}
 \doxysubsubsection{\texorpdfstring{wall\_start}{wall\_start}}
 {\footnotesize\ttfamily std\+::chrono\+::time\+\_\+point$<$std\+::chrono\+::steady\+\_\+clock$>$ mesh\+\_\+sim\+::\+Progress\+Logger\+::wall\+\_\+start}
+
+
+
+Wall-\/clock reference point captured before the step loop starts. 
 
 
 

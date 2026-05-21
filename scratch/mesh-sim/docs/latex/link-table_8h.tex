@@ -2,7 +2,7 @@
 \label{link-table_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/table.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/table.h}}
 
 
-Link\+Table\+: NxN link quality matrix updated each tick. Wraps the flat output of Link\+Evaluator\+::\+Evaluate\+All() into a symmetric matrix with O(1) per-\/link lookup.  
+NxN symmetric link-\/quality matrix with O(1) per-\/link lookup.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/link-\/result.\+h\char`\"{}}\newline
@@ -16,7 +16,8 @@ Include dependency graph for link-\/table.h\+:
 \includegraphics[width=318pt]{link-table_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -27,7 +28,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{mesh\+\_\+sim\+::\+Link\+Table}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Symmetric N×N link-\/quality matrix, updated each simulation tick. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -36,5 +37,6 @@ class \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{mesh\+\_\+sim\+::\+Link\+Tab
 
 
 \doxysubsection{Detailed Description}
-Link\+Table\+: NxN link quality matrix updated each tick. Wraps the flat output of Link\+Evaluator\+::\+Evaluate\+All() into a symmetric matrix with O(1) per-\/link lookup. 
+NxN symmetric link-\/quality matrix with O(1) per-\/link lookup. 
 
+Link\+Table wraps the flat vector produced by Link\+Evaluator\+::\+Evaluate\+All into a symmetric N×N matrix. It is updated once per tick and then queried by the routing engine, metrics writer, and RL reward calculator. 

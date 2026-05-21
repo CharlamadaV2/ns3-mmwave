@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>VizWriter: writes per-tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz_tick_ms intervals.  
+<p>Writes per-tick CSV snapshots for GUI and offline plotting.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="sim-config_8h_source.html">src/domain/sim-config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="link-table_8h_source.html">src/eval/link-table.h</a>&quot;</code><br />
@@ -88,12 +88,12 @@ Include dependency graph for viz-writer.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="viz-writer_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8h">
-<area shape="rect" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="900,5,1108,61"/>
+<area shape="rect" title="Writes per&#45;tick CSV snapshots for GUI and offline plotting." alt="" coords="900,5,1108,61"/>
 <area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="381,281,560,307"/>
 <area shape="rect" title=" " alt="" coords="861,437,928,464"/>
 <area shape="rect" title=" " alt="" coords="101,437,163,464"/>
-<area shape="rect" href="link-table_8h.html" title="LinkTable: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::Evaluat..." alt="" coords="929,191,1079,218"/>
-<area shape="rect" href="mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="747,109,933,136"/>
+<area shape="rect" href="link-table_8h.html" title="NxN symmetric link&#45;quality matrix with O(1) per&#45;link lookup." alt="" coords="929,191,1079,218"/>
+<area shape="rect" href="mesh-router_8h.html" title="Flow&#45;level routing over the mesh link graph." alt="" coords="747,109,933,136"/>
 <area shape="rect" title=" " alt="" coords="1179,109,1341,136"/>
 <area shape="rect" title=" " alt="" coords="1365,109,1438,136"/>
 <area shape="rect" href="channel-config_8h.html" title="Radio and channel configuration POD types." alt="" coords="513,363,642,389"/>
@@ -102,7 +102,7 @@ Include dependency graph for viz-writer.h:</div>
 <area shape="rect" href="node-spec_8h.html" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="336,363,437,389"/>
 <area shape="rect" title=" " alt="" coords="245,363,312,389"/>
 <area shape="rect" href="link-result_8h.html" title="Per&#45;link radio evaluation result POD type." alt="" coords="877,281,1053,307"/>
-<area shape="rect" href="traffic-matrix_8h.html" title="TrafficMatrix: flow&#45;level traffic demand generation for the mesh. Supports constant&#45;rate,..." alt="" coords="408,184,533,225"/>
+<area shape="rect" href="traffic-matrix_8h.html" title="Flow&#45;level traffic demand generation for the mesh." alt="" coords="408,184,533,225"/>
 <area shape="rect" title=" " alt="" coords="145,273,301,315"/>
 </map>
 </div>
@@ -111,7 +111,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="viz-writer_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2io_2viz-writer_8hdep">
-<area shape="rect" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Writes per&#45;tick CSV snapshots for GUI and offline plotting." alt="" coords="5,5,213,61"/>
 <area shape="rect" href="viz-writer_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 </map>
 </div>
@@ -121,6 +121,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1VizWriter.html">mesh_sim::VizWriter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Streams per-tick simulation state to six CSV files.  <a href="classmesh__sim_1_1VizWriter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -129,8 +130,25 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>VizWriter: writes per-tick CSV snapshots for GUI and plotting consumption. Called from the step loop at viz_tick_ms intervals. </p>
-<p>Output files: positions.csv &ndash; time_s, node_id, x, y, z, node_type, active links.csv &ndash; time_s, node_a, node_b, dist_m, sinr_db, condition, condition_reason, capacity_mbps, delivered_mbps, hop_count rx-power.csv &ndash; time_s, node_a, node_b, rx_power_dbm mcs.csv &ndash; time_s, node_a, node_b, mcs_index, spectral_eff flows.csv &ndash; time_s, src, dst, demand_mbps, delivered_mbps, latency_ms, hop_count, routable routes.csv &ndash; time_s, src, dst, path, bottleneck_mbps, hop_count, routable </p>
+<div class="textblock"><p>Writes per-tick CSV snapshots for GUI and offline plotting. </p>
+<p>VizWriter maintains six open CSV files for the duration of the simulation and appends one row (or one row per node/link/flow) each time WriteTick is called. Writes are rate-limited to <code>viz_tick_ms</code> intervals so a small tick step (<code>tick_s</code>) does not inflate file sizes unnecessarily.</p>
+<p><b>Output files</b> (all written to <code>cfg.output_dir</code>)</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Columns    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>positions.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>node_id</code>, <code>x</code>, <code>y</code>, <code>z</code>, <code>node_type</code>, <code>active</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>links.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>node_a</code>, <code>node_b</code>, <code>dist_m</code>, <code>sinr_db</code>, <code>condition</code>, <code>condition_reason</code>, <code>capacity_mbps</code>, <code>delivered_mbps</code>, <code>hop_count</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>rx-power.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>node_a</code>, <code>node_b</code>, <code>rx_power_dbm</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>mcs.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>node_a</code>, <code>node_b</code>, <code>mcs_index</code>, <code>spectral_eff</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>flows.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>src</code>, <code>dst</code>, <code>demand_mbps</code>, <code>delivered_mbps</code>, <code>latency_ms</code>, <code>hop_count</code>, <code>routable</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>routes.csv</code>   </td><td class="markdownTableBodyNone"><code>time_s</code>, <code>src</code>, <code>dst</code>, <code>path</code>, <code>bottleneck_mbps</code>, <code>hop_count</code>, <code>routable</code>   </td></tr>
+</table>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

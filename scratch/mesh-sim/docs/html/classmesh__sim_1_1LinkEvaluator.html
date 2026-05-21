@@ -75,51 +75,52 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Computes per-link radio metrics using ns-3 propagation models.  
+ <a href="classmesh__sim_1_1LinkEvaluator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="link-evaluator_8h_source.html">link-evaluator.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e0af315989e135767eb4878d08ac61c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg, ns3::Ptr&lt; ns3::PropagationLossModel &gt; plModel, ns3::Ptr&lt; ns3::ChannelConditionModel &gt; condModel)</td></tr>
+<tr class="memdesc:a5e0af315989e135767eb4878d08ac61c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind ns-3 propagation models and extract scalar radio parameters.  <a href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">More...</a><br /></td></tr>
 <tr class="separator:a5e0af315989e135767eb4878d08ac61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a132e1068c43059b44087db448606c900"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">Evaluate</a> (ns3::Ptr&lt; ns3::MobilityModel &gt; txMob, ns3::Ptr&lt; ns3::MobilityModel &gt; rxMob, uint32_t txIdx, uint32_t rxIdx) const</td></tr>
+<tr class="memdesc:a132e1068c43059b44087db448606c900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate one directed (tx → rx) link at the current node positions.  <a href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">More...</a><br /></td></tr>
 <tr class="separator:a132e1068c43059b44087db448606c900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16c39016432fb10dc7358821d4ab3cac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">EvaluateAll</a> (const std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt;&gt; &amp;mobs) const</td></tr>
+<tr class="memdesc:a16c39016432fb10dc7358821d4ab3cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate all N·(N−1)/2 unordered node pairs in index order.  <a href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">More...</a><br /></td></tr>
 <tr class="separator:a16c39016432fb10dc7358821d4ab3cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a45a25562108d717b3d8ba595edce96cb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a45a25562108d717b3d8ba595edce96cb">m_txPowerDbm</a> = 30.0</td></tr>
+<tr class="memdesc:a45a25562108d717b3d8ba595edce96cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">TX power in dBm (from <a class="el" href="structmesh__sim_1_1ChannelConfig.html">ChannelConfig</a>).  <a href="classmesh__sim_1_1LinkEvaluator.html#a45a25562108d717b3d8ba595edce96cb">More...</a><br /></td></tr>
 <tr class="separator:a45a25562108d717b3d8ba595edce96cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab35396e23c25c45ee042b4519e8013a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#ab35396e23c25c45ee042b4519e8013a1">m_noiseFloorDbm</a> = -174.0</td></tr>
+<tr class="memdesc:ab35396e23c25c45ee042b4519e8013a1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a> from bandwidth and noise figure.  <a href="classmesh__sim_1_1LinkEvaluator.html#ab35396e23c25c45ee042b4519e8013a1">More...</a><br /></td></tr>
 <tr class="separator:ab35396e23c25c45ee042b4519e8013a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a47d61ccd593bbb9e05a8cdba3fb463a1">m_bandwidthHz</a> = 400e6</td></tr>
+<tr class="memdesc:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">System bandwidth in Hz.  <a href="classmesh__sim_1_1LinkEvaluator.html#a47d61ccd593bbb9e05a8cdba3fb463a1">More...</a><br /></td></tr>
 <tr class="separator:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a9a74eb8092db9bb9e0584662e9e35fa0">m_bfGainDb</a> = 0.0</td></tr>
+<tr class="memdesc:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combined TX + RX array gain in dB.  <a href="classmesh__sim_1_1LinkEvaluator.html#a9a74eb8092db9bb9e0584662e9e35fa0">More...</a><br /></td></tr>
 <tr class="separator:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af22886f54c0d8c68bf25fda02afc9779"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#af22886f54c0d8c68bf25fda02afc9779">m_amcModel</a> = &quot;shannon&quot;</td></tr>
+<tr class="memdesc:af22886f54c0d8c68bf25fda02afc9779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Capacity model: <code>"shannon"</code> or <code>"table"</code>.  <a href="classmesh__sim_1_1LinkEvaluator.html#af22886f54c0d8c68bf25fda02afc9779">More...</a><br /></td></tr>
 <tr class="separator:af22886f54c0d8c68bf25fda02afc9779"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac03e529739a2b1cf085f32ad510e9e43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#ac03e529739a2b1cf085f32ad510e9e43">m_buildingsEnabled</a> = false</td></tr>
 <tr class="separator:ac03e529739a2b1cf085f32ad510e9e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a550e2c385872ea43e701f8cd13e44185"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a550e2c385872ea43e701f8cd13e44185">m_plModel</a></td></tr>
+<tr class="memdesc:a550e2c385872ea43e701f8cd13e44185"><td class="mdescLeft">&#160;</td><td class="mdescRight">ns-3 path-loss model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>).  <a href="classmesh__sim_1_1LinkEvaluator.html#a550e2c385872ea43e701f8cd13e44185">More...</a><br /></td></tr>
 <tr class="separator:a550e2c385872ea43e701f8cd13e44185"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7002e2e8870aa3ffa0e2b414c3d97b56"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a7002e2e8870aa3ffa0e2b414c3d97b56">m_condModel</a></td></tr>
+<tr class="memdesc:a7002e2e8870aa3ffa0e2b414c3d97b56"><td class="mdescLeft">&#160;</td><td class="mdescRight">ns-3 LOS/NLOS model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>).  <a href="classmesh__sim_1_1LinkEvaluator.html#a7002e2e8870aa3ffa0e2b414c3d97b56">More...</a><br /></td></tr>
 <tr class="separator:a7002e2e8870aa3ffa0e2b414c3d97b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<div class="textblock"><p>Computes per-link radio metrics using ns-3 propagation models. </p>
+<p>Stateless between calls (all per-call state lives in <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a>). The ns-3 model pointers are set once by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a> and reused across every subsequent <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">Evaluate</a> / <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">EvaluateAll</a> call. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5e0af315989e135767eb4878d08ac61c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5e0af315989e135767eb4878d08ac61c">&#9670;&nbsp;</a></span>Configure()</h2>
@@ -152,6 +153,27 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Bind ns-3 propagation models and extract scalar radio parameters. </p>
+<p>Computes and caches:</p><ul>
+<li>Thermal noise floor: <code>−174</code> + 10·log₁₀(bandwidth_Hz) + noise_figure_dB.</li>
+<li>Combined beamforming gain: <code>tx_array_gain_dBi</code> + rx_array_gain_dBi.</li>
+</ul>
+<p>Must be called once before <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">Evaluate</a> or <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">EvaluateAll</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cfg</td><td>Fully loaded and validated simulation configuration. </td></tr>
+    <tr><td class="paramname">plModel</td><td>ns-3 propagation loss model (3GPP or NYU); must not be null. </td></tr>
+    <tr><td class="paramname">condModel</td><td>ns-3 channel condition model for LOS/NLOS determination; must not be null. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if either model pointer is null. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -193,6 +215,26 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Evaluate one directed (tx → rx) link at the current node positions. </p>
+<p><b>Co-location guard</b>: if the 3-D distance between <code>txMob</code> and <code>rxMob</code> is less than 1 m, path loss is set to 0 dB and the full TX power plus beamforming gain is returned directly, bypassing the propagation model. This prevents undefined behaviour from <code>log10(0)</code> in distance-dependent models.</p>
+<p>For all other distances:</p><ol type="1">
+<li>The channel condition model determines LOS vs. NLOS.</li>
+<li>The propagation loss model computes <code>rx_power_dBm</code>.</li>
+<li>Beamforming gain is added: <code>rx_power</code> += bf_gain_dB.</li>
+<li>SINR is computed against the thermal noise floor only (no ICI).</li>
+<li><a class="el" href="namespacemesh__sim.html#a3e593524f1194ab3632ac6ffbbcb20ee">SinrToCapacity</a> and <a class="el" href="namespacemesh__sim.html#ad9ccac6586eaef254fffab3f801a7fd0">SinrToMcsIndex</a> translate SINR to capacity and MCS index using the configured AMC model.</li>
+</ol>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">txMob</td><td>Mobility model of the transmitting node. </td></tr>
+    <tr><td class="paramname">rxMob</td><td>Mobility model of the receiving node. </td></tr>
+    <tr><td class="paramname">txIdx</td><td>Index of the transmitter in <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </td></tr>
+    <tr><td class="paramname">rxIdx</td><td>Index of the receiver in <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Fully populated <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> for this directed pair. </dd></dl>
+
 </div>
 </div>
 <a id="a16c39016432fb10dc7358821d4ab3cac"></a>
@@ -210,6 +252,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Evaluate all N·(N−1)/2 unordered node pairs in index order. </p>
+<p>Iterates pairs (i, j) with i &lt; j, calling <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a132e1068c43059b44087db448606c900">Evaluate</a> for each. The returned vector is in the same order and has the same size as expected by <a class="el" href="classmesh__sim_1_1LinkTable.html#ae2d4c11e57c3abdebb48d7be853d25b4">LinkTable::Update</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mobs</td><td>Mobility models for all <code>N</code> nodes, in node-index order (i.e. <code>mobs</code>[k] corresponds to <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>[k]). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flat vector of N·(N−1)/2 <a class="el" href="structmesh__sim_1_1LinkResult.html">LinkResult</a> objects. </dd></dl>
 
 </div>
 </div>
@@ -234,6 +286,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Capacity model: <code>"shannon"</code> or <code>"table"</code>. </p>
+
 </div>
 </div>
 <a id="a47d61ccd593bbb9e05a8cdba3fb463a1"></a>
@@ -255,6 +309,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>System bandwidth in Hz. </p>
 
 </div>
 </div>
@@ -278,6 +334,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Combined TX + RX array gain in dB. </p>
+
 </div>
 </div>
 <a id="ac03e529739a2b1cf085f32ad510e9e43"></a>
@@ -299,6 +357,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p><code>true</code> when buildings are present; written to <a class="el" href="structmesh__sim_1_1LinkResult.html#af4d8f79dacb43aa9aacc88e7f8be661a">LinkResult::condition_from_buildings</a>. </p>
 
 </div>
 </div>
@@ -322,6 +381,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>ns-3 LOS/NLOS model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>). </p>
+
 </div>
 </div>
 <a id="ab35396e23c25c45ee042b4519e8013a1"></a>
@@ -343,6 +404,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a> from bandwidth and noise figure. </p>
+<p>Thermal noise floor in dBm; computed by </p>
 
 </div>
 </div>
@@ -366,6 +430,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>ns-3 path-loss model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>). </p>
+
 </div>
 </div>
 <a id="a45a25562108d717b3d8ba595edce96cb"></a>
@@ -387,6 +453,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>TX power in dBm (from <a class="el" href="structmesh__sim_1_1ChannelConfig.html">ChannelConfig</a>). </p>
 
 </div>
 </div>

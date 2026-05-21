@@ -1,5 +1,5 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/eval/link&#45;table.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/eval/link&#45;table.h">
-<area shape="rect" id="node1" title="LinkTable: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::Evaluat..." alt="" coords="115,5,323,61"/>
+<area shape="rect" id="node1" title="NxN symmetric link&#45;quality matrix with O(1) per&#45;link lookup." alt="" coords="115,5,323,61"/>
 <area shape="rect" id="node2" href="$link-result_8h.html" title="Per&#45;link radio evaluation result POD type." alt="" coords="5,109,181,136"/>
 <area shape="rect" id="node3" title=" " alt="" coords="123,184,189,211"/>
 <area shape="rect" id="node4" title=" " alt="" coords="257,109,319,136"/>

@@ -74,28 +74,41 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>A single directed traffic flow between two nodes.  
+ <a href="structmesh__sim_1_1Flow.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="traffic-matrix_8h_source.html">traffic-matrix.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a610cb0429055636adee73e9ce55fecd5"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#a610cb0429055636adee73e9ce55fecd5">src</a> = 0</td></tr>
+<tr class="memdesc:a610cb0429055636adee73e9ce55fecd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>.  <a href="structmesh__sim_1_1Flow.html#a610cb0429055636adee73e9ce55fecd5">More...</a><br /></td></tr>
 <tr class="separator:a610cb0429055636adee73e9ce55fecd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adacff1d0c3ef715072d43c2baefbea26"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#adacff1d0c3ef715072d43c2baefbea26">dst</a> = 0</td></tr>
+<tr class="memdesc:adacff1d0c3ef715072d43c2baefbea26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destination node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>.  <a href="structmesh__sim_1_1Flow.html#adacff1d0c3ef715072d43c2baefbea26">More...</a><br /></td></tr>
 <tr class="separator:adacff1d0c3ef715072d43c2baefbea26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accd345f898db9ad4f6ac5a5d6a3c9816"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#accd345f898db9ad4f6ac5a5d6a3c9816">demand_mbps</a> = 0.0</td></tr>
+<tr class="memdesc:accd345f898db9ad4f6ac5a5d6a3c9816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-flow demand in Mbps (from <a class="el" href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">TrafficConfig::demand_mbps</a>).  <a href="structmesh__sim_1_1Flow.html#accd345f898db9ad4f6ac5a5d6a3c9816">More...</a><br /></td></tr>
 <tr class="separator:accd345f898db9ad4f6ac5a5d6a3c9816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14f3a507916d5ac0b83169f99e589b5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#a14f3a507916d5ac0b83169f99e589b5e">start_time_s</a> = 0.0</td></tr>
+<tr class="memdesc:a14f3a507916d5ac0b83169f99e589b5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation time at which the flow was created (s).  <a href="structmesh__sim_1_1Flow.html#a14f3a507916d5ac0b83169f99e589b5e">More...</a><br /></td></tr>
 <tr class="separator:a14f3a507916d5ac0b83169f99e589b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bd2f95593b11cde33f663ef5033f971"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#a0bd2f95593b11cde33f663ef5033f971">end_time_s</a> = 0.0</td></tr>
+<tr class="memdesc:a0bd2f95593b11cde33f663ef5033f971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expiry time in seconds; <code>0</code> = permanent (no expiry).  <a href="structmesh__sim_1_1Flow.html#a0bd2f95593b11cde33f663ef5033f971">More...</a><br /></td></tr>
 <tr class="separator:a0bd2f95593b11cde33f663ef5033f971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a407ac675909f29c137b0933d923f2f9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#a407ac675909f29c137b0933d923f2f9b">active</a> = true</td></tr>
 <tr class="separator:a407ac675909f29c137b0933d923f2f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a485fea50a3c69afb13a19d0bfb8fa9ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#a485fea50a3c69afb13a19d0bfb8fa9ec">in_on_phase</a> = true</td></tr>
+<tr class="memdesc:a485fea50a3c69afb13a19d0bfb8fa9ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Always <code>true</code> for non-on-off models.  <a href="structmesh__sim_1_1Flow.html#a485fea50a3c69afb13a19d0bfb8fa9ec">More...</a><br /></td></tr>
 <tr class="separator:a485fea50a3c69afb13a19d0bfb8fa9ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcbd64f4b5476fd3985f3f4157e0e411"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html#abcbd64f4b5476fd3985f3f4157e0e411">phase_end_s</a> = 0.0</td></tr>
+<tr class="memdesc:abcbd64f4b5476fd3985f3f4157e0e411"><td class="mdescLeft">&#160;</td><td class="mdescRight">phase ends. Irrelevant for non-on-off models.  <a href="structmesh__sim_1_1Flow.html#abcbd64f4b5476fd3985f3f4157e0e411">More...</a><br /></td></tr>
 <tr class="separator:abcbd64f4b5476fd3985f3f4157e0e411"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A single directed traffic flow between two nodes. </p>
+<p>Flows are created by <a class="el" href="classmesh__sim_1_1TrafficMatrix.html">TrafficMatrix</a> and consumed by <a class="el" href="classmesh__sim_1_1MeshRouter.html">MeshRouter</a>. The on-off model state (<code>in_on_phase</code>, <code>phase_end_s</code>) is only meaningful when the traffic model is <code>"on_off"</code>; for other models these fields retain their default values and are ignored by the router. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a407ac675909f29c137b0933d923f2f9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a407ac675909f29c137b0933d923f2f9b">&#9670;&nbsp;</a></span>active</h2>
 
@@ -107,6 +120,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p><code>false</code> once <code>currentTime</code> &gt;= <code>end_time_s</code>. Inactive flows are removed from <code>m_flows</code> each tick unless they are permanent (<code>end_time_s</code> == 0). </p>
 
 </div>
 </div>
@@ -122,6 +136,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Per-flow demand in Mbps (from <a class="el" href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">TrafficConfig::demand_mbps</a>). </p>
+
 </div>
 </div>
 <a id="adacff1d0c3ef715072d43c2baefbea26"></a>
@@ -135,6 +151,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Destination node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </p>
 
 </div>
 </div>
@@ -150,6 +168,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Expiry time in seconds; <code>0</code> = permanent (no expiry). </p>
+
 </div>
 </div>
 <a id="a485fea50a3c69afb13a19d0bfb8fa9ec"></a>
@@ -163,6 +183,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Always <code>true</code> for non-on-off models. </p>
+<p><code>true</code> when the flow is in its ON (transmitting) phase. </p>
 
 </div>
 </div>
@@ -178,6 +201,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>phase ends. Irrelevant for non-on-off models. </p>
+<p>Simulation time at which the current ON or OFF </p>
+
 </div>
 </div>
 <a id="a610cb0429055636adee73e9ce55fecd5"></a>
@@ -192,6 +218,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Source node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </p>
+
 </div>
 </div>
 <a id="a14f3a507916d5ac0b83169f99e589b5e"></a>
@@ -205,6 +233,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Simulation time at which the flow was created (s). </p>
 
 </div>
 </div>

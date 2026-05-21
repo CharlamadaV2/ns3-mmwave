@@ -1,5 +1,5 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/traffic/traffic&#45;matrix.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/traffic/traffic&#45;matrix.h">
-<area shape="rect" id="node1" title="TrafficMatrix: flow&#45;level traffic demand generation for the mesh. Supports constant&#45;rate,..." alt="" coords="441,5,649,61"/>
+<area shape="rect" id="node1" title="Flow&#45;level traffic demand generation for the mesh." alt="" coords="441,5,649,61"/>
 <area shape="rect" id="node2" href="$sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="295,117,474,143"/>
 <area shape="rect" id="node4" title=" " alt="" coords="17,273,83,300"/>
 <area shape="rect" id="node8" title=" " alt="" coords="577,273,640,300"/>

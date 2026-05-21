@@ -1,27 +1,37 @@
 \hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats}{}\doxysection{mesh\+\_\+sim\+::Metrics\+Writer\+::Node\+Stats Struct Reference}
 \label{structmesh__sim_1_1MetricsWriter_1_1NodeStats}\index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
+
+
+Per-\/node running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}.  
+
+
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a7a2b38371544468399be0414f8756459}{sinr\+\_\+sum}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of SINR values across all peers and ticks (dB). \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a2eb6c6d9d5b237719288880206088236}{sinr\+\_\+min}} = 1e9
-\item 
+\begin{DoxyCompactList}\small\item\em Minimum SINR seen across all peers and ticks (dB). \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_aed344344f13b37383e88a543292b1f50}{sinr\+\_\+max}} = -\/1e9
-\item 
+\begin{DoxyCompactList}\small\item\em Maximum SINR seen across all peers and ticks (dB). \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ab981357b4a40cdd81ef285e5348197fd}{sinr\+\_\+count}} = 0
-\item 
+\begin{DoxyCompactList}\small\item\em Number of valid (non-\/sentinel) SINR samples accumulated. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a055979b87352086504220623609c2e1c}{los\+\_\+link\+\_\+sum}} = 0
-\item 
+\begin{DoxyCompactList}\small\item\em Cumulative count of LOS links across ticks. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ad38f2465776815c73e1f0f8c8be06a9e}{conn\+\_\+link\+\_\+sum}} = 0
-\item 
+\begin{DoxyCompactList}\small\item\em Cumulative count of connected links across ticks. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a5031f488794e522c5c5dfc96a7fa1c10}{tx\+\_\+delivered}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of delivered\+\_\+mbps for flows where this node is src. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ae8f164162ba5d9b74fcbde792da75081}{rx\+\_\+delivered}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Sum of delivered\+\_\+mbps for flows where this node is dst. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac46ab384be40f2ca55b17703d8d0bc07}{tick\+\_\+count}} = 0
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of post-\/warmup ticks this node was observed. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Per-\/node running totals accumulated by \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a12a3fe3d90a9a8095f0a64667f5e503e}{Accumulate\+Tick}}. 
+
+All values are summed over post-\/warmup ticks; time-\/averages are computed in \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter_a62a9a193e9c6f182491282265f62f1e0}{Write}} by dividing by {\ttfamily tick\+\_\+count}. 
 
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ad38f2465776815c73e1f0f8c8be06a9e}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ad38f2465776815c73e1f0f8c8be06a9e}} 
@@ -30,11 +40,19 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac4
 \doxysubsubsection{\texorpdfstring{conn\_link\_sum}{conn\_link\_sum}}
 {\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::conn\+\_\+link\+\_\+sum = 0}
 
+
+
+Cumulative count of connected links across ticks. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a055979b87352086504220623609c2e1c}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a055979b87352086504220623609c2e1c}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!los\_link\_sum@{los\_link\_sum}}
 \index{los\_link\_sum@{los\_link\_sum}!mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
 \doxysubsubsection{\texorpdfstring{los\_link\_sum}{los\_link\_sum}}
 {\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::los\+\_\+link\+\_\+sum = 0}
+
+
+
+Cumulative count of LOS links across ticks. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ae8f164162ba5d9b74fcbde792da75081}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ae8f164162ba5d9b74fcbde792da75081}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!rx\_delivered@{rx\_delivered}}
@@ -42,11 +60,19 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac4
 \doxysubsubsection{\texorpdfstring{rx\_delivered}{rx\_delivered}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::rx\+\_\+delivered = 0.\+0}
 
+
+
+Sum of delivered\+\_\+mbps for flows where this node is dst. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ab981357b4a40cdd81ef285e5348197fd}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ab981357b4a40cdd81ef285e5348197fd}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!sinr\_count@{sinr\_count}}
 \index{sinr\_count@{sinr\_count}!mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
 \doxysubsubsection{\texorpdfstring{sinr\_count}{sinr\_count}}
 {\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::sinr\+\_\+count = 0}
+
+
+
+Number of valid (non-\/sentinel) SINR samples accumulated. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_aed344344f13b37383e88a543292b1f50}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_aed344344f13b37383e88a543292b1f50}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!sinr\_max@{sinr\_max}}
@@ -54,11 +80,19 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac4
 \doxysubsubsection{\texorpdfstring{sinr\_max}{sinr\_max}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::sinr\+\_\+max = -\/1e9}
 
+
+
+Maximum SINR seen across all peers and ticks (dB). 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a2eb6c6d9d5b237719288880206088236}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a2eb6c6d9d5b237719288880206088236}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!sinr\_min@{sinr\_min}}
 \index{sinr\_min@{sinr\_min}!mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
 \doxysubsubsection{\texorpdfstring{sinr\_min}{sinr\_min}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::sinr\+\_\+min = 1e9}
+
+
+
+Minimum SINR seen across all peers and ticks (dB). 
 
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a7a2b38371544468399be0414f8756459}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a7a2b38371544468399be0414f8756459}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!sinr\_sum@{sinr\_sum}}
@@ -66,17 +100,29 @@ uint64\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac4
 \doxysubsubsection{\texorpdfstring{sinr\_sum}{sinr\_sum}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::sinr\+\_\+sum = 0.\+0}
 
+
+
+Sum of SINR values across all peers and ticks (dB). 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac46ab384be40f2ca55b17703d8d0bc07}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_ac46ab384be40f2ca55b17703d8d0bc07}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!tick\_count@{tick\_count}}
 \index{tick\_count@{tick\_count}!mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
 \doxysubsubsection{\texorpdfstring{tick\_count}{tick\_count}}
 {\footnotesize\ttfamily uint64\+\_\+t mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::tick\+\_\+count = 0}
 
+
+
+Number of post-\/warmup ticks this node was observed. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a5031f488794e522c5c5dfc96a7fa1c10}\label{structmesh__sim_1_1MetricsWriter_1_1NodeStats_a5031f488794e522c5c5dfc96a7fa1c10}} 
 \index{mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}!tx\_delivered@{tx\_delivered}}
 \index{tx\_delivered@{tx\_delivered}!mesh\_sim::MetricsWriter::NodeStats@{mesh\_sim::MetricsWriter::NodeStats}}
 \doxysubsubsection{\texorpdfstring{tx\_delivered}{tx\_delivered}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Metrics\+Writer\+::\+Node\+Stats\+::tx\+\_\+delivered = 0.\+0}
+
+
+
+Sum of delivered\+\_\+mbps for flows where this node is src. 
 
 
 

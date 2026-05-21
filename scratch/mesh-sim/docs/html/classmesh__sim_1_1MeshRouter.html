@@ -76,13 +76,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Routes flows over the mesh link graph and applies congestion scaling.  
+ <a href="classmesh__sim_1_1MeshRouter.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mesh-router_8h_source.html">mesh-router.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for mesh_sim::MeshRouter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmesh__sim_1_1MeshRouter__coll__graph.png" border="0" usemap="#amesh__sim_1_1MeshRouter_coll__map" alt="Collaboration graph"/></div>
 <map name="amesh__sim_1_1MeshRouter_coll__map" id="amesh__sim_1_1MeshRouter_coll__map">
-<area shape="rect" title=" " alt="" coords="12,95,187,121"/>
+<area shape="rect" title="Routes flows over the mesh link graph and applies congestion scaling." alt="" coords="12,95,187,121"/>
 <area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -90,33 +93,46 @@ Collaboration diagram for mesh_sim::MeshRouter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a02ac1d75825cb9299bc9674b387ded81"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a02ac1d75825cb9299bc9674b387ded81">MeshRouter</a> (const <a class="el" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:a02ac1d75825cb9299bc9674b387ded81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a router with the given routing configuration.  <a href="classmesh__sim_1_1MeshRouter.html#a02ac1d75825cb9299bc9674b387ded81">More...</a><br /></td></tr>
 <tr class="separator:a02ac1d75825cb9299bc9674b387ded81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a1a1c0210655e515f0d9c62f592d64b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a5a1a1c0210655e515f0d9c62f592d64b">Route</a> (const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, const std::vector&lt; <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> &gt; &amp;flows, uint32_t numNodes) const</td></tr>
+<tr class="memdesc:a5a1a1c0210655e515f0d9c62f592d64b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Route all flows and return one <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> per flow.  <a href="classmesh__sim_1_1MeshRouter.html#a5a1a1c0210655e515f0d9c62f592d64b">More...</a><br /></td></tr>
 <tr class="separator:a5a1a1c0210655e515f0d9c62f592d64b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ace88b4e00f0ffd0f0ed17ac50a08eea0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#ace88b4e00f0ffd0f0ed17ac50a08eea0">FindPath</a> (const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, uint32_t src, uint32_t dst, uint32_t numNodes) const</td></tr>
+<tr class="memdesc:ace88b4e00f0ffd0f0ed17ac50a08eea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch to the appropriate path-finding algorithm and enforce the hop limit.  <a href="classmesh__sim_1_1MeshRouter.html#ace88b4e00f0ffd0f0ed17ac50a08eea0">More...</a><br /></td></tr>
 <tr class="separator:ace88b4e00f0ffd0f0ed17ac50a08eea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecc49e477be43a256895907ced24c4f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#aecc49e477be43a256895907ced24c4f7">FindPathShortestPath</a> (const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, uint32_t src, uint32_t dst, uint32_t numNodes) const</td></tr>
+<tr class="memdesc:aecc49e477be43a256895907ced24c4f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dijkstra shortest path with edge weight <code>1/capacity_mbps</code>.  <a href="classmesh__sim_1_1MeshRouter.html#aecc49e477be43a256895907ced24c4f7">More...</a><br /></td></tr>
 <tr class="separator:aecc49e477be43a256895907ced24c4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f2624fb0b8708aa67baed087a827e2a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a1f2624fb0b8708aa67baed087a827e2a">FindPathMaxThroughput</a> (const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, uint32_t src, uint32_t dst, uint32_t numNodes) const</td></tr>
+<tr class="memdesc:a1f2624fb0b8708aa67baed087a827e2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Widest-path algorithm: maximises bottleneck link capacity.  <a href="classmesh__sim_1_1MeshRouter.html#a1f2624fb0b8708aa67baed087a827e2a">More...</a><br /></td></tr>
 <tr class="separator:a1f2624fb0b8708aa67baed087a827e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f07008dad41fc18fdf776b70bbf0572"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a1f07008dad41fc18fdf776b70bbf0572">FindPathMinHop</a> (const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, uint32_t src, uint32_t dst, uint32_t numNodes) const</td></tr>
+<tr class="memdesc:a1f07008dad41fc18fdf776b70bbf0572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum-hop path via BFS.  <a href="classmesh__sim_1_1MeshRouter.html#a1f07008dad41fc18fdf776b70bbf0572">More...</a><br /></td></tr>
 <tr class="separator:a1f07008dad41fc18fdf776b70bbf0572"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a5b4bb6243d655fc930c71129da92f1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a4a5b4bb6243d655fc930c71129da92f1">ReconstructPath</a> (const std::vector&lt; uint32_t &gt; &amp;prev, uint32_t src, uint32_t dst) const</td></tr>
+<tr class="memdesc:a4a5b4bb6243d655fc930c71129da92f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reconstruct a node path by walking the predecessor array.  <a href="classmesh__sim_1_1MeshRouter.html#a4a5b4bb6243d655fc930c71129da92f1">More...</a><br /></td></tr>
+<tr class="separator:a4a5b4bb6243d655fc930c71129da92f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9079dc8eeab809bb799ff3c92b88565c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a9079dc8eeab809bb799ff3c92b88565c">ApplyCongestionScaling</a> (std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;results, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links) const</td></tr>
+<tr class="memdesc:a9079dc8eeab809bb799ff3c92b88565c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply proportional-fairness congestion scaling to all results.  <a href="classmesh__sim_1_1MeshRouter.html#a9079dc8eeab809bb799ff3c92b88565c">More...</a><br /></td></tr>
 <tr class="separator:a9079dc8eeab809bb799ff3c92b88565c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2a1bfd61e967a3c5e758ee05a6bb5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a3d2a1bfd61e967a3c5e758ee05a6bb5c">ComputeLatency</a> (const std::vector&lt; uint32_t &gt; &amp;path, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links) const</td></tr>
+<tr class="memdesc:a3d2a1bfd61e967a3c5e758ee05a6bb5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute end-to-end path latency in milliseconds.  <a href="classmesh__sim_1_1MeshRouter.html#a3d2a1bfd61e967a3c5e758ee05a6bb5c">More...</a><br /></td></tr>
 <tr class="separator:a3d2a1bfd61e967a3c5e758ee05a6bb5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a5b4bb6243d655fc930c71129da92f1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a4a5b4bb6243d655fc930c71129da92f1">ReconstructPath</a> (const std::vector&lt; uint32_t &gt; &amp;prev, uint32_t src, uint32_t dst) const</td></tr>
-<tr class="separator:a4a5b4bb6243d655fc930c71129da92f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9a9514db9dcd64a5078e635dfed8e252"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MeshRouter.html#a9a9514db9dcd64a5078e635dfed8e252">m_cfg</a></td></tr>
+<tr class="memdesc:a9a9514db9dcd64a5078e635dfed8e252"><td class="mdescLeft">&#160;</td><td class="mdescRight">Routing algorithm and hop-limit settings.  <a href="classmesh__sim_1_1MeshRouter.html#a9a9514db9dcd64a5078e635dfed8e252">More...</a><br /></td></tr>
 <tr class="separator:a9a9514db9dcd64a5078e635dfed8e252"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Routes flows over the mesh link graph and applies congestion scaling. </p>
+<p>Stateless between <a class="el" href="classmesh__sim_1_1MeshRouter.html#a5a1a1c0210655e515f0d9c62f592d64b">Route</a> calls (all per-call state is local). The <a class="el" href="structmesh__sim_1_1RoutingConfig.html">RoutingConfig</a> is copied at construction and does not change. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a02ac1d75825cb9299bc9674b387ded81"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a02ac1d75825cb9299bc9674b387ded81">&#9670;&nbsp;</a></span>MeshRouter()</h2>
 
@@ -140,17 +156,11 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Construct a router with the given routing configuration. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">cfg</td><td>Routing algorithm and max-hops settings from <a class="el" href="structmesh__sim_1_1SimConfig.html#abf6303595604ef96c398b64ab347156b">SimConfig::mesh</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -191,17 +201,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Apply proportional-fairness congestion scaling to all results. </p>
+<p>For each physical edge (identified by the sorted node-index pair) whose total demanded throughput exceeds its link capacity, scales every flow using that edge by <code>capacity/total_demand</code>. A flow traversing multiple bottleneck hops takes the minimum scaling factor across all of them via: </p><div class="fragment"><div class="line">fr.delivered_mbps = min(fr.delivered_mbps, fr.demand_mbps * scale)</div>
+</div><!-- fragment --><p> Edges where <code>total_demand</code> &lt;= capacity are left unchanged.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">results</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> results to update in-place. </td></tr>
+    <tr><td class="paramname">links</td><td>Current <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> (used to read link capacities). </td></tr>
   </table>
   </dd>
 </dl>
@@ -241,20 +248,21 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Compute end-to-end path latency in milliseconds. </p>
+<p>Uses a store-and-forward model summing two components per hop:</p><ul>
+<li><b>Propagation delay</b> = <code>distance_m</code> / 3×10⁸ × 1000 ms.</li>
+<li><b>Processing delay</b> = 0.5 ms (fixed per hop; approximates L1/L2 processing at a mmWave small cell, consistent with the 3GPP TR 38.913 V17.0.0 §7 one-way user-plane latency target).</li>
+</ul>
+<p>No transmission-delay term is included because traffic is modelled at flow granularity, not packet granularity.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">path</td><td>Ordered node indices from src to dst. </td></tr>
+    <tr><td class="paramname">links</td><td>Current <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> (used to read per-hop distances). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Total one-way latency in milliseconds. </dd></dl>
 
 </div>
 </div>
@@ -303,20 +311,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Dispatch to the appropriate path-finding algorithm and enforce the hop limit. </p>
+<p>Calls <a class="el" href="classmesh__sim_1_1MeshRouter.html#aecc49e477be43a256895907ced24c4f7">FindPathShortestPath</a>, <a class="el" href="classmesh__sim_1_1MeshRouter.html#a1f2624fb0b8708aa67baed087a827e2a">FindPathMaxThroughput</a>, or <a class="el" href="classmesh__sim_1_1MeshRouter.html#a1f07008dad41fc18fdf776b70bbf0572">FindPathMinHop</a> based on <code>m_cfg.algorithm</code>. If the found path exceeds <code>m_cfg.max_hops</code> hops (and <code>max_hops</code> &gt; 0), an empty vector is returned and the flow is left unroutable. <code>max_hops</code> == 0 means unlimited.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">links</td><td>Current link quality matrix. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes in the graph. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ordered path from <code>src</code> to <code>dst</code>, or an empty vector if no path exists or the hop limit is exceeded. </dd></dl>
 
 </div>
 </div>
@@ -365,20 +372,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Widest-path algorithm: maximises bottleneck link capacity. </p>
+<p>Modified Dijkstra using a max-heap. For each candidate next hop, the path bandwidth is <code>min(current_bottleneck, link_capacity)</code>; the node with the highest such value is expanded first. Edges with <code>capacity_mbps</code> &lt;= 0 are skipped.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">links</td><td>Current link quality matrix. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes in the graph. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ordered path that maximises bottleneck capacity, or empty if <code>dst</code> is unreachable. </dd></dl>
 
 </div>
 </div>
@@ -427,20 +433,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Minimum-hop path via BFS. </p>
+<p>Ignores link capacity entirely (beyond the &gt; 0 connectivity check). Returns the path with fewest hops; ties are broken by BFS expansion order (lower node index expanded first within a level).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">links</td><td>Current link quality matrix. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes in the graph. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ordered minimum-hop path, or empty if <code>dst</code> is unreachable. </dd></dl>
 
 </div>
 </div>
@@ -489,20 +494,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Dijkstra shortest path with edge weight <code>1/capacity_mbps</code>. </p>
+<p>High-capacity links are preferred (lower weight). Edges with <code>capacity_mbps</code> &lt;= 0 are treated as absent. Uses a min-heap for O((V+E)·log V) complexity.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">links</td><td>Current link quality matrix. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes in the graph. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ordered path, or empty if <code>dst</code> is unreachable. </dd></dl>
 
 </div>
 </div>
@@ -545,20 +549,18 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Reconstruct a node path by walking the predecessor array. </p>
+<p>Walks <code>prev</code>[] backward from <code>dst</code> to <code>src</code>, then reverses the result. The sentinel value <code>UINT32_MAX</code> in <code>prev</code> indicates an unvisited node (no predecessor).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">prev</td><td>Predecessor array filled by a path-finding algorithm; <code>prev</code>[v] is the node before <code>v</code> on the best path. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ordered path <code></code>[src, …, dst], or an empty vector if <code>dst</code> was not reached (<code>prev</code>[dst] == UINT32_MAX and <code>src</code> != <code>dst</code>). </dd></dl>
 
 </div>
 </div>
@@ -593,20 +595,25 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Route all flows and return one <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> per flow. </p>
+<p><b>Per-flow pipeline:</b></p><ol type="1">
+<li>Compute effective demand: <code>0.0</code> for inactive or off-phase flows.</li>
+<li>Skip path finding for zero-demand flows (marked unroutable unless <code>src</code> == <code>dst</code>).</li>
+<li>Call <a class="el" href="classmesh__sim_1_1MeshRouter.html#ace88b4e00f0ffd0f0ed17ac50a08eea0">FindPath</a> to select the best route under the configured algorithm and hop limit.</li>
+<li>Set <code>delivered_mbps</code> = <code>demand_mbps</code> (full demand, before scaling).</li>
+<li>Compute latency via <a class="el" href="classmesh__sim_1_1MeshRouter.html#a3d2a1bfd61e967a3c5e758ee05a6bb5c">ComputeLatency</a>.</li>
+<li>After all flows are processed, call <a class="el" href="classmesh__sim_1_1MeshRouter.html#a9079dc8eeab809bb799ff3c92b88565c">ApplyCongestionScaling</a> to reduce <code>delivered_mbps</code> on overloaded edges.</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">links</td><td>Current <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> from <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">LinkEvaluator::EvaluateAll</a>. </td></tr>
+    <tr><td class="paramname">flows</td><td>Active flows from <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a5128ce2f890d3ace9f0ab5a0ae10cfe4">TrafficMatrix::GetActiveFlows</a>. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Total node count (<code>cfg.nodes.size()</code>); must match the dimension of <code>links</code>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a>, one per entry in <code>flows</code>, in the same order. </dd></dl>
 
 </div>
 </div>
@@ -630,20 +637,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Routing algorithm and hop-limit settings. </p>
 
 </div>
 </div>

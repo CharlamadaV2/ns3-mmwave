@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>TrafficMatrix: flow-level traffic demand generation for the mesh. Supports constant-rate, Poisson arrival, and on-off (bursty) models. No packets &ndash; just "node A wants X Mbps to node B.".  
+<p>Flow-level traffic demand generation for the mesh.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="sim-config_8h_source.html">src/domain/sim-config.h</a>&quot;</code><br />
 <code>#include &quot;ns3/random-variable-stream.h&quot;</code><br />
@@ -85,7 +85,7 @@ Include dependency graph for traffic-matrix.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="traffic-matrix_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8h">
-<area shape="rect" title="TrafficMatrix: flow&#45;level traffic demand generation for the mesh. Supports constant&#45;rate,..." alt="" coords="441,5,649,61"/>
+<area shape="rect" title="Flow&#45;level traffic demand generation for the mesh." alt="" coords="441,5,649,61"/>
 <area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="295,117,474,143"/>
 <area shape="rect" title=" " alt="" coords="17,273,83,300"/>
 <area shape="rect" title=" " alt="" coords="577,273,640,300"/>
@@ -102,11 +102,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="traffic-matrix_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2traffic_2traffic-matrix_8hdep">
-<area shape="rect" title="TrafficMatrix: flow&#45;level traffic demand generation for the mesh. Supports constant&#45;rate,..." alt="" coords="353,5,561,61"/>
-<area shape="rect" href="mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="237,109,445,165"/>
+<area shape="rect" title="Flow&#45;level traffic demand generation for the mesh." alt="" coords="353,5,561,61"/>
+<area shape="rect" href="mesh-router_8h.html" title="Flow&#45;level routing over the mesh link graph." alt="" coords="237,109,445,165"/>
 <area shape="rect" href="traffic-matrix_8cc.html" title=" " alt="" coords="469,109,677,165"/>
-<area shape="rect" href="metrics-writer_8h.html" title="MetricsWriter: accumulates per&#45;tick metrics in&#45;memory during the step loop, then writes summary...." alt="" coords="5,213,213,269"/>
-<area shape="rect" href="viz-writer_8h.html" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="237,213,445,269"/>
+<area shape="rect" href="metrics-writer_8h.html" title="Accumulates per&#45;tick simulation metrics and writes summary.json." alt="" coords="5,213,213,269"/>
+<area shape="rect" href="viz-writer_8h.html" title="Writes per&#45;tick CSV snapshots for GUI and offline plotting." alt="" coords="237,213,445,269"/>
 <area shape="rect" href="mesh-router_8cc.html" title=" " alt="" coords="469,213,677,269"/>
 <area shape="rect" href="metrics-writer_8cc.html" title=" " alt="" coords="5,317,213,373"/>
 <area shape="rect" href="viz-writer_8cc.html" title=" " alt="" coords="237,317,445,373"/>
@@ -118,8 +118,10 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1Flow.html">mesh_sim::Flow</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single directed traffic flow between two nodes.  <a href="structmesh__sim_1_1Flow.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html">mesh_sim::TrafficMatrix</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates and maintains the set of active flows each simulation tick.  <a href="classmesh__sim_1_1TrafficMatrix.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -128,7 +130,28 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>TrafficMatrix: flow-level traffic demand generation for the mesh. Supports constant-rate, Poisson arrival, and on-off (bursty) models. No packets &ndash; just "node A wants X Mbps to node B.". </p>
+<div class="textblock"><p>Flow-level traffic demand generation for the mesh. </p>
+<p>TrafficMatrix maintains a list of Flow objects and updates them each tick according to the configured traffic model. There are no packets — a flow simply represents "node A wants X Mbps to node B."</p>
+<p><b>Lifecycle</b> </p><div class="fragment"><div class="line">TrafficMatrix tm(cfg);</div>
+<div class="line">tm.Initialize(numNodes, 0.0);   <span class="comment">// once, before the step loop</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// each tick, before routing:</span></div>
+<div class="line">tm.Tick(currentTime);</div>
+<div class="line"><span class="keyword">auto</span>&amp; flows = tm.GetActiveFlows();</div>
+<div class="line"><span class="keyword">auto</span> results = router.Route(links, flows, numNodes);</div>
+</div><!-- fragment --><p><b>Traffic models</b></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>model</code>   </th><th class="markdownTableHeadNone">Flow creation   </th><th class="markdownTableHeadNone">Per-tick update    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"constant"</code>   </td><td class="markdownTableBodyNone">All flows created at Initialize.   </td><td class="markdownTableBodyNone">None; flows run for the full simulation.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"poisson"</code>   </td><td class="markdownTableBodyNone">New flows arrive each tick via Poisson.   </td><td class="markdownTableBodyNone">New flows added; expired flows removed.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"on_off"</code>   </td><td class="markdownTableBodyNone">All flows created at Initialize.   </td><td class="markdownTableBodyNone">ON/OFF state machine per flow.   </td></tr>
+</table>
+<p><b>Flow removal</b> Expired flows (<code>end_time_s</code> &gt; 0 and <code>active</code> == false) are erased from <code>m_flows</code> each tick. Permanent flows (<code>end_time_s</code> == 0) are never removed, even when they transition to inactive in the on-off model.</p>
+<p><b>Gateway resolution</b> For the <code>"gateway"</code> topology, TrafficConfig::gateway_node_id is resolved as a numeric index first (<code>stoul</code>); if that throws, it falls back to a linear search by NodeSpec::id string. Index 0 is used when <code>gateway_node_id</code> is empty. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -2,7 +2,7 @@
 \label{link-evaluator_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/evaluator.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/eval/link-\/evaluator.h}}
 
 
-Link\+Evaluator\+: wraps ns-\/3 propagation models to compute per-\/link path loss, SINR, and capacity. Core physics engine of mesh-\/sim.  
+Per-\/link path loss, SINR, and capacity computation.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/link-\/result.\+h\char`\"{}}\newline
@@ -20,7 +20,8 @@ Include dependency graph for link-\/evaluator.h\+:
 \includegraphics[width=350pt]{link-evaluator_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,7 +32,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{mesh\+\_\+sim\+::\+Link\+Evaluator}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Computes per-\/link radio metrics using ns-\/3 propagation models. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -40,5 +41,10 @@ class \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{mesh\+\_\+sim\+::\+Link\
 
 
 \doxysubsection{Detailed Description}
-Link\+Evaluator\+: wraps ns-\/3 propagation models to compute per-\/link path loss, SINR, and capacity. Core physics engine of mesh-\/sim. 
+Per-\/link path loss, SINR, and capacity computation. 
 
+Link\+Evaluator wraps a pair of ns-\/3 propagation models — a {\ttfamily Propagation\+Loss\+Model} and a {\ttfamily Channel\+Condition\+Model} — and applies the configured TX power, beamforming gain, bandwidth, and noise figure to produce a complete Link\+Result for each node pair.
+
+\begin{DoxyNote}{Note}
+Configure must be called before Evaluate or Evaluate\+All; calling either without first configuring produces undefined behaviour (null pointer dereference on the model pointers). 
+\end{DoxyNote}

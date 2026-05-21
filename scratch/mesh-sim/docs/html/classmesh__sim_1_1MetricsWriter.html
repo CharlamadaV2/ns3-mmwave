@@ -76,13 +76,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Accumulates per-tick radio and flow metrics, then writes summary.json.  
+ <a href="classmesh__sim_1_1MetricsWriter.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="metrics-writer_8h_source.html">metrics-writer.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for mesh_sim::MetricsWriter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmesh__sim_1_1MetricsWriter__coll__graph.png" border="0" usemap="#amesh__sim_1_1MetricsWriter_coll__map" alt="Collaboration graph"/></div>
 <map name="amesh__sim_1_1MetricsWriter_coll__map" id="amesh__sim_1_1MetricsWriter_coll__map">
-<area shape="rect" title=" " alt="" coords="415,273,600,300"/>
+<area shape="rect" title="Accumulates per&#45;tick radio and flow metrics, then writes summary.json." alt="" coords="415,273,600,300"/>
 <area shape="rect" href="structmesh__sim_1_1SimConfig.html" title="Root simulation configuration aggregating all subsystem parameters." alt="" coords="331,184,494,211"/>
 <area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title="Aggregates all mesh&#45;layer configuration." alt="" coords="139,95,313,121"/>
 <area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
@@ -97,67 +100,75 @@ Collaboration diagram for mesh_sim::MetricsWriter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html">FlowStats</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-flow-pair running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html">NodeStats</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-node running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af2673763ab39b9d971f12fff1470ae19"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#af2673763ab39b9d971f12fff1470ae19">MetricsWriter</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:af2673763ab39b9d971f12fff1470ae19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a writer bound to the given simulation configuration.  <a href="classmesh__sim_1_1MetricsWriter.html#af2673763ab39b9d971f12fff1470ae19">More...</a><br /></td></tr>
 <tr class="separator:af2673763ab39b9d971f12fff1470ae19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d21162533a5bea2eab0eed3797a5ee3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a1d21162533a5bea2eab0eed3797a5ee3">SetTiming</a> (const <a class="el" href="structmesh__sim_1_1TimingInfo.html">TimingInfo</a> &amp;t)</td></tr>
+<tr class="memdesc:a1d21162533a5bea2eab0eed3797a5ee3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store wall-clock timing for inclusion in summary.json.  <a href="classmesh__sim_1_1MetricsWriter.html#a1d21162533a5bea2eab0eed3797a5ee3">More...</a><br /></td></tr>
 <tr class="separator:a1d21162533a5bea2eab0eed3797a5ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12a3fe3d90a9a8095f0a64667f5e503e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a> (double time_s, const <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> &amp;links, const std::vector&lt; <a class="el" href="structmesh__sim_1_1FlowResult.html">FlowResult</a> &gt; &amp;flows, uint32_t numNodes)</td></tr>
+<tr class="memdesc:a12a3fe3d90a9a8095f0a64667f5e503e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accumulate metrics for one simulation tick.  <a href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">More...</a><br /></td></tr>
 <tr class="separator:a12a3fe3d90a9a8095f0a64667f5e503e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62a9a193e9c6f182491282265f62f1e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">Write</a> () const</td></tr>
+<tr class="memdesc:a62a9a193e9c6f182491282265f62f1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write all accumulated metrics to <code></code> &lt;output_dir&gt;/summary.json.  <a href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">More...</a><br /></td></tr>
 <tr class="separator:a62a9a193e9c6f182491282265f62f1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab72c6a682de1c36e252e1e454d7d1e40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#ab72c6a682de1c36e252e1e454d7d1e40">m_cfg</a></td></tr>
+<tr class="memdesc:ab72c6a682de1c36e252e1e454d7d1e40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation configuration (copied at construction).  <a href="classmesh__sim_1_1MetricsWriter.html#ab72c6a682de1c36e252e1e454d7d1e40">More...</a><br /></td></tr>
 <tr class="separator:ab72c6a682de1c36e252e1e454d7d1e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3390a8407ed0a5ce78528d0c4d44198b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1TimingInfo.html">TimingInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a3390a8407ed0a5ce78528d0c4d44198b">m_timing</a></td></tr>
+<tr class="memdesc:a3390a8407ed0a5ce78528d0c4d44198b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wall-clock timing set by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a1d21162533a5bea2eab0eed3797a5ee3">SetTiming</a>.  <a href="classmesh__sim_1_1MetricsWriter.html#a3390a8407ed0a5ce78528d0c4d44198b">More...</a><br /></td></tr>
 <tr class="separator:a3390a8407ed0a5ce78528d0c4d44198b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eb4b83a50d8ea9aa113dcab02dc63d5"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint32_t, <a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html">NodeStats</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a5eb4b83a50d8ea9aa113dcab02dc63d5">m_nodeStats</a></td></tr>
+<tr class="memdesc:a5eb4b83a50d8ea9aa113dcab02dc63d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-node accumulators.  <a href="classmesh__sim_1_1MetricsWriter.html#a5eb4b83a50d8ea9aa113dcab02dc63d5">More...</a><br /></td></tr>
 <tr class="separator:a5eb4b83a50d8ea9aa113dcab02dc63d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c3335e6a1953196cd9104eb14717e39"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::pair&lt; uint32_t, uint32_t &gt;, <a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html">FlowStats</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a3c3335e6a1953196cd9104eb14717e39">m_flowStats</a></td></tr>
+<tr class="memdesc:a3c3335e6a1953196cd9104eb14717e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-flow-pair accumulators.  <a href="classmesh__sim_1_1MetricsWriter.html#a3c3335e6a1953196cd9104eb14717e39">More...</a><br /></td></tr>
 <tr class="separator:a3c3335e6a1953196cd9104eb14717e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a079d2b6fa9f2afcf14ecafd3c316cc8d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a079d2b6fa9f2afcf14ecafd3c316cc8d">m_tickCount</a> = 0</td></tr>
+<tr class="memdesc:a079d2b6fa9f2afcf14ecafd3c316cc8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Post-warmup tick count.  <a href="classmesh__sim_1_1MetricsWriter.html#a079d2b6fa9f2afcf14ecafd3c316cc8d">More...</a><br /></td></tr>
 <tr class="separator:a079d2b6fa9f2afcf14ecafd3c316cc8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add8299f4f5d9561d54c9b07e734dab10"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#add8299f4f5d9561d54c9b07e734dab10">m_netSinrSum</a> = 0.0</td></tr>
+<tr class="memdesc:add8299f4f5d9561d54c9b07e734dab10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Network-wide SINR sum (dB) across all links and ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#add8299f4f5d9561d54c9b07e734dab10">More...</a><br /></td></tr>
 <tr class="separator:add8299f4f5d9561d54c9b07e734dab10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58d12ddb66046b1c955b78570a0fda3f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a58d12ddb66046b1c955b78570a0fda3f">m_netSinrCount</a> = 0</td></tr>
+<tr class="memdesc:a58d12ddb66046b1c955b78570a0fda3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Network-wide valid SINR sample count.  <a href="classmesh__sim_1_1MetricsWriter.html#a58d12ddb66046b1c955b78570a0fda3f">More...</a><br /></td></tr>
 <tr class="separator:a58d12ddb66046b1c955b78570a0fda3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80a6cf5742fca52e3e5d94da1c2a4567"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a80a6cf5742fca52e3e5d94da1c2a4567">m_netDeliveredSum</a> = 0.0</td></tr>
+<tr class="memdesc:a80a6cf5742fca52e3e5d94da1c2a4567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Network-wide sum of delivered_mbps across ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#a80a6cf5742fca52e3e5d94da1c2a4567">More...</a><br /></td></tr>
 <tr class="separator:a80a6cf5742fca52e3e5d94da1c2a4567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a429f16a4b622752c02bfceb87927a178"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a429f16a4b622752c02bfceb87927a178">m_connectedPairsSum</a> = 0</td></tr>
+<tr class="memdesc:a429f16a4b622752c02bfceb87927a178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of connected pair counts across ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#a429f16a4b622752c02bfceb87927a178">More...</a><br /></td></tr>
 <tr class="separator:a429f16a4b622752c02bfceb87927a178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342d9a3115f50983695bc5ffbcfe6bdf"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a342d9a3115f50983695bc5ffbcfe6bdf">m_totalPairsSum</a> = 0</td></tr>
+<tr class="memdesc:a342d9a3115f50983695bc5ffbcfe6bdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of total pair counts across ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#a342d9a3115f50983695bc5ffbcfe6bdf">More...</a><br /></td></tr>
 <tr class="separator:a342d9a3115f50983695bc5ffbcfe6bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb3736c07a56cf14d6cbca84487d95a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#afb3736c07a56cf14d6cbca84487d95a1">m_hopCountSum</a> = 0.0</td></tr>
+<tr class="memdesc:afb3736c07a56cf14d6cbca84487d95a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of hop counts for routable flows.  <a href="classmesh__sim_1_1MetricsWriter.html#afb3736c07a56cf14d6cbca84487d95a1">More...</a><br /></td></tr>
 <tr class="separator:afb3736c07a56cf14d6cbca84487d95a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0a29725fed80da289b80c2c329f1565"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#aa0a29725fed80da289b80c2c329f1565">m_hopCountCount</a> = 0</td></tr>
+<tr class="memdesc:aa0a29725fed80da289b80c2c329f1565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of routable flow observations.  <a href="classmesh__sim_1_1MetricsWriter.html#aa0a29725fed80da289b80c2c329f1565">More...</a><br /></td></tr>
 <tr class="separator:aa0a29725fed80da289b80c2c329f1565"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6f09efce20cbca2760c1b381a6e07b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#abf6f09efce20cbca2760c1b381a6e07b">m_flowsRoutedSum</a> = 0</td></tr>
+<tr class="memdesc:abf6f09efce20cbca2760c1b381a6e07b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cumulative count of routable flow ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#abf6f09efce20cbca2760c1b381a6e07b">More...</a><br /></td></tr>
 <tr class="separator:abf6f09efce20cbca2760c1b381a6e07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5df440f0916e0e5c13eb2125e552e0b9"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1MetricsWriter.html#a5df440f0916e0e5c13eb2125e552e0b9">m_flowsUnroutableSum</a> = 0</td></tr>
+<tr class="memdesc:a5df440f0916e0e5c13eb2125e552e0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cumulative count of unroutable flow ticks.  <a href="classmesh__sim_1_1MetricsWriter.html#a5df440f0916e0e5c13eb2125e552e0b9">More...</a><br /></td></tr>
 <tr class="separator:a5df440f0916e0e5c13eb2125e552e0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<div class="textblock"><p>Accumulates per-tick radio and flow metrics, then writes summary.json. </p>
+<p>All accumulation is done in-memory; the file is written exactly once by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">Write</a> after the step loop completes. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af2673763ab39b9d971f12fff1470ae19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2673763ab39b9d971f12fff1470ae19">&#9670;&nbsp;</a></span>MetricsWriter()</h2>
@@ -182,17 +193,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Construct a writer bound to the given simulation configuration. </p>
+<p>Stores a copy of <code>cfg</code> so the writer remains valid after the <code><a class="el" href="structmesh__sim_1_1SimConfig.html" title="Root simulation configuration aggregating all subsystem parameters.">SimConfig</a></code> is modified (e.g. by an RL position override between seeds).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">cfg</td><td>Fully loaded and validated simulation configuration. </td></tr>
   </table>
   </dd>
 </dl>
@@ -237,17 +243,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Accumulate metrics for one simulation tick. </p>
+<p>Ticks with <code>time_s</code> &lt; <code>cfg.warmup_s</code> are silently skipped so that transient start-up behaviour is excluded from all averages.</p>
+<p>For each node pair the SINR sentinel value (−999.0 dBm) is filtered: only links with <code>sinr_db</code> &gt; −900.0 contribute to SINR accumulators, preventing unevaluated links from corrupting the statistics.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">time_s</td><td>Simulation time at this tick (seconds). </td></tr>
+    <tr><td class="paramname">links</td><td>Current <a class="el" href="classmesh__sim_1_1LinkTable.html">LinkTable</a> from <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a16c39016432fb10dc7358821d4ab3cac">LinkEvaluator::EvaluateAll</a>. </td></tr>
+    <tr><td class="paramname">flows</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> results from the routing engine for this tick. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of active nodes (<code>cfg.nodes.size()</code>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -269,17 +274,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Store wall-clock timing for inclusion in summary.json. </p>
+<p>Must be called after the step loop completes and before <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">Write</a>. If not called, the <code>wall_clock_*</code> fields are omitted from the output.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">t</td><td><a class="el" href="structmesh__sim_1_1TimingInfo.html">TimingInfo</a> populated by <code>sim.cc</code> after the step loop. </td></tr>
   </table>
   </dd>
 </dl>
@@ -300,20 +300,10 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Write all accumulated metrics to <code></code> &lt;output_dir&gt;/summary.json. </p>
+<p>All per-node and per-flow values are time-averaged over the number of post-warmup ticks in which they were observed. Node IDs from <code>cfg.nodes</code> are used as JSON keys; unrecognised indices fall back to <code>"node&lt;idx&gt;"</code>.</p>
+<p>Prints an error to <code>stderr</code> if the file cannot be opened; does not throw. </p>
 
 </div>
 </div>
@@ -338,6 +328,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Simulation configuration (copied at construction). </p>
+
 </div>
 </div>
 <a id="a429f16a4b622752c02bfceb87927a178"></a>
@@ -359,6 +351,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sum of connected pair counts across ticks. </p>
 
 </div>
 </div>
@@ -382,6 +376,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Cumulative count of routable flow ticks. </p>
+
 </div>
 </div>
 <a id="a3c3335e6a1953196cd9104eb14717e39"></a>
@@ -403,6 +399,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Per-flow-pair accumulators. </p>
 
 </div>
 </div>
@@ -426,6 +424,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Cumulative count of unroutable flow ticks. </p>
+
 </div>
 </div>
 <a id="aa0a29725fed80da289b80c2c329f1565"></a>
@@ -447,6 +447,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Number of routable flow observations. </p>
 
 </div>
 </div>
@@ -470,6 +472,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sum of hop counts for routable flows. </p>
+
 </div>
 </div>
 <a id="a80a6cf5742fca52e3e5d94da1c2a4567"></a>
@@ -491,6 +495,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Network-wide sum of delivered_mbps across ticks. </p>
 
 </div>
 </div>
@@ -514,6 +520,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Network-wide valid SINR sample count. </p>
+
 </div>
 </div>
 <a id="add8299f4f5d9561d54c9b07e734dab10"></a>
@@ -535,6 +543,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Network-wide SINR sum (dB) across all links and ticks. </p>
 
 </div>
 </div>
@@ -558,6 +568,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Per-node accumulators. </p>
+
 </div>
 </div>
 <a id="a079d2b6fa9f2afcf14ecafd3c316cc8d"></a>
@@ -579,6 +591,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Post-warmup tick count. </p>
 
 </div>
 </div>
@@ -602,6 +616,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Wall-clock timing set by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a1d21162533a5bea2eab0eed3797a5ee3">SetTiming</a>. </p>
+
 </div>
 </div>
 <a id="a342d9a3115f50983695bc5ffbcfe6bdf"></a>
@@ -623,6 +639,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sum of total pair counts across ticks. </p>
 
 </div>
 </div>

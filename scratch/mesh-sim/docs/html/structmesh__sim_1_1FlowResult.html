@@ -74,28 +74,45 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Routing result for one flow at one simulation tick.  
+ <a href="structmesh__sim_1_1FlowResult.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mesh-router_8h_source.html">mesh-router.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1aa5f06e1be0038034f2c372a5c3e35b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#a1aa5f06e1be0038034f2c372a5c3e35b">src</a> = 0</td></tr>
+<tr class="memdesc:a1aa5f06e1be0038034f2c372a5c3e35b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>.  <a href="structmesh__sim_1_1FlowResult.html#a1aa5f06e1be0038034f2c372a5c3e35b">More...</a><br /></td></tr>
 <tr class="separator:a1aa5f06e1be0038034f2c372a5c3e35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a671d64e1854438d9a7ed5463ac2c032b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#a671d64e1854438d9a7ed5463ac2c032b">dst</a> = 0</td></tr>
+<tr class="memdesc:a671d64e1854438d9a7ed5463ac2c032b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destination node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>.  <a href="structmesh__sim_1_1FlowResult.html#a671d64e1854438d9a7ed5463ac2c032b">More...</a><br /></td></tr>
 <tr class="separator:a671d64e1854438d9a7ed5463ac2c032b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03b3856fd5b166eec840792253d24dc7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#a03b3856fd5b166eec840792253d24dc7">demand_mbps</a> = 0.0</td></tr>
+<tr class="memdesc:a03b3856fd5b166eec840792253d24dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">inactive or in the off-phase.  <a href="structmesh__sim_1_1FlowResult.html#a03b3856fd5b166eec840792253d24dc7">More...</a><br /></td></tr>
 <tr class="separator:a03b3856fd5b166eec840792253d24dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe21444b810036fb24443672f508f4a0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#abe21444b810036fb24443672f508f4a0">delivered_mbps</a> = 0.0</td></tr>
+<tr class="memdesc:abe21444b810036fb24443672f508f4a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">≤ <code>demand_mbps</code>.  <a href="structmesh__sim_1_1FlowResult.html#abe21444b810036fb24443672f508f4a0">More...</a><br /></td></tr>
 <tr class="separator:abe21444b810036fb24443672f508f4a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeacaff600606434e68d3894a8aa592b1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#aeacaff600606434e68d3894a8aa592b1">latency_ms</a> = 0.0</td></tr>
+<tr class="memdesc:aeacaff600606434e68d3894a8aa592b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">processing); 0 when unroutable.  <a href="structmesh__sim_1_1FlowResult.html#aeacaff600606434e68d3894a8aa592b1">More...</a><br /></td></tr>
 <tr class="separator:aeacaff600606434e68d3894a8aa592b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a401864fb66ef3d09617ec2dc6784b7e8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#a401864fb66ef3d09617ec2dc6784b7e8">hop_count</a> = 0</td></tr>
+<tr class="memdesc:a401864fb66ef3d09617ec2dc6784b7e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">unroutable or self-flow.  <a href="structmesh__sim_1_1FlowResult.html#a401864fb66ef3d09617ec2dc6784b7e8">More...</a><br /></td></tr>
 <tr class="separator:a401864fb66ef3d09617ec2dc6784b7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4795d2007a950bb29201512b43794db8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#a4795d2007a950bb29201512b43794db8">path</a></td></tr>
+<tr class="memdesc:a4795d2007a950bb29201512b43794db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty when unroutable or self-flow.  <a href="structmesh__sim_1_1FlowResult.html#a4795d2007a950bb29201512b43794db8">More...</a><br /></td></tr>
 <tr class="separator:a4795d2007a950bb29201512b43794db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac69d914d98a5de891aedc1002a2b89b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1FlowResult.html#ac69d914d98a5de891aedc1002a2b89b7">routable</a> = false</td></tr>
+<tr class="memdesc:ac69d914d98a5de891aedc1002a2b89b7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code>true</code> if a path was found (or <code>src</code> == <code>dst</code>).  <a href="structmesh__sim_1_1FlowResult.html#ac69d914d98a5de891aedc1002a2b89b7">More...</a><br /></td></tr>
 <tr class="separator:ac69d914d98a5de891aedc1002a2b89b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Routing result for one flow at one simulation tick. </p>
+<p>Produced by <a class="el" href="classmesh__sim_1_1MeshRouter.html#a5a1a1c0210655e515f0d9c62f592d64b">MeshRouter::Route</a> and consumed by <a class="el" href="classmesh__sim_1_1MetricsWriter.html">MetricsWriter</a>, <a class="el" href="classmesh__sim_1_1VizWriter.html">VizWriter</a>, and the RL reward calculator.</p>
+<p><b>Effective demand</b> <code>demand_mbps</code> reflects the flow's <em>effective</em> demand this tick — it is zero when the flow is inactive or in the OFF phase of an on-off model, regardless of the configured per-flow demand. Only the on_off model sets <code>in_on_phase</code> to <code>false</code>; constant and Poisson flows always have <code>demand_mbps</code> equal to <a class="el" href="structmesh__sim_1_1Flow.html#accd345f898db9ad4f6ac5a5d6a3c9816">Flow::demand_mbps</a> when active.</p>
+<p><b>Unroutable flows</b> When <code>routable</code> is <code>false</code> the path is empty, <code>delivered_mbps</code> is 0, <code>latency_ms</code> is 0, and <code>hop_count</code> is 0. The <code>src</code> and <code>dst</code> fields are always set.</p>
+<p><b>Self-flows</b> (<code>src</code> == <code>dst</code>) are marked <code>routable</code> = <code>true</code> with an empty path and zero delivered demand, since they require no forwarding. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="abe21444b810036fb24443672f508f4a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abe21444b810036fb24443672f508f4a0">&#9670;&nbsp;</a></span>delivered_mbps</h2>
 
@@ -107,6 +124,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>≤ <code>demand_mbps</code>. </p>
+<p>Throughput after congestion scaling (Mbps); </p>
 
 </div>
 </div>
@@ -122,6 +142,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>inactive or in the off-phase. </p>
+<p>Effective demand this tick (Mbps); 0 when </p>
+
 </div>
 </div>
 <a id="a671d64e1854438d9a7ed5463ac2c032b"></a>
@@ -135,6 +158,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Destination node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </p>
 
 </div>
 </div>
@@ -150,6 +175,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>unroutable or self-flow. </p>
+<p>Number of hops: <code>path.size()</code> − 1; 0 when </p>
+
 </div>
 </div>
 <a id="aeacaff600606434e68d3894a8aa592b1"></a>
@@ -163,6 +191,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>processing); 0 when unroutable. </p>
+<p>End-to-end path latency in ms (propagation + </p>
 
 </div>
 </div>
@@ -178,6 +209,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Empty when unroutable or self-flow. </p>
+<p>Ordered node indices from <code>src</code> to <code>dst</code>. </p>
+
 </div>
 </div>
 <a id="ac69d914d98a5de891aedc1002a2b89b7"></a>
@@ -192,6 +226,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p><code>true</code> if a path was found (or <code>src</code> == <code>dst</code>). </p>
+
 </div>
 </div>
 <a id="a1aa5f06e1be0038034f2c372a5c3e35b"></a>
@@ -205,6 +241,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Source node index into <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a>. </p>
 
 </div>
 </div>

@@ -71,36 +71,41 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="string-utils_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* -*- Mode: C++; c-file-style: &quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;chrono&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">trimStr</a>(<span class="keyword">const</span> std::string&amp; s);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;std::vector&lt;std::string&gt; <a class="code" href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">splitTab</a>(<span class="keyword">const</span> std::string&amp; line);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">toIso8601</a>(<span class="keyword">const</span> std::chrono::system_clock::time_point&amp; tp);</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;chrono&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacemesh__sim.html">mesh_sim</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">trimStr</a>(<span class="keyword">const</span> std::string&amp; s);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;std::vector&lt;std::string&gt; <a class="code" href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">splitTab</a>(<span class="keyword">const</span> std::string&amp; line);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">toIso8601</a>(<span class="keyword">const</span> std::chrono::system_clock::time_point&amp; tp);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">resolvePath</a>(<span class="keyword">const</span> std::string&amp; base_dir, <span class="keyword">const</span> std::string&amp; path);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">dirOf</a>(<span class="keyword">const</span> std::string&amp; path);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;std::vector&lt;uint32_t&gt; <a class="code" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">parseSeedList</a>(<span class="keyword">const</span> std::string&amp; arg);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">resolvePath</a>(<span class="keyword">const</span> std::string&amp; base_dir, <span class="keyword">const</span> std::string&amp; path);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;std::string <a class="code" href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">dirOf</a>(<span class="keyword">const</span> std::string&amp; path);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;std::vector&lt;uint32_t&gt; <a class="code" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">parseSeedList</a>(<span class="keyword">const</span> std::string&amp; arg);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}  <span class="comment">// namespace mesh_sim</span></div>
 <div class="ttc" id="anamespacemesh__sim_html"><div class="ttname"><a href="namespacemesh__sim.html">mesh_sim</a></div><div class="ttdef"><b>Definition:</b> cli-parser.cc:16</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_a00ba117c4e068667da22c29d3b8ae623"><div class="ttname"><a href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">mesh_sim::parseSeedList</a></div><div class="ttdeci">std::vector&lt; uint32_t &gt; parseSeedList(const std::string &amp;arg)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:85</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_a31d367bd44a36a4fea1c7e422d1ac59a"><div class="ttname"><a href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">mesh_sim::resolvePath</a></div><div class="ttdeci">std::string resolvePath(const std::string &amp;base_dir, const std::string &amp;path)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:57</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_a4b0d77a0c5e79f16d7c1e9d86cca7d79"><div class="ttname"><a href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">mesh_sim::splitTab</a></div><div class="ttdeci">std::vector&lt; std::string &gt; splitTab(const std::string &amp;line)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:33</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_a8d5701a7dead70a3d2c278df41b267f5"><div class="ttname"><a href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">mesh_sim::toIso8601</a></div><div class="ttdeci">std::string toIso8601(const std::chrono::system_clock::time_point &amp;tp)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:46</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_aa28d0b850b46ffeb2160f1dfa8b5c5b4"><div class="ttname"><a href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">mesh_sim::trimStr</a></div><div class="ttdeci">std::string trimStr(const std::string &amp;s)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:21</div></div>
-<div class="ttc" id="anamespacemesh__sim_html_acd22cd5edefb2bc7bca48d593f0a87f4"><div class="ttname"><a href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">mesh_sim::dirOf</a></div><div class="ttdeci">std::string dirOf(const std::string &amp;path)</div><div class="ttdef"><b>Definition:</b> string-utils.cc:73</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_a00ba117c4e068667da22c29d3b8ae623"><div class="ttname"><a href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">mesh_sim::parseSeedList</a></div><div class="ttdeci">std::vector&lt; uint32_t &gt; parseSeedList(const std::string &amp;arg)</div><div class="ttdoc">Parse a comma-separated string of seed values into a uint32_t vector.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:85</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_a31d367bd44a36a4fea1c7e422d1ac59a"><div class="ttname"><a href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">mesh_sim::resolvePath</a></div><div class="ttdeci">std::string resolvePath(const std::string &amp;base_dir, const std::string &amp;path)</div><div class="ttdoc">Resolve a possibly-relative path against a base directory.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:57</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_a4b0d77a0c5e79f16d7c1e9d86cca7d79"><div class="ttname"><a href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">mesh_sim::splitTab</a></div><div class="ttdeci">std::vector&lt; std::string &gt; splitTab(const std::string &amp;line)</div><div class="ttdoc">Split a string on tab characters and return all tokens.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:33</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_a8d5701a7dead70a3d2c278df41b267f5"><div class="ttname"><a href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">mesh_sim::toIso8601</a></div><div class="ttdeci">std::string toIso8601(const std::chrono::system_clock::time_point &amp;tp)</div><div class="ttdoc">Format a system_clock::time_point as an ISO 8601 UTC string.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:46</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_aa28d0b850b46ffeb2160f1dfa8b5c5b4"><div class="ttname"><a href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">mesh_sim::trimStr</a></div><div class="ttdeci">std::string trimStr(const std::string &amp;s)</div><div class="ttdoc">Strip leading and trailing ASCII whitespace from a string.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:21</div></div>
+<div class="ttc" id="anamespacemesh__sim_html_acd22cd5edefb2bc7bca48d593f0a87f4"><div class="ttname"><a href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">mesh_sim::dirOf</a></div><div class="ttdeci">std::string dirOf(const std::string &amp;path)</div><div class="ttdoc">Return the parent directory component of a file path.</div><div class="ttdef"><b>Definition:</b> string-utils.cc:73</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

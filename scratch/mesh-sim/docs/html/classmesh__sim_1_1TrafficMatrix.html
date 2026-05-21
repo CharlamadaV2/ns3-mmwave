@@ -76,13 +76,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Generates and maintains the set of active flows each simulation tick.  
+ <a href="classmesh__sim_1_1TrafficMatrix.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="traffic-matrix_8h_source.html">traffic-matrix.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for mesh_sim::TrafficMatrix:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmesh__sim_1_1TrafficMatrix__coll__graph.png" border="0" usemap="#amesh__sim_1_1TrafficMatrix_coll__map" alt="Collaboration graph"/></div>
 <map name="amesh__sim_1_1TrafficMatrix_coll__map" id="amesh__sim_1_1TrafficMatrix_coll__map">
-<area shape="rect" title=" " alt="" coords="5,95,184,121"/>
+<area shape="rect" title="Generates and maintains the set of active flows each simulation tick." alt="" coords="5,95,184,121"/>
 <area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title="Flow&#45;level traffic demand configuration." alt="" coords="6,5,183,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -90,49 +93,70 @@ Collaboration diagram for mesh_sim::TrafficMatrix:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0a7c8781ba6c9b942c6897e49832bbaa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a0a7c8781ba6c9b942c6897e49832bbaa">TrafficMatrix</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:a0a7c8781ba6c9b942c6897e49832bbaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a traffic matrix from the simulation configuration.  <a href="classmesh__sim_1_1TrafficMatrix.html#a0a7c8781ba6c9b942c6897e49832bbaa">More...</a><br /></td></tr>
 <tr class="separator:a0a7c8781ba6c9b942c6897e49832bbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a514a72803c32cc585ad03cd99474a683"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683">Initialize</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="memdesc:a514a72803c32cc585ad03cd99474a683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the initial set of flows for the configured topology.  <a href="classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683">More...</a><br /></td></tr>
 <tr class="separator:a514a72803c32cc585ad03cd99474a683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9921b0d01fde96abf35c11428cb04742"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a9921b0d01fde96abf35c11428cb04742">Tick</a> (double currentTime)</td></tr>
+<tr class="memdesc:a9921b0d01fde96abf35c11428cb04742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance the traffic state by one simulation tick.  <a href="classmesh__sim_1_1TrafficMatrix.html#a9921b0d01fde96abf35c11428cb04742">More...</a><br /></td></tr>
 <tr class="separator:a9921b0d01fde96abf35c11428cb04742"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5128ce2f890d3ace9f0ab5a0ae10cfe4"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a5128ce2f890d3ace9f0ab5a0ae10cfe4">GetActiveFlows</a> () const</td></tr>
+<tr class="memdesc:a5128ce2f890d3ace9f0ab5a0ae10cfe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a const reference to the internal flow list.  <a href="classmesh__sim_1_1TrafficMatrix.html#a5128ce2f890d3ace9f0ab5a0ae10cfe4">More...</a><br /></td></tr>
 <tr class="separator:a5128ce2f890d3ace9f0ab5a0ae10cfe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158372ed579012cb0478e15f61ca2d3b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a158372ed579012cb0478e15f61ca2d3b">GetDemand</a> (uint32_t src, uint32_t dst) const</td></tr>
+<tr class="memdesc:a158372ed579012cb0478e15f61ca2d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the total active demand from <code>src</code> to <code>dst</code> (Mbps).  <a href="classmesh__sim_1_1TrafficMatrix.html#a158372ed579012cb0478e15f61ca2d3b">More...</a><br /></td></tr>
 <tr class="separator:a158372ed579012cb0478e15f61ca2d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a909202facea0da1000232026e6177949"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a909202facea0da1000232026e6177949">InitAllPairs</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="memdesc:a909202facea0da1000232026e6177949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create one flow for every unordered node pair (i &lt; j).  <a href="classmesh__sim_1_1TrafficMatrix.html#a909202facea0da1000232026e6177949">More...</a><br /></td></tr>
 <tr class="separator:a909202facea0da1000232026e6177949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8880d1b1509aea9ebe5154acf98c86d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af8880d1b1509aea9ebe5154acf98c86d">InitRandomPairs</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="memdesc:af8880d1b1509aea9ebe5154acf98c86d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create <code>random_pair_count</code> flows with uniformly random src/dst.  <a href="classmesh__sim_1_1TrafficMatrix.html#af8880d1b1509aea9ebe5154acf98c86d">More...</a><br /></td></tr>
 <tr class="separator:af8880d1b1509aea9ebe5154acf98c86d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98dc9cd9637de63d708fe5514ba65206"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a98dc9cd9637de63d708fe5514ba65206">InitGateway</a> (uint32_t numNodes, double currentTime)</td></tr>
+<tr class="memdesc:a98dc9cd9637de63d708fe5514ba65206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create one flow from every non-gateway node to the gateway.  <a href="classmesh__sim_1_1TrafficMatrix.html#a98dc9cd9637de63d708fe5514ba65206">More...</a><br /></td></tr>
 <tr class="separator:a98dc9cd9637de63d708fe5514ba65206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9460a0782813101acebb0eabc4ff0f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1Flow.html">Flow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af9460a0782813101acebb0eabc4ff0f3">MakeFlow</a> (uint32_t src, uint32_t dst, double currentTime) const</td></tr>
+<tr class="memdesc:af9460a0782813101acebb0eabc4ff0f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a single <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> for the given (src, dst) pair.  <a href="classmesh__sim_1_1TrafficMatrix.html#af9460a0782813101acebb0eabc4ff0f3">More...</a><br /></td></tr>
 <tr class="separator:af9460a0782813101acebb0eabc4ff0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab235b56f20a6a4b6bfb1316454a18ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aab235b56f20a6a4b6bfb1316454a18ba">TickOnOff</a> (double currentTime)</td></tr>
+<tr class="memdesc:aab235b56f20a6a4b6bfb1316454a18ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advance the ON/OFF state machine for all active flows.  <a href="classmesh__sim_1_1TrafficMatrix.html#aab235b56f20a6a4b6bfb1316454a18ba">More...</a><br /></td></tr>
 <tr class="separator:aab235b56f20a6a4b6bfb1316454a18ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa53dc92cc2f0947112186758d6bb2542"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aa53dc92cc2f0947112186758d6bb2542">TickPoisson</a> (double currentTime)</td></tr>
+<tr class="memdesc:aa53dc92cc2f0947112186758d6bb2542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Poisson-distributed new flow arrivals for this tick.  <a href="classmesh__sim_1_1TrafficMatrix.html#aa53dc92cc2f0947112186758d6bb2542">More...</a><br /></td></tr>
 <tr class="separator:aa53dc92cc2f0947112186758d6bb2542"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a5cc00b6d88a38d10ec8ea8a304e24cea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a5cc00b6d88a38d10ec8ea8a304e24cea">m_trafficCfg</a></td></tr>
+<tr class="memdesc:a5cc00b6d88a38d10ec8ea8a304e24cea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy of traffic configuration.  <a href="classmesh__sim_1_1TrafficMatrix.html#a5cc00b6d88a38d10ec8ea8a304e24cea">More...</a><br /></td></tr>
 <tr class="separator:a5cc00b6d88a38d10ec8ea8a304e24cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af71ce41c79e75d1be5dbb87a1358bba7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af71ce41c79e75d1be5dbb87a1358bba7">m_nodeSpecs</a></td></tr>
+<tr class="memdesc:af71ce41c79e75d1be5dbb87a1358bba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy of node specs (for gateway ID lookup).  <a href="classmesh__sim_1_1TrafficMatrix.html#af71ce41c79e75d1be5dbb87a1358bba7">More...</a><br /></td></tr>
 <tr class="separator:af71ce41c79e75d1be5dbb87a1358bba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a735e225e84efbeba494b4f5374958e6c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a735e225e84efbeba494b4f5374958e6c">m_numNodes</a> = 0</td></tr>
+<tr class="memdesc:a735e225e84efbeba494b4f5374958e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Node count set by <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683">Initialize</a>.  <a href="classmesh__sim_1_1TrafficMatrix.html#a735e225e84efbeba494b4f5374958e6c">More...</a><br /></td></tr>
 <tr class="separator:a735e225e84efbeba494b4f5374958e6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4c089a99c69ced57980dd3f6b89b638"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ac4c089a99c69ced57980dd3f6b89b638">m_tickS</a> = 0.1</td></tr>
+<tr class="memdesc:ac4c089a99c69ced57980dd3f6b89b638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tick duration in seconds (from <code>cfg.tick_s</code>).  <a href="classmesh__sim_1_1TrafficMatrix.html#ac4c089a99c69ced57980dd3f6b89b638">More...</a><br /></td></tr>
 <tr class="separator:ac4c089a99c69ced57980dd3f6b89b638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2840845854f7eb0b7ffb46e39702e75"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ae2840845854f7eb0b7ffb46e39702e75">m_flows</a></td></tr>
+<tr class="memdesc:ae2840845854f7eb0b7ffb46e39702e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">All flows (active, inactive, and off-phase).  <a href="classmesh__sim_1_1TrafficMatrix.html#ae2840845854f7eb0b7ffb46e39702e75">More...</a><br /></td></tr>
 <tr class="separator:ae2840845854f7eb0b7ffb46e39702e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7424e791bdc3c1f4251adbe6315f945"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::UniformRandomVariable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#ad7424e791bdc3c1f4251adbe6315f945">m_uniformRng</a></td></tr>
+<tr class="memdesc:ad7424e791bdc3c1f4251adbe6315f945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uniform RNG [0, 1] used for Poisson arrival generation and random-pair selection.  <a href="classmesh__sim_1_1TrafficMatrix.html#ad7424e791bdc3c1f4251adbe6315f945">More...</a><br /></td></tr>
 <tr class="separator:ad7424e791bdc3c1f4251adbe6315f945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99ca35ea87191729a9b29fcc09d2b673"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ExponentialRandomVariable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a99ca35ea87191729a9b29fcc09d2b673">m_expRng</a></td></tr>
+<tr class="memdesc:a99ca35ea87191729a9b29fcc09d2b673"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exponential RNG used for on-off phase durations and Poisson flow holding times.  <a href="classmesh__sim_1_1TrafficMatrix.html#a99ca35ea87191729a9b29fcc09d2b673">More...</a><br /></td></tr>
 <tr class="separator:a99ca35ea87191729a9b29fcc09d2b673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Generates and maintains the set of active flows each simulation tick. </p>
+<p>Copies <a class="el" href="structmesh__sim_1_1TrafficConfig.html">TrafficConfig</a> and the node spec list at construction; does not hold a reference to <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> after the constructor returns. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0a7c8781ba6c9b942c6897e49832bbaa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a7c8781ba6c9b942c6897e49832bbaa">&#9670;&nbsp;</a></span>TrafficMatrix()</h2>
 
@@ -156,17 +180,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Construct a traffic matrix from the simulation configuration. </p>
+<p>Copies <code>cfg.mesh.traffic</code>, <code>cfg.nodes</code>, and <code>cfg.tick_s</code>. Creates two ns-3 RNG objects (<code>UniformRandomVariable</code> for Poisson generation / random pairs, <code>ExponentialRandomVariable</code> for on-off phase durations and Poisson holding times) and seeds them via the ns-3 global <code>RngSeedManager</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">cfg</td><td>Fully loaded and validated simulation configuration. </td></tr>
   </table>
   </dd>
 </dl>
@@ -188,20 +207,11 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Return a const reference to the internal flow list. </p>
+<p>Returns <em>all</em> flows — including inactive flows (in the OFF phase or expiring this tick) that have not yet been removed. <a class="el" href="classmesh__sim_1_1MeshRouter.html">MeshRouter</a> filters by <code>f.active</code> and <code>f.in_on_phase</code> internally, so callers do not need to pre-filter.</p>
+<p>The reference is valid until the next call to <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a9921b0d01fde96abf35c11428cb04742">Tick</a> or <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683">Initialize</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>Const reference to <code>m_flows</code>. </dd></dl>
 
 </div>
 </div>
@@ -230,20 +240,17 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Return the total active demand from <code>src</code> to <code>dst</code> (Mbps). </p>
+<p>Sums <code>demand_mbps</code> across all flows where <code>f.src</code> == src, <code>f.dst</code> == dst, and <code>f.active</code> == true. For the <code>"on_off"</code> model, flows in the OFF phase (<code>in_on_phase</code> == false) are excluded.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Total demand in Mbps; 0.0 if no active flows exist for this pair. </dd></dl>
 
 </div>
 </div>
@@ -280,17 +287,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Create one flow for every unordered node pair (i &lt; j). </p>
+<p>Produces N*(N-1)/2 flows for <code>N</code> nodes. All flows start active at <code>currentTime</code> with permanent lifetime (<code>end_time_s</code> == 0) unless <code>holding_time_s</code> &gt; 0.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes. </td></tr>
+    <tr><td class="paramname">currentTime</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> creation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
@@ -330,17 +333,23 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Create one flow from every non-gateway node to the gateway. </p>
+<p>Resolves the gateway index from TrafficConfig::gateway_node_id:</p><ol type="1">
+<li>Attempt <code>std::stoul</code> (numeric index).</li>
+<li>On <code>std::invalid_argument</code>, search <code>m_nodeSpecs</code> by <code>id</code> string.</li>
+<li>Default to index 0 when <code>gateway_node_id</code> is empty.</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes. </td></tr>
+    <tr><td class="paramname">currentTime</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> creation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>if <code>gateway_node_id</code> is a non-numeric string that does not match any node ID. </td></tr>
   </table>
   </dd>
 </dl>
@@ -372,17 +381,24 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Create the initial set of flows for the configured topology. </p>
+<p>Clears any existing flows, sets the node count, then calls the appropriate initialiser:</p><ul>
+<li><code>"all_pairs"</code> → <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a909202facea0da1000232026e6177949">InitAllPairs</a></li>
+<li><code>"random_pairs"</code> → <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#af8880d1b1509aea9ebe5154acf98c86d">InitRandomPairs</a></li>
+<li><code>"gateway"</code> → <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a98dc9cd9637de63d708fe5514ba65206">InitGateway</a></li>
+</ul>
+<p>Must be called once before the step loop, at <code>currentTime</code> = 0 for normal use (or at warmup end when pre-warming traffic state).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Total number of active simulation nodes. </td></tr>
+    <tr><td class="paramname">currentTime</td><td>Simulation time at which flows start (seconds). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>for an unrecognised <code>flow_topology</code> string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -422,17 +438,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Create <code>random_pair_count</code> flows with uniformly random src/dst. </p>
+<p>Each pair is drawn independently. Self-flows (<code>src</code> == <code>dst</code>) are rejected via a rejection loop (uniform resample until <code>dst</code> != <code>src</code>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">numNodes</td><td>Number of nodes. </td></tr>
+    <tr><td class="paramname">currentTime</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> creation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
@@ -478,20 +490,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Construct a single <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a> for the given (src, dst) pair. </p>
+<p>Sets <code>demand_mbps</code>, <code>start_time_s</code>, and <code>active</code> = true. When <code>holding_time_s</code> &gt; 0 sets <code>end_time_s</code> = currentTime + holding_time_s. For the <code>"on_off"</code> model, sets <code>in_on_phase</code> = true and draws the first ON-phase duration from <code>Exponential(on_time_s)</code>.</p>
+<dl class="section note"><dt>Note</dt><dd>For <code>"poisson"</code> flows, <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aa53dc92cc2f0947112186758d6bb2542">TickPoisson</a> overrides <code>end_time_s</code> with a fresh exponential draw after calling this factory.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
+    <tr><td class="paramname">src</td><td>Source node index. </td></tr>
+    <tr><td class="paramname">dst</td><td>Destination node index. </td></tr>
+    <tr><td class="paramname">currentTime</td><td><a class="el" href="structmesh__sim_1_1Flow.html" title="A single directed traffic flow between two nodes.">Flow</a> creation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="section return"><dt>Returns</dt><dd>Fully initialised <a class="el" href="structmesh__sim_1_1Flow.html">Flow</a>. </dd></dl>
 
 </div>
 </div>
@@ -510,17 +521,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Advance the traffic state by one simulation tick. </p>
+<p>Executed in three phases each tick:</p><ol type="1">
+<li><b>Expiry</b>: any flow whose <code>end_time_s</code> &gt; 0 and <code>currentTime</code> &gt;= <code>end_time_s</code> is marked <code>active</code> = <code>false</code>.</li>
+<li><b>Model update</b>: <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aab235b56f20a6a4b6bfb1316454a18ba">TickOnOff</a> or <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#aa53dc92cc2f0947112186758d6bb2542">TickPoisson</a> is called for the respective model. The <code>"constant"</code> model requires no per-tick work.</li>
+<li><b>Removal</b>: flows matching <code>!active</code> &amp;&amp; end_time_s &gt; 0 are erased from <code>m_flows</code>. Permanent flows (<code>end_time_s</code> == 0) are never removed.</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">currentTime</td><td>Current simulation time in seconds. </td></tr>
   </table>
   </dd>
 </dl>
@@ -550,17 +560,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Advance the ON/OFF state machine for all active flows. </p>
+<p>For each active flow, checks whether <code>phase_end_s</code> &lt;= currentTime. A <code>while</code> loop handles multiple phase transitions within a single tick (possible when <code>tick_s</code> is large relative to mean phase duration). Each transition: toggles <code>in_on_phase</code> and adds an exponential sample of the new phase's mean duration to <code>phase_end_s</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">currentTime</td><td>Current simulation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
@@ -590,17 +595,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Generate Poisson-distributed new flow arrivals for this tick. </p>
+<p>Computes the expected arrivals: <code>lambda</code> = arrival_rate_hz × tick_s. The actual count is drawn using Knuth's product-of-uniforms method: multiply uniform(0,1) samples until their product falls below <code>exp</code>(-lambda); the count is the number of multiplications minus one.</p>
+<p>Each new flow has a uniformly random src != dst (rejection sampling). When <code>holding_time_s</code> &gt; 0, <code>end_time_s</code> is overridden with an independent <code>Exponential(holding_time_s)</code> draw so Poisson flows have exponentially distributed lifetimes rather than fixed ones.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">currentTime</td><td>Current simulation time (seconds). </td></tr>
   </table>
   </dd>
 </dl>
@@ -627,20 +628,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Exponential RNG used for on-off phase durations and Poisson flow holding times. </p>
 
 </div>
 </div>
@@ -664,6 +653,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>All flows (active, inactive, and off-phase). </p>
+
 </div>
 </div>
 <a id="af71ce41c79e75d1be5dbb87a1358bba7"></a>
@@ -685,6 +676,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Copy of node specs (for gateway ID lookup). </p>
 
 </div>
 </div>
@@ -708,6 +701,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Node count set by <a class="el" href="classmesh__sim_1_1TrafficMatrix.html#a514a72803c32cc585ad03cd99474a683">Initialize</a>. </p>
+
 </div>
 </div>
 <a id="ac4c089a99c69ced57980dd3f6b89b638"></a>
@@ -729,6 +724,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Tick duration in seconds (from <code>cfg.tick_s</code>). </p>
 
 </div>
 </div>
@@ -752,6 +749,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Copy of traffic configuration. </p>
+
 </div>
 </div>
 <a id="ad7424e791bdc3c1f4251adbe6315f945"></a>
@@ -773,20 +772,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Uniform RNG [0, 1] used for Poisson arrival generation and random-pair selection. </p>
 
 </div>
 </div>

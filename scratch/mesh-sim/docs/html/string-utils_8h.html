@@ -73,6 +73,9 @@ $(function() {
 <div class="title">string-utils.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>String and path manipulation utilities shared across all modules.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -82,7 +85,7 @@ Include dependency graph for string-utils.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="string-utils_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8h">
-<area shape="rect" title=" " alt="" coords="68,5,276,61"/>
+<area shape="rect" title="String and path manipulation utilities shared across all modules." alt="" coords="68,5,276,61"/>
 <area shape="rect" title=" " alt="" coords="5,109,72,136"/>
 <area shape="rect" title=" " alt="" coords="96,109,163,136"/>
 <area shape="rect" title=" " alt="" coords="187,109,245,136"/>
@@ -94,11 +97,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="string-utils_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2util_2string-utils_8hdep">
-<area shape="rect" title=" " alt="" coords="585,5,793,61"/>
+<area shape="rect" title="String and path manipulation utilities shared across all modules." alt="" coords="585,5,793,61"/>
 <area shape="rect" href="cli-parser_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 <area shape="rect" href="config-loader_8cc.html" title=" " alt="" coords="237,109,445,165"/>
 <area shape="rect" href="metrics-writer_8cc.html" title=" " alt="" coords="469,109,677,165"/>
-<area shape="rect" href="run-logger_8h.html" title="RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved config for reproducibility...." alt="" coords="701,109,909,165"/>
+<area shape="rect" href="run-logger_8h.html" title="Writes a human&#45;readable run.log capturing seeds, CLI overrides, and the fully resolved configuration ..." alt="" coords="701,109,909,165"/>
 <area shape="rect" href="ini-parser_8cc.html" title=" " alt="" coords="933,109,1141,165"/>
 <area shape="rect" href="string-utils_8cc.html" title=" " alt="" coords="1165,109,1373,165"/>
 </map>
@@ -114,19 +117,27 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">mesh_sim::trimStr</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strip leading and trailing ASCII whitespace from a string.  <a href="namespacemesh__sim.html#aa28d0b850b46ffeb2160f1dfa8b5c5b4">More...</a><br /></td></tr>
 <tr class="separator:aa28d0b850b46ffeb2160f1dfa8b5c5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">mesh_sim::splitTab</a> (const std::string &amp;line)</td></tr>
+<tr class="memdesc:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a string on tab characters and return all tokens.  <a href="namespacemesh__sim.html#a4b0d77a0c5e79f16d7c1e9d86cca7d79">More...</a><br /></td></tr>
 <tr class="separator:a4b0d77a0c5e79f16d7c1e9d86cca7d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d5701a7dead70a3d2c278df41b267f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">mesh_sim::toIso8601</a> (const std::chrono::system_clock::time_point &amp;tp)</td></tr>
+<tr class="memdesc:a8d5701a7dead70a3d2c278df41b267f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a <code>system_clock::time_point</code> as an ISO 8601 UTC string.  <a href="namespacemesh__sim.html#a8d5701a7dead70a3d2c278df41b267f5">More...</a><br /></td></tr>
 <tr class="separator:a8d5701a7dead70a3d2c278df41b267f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">mesh_sim::resolvePath</a> (const std::string &amp;base_dir, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve a possibly-relative path against a base directory.  <a href="namespacemesh__sim.html#a31d367bd44a36a4fea1c7e422d1ac59a">More...</a><br /></td></tr>
 <tr class="separator:a31d367bd44a36a4fea1c7e422d1ac59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">mesh_sim::dirOf</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the parent directory component of a file path.  <a href="namespacemesh__sim.html#acd22cd5edefb2bc7bca48d593f0a87f4">More...</a><br /></td></tr>
 <tr class="separator:acd22cd5edefb2bc7bca48d593f0a87f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00ba117c4e068667da22c29d3b8ae623"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">mesh_sim::parseSeedList</a> (const std::string &amp;arg)</td></tr>
+<tr class="memdesc:a00ba117c4e068667da22c29d3b8ae623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a comma-separated string of seed values into a <code>uint32_t</code> vector.  <a href="namespacemesh__sim.html#a00ba117c4e068667da22c29d3b8ae623">More...</a><br /></td></tr>
 <tr class="separator:a00ba117c4e068667da22c29d3b8ae623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>String and path manipulation utilities shared across all modules. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1

@@ -1,5 +1,5 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/eval/link&#45;evaluator.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/eval/link&#45;evaluator.h">
-<area shape="rect" id="node1" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="827,5,1035,61"/>
+<area shape="rect" id="node1" title="Per&#45;link path loss, SINR, and capacity computation." alt="" coords="827,5,1035,61"/>
 <area shape="rect" id="node2" href="$link-result_8h.html" title="Per&#45;link radio evaluation result POD type." alt="" coords="5,199,181,225"/>
 <area shape="rect" id="node4" href="$sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="517,117,696,143"/>
 <area shape="rect" id="node6" title=" " alt="" coords="533,273,592,300"/>

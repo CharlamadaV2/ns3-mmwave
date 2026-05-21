@@ -2,16 +2,26 @@
 \label{structmesh__sim_1_1McsEntry}\index{mesh\_sim::McsEntry@{mesh\_sim::McsEntry}}
 
 
+One entry in the NR CQI / MCS table.  
+
+
+
+
 {\ttfamily \#include $<$sinr-\/capacity.\+h$>$}
 
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 double \mbox{\hyperlink{structmesh__sim_1_1McsEntry_a6921b06a11ddbd487d28c10eb23a9d34}{sinr\+\_\+min\+\_\+db}}
-\item 
+\begin{DoxyCompactList}\small\item\em Minimum SINR in dB required to select this entry. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1McsEntry_a0bee483eea98ff39ea8b7e34bba4cbb8}{spectral\+\_\+eff}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Spectral efficiency in bits/s/\+Hz at this CQI index. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+One entry in the NR CQI / MCS table. 
+
+Used by \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}} and \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{Sinr\+To\+Capacity}} ({\ttfamily \char`\"{}table\char`\"{}} mode). 
 
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1McsEntry_a6921b06a11ddbd487d28c10eb23a9d34}\label{structmesh__sim_1_1McsEntry_a6921b06a11ddbd487d28c10eb23a9d34}} 
@@ -20,11 +30,19 @@ double \mbox{\hyperlink{structmesh__sim_1_1McsEntry_a0bee483eea98ff39ea8b7e34bba
 \doxysubsubsection{\texorpdfstring{sinr\_min\_db}{sinr\_min\_db}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Mcs\+Entry\+::sinr\+\_\+min\+\_\+db}
 
+
+
+Minimum SINR in dB required to select this entry. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1McsEntry_a0bee483eea98ff39ea8b7e34bba4cbb8}\label{structmesh__sim_1_1McsEntry_a0bee483eea98ff39ea8b7e34bba4cbb8}} 
 \index{mesh\_sim::McsEntry@{mesh\_sim::McsEntry}!spectral\_eff@{spectral\_eff}}
 \index{spectral\_eff@{spectral\_eff}!mesh\_sim::McsEntry@{mesh\_sim::McsEntry}}
 \doxysubsubsection{\texorpdfstring{spectral\_eff}{spectral\_eff}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Mcs\+Entry\+::spectral\+\_\+eff}
+
+
+
+Spectral efficiency in bits/s/\+Hz at this CQI index. 
 
 
 

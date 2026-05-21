@@ -75,7 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>SINR-to-capacity mapping functions. Pure math, no ns-3 dependency. Used by LinkEvaluator and testable standalone.  
+<p>SINR-to-capacity and SINR-to-MCS mapping functions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
@@ -85,7 +85,7 @@ Include dependency graph for sinr-capacity.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="sinr-capacity_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8h">
-<area shape="rect" title="SINR&#45;to&#45;capacity mapping functions. Pure math, no ns&#45;3 dependency. Used by LinkEvaluator and testable..." alt="" coords="31,5,239,61"/>
+<area shape="rect" title="SINR&#45;to&#45;capacity and SINR&#45;to&#45;MCS mapping functions." alt="" coords="31,5,239,61"/>
 <area shape="rect" title=" " alt="" coords="5,109,68,136"/>
 <area shape="rect" title=" " alt="" coords="92,109,179,136"/>
 <area shape="rect" title=" " alt="" coords="203,109,262,136"/>
@@ -96,7 +96,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="sinr-capacity_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2eval_2sinr-capacity_8hdep">
-<area shape="rect" title="SINR&#45;to&#45;capacity mapping functions. Pure math, no ns&#45;3 dependency. Used by LinkEvaluator and testable..." alt="" coords="121,5,329,61"/>
+<area shape="rect" title="SINR&#45;to&#45;capacity and SINR&#45;to&#45;MCS mapping functions." alt="" coords="121,5,329,61"/>
 <area shape="rect" href="link-evaluator_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 <area shape="rect" href="viz-writer_8cc.html" title=" " alt="" coords="237,109,445,165"/>
 </map>
@@ -107,6 +107,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1McsEntry.html">mesh_sim::McsEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One entry in the NR CQI / MCS table.  <a href="structmesh__sim_1_1McsEntry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -117,12 +118,27 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad9ccac6586eaef254fffab3f801a7fd0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#ad9ccac6586eaef254fffab3f801a7fd0">mesh_sim::SinrToMcsIndex</a> (double sinr_db)</td></tr>
+<tr class="memdesc:ad9ccac6586eaef254fffab3f801a7fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map a SINR value to the highest supportable MCS / CQI index.  <a href="namespacemesh__sim.html#ad9ccac6586eaef254fffab3f801a7fd0">More...</a><br /></td></tr>
 <tr class="separator:ad9ccac6586eaef254fffab3f801a7fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e593524f1194ab3632ac6ffbbcb20ee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a3e593524f1194ab3632ac6ffbbcb20ee">mesh_sim::SinrToCapacity</a> (double sinr_db, double bandwidth_hz, const std::string &amp;amc_model)</td></tr>
+<tr class="memdesc:a3e593524f1194ab3632ac6ffbbcb20ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute link capacity in Mbps from SINR and bandwidth.  <a href="namespacemesh__sim.html#a3e593524f1194ab3632ac6ffbbcb20ee">More...</a><br /></td></tr>
 <tr class="separator:a3e593524f1194ab3632ac6ffbbcb20ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>SINR-to-capacity mapping functions. Pure math, no ns-3 dependency. Used by LinkEvaluator and testable standalone. </p>
+<div class="textblock"><p>SINR-to-capacity and SINR-to-MCS mapping functions. </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>amc_model</code>   </th><th class="markdownTableHeadNone">Method    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"shannon"</code>   </td><td class="markdownTableBodyNone">Shannon-Hartley theorem: <code>B·log₂</code>(1+SNR). Theoretical upper    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">bound; real systems achieve roughly 60–80% of this value.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"table"</code>   </td><td class="markdownTableBodyNone">3GPP TS 38.214 NR CQI table (15 entries). Spectral efficiency    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">steps match the discrete MCS levels used by the field hardware.   </td></tr>
+</table>
+<p>The MCS table is derived from 3GPP TS 38.214 Table 5.1.3.1-1 and uses the same SINR thresholds and spectral efficiencies as <code>MmWaveAmc::CreateCqiFeedbackWbTdma()</code> in ns3-mmwave. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

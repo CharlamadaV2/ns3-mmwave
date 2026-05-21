@@ -73,29 +73,44 @@ $(function() {
 <div class="title">mesh_sim::MetricsWriter::NodeStats Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Per-node running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>.  
+ <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7a2b38371544468399be0414f8756459"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a7a2b38371544468399be0414f8756459">sinr_sum</a> = 0.0</td></tr>
+<tr class="memdesc:a7a2b38371544468399be0414f8756459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of SINR values across all peers and ticks (dB).  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a7a2b38371544468399be0414f8756459">More...</a><br /></td></tr>
 <tr class="separator:a7a2b38371544468399be0414f8756459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eb6c6d9d5b237719288880206088236"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a2eb6c6d9d5b237719288880206088236">sinr_min</a> = 1e9</td></tr>
+<tr class="memdesc:a2eb6c6d9d5b237719288880206088236"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum SINR seen across all peers and ticks (dB).  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a2eb6c6d9d5b237719288880206088236">More...</a><br /></td></tr>
 <tr class="separator:a2eb6c6d9d5b237719288880206088236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed344344f13b37383e88a543292b1f50"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#aed344344f13b37383e88a543292b1f50">sinr_max</a> = -1e9</td></tr>
+<tr class="memdesc:aed344344f13b37383e88a543292b1f50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum SINR seen across all peers and ticks (dB).  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#aed344344f13b37383e88a543292b1f50">More...</a><br /></td></tr>
 <tr class="separator:aed344344f13b37383e88a543292b1f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab981357b4a40cdd81ef285e5348197fd"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ab981357b4a40cdd81ef285e5348197fd">sinr_count</a> = 0</td></tr>
+<tr class="memdesc:ab981357b4a40cdd81ef285e5348197fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of valid (non-sentinel) SINR samples accumulated.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ab981357b4a40cdd81ef285e5348197fd">More...</a><br /></td></tr>
 <tr class="separator:ab981357b4a40cdd81ef285e5348197fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a055979b87352086504220623609c2e1c"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a055979b87352086504220623609c2e1c">los_link_sum</a> = 0</td></tr>
+<tr class="memdesc:a055979b87352086504220623609c2e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cumulative count of LOS links across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a055979b87352086504220623609c2e1c">More...</a><br /></td></tr>
 <tr class="separator:a055979b87352086504220623609c2e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad38f2465776815c73e1f0f8c8be06a9e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ad38f2465776815c73e1f0f8c8be06a9e">conn_link_sum</a> = 0</td></tr>
+<tr class="memdesc:ad38f2465776815c73e1f0f8c8be06a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cumulative count of connected links across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ad38f2465776815c73e1f0f8c8be06a9e">More...</a><br /></td></tr>
 <tr class="separator:ad38f2465776815c73e1f0f8c8be06a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5031f488794e522c5c5dfc96a7fa1c10"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a5031f488794e522c5c5dfc96a7fa1c10">tx_delivered</a> = 0.0</td></tr>
+<tr class="memdesc:a5031f488794e522c5c5dfc96a7fa1c10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of delivered_mbps for flows where this node is src.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#a5031f488794e522c5c5dfc96a7fa1c10">More...</a><br /></td></tr>
 <tr class="separator:a5031f488794e522c5c5dfc96a7fa1c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8f164162ba5d9b74fcbde792da75081"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ae8f164162ba5d9b74fcbde792da75081">rx_delivered</a> = 0.0</td></tr>
+<tr class="memdesc:ae8f164162ba5d9b74fcbde792da75081"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of delivered_mbps for flows where this node is dst.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ae8f164162ba5d9b74fcbde792da75081">More...</a><br /></td></tr>
 <tr class="separator:ae8f164162ba5d9b74fcbde792da75081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac46ab384be40f2ca55b17703d8d0bc07"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ac46ab384be40f2ca55b17703d8d0bc07">tick_count</a> = 0</td></tr>
+<tr class="memdesc:ac46ab384be40f2ca55b17703d8d0bc07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of post-warmup ticks this node was observed.  <a href="structmesh__sim_1_1MetricsWriter_1_1NodeStats.html#ac46ab384be40f2ca55b17703d8d0bc07">More...</a><br /></td></tr>
 <tr class="separator:ac46ab384be40f2ca55b17703d8d0bc07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Per-node running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>. </p>
+<p>All values are summed over post-warmup ticks; time-averages are computed in <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">Write</a> by dividing by <code>tick_count</code>. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ad38f2465776815c73e1f0f8c8be06a9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad38f2465776815c73e1f0f8c8be06a9e">&#9670;&nbsp;</a></span>conn_link_sum</h2>
 
@@ -107,6 +122,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Cumulative count of connected links across ticks. </p>
 
 </div>
 </div>
@@ -122,6 +139,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Cumulative count of LOS links across ticks. </p>
+
 </div>
 </div>
 <a id="ae8f164162ba5d9b74fcbde792da75081"></a>
@@ -135,6 +154,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum of delivered_mbps for flows where this node is dst. </p>
 
 </div>
 </div>
@@ -150,6 +171,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Number of valid (non-sentinel) SINR samples accumulated. </p>
+
 </div>
 </div>
 <a id="aed344344f13b37383e88a543292b1f50"></a>
@@ -163,6 +186,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Maximum SINR seen across all peers and ticks (dB). </p>
 
 </div>
 </div>
@@ -178,6 +203,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Minimum SINR seen across all peers and ticks (dB). </p>
+
 </div>
 </div>
 <a id="a7a2b38371544468399be0414f8756459"></a>
@@ -191,6 +218,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum of SINR values across all peers and ticks (dB). </p>
 
 </div>
 </div>
@@ -206,6 +235,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Number of post-warmup ticks this node was observed. </p>
+
 </div>
 </div>
 <a id="a5031f488794e522c5c5dfc96a7fa1c10"></a>
@@ -219,6 +250,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum of delivered_mbps for flows where this node is src. </p>
 
 </div>
 </div>

@@ -1,7 +1,7 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/util/ini&#45;parser.cc" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/util/ini&#45;parser.cc">
 <area shape="rect" id="node1" title=" " alt="" coords="287,5,495,61"/>
-<area shape="rect" id="node2" href="$ini-parser_8h.html" title=" " alt="" coords="5,109,148,136"/>
-<area shape="rect" id="node5" href="$string-utils_8h.html" title=" " alt="" coords="173,109,325,136"/>
+<area shape="rect" id="node2" href="$ini-parser_8h.html" title="Minimal INI&#45;file parser used by ConfigLoader." alt="" coords="5,109,148,136"/>
+<area shape="rect" id="node5" href="$string-utils_8h.html" title="String and path manipulation utilities shared across all modules." alt="" coords="173,109,325,136"/>
 <area shape="rect" id="node9" title=" " alt="" coords="349,109,434,136"/>
 <area shape="rect" id="node10" title=" " alt="" coords="459,109,532,136"/>
 <area shape="rect" id="node11" title=" " alt="" coords="556,109,643,136"/>

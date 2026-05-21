@@ -40,32 +40,32 @@ struct \mbox{\hyperlink{structmesh__sim_1_1RlConfig}{Rl\+Config}}
 struct \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}}
 \begin{DoxyCompactList}\small\item\em Root simulation configuration aggregating all subsystem parameters. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{Link\+Evaluator}}
-\item 
+\begin{DoxyCompactList}\small\item\em Computes per-\/link radio metrics using ns-\/3 propagation models. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{Link\+Table}}
-\item 
+\begin{DoxyCompactList}\small\item\em Symmetric N×N link-\/quality matrix, updated each simulation tick. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1McsEntry}{Mcs\+Entry}}
-\item 
+\begin{DoxyCompactList}\small\item\em One entry in the NR CQI / MCS table. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1MetricsWriter}{Metrics\+Writer}}
-\item 
+\begin{DoxyCompactList}\small\item\em Accumulates per-\/tick radio and flow metrics, then writes summary.\+json. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1ProgressLogger}{Progress\+Logger}}
-\item 
+\begin{DoxyCompactList}\small\item\em Prints sim-\/time progress, wall-\/clock elapsed time, and ETA to stderr. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1VizWriter}{Viz\+Writer}}
-\item 
+\begin{DoxyCompactList}\small\item\em Streams per-\/tick simulation state to six CSV files. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1FlowResult}{Flow\+Result}}
-\item 
+\begin{DoxyCompactList}\small\item\em Routing result for one flow at one simulation tick. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1MeshRouter}{Mesh\+Router}}
-\item 
+\begin{DoxyCompactList}\small\item\em Routes flows over the mesh link graph and applies congestion scaling. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1TopologyBuilder}{Topology\+Builder}}
-\item 
+\begin{DoxyCompactList}\small\item\em Translates a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} into ns-\/3 mobility, building, and propagation model objects. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1Flow}{Flow}}
-\item 
+\begin{DoxyCompactList}\small\item\em A single directed traffic flow between two nodes. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix}{Traffic\+Matrix}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Generates and maintains the set of active flows each simulation tick. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
 using \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} = std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, std\+::string $>$ $>$
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Two-\/level string map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -80,29 +80,29 @@ void \mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{Arch
 double \mbox{\hyperlink{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}{Max\+Speed\+For\+Type}} (const std\+::string \&node\+\_\+type)
 \begin{DoxyCompactList}\small\item\em Return the maximum speed (m/s) allowed for a given node type. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}} (double sinr\+\_\+db)
-\item 
+\begin{DoxyCompactList}\small\item\em Map a SINR value to the highest supportable MCS / CQI index. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{Sinr\+To\+Capacity}} (double sinr\+\_\+db, double bandwidth\+\_\+hz, const std\+::string \&amc\+\_\+model)
-\item 
+\begin{DoxyCompactList}\small\item\em Compute link capacity in Mbps from SINR and bandwidth. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}{Write\+Run\+Log}} (const std\+::string \&base\+\_\+output\+\_\+dir, const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&args, const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg, const std\+::vector$<$ uint32\+\_\+t $>$ \&seeds)
-\item 
+\begin{DoxyCompactList}\small\item\em Write a human-\/readable reproducibility log for a batch run. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}} (const std\+::string \&path)
-\item 
-std\+::string \mbox{\hyperlink{namespacemesh__sim_a4265a363240776b14f624c437b274c61}{ini\+Get}} (const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&ini, const std\+::string \&section, const std\+::string \&key, const std\+::string \&def)
-\item 
+\begin{DoxyCompactList}\small\item\em Parse an INI-\/style configuration file into a two-\/level string map. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{namespacemesh__sim_af2453855c7572a20fd40d70f33fa1782}{ini\+Get}} (const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&ini, const std\+::string \&section, const std\+::string \&key, const std\+::string \&def=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Retrieve a string value from an \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}{ini\+Get\+Bool}} (const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&ini, const std\+::string \&section, const std\+::string \&key, bool def)
-\item 
+\begin{DoxyCompactList}\small\item\em Retrieve a boolean value from an \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}{trim\+Str}} (const std\+::string \&s)
-\item 
+\begin{DoxyCompactList}\small\item\em Strip leading and trailing ASCII whitespace from a string. \end{DoxyCompactList}\item 
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}{split\+Tab}} (const std\+::string \&line)
-\item 
+\begin{DoxyCompactList}\small\item\em Split a string on tab characters and return all tokens. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}{to\+Iso8601}} (const std\+::chrono\+::system\+\_\+clock\+::time\+\_\+point \&tp)
-\item 
+\begin{DoxyCompactList}\small\item\em Format a {\ttfamily system\+\_\+clock\+::time\+\_\+point} as an ISO 8601 UTC string. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}{resolve\+Path}} (const std\+::string \&base\+\_\+dir, const std\+::string \&path)
-\item 
+\begin{DoxyCompactList}\small\item\em Resolve a possibly-\/relative path against a base directory. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespacemesh__sim_acd22cd5edefb2bc7bca48d593f0a87f4}{dir\+Of}} (const std\+::string \&path)
-\item 
+\begin{DoxyCompactList}\small\item\em Return the parent directory component of a file path. \end{DoxyCompactList}\item 
 std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}{parse\+Seed\+List}} (const std\+::string \&arg)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Parse a comma-\/separated string of seed values into a {\ttfamily uint32\+\_\+t} vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Typedef Documentation}
@@ -112,7 +112,11 @@ std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_a00ba117c
 \doxysubsubsection{\texorpdfstring{IniMap}{IniMap}}
 {\footnotesize\ttfamily using \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{mesh\+\_\+sim\+::\+Ini\+Map}} = typedef std\+::map$<$std\+::string, std\+::map$<$std\+::string, std\+::string$>$ $>$}
 
-Section -\/$>$ (key -\/$>$ value) map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini()}}. 
+
+
+Two-\/level string map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}}. 
+
+Indexed as {\ttfamily ini}\mbox{[}section\mbox{]}\mbox{[}key\mbox{]}. The outer key is the section name (e.\+g. {\ttfamily \char`\"{}scenario\char`\"{}}, {\ttfamily \char`\"{}channel\char`\"{}}). Keys that appear before any {\ttfamily }\mbox{[}section\mbox{]} header in the file are stored under the empty string {\ttfamily \char`\"{}\char`\"{}}. 
 
 \doxysubsection{Function Documentation}
 \mbox{\Hypertarget{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}\label{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}} 
@@ -142,63 +146,78 @@ This ensures every batch output directory is self-\/contained\+: re-\/running wi
 \doxysubsubsection{\texorpdfstring{dirOf()}{dirOf()}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::dir\+Of (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
 
-Return the parent directory of the given path. Returns \char`\"{}.\char`\"{} if the path contains no directory separator. Description of what the method does.
+
+
+Return the parent directory component of a file path. 
+
+Delegates to {\ttfamily std\+::filesystem\+::path\+::parent\+\_\+path}. Returns {\ttfamily \char`\"{}.\char`\"{}} when {\ttfamily path} contains no directory separator (i.\+e. it is a bare filename).
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em path} & Filesystem path (absolute or relative). \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Parent directory string, or {\ttfamily \char`\"{}.\char`\"{}} if none. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
-\mbox{\Hypertarget{namespacemesh__sim_a4265a363240776b14f624c437b274c61}\label{namespacemesh__sim_a4265a363240776b14f624c437b274c61}} 
+\mbox{\Hypertarget{namespacemesh__sim_af2453855c7572a20fd40d70f33fa1782}\label{namespacemesh__sim_af2453855c7572a20fd40d70f33fa1782}} 
 \index{mesh\_sim@{mesh\_sim}!iniGet@{iniGet}}
 \index{iniGet@{iniGet}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{iniGet()}{iniGet()}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::ini\+Get (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&}]{ini,  }\item[{const std\+::string \&}]{section,  }\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{def = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})}
 
-Retrieve a string value from an Ini\+Map, returning {\ttfamily def} if not found. Description of what the method does.
+
+
+Retrieve a string value from an \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}. 
+
+Returns {\ttfamily def} when either the section or the key is absent, so callers never need to check for missing entries explicitly.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em ini} & Map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}}. \\
+\hline
+{\em section} & Section name (e.\+g. {\ttfamily \char`\"{}channel\char`\"{}}). \\
+\hline
+{\em key} & Key within the section (e.\+g. {\ttfamily \char`\"{}frequency\+\_\+ghz\char`\"{}}). \\
+\hline
+{\em def} & Default value returned when the entry is not found. Defaults to an empty string. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+The stored string value, or {\ttfamily def} if not found. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}\label{namespacemesh__sim_ae04531924c26c3e87354a22203eaaa2e}} 
 \index{mesh\_sim@{mesh\_sim}!iniGetBool@{iniGetBool}}
 \index{iniGetBool@{iniGetBool}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{iniGetBool()}{iniGetBool()}}
 {\footnotesize\ttfamily bool mesh\+\_\+sim\+::ini\+Get\+Bool (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} \&}]{ini,  }\item[{const std\+::string \&}]{section,  }\item[{const std\+::string \&}]{key,  }\item[{bool}]{def }\end{DoxyParamCaption})}
 
-Retrieve a boolean value from an Ini\+Map, returning {\ttfamily def} if not found. Description of what the method does.
+
+
+Retrieve a boolean value from an \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}. 
+
+Calls \mbox{\hyperlink{namespacemesh__sim_af2453855c7572a20fd40d70f33fa1782}{ini\+Get}} and interprets the result case-\/insensitively\+:
+\begin{DoxyItemize}
+\item {\ttfamily true} for {\ttfamily \char`\"{}true\char`\"{}}, {\ttfamily \char`\"{}1\char`\"{}}, or {\ttfamily \char`\"{}yes\char`\"{}}.
+\item {\ttfamily false} for everything else (including {\ttfamily \char`\"{}false\char`\"{}}, {\ttfamily \char`\"{}0\char`\"{}}, {\ttfamily \char`\"{}no\char`\"{}}).
+\end{DoxyItemize}
+
+Returns {\ttfamily def} when the section or key is absent.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em ini} & Map produced by \mbox{\hyperlink{namespacemesh__sim_ada70fef996cce331ae7239ddbe118ddd}{parse\+Ini}}. \\
+\hline
+{\em section} & Section name. \\
+\hline
+{\em key} & Key within the section. \\
+\hline
+{\em def} & Default value returned when the entry is not found. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Parsed boolean value, or {\ttfamily def} if not found. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}\label{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}} 
 \index{mesh\_sim@{mesh\_sim}!MaxSpeedForType@{MaxSpeedForType}}
 \index{MaxSpeedForType@{MaxSpeedForType}!mesh\_sim@{mesh\_sim}}
@@ -289,19 +308,23 @@ Populated \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} struct.
 \doxysubsubsection{\texorpdfstring{parseIni()}{parseIni()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}} mesh\+\_\+sim\+::parse\+Ini (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
 
-Parse an INI-\/style config file. Supports \mbox{[}section\mbox{]} headers, key=value pairs, and \# / ; comments. Description of what the method does.
+
+
+Parse an INI-\/style configuration file into a two-\/level string map. 
+
+Reads {\ttfamily path} line by line, strips {\ttfamily \#} and {\ttfamily }; comments, trims whitespace, skips blank lines, and populates an \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em path} & Filesystem path to the {\ttfamily }.ini file. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Fully populated \mbox{\hyperlink{namespacemesh__sim_a187f939986d0aa62413484ee399ec184}{Ini\+Map}}; empty if the file has no valid entries. 
 \end{DoxyReturn}
 
 \begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
+{\em std\+::runtime\+\_\+error} & if the file cannot be opened. \\
 \hline
 \end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}\label{namespacemesh__sim_a00ba117c4e068667da22c29d3b8ae623}} 
@@ -310,42 +333,51 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{parseSeedList()}{parseSeedList()}}
 {\footnotesize\ttfamily std\+::vector$<$ uint32\+\_\+t $>$ mesh\+\_\+sim\+::parse\+Seed\+List (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{arg }\end{DoxyParamCaption})}
 
-Parse a comma-\/separated string of seed values into a vector. Skips empty tokens (e.\+g. \char`\"{}1,,3\char`\"{} -\/$>$ \{1, 3\}). Exits with an error message if any token is not a valid unsigned integer. Description of what the method does.
 
+
+Parse a comma-\/separated string of seed values into a {\ttfamily uint32\+\_\+t} vector. 
+
+Splits {\ttfamily arg} on {\ttfamily \textquotesingle{}},\textquotesingle{} and converts each non-\/empty token with {\ttfamily std\+::stoul}. Empty tokens (e.\+g. the gap in {\ttfamily \char`\"{}1,,3\char`\"{}}) are silently skipped so that trailing commas and double-\/commas are tolerated.
+
+\begin{DoxyNote}{Note}
+On an invalid token (non-\/numeric or out of {\ttfamily uint32\+\_\+t} range) this function prints an error to {\ttfamily stderr} and calls {\ttfamily std\+::exit(1)}. It does not throw, matching the hard-\/exit convention used elsewhere in the CLI layer.
+\end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em arg} & Comma-\/separated seed string (e.\+g. {\ttfamily \char`\"{}1,2,3,4,5\char`\"{}}). \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Vector of parsed seed values in the order they appear in {\ttfamily arg}. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}\label{namespacemesh__sim_a31d367bd44a36a4fea1c7e422d1ac59a}} 
 \index{mesh\_sim@{mesh\_sim}!resolvePath@{resolvePath}}
 \index{resolvePath@{resolvePath}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{resolvePath()}{resolvePath()}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::resolve\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+\_\+dir,  }\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
 
-Resolve a possibly-\/relative path against a base directory. Returns the path unchanged if it is already absolute or empty. Description of what the method does.
+
+
+Resolve a possibly-\/relative path against a base directory. 
+
+Returns {\ttfamily path} unchanged if it is\+:
+\begin{DoxyItemize}
+\item empty, or
+\item already absolute ({\ttfamily std\+::filesystem\+::path\+::is\+\_\+absolute}).
+\end{DoxyItemize}
+
+Otherwise returns {\ttfamily base\+\_\+dir} / {\ttfamily path} as an absolute string. Used by \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}} to resolve {\ttfamily nodes.\+json} and {\ttfamily buildings.\+json} relative to the scenario directory rather than the working directory.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em base\+\_\+dir} & Directory to use as the resolution root. \\
+\hline
+{\em path} & Path to resolve; may be absolute, relative, or empty. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Resolved path string. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}\label{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}} 
 \index{mesh\_sim@{mesh\_sim}!ResolveSeeds@{ResolveSeeds}}
 \index{ResolveSeeds@{ResolveSeeds}!mesh\_sim@{mesh\_sim}}
@@ -379,21 +411,43 @@ Non-\/empty vector of seed values in the order they should be run.
 \index{mesh\_sim@{mesh\_sim}!SinrToCapacity@{SinrToCapacity}}
 \index{SinrToCapacity@{SinrToCapacity}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{SinrToCapacity()}{SinrToCapacity()}}
-{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sinr\+To\+Capacity (\begin{DoxyParamCaption}\item[{double}]{sinr\+\_\+db,  }\item[{double}]{bandwidth\+\_\+hz,  }\item[{const std\+::string \&}]{amc\+\_\+model }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sinr\+To\+Capacity (\begin{DoxyParamCaption}\item[{double}]{sinr\+\_\+db,  }\item[{double}]{bandwidth\+\_\+hz,  }\item[{const std\+::string \&}]{amc\+\_\+model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Description of what the method does.
+
+
+Compute link capacity in Mbps from SINR and bandwidth. 
+
+Returns {\ttfamily 0.\+0} for any SINR below SINR\+\_\+\+MIN\+\_\+\+DB, regardless of model.
+
+{\bfseries{Shannon model}} ({\ttfamily \char`\"{}shannon\char`\"{}}) Applies the Shannon-\/\+Hartley theorem\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C = bandwidth\_hz * log2(1 + 10\string^(sinr\_db / 10))   [bits/s]}
+
+\end{DoxyCode}
+ This is a theoretical upper bound. Real systems typically achieve 60–80\% of the Shannon limit.
+
+{\bfseries{Table model}} ({\ttfamily \char`\"{}table\char`\"{}}) Looks up the spectral efficiency for the highest supportable CQI index (via \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}}) and multiplies by {\ttfamily bandwidth\+\_\+hz\+:} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C = MCS\_TABLE[\mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{SinrToMcsIndex}}(sinr\_db)].spectral\_eff * bandwidth\_hz}
+
+\end{DoxyCode}
+
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em sinr\+\_\+db} & Received SINR in dB. \\
+\hline
+{\em bandwidth\+\_\+hz} & System bandwidth in Hz (e.\+g. 400e6 for 400 MHz). \\
+\hline
+{\em amc\+\_\+model} & Capacity model\+: {\ttfamily \char`\"{}shannon\char`\"{}} or {\ttfamily \char`\"{}table\char`\"{}}. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Capacity in Mbps, or {\ttfamily 0.\+0} if {\ttfamily sinr\+\_\+db} $<$ SINR\+\_\+\+MIN\+\_\+\+DB. 
 \end{DoxyReturn}
 
 \begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
+{\em std\+::runtime\+\_\+error} & if {\ttfamily amc\+\_\+model} is neither {\ttfamily \char`\"{}shannon\char`\"{}} nor {\ttfamily \char`\"{}table\char`\"{}}. \\
 \hline
 \end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}\label{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}} 
@@ -402,84 +456,80 @@ Description of return value.
 \doxysubsubsection{\texorpdfstring{SinrToMcsIndex()}{SinrToMcsIndex()}}
 {\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Sinr\+To\+Mcs\+Index (\begin{DoxyParamCaption}\item[{double}]{sinr\+\_\+db }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Description of what the method does.
+
+
+Map a SINR value to the highest supportable MCS / CQI index. 
+
+Walks MCS\+\_\+\+TABLE from the lowest entry upward and returns the index of the last entry whose {\ttfamily sinr\+\_\+min\+\_\+db} threshold is met.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em sinr\+\_\+db} & Received SINR in dB. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+CQI index in \mbox{[}0, 14\mbox{]}. Returns 0 for any SINR below SINR\+\_\+\+MIN\+\_\+\+DB (the link is at minimum viable throughput, not disconnected — use \mbox{\hyperlink{namespacemesh__sim_a3e593524f1194ab3632ac6ffbbcb20ee}{Sinr\+To\+Capacity}} to get 0 Mbps for truly unusable links). 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}\label{namespacemesh__sim_a4b0d77a0c5e79f16d7c1e9d86cca7d79}} 
 \index{mesh\_sim@{mesh\_sim}!splitTab@{splitTab}}
 \index{splitTab@{splitTab}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{splitTab()}{splitTab()}}
 {\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ mesh\+\_\+sim\+::split\+Tab (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{line }\end{DoxyParamCaption})}
 
-Split a string by tab characters and return the tokens. Description of what the method does.
+
+
+Split a string on tab characters and return all tokens. 
+
+Consecutive tab characters produce empty tokens between them (no collapsing). An input with no tab characters returns a single-\/element vector containing the whole string.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em line} & Input string to split. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Vector of tokens in the order they appear in {\ttfamily line}. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}\label{namespacemesh__sim_a8d5701a7dead70a3d2c278df41b267f5}} 
 \index{mesh\_sim@{mesh\_sim}!toIso8601@{toIso8601}}
 \index{toIso8601@{toIso8601}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{toIso8601()}{toIso8601()}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::to\+Iso8601 (\begin{DoxyParamCaption}\item[{const std\+::chrono\+::system\+\_\+clock\+::time\+\_\+point \&}]{tp }\end{DoxyParamCaption})}
 
-Format a time\+\_\+point as an ISO 8601 UTC string (e.\+g. \char`\"{}2026-\/03-\/27\+T14\+:30\+:00\+Z\char`\"{}). Description of what the method does.
+
+
+Format a {\ttfamily system\+\_\+clock\+::time\+\_\+point} as an ISO 8601 UTC string. 
+
+Output format\+: {\ttfamily \char`\"{}\+YYYY-\/\+MM-\/\+DDTHH\+:\+MM\+:\+SSZ\char`\"{}} (e.\+g. {\ttfamily \char`\"{}2026-\/03-\/27\+T14\+:30\+:00\+Z\char`\"{}}). Sub-\/second precision is discarded. Conversion uses {\ttfamily gmtime\+\_\+r} (POSIX); this function is not portable to Windows without a compatibility shim.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em tp} & Time point to format. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+ISO 8601 UTC string. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}\label{namespacemesh__sim_aa28d0b850b46ffeb2160f1dfa8b5c5b4}} 
 \index{mesh\_sim@{mesh\_sim}!trimStr@{trimStr}}
 \index{trimStr@{trimStr}!mesh\_sim@{mesh\_sim}}
 \doxysubsubsection{\texorpdfstring{trimStr()}{trimStr()}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::trim\+Str (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
 
-Trim leading and trailing whitespace from a string. Description of what the method does.
+
+
+Strip leading and trailing ASCII whitespace from a string. 
+
+Whitespace characters removed\+: space ({\ttfamily \textquotesingle{}} \textquotesingle{}), horizontal tab ({\ttfamily \textquotesingle{}\textbackslash{}t} \textquotesingle{}), carriage return ({\ttfamily \textquotesingle{}\textbackslash{}r} \textquotesingle{}), and newline ({\ttfamily \textquotesingle{}\textbackslash{}n} \textquotesingle{}). Returns an empty string if {\ttfamily s} contains only whitespace.
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em s} & Input string. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Description of return value. 
+Trimmed copy of {\ttfamily s}. 
 \end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}
 \mbox{\Hypertarget{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}\label{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}} 
 \index{mesh\_sim@{mesh\_sim}!ValidateConfig@{ValidateConfig}}
 \index{ValidateConfig@{ValidateConfig}!mesh\_sim@{mesh\_sim}}
@@ -506,18 +556,27 @@ Intended to be called immediately after \mbox{\hyperlink{classmesh__sim_1_1Confi
 \doxysubsubsection{\texorpdfstring{WriteRunLog()}{WriteRunLog()}}
 {\footnotesize\ttfamily void mesh\+\_\+sim\+::\+Write\+Run\+Log (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+\_\+output\+\_\+dir,  }\item[{const \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}} \&}]{args,  }\item[{const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&}]{cfg,  }\item[{const std\+::vector$<$ uint32\+\_\+t $>$ \&}]{seeds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Description of what the method does.
+
+
+Write a human-\/readable reproducibility log for a batch run. 
+
+Creates {\ttfamily } $<$base\+\_\+output\+\_\+dir$>$/run.log (creating intermediate directories as needed). If the file cannot be opened the function returns silently; this is a best-\/effort log and should not abort the simulation.
+
+{\bfseries{Seed source label}} The log annotates which source provided the seed list\+:
+\begin{DoxyItemize}
+\item {\ttfamily \char`\"{}-\/-\/seeds CLI argument\char`\"{}} when {\ttfamily args.\+seeds\+\_\+arg} is non-\/empty.
+\item {\ttfamily \char`\"{}-\/-\/seed CLI override\char`\"{}} when {\ttfamily args.\+seed\+\_\+override} $>$= 0.
+\item {\ttfamily \char`\"{}config default\char`\"{}} otherwise.
+\end{DoxyItemize}
 
 
 \begin{DoxyParams}{Parameters}
-{\em input} & Description of parameter. \\
+{\em base\+\_\+output\+\_\+dir} & Batch output root directory; {\ttfamily run.\+log} is written directly inside it (not per-\/seed). \\
+\hline
+{\em args} & Parsed CLI arguments from \mbox{\hyperlink{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}{Parse\+Command\+Line}}. \\
+\hline
+{\em cfg} & Fully loaded \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Config\+Loader\+::\+Load}}. Only scalar fields are logged; node and building details are preserved in the archived {\ttfamily nodes.\+json}. \\
+\hline
+{\em seeds} & Resolved seed list from \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{Resolve\+Seeds}}. \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Description of return value. 
-\end{DoxyReturn}
-
-\begin{DoxyExceptions}{Exceptions}
-{\em Exception} & Description of exception. \\
-\hline
-\end{DoxyExceptions}

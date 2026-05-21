@@ -2,7 +2,7 @@
 \label{traffic-matrix_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/traffic-\/matrix.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/traffic/traffic-\/matrix.h}}
 
 
-Traffic\+Matrix\+: flow-\/level traffic demand generation for the mesh. Supports constant-\/rate, Poisson arrival, and on-\/off (bursty) models. No packets -- just \char`\"{}node A wants X Mbps to node B.\char`\"{}.  
+Flow-\/level traffic demand generation for the mesh.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
@@ -17,7 +17,8 @@ Include dependency graph for traffic-\/matrix.h\+:
 \includegraphics[width=350pt]{traffic-matrix_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -28,9 +29,9 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1Flow}{mesh\+\_\+sim\+::\+Flow}}
-\item 
+\begin{DoxyCompactList}\small\item\em A single directed traffic flow between two nodes. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix}{mesh\+\_\+sim\+::\+Traffic\+Matrix}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Generates and maintains the set of active flows each simulation tick. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -39,5 +40,41 @@ class \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix}{mesh\+\_\+sim\+::\+Traff
 
 
 \doxysubsection{Detailed Description}
-Traffic\+Matrix\+: flow-\/level traffic demand generation for the mesh. Supports constant-\/rate, Poisson arrival, and on-\/off (bursty) models. No packets -- just \char`\"{}node A wants X Mbps to node B.\char`\"{}. 
+Flow-\/level traffic demand generation for the mesh. 
 
+Traffic\+Matrix maintains a list of Flow objects and updates them each tick according to the configured traffic model. There are no packets — a flow simply represents \char`\"{}node A wants X Mbps to node B.\char`\"{}
+
+{\bfseries{Lifecycle}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TrafficMatrix tm(cfg);}
+\DoxyCodeLine{tm.Initialize(numNodes, 0.0);   \textcolor{comment}{// once, before the step loop}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{// each tick, before routing:}}
+\DoxyCodeLine{tm.Tick(currentTime);}
+\DoxyCodeLine{\textcolor{keyword}{auto}\& flows = tm.GetActiveFlows();}
+\DoxyCodeLine{\textcolor{keyword}{auto} results = router.Route(links, flows, numNodes);}
+
+\end{DoxyCode}
+
+
+{\bfseries{Traffic models}}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\ttfamily model}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Flow creation   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Per-\/tick update    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\ttfamily model}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Flow creation   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Per-\/tick update    }\\\cline{1-3}
+\endhead
+{\ttfamily \char`\"{}constant\char`\"{}}   &All flows created at Initialize.   &None; flows run for the full simulation.    \\\cline{1-3}
+{\ttfamily \char`\"{}poisson\char`\"{}}   &New flows arrive each tick via Poisson.   &New flows added; expired flows removed.    \\\cline{1-3}
+{\ttfamily \char`\"{}on\+\_\+off\char`\"{}}   &All flows created at Initialize.   &ON/\+OFF state machine per flow.   \\\cline{1-3}
+\end{longtabu}
+
+
+{\bfseries{Flow removal}} Expired flows ({\ttfamily end\+\_\+time\+\_\+s} $>$ 0 and {\ttfamily active} == false) are erased from {\ttfamily m\+\_\+flows} each tick. Permanent flows ({\ttfamily end\+\_\+time\+\_\+s} == 0) are never removed, even when they transition to inactive in the on-\/off model.
+
+{\bfseries{Gateway resolution}} For the {\ttfamily \char`\"{}gateway\char`\"{}} topology, Traffic\+Config\+::gateway\+\_\+node\+\_\+id is resolved as a numeric index first ({\ttfamily stoul}); if that throws, it falls back to a linear search by Node\+Spec\+::id string. Index 0 is used when {\ttfamily gateway\+\_\+node\+\_\+id} is empty. 

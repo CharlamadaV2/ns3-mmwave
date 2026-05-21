@@ -76,13 +76,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Translates a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> into ns-3 mobility, building, and propagation model objects.  
+ <a href="classmesh__sim_1_1TopologyBuilder.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="topology-builder_8h_source.html">topology-builder.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for mesh_sim::TopologyBuilder:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmesh__sim_1_1TopologyBuilder__coll__graph.png" border="0" usemap="#amesh__sim_1_1TopologyBuilder_coll__map" alt="Collaboration graph"/></div>
 <map name="amesh__sim_1_1TopologyBuilder_coll__map" id="amesh__sim_1_1TopologyBuilder_coll__map">
-<area shape="rect" title=" " alt="" coords="312,273,513,300"/>
+<area shape="rect" title="Translates a SimConfig into ns&#45;3 mobility, building, and propagation model objects." alt="" coords="312,273,513,300"/>
 <area shape="rect" href="structmesh__sim_1_1SimConfig.html" title="Root simulation configuration aggregating all subsystem parameters." alt="" coords="331,184,494,211"/>
 <area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title="Aggregates all mesh&#45;layer configuration." alt="" coords="139,95,313,121"/>
 <area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
@@ -96,47 +99,67 @@ Collaboration diagram for mesh_sim::TopologyBuilder:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa8e34c9a99b447b8b80f8d449b91d504"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#aa8e34c9a99b447b8b80f8d449b91d504">TopologyBuilder</a> (const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;cfg)</td></tr>
+<tr class="memdesc:aa8e34c9a99b447b8b80f8d449b91d504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a builder for the given simulation configuration.  <a href="classmesh__sim_1_1TopologyBuilder.html#aa8e34c9a99b447b8b80f8d449b91d504">More...</a><br /></td></tr>
 <tr class="separator:aa8e34c9a99b447b8b80f8d449b91d504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66846486902eb1ebdee7ad105662759f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">Build</a> ()</td></tr>
+<tr class="memdesc:a66846486902eb1ebdee7ad105662759f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create all ns-3 topology objects in the required order.  <a href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">More...</a><br /></td></tr>
 <tr class="separator:a66846486902eb1ebdee7ad105662759f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04af6f6de00df557a1b19063f583d728"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a04af6f6de00df557a1b19063f583d728">GetMobilityModels</a> () const</td></tr>
+<tr class="memdesc:a04af6f6de00df557a1b19063f583d728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the mobility model for each node in <code>cfg.nodes</code> order.  <a href="classmesh__sim_1_1TopologyBuilder.html#a04af6f6de00df557a1b19063f583d728">More...</a><br /></td></tr>
 <tr class="separator:a04af6f6de00df557a1b19063f583d728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1a9b78577d635fc1924d1c7821d31c1"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#aa1a9b78577d635fc1924d1c7821d31c1">GetPropagationModel</a> () const</td></tr>
+<tr class="memdesc:aa1a9b78577d635fc1924d1c7821d31c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the configured propagation loss model.  <a href="classmesh__sim_1_1TopologyBuilder.html#aa1a9b78577d635fc1924d1c7821d31c1">More...</a><br /></td></tr>
 <tr class="separator:aa1a9b78577d635fc1924d1c7821d31c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cbc52d0694c6e7e4082f314eb131d50"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a9cbc52d0694c6e7e4082f314eb131d50">GetConditionModel</a> () const</td></tr>
+<tr class="memdesc:a9cbc52d0694c6e7e4082f314eb131d50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the channel condition model used for LOS/NLOS determination.  <a href="classmesh__sim_1_1TopologyBuilder.html#a9cbc52d0694c6e7e4082f314eb131d50">More...</a><br /></td></tr>
 <tr class="separator:a9cbc52d0694c6e7e4082f314eb131d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ae756126bafd73421de221ba309ed27d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ae756126bafd73421de221ba309ed27d9">CreateNodesAndMobility</a> ()</td></tr>
+<tr class="memdesc:ae756126bafd73421de221ba309ed27d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create one ns-3 node per <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> and install its mobility model.  <a href="classmesh__sim_1_1TopologyBuilder.html#ae756126bafd73421de221ba309ed27d9">More...</a><br /></td></tr>
 <tr class="separator:ae756126bafd73421de221ba309ed27d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a131eb71dcaf4ecfd67ed1f7e054ef4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a131eb71dcaf4ecfd67ed1f7e054ef4ca">CreateBuildings</a> ()</td></tr>
+<tr class="memdesc:a131eb71dcaf4ecfd67ed1f7e054ef4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create ns-3 <code>Building</code> objects from <code>cfg.buildings</code>.  <a href="classmesh__sim_1_1TopologyBuilder.html#a131eb71dcaf4ecfd67ed1f7e054ef4ca">More...</a><br /></td></tr>
 <tr class="separator:a131eb71dcaf4ecfd67ed1f7e054ef4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade5c504b923cab50af63c0f49c8ee35b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ade5c504b923cab50af63c0f49c8ee35b">ConfigurePropagationModel</a> ()</td></tr>
+<tr class="memdesc:ade5c504b923cab50af63c0f49c8ee35b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select and configure the propagation and channel condition models.  <a href="classmesh__sim_1_1TopologyBuilder.html#ade5c504b923cab50af63c0f49c8ee35b">More...</a><br /></td></tr>
 <tr class="separator:ade5c504b923cab50af63c0f49c8ee35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0e079b00d134a82fec8d3dcb394e22c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ab0e079b00d134a82fec8d3dcb394e22c">InstallMobilityFixed</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="memdesc:ab0e079b00d134a82fec8d3dcb394e22c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install <code>ns3::ConstantPositionMobilityModel</code> on a node.  <a href="classmesh__sim_1_1TopologyBuilder.html#ab0e079b00d134a82fec8d3dcb394e22c">More...</a><br /></td></tr>
 <tr class="separator:ab0e079b00d134a82fec8d3dcb394e22c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28d6212f456c6db5aa6532e0fbec9cd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a28d6212f456c6db5aa6532e0fbec9cd7">InstallMobilityConstantVelocity</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="memdesc:a28d6212f456c6db5aa6532e0fbec9cd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install <code>ns3::ConstantVelocityMobilityModel</code> on a node.  <a href="classmesh__sim_1_1TopologyBuilder.html#a28d6212f456c6db5aa6532e0fbec9cd7">More...</a><br /></td></tr>
 <tr class="separator:a28d6212f456c6db5aa6532e0fbec9cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7cdfe8d79d68709a60274919c753b9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ae7cdfe8d79d68709a60274919c753b9f">InstallMobilityRandomWalk</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="memdesc:ae7cdfe8d79d68709a60274919c753b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install <code>ns3::RandomWalk2dMobilityModel</code> on a node.  <a href="classmesh__sim_1_1TopologyBuilder.html#ae7cdfe8d79d68709a60274919c753b9f">More...</a><br /></td></tr>
 <tr class="separator:ae7cdfe8d79d68709a60274919c753b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32700d192e42c7e629ff99726d5b9b16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a32700d192e42c7e629ff99726d5b9b16">InstallMobilityWaypoint</a> (const ns3::Ptr&lt; ns3::Node &gt; &amp;node, const <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &amp;spec)</td></tr>
+<tr class="memdesc:a32700d192e42c7e629ff99726d5b9b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install <code>ns3::WaypointMobilityModel</code> on a node.  <a href="classmesh__sim_1_1TopologyBuilder.html#a32700d192e42c7e629ff99726d5b9b16">More...</a><br /></td></tr>
 <tr class="separator:a32700d192e42c7e629ff99726d5b9b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af617ee5d0702cd14d196523f934776bf"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#af617ee5d0702cd14d196523f934776bf">m_cfg</a></td></tr>
+<tr class="memdesc:af617ee5d0702cd14d196523f934776bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation configuration (const reference; not owned).  <a href="classmesh__sim_1_1TopologyBuilder.html#af617ee5d0702cd14d196523f934776bf">More...</a><br /></td></tr>
 <tr class="separator:af617ee5d0702cd14d196523f934776bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc3684aac2b770de5c23929d5cdd8d1c"><td class="memItemLeft" align="right" valign="top">ns3::NodeContainer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#abc3684aac2b770de5c23929d5cdd8d1c">m_nodes</a></td></tr>
+<tr class="memdesc:abc3684aac2b770de5c23929d5cdd8d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">All created ns-3 nodes.  <a href="classmesh__sim_1_1TopologyBuilder.html#abc3684aac2b770de5c23929d5cdd8d1c">More...</a><br /></td></tr>
 <tr class="separator:abc3684aac2b770de5c23929d5cdd8d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a510c5f5b85203fe5c90e976cca1ac4cc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ns3::Ptr&lt; ns3::MobilityModel &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a510c5f5b85203fe5c90e976cca1ac4cc">m_mobilityModels</a></td></tr>
+<tr class="memdesc:a510c5f5b85203fe5c90e976cca1ac4cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">One entry per cfg.nodes entry, in index order.  <a href="classmesh__sim_1_1TopologyBuilder.html#a510c5f5b85203fe5c90e976cca1ac4cc">More...</a><br /></td></tr>
 <tr class="separator:a510c5f5b85203fe5c90e976cca1ac4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba196a5c3823f52ed0bedfd9736da8b6"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#aba196a5c3823f52ed0bedfd9736da8b6">m_propagationModel</a></td></tr>
+<tr class="memdesc:aba196a5c3823f52ed0bedfd9736da8b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configured after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f" title="Create all ns-3 topology objects in the required order.">Build()</a>.  <a href="classmesh__sim_1_1TopologyBuilder.html#aba196a5c3823f52ed0bedfd9736da8b6">More...</a><br /></td></tr>
 <tr class="separator:aba196a5c3823f52ed0bedfd9736da8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f6a7de855f309ef42a02a4c8b259895"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::ChannelConditionModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a4f6a7de855f309ef42a02a4c8b259895">m_conditionModel</a></td></tr>
+<tr class="memdesc:a4f6a7de855f309ef42a02a4c8b259895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configured after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f" title="Create all ns-3 topology objects in the required order.">Build()</a>.  <a href="classmesh__sim_1_1TopologyBuilder.html#a4f6a7de855f309ef42a02a4c8b259895">More...</a><br /></td></tr>
 <tr class="separator:a4f6a7de855f309ef42a02a4c8b259895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Translates a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> into ns-3 mobility, building, and propagation model objects. </p>
+<p>Holds a const reference to the <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> — the config must remain valid for the lifetime of the builder. All ns-3 smart pointers are retained internally after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">Build</a> and returned by the accessor methods. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa8e34c9a99b447b8b80f8d449b91d504"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8e34c9a99b447b8b80f8d449b91d504">&#9670;&nbsp;</a></span>TopologyBuilder()</h2>
 
@@ -160,17 +183,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Construct a builder for the given simulation configuration. </p>
+<p>Stores a const reference to <code>cfg</code>; does not create any ns-3 objects. Call <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">Build</a> before any accessor.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">cfg</td><td>Fully loaded and validated simulation configuration. Must outlive this object. </td></tr>
   </table>
   </dd>
 </dl>
@@ -192,17 +210,17 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+
+<p>Create all ns-3 topology objects in the required order. </p>
+<p>Executes three steps in sequence:</p><ol type="1">
+<li><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ae756126bafd73421de221ba309ed27d9">CreateNodesAndMobility</a> — one ns-3 node per <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a>, with the appropriate mobility model installed.</li>
+<li><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a131eb71dcaf4ecfd67ed1f7e054ef4ca">CreateBuildings</a> — ns-3 <code>Building</code> objects plus <code>BuildingsHelper::Install</code>; skipped when <code>cfg.buildings</code> is empty.</li>
+<li><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#ade5c504b923cab50af63c0f49c8ee35b">ConfigurePropagationModel</a> — selects and configures the 3GPP or NYU propagation loss model and the channel condition model.</li>
+</ol>
+<p>Must be called exactly once, before any accessor method.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>for an unrecognised <code><a class="el" href="structmesh__sim_1_1NodeSpec.html#ac7060365aa52deaefc03cf6865beee7f">NodeSpec::mobility</a></code> string, an unknown propagation scenario, or an unknown channel model string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -231,17 +249,16 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+
+<p>Select and configure the propagation and channel condition models. </p>
+<p>Reads <code>cfg.channel.channel_model</code> (<code>"3gpp"</code> or <code>"nyu"</code>) and <code>cfg.channel.scenario</code> to instantiate the correct ns-3 subclass. Sets the carrier frequency on the model. For NYU, also applies every field from <a class="el" href="structmesh__sim_1_1NyuChannelConfig.html">NyuChannelConfig</a> via <code>SetAttribute</code>.</p>
+<p><b>Channel condition model:</b></p><ul>
+<li>Buildings present: <code>BuildingsChannelConditionModel</code> is installed on the propagation model and stored as <code>m_conditionModel</code>.</li>
+<li>No buildings: the propagation model's default statistical condition model is retrieved and stored as <code>m_conditionModel</code>.</li>
+</ul>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>for an unrecognised scenario or channel model string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -270,20 +287,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Create ns-3 <code>Building</code> objects from <code>cfg.buildings</code>. </p>
+<p>A no-op when <code>cfg.buildings</code> is empty. For non-empty configs, creates one <code>ns3::Building</code> per <a class="el" href="structmesh__sim_1_1BuildingSpec.html">BuildingSpec</a>, sets its bounding box, type, exterior wall material, floor count, and room layout, then calls <code>BuildingsHelper::Install(m_nodes)</code> to associate all nodes with the building model. <code>BuildingsHelper::Install</code> must be called after all buildings are created and all nodes have mobility models installed. </p>
 
 </div>
 </div>
@@ -309,17 +315,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
+
+<p>Create one ns-3 node per <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> and install its mobility model. </p>
+<p>Iterates <code>cfg.nodes</code> in order, creates a single-node <code>NodeContainer</code> for each, dispatches to the appropriate <code>InstallMobility*</code> helper, and appends the resulting <code>MobilityModel</code> pointer to <code>m_mobilityModels</code>.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>for any unrecognised <code><a class="el" href="structmesh__sim_1_1NodeSpec.html#ac7060365aa52deaefc03cf6865beee7f">NodeSpec::mobility</a></code> value. </td></tr>
   </table>
   </dd>
 </dl>
@@ -340,20 +341,10 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Return the channel condition model used for LOS/NLOS determination. </p>
+<p>When buildings are present this is a <code>BuildingsChannelConditionModel</code> (deterministic). Otherwise it is the propagation model's default statistical condition model. Pass directly to <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">LinkEvaluator::Configure</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>ns-3 channel condition model. </dd></dl>
 
 </div>
 </div>
@@ -371,20 +362,10 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Return the mobility model for each node in <code>cfg.nodes</code> order. </p>
+<p>The vector index matches the node index used by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html">LinkEvaluator</a> and LinkTable: <code><a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a04af6f6de00df557a1b19063f583d728" title="Return the mobility model for each node in cfg.nodes order.">GetMobilityModels()</a></code>[k] corresponds to <code>cfg.nodes</code>[k].</p>
+<dl class="section return"><dt>Returns</dt><dd>Vector of <code>N</code> mobility model smart pointers, where <code>N</code> is <code>cfg.nodes.size()</code>. Empty until <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">Build</a> is called. </dd></dl>
 
 </div>
 </div>
@@ -402,20 +383,10 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+
+<p>Return the configured propagation loss model. </p>
+<p>The pointer is valid after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f">Build</a>. Pass directly to <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">LinkEvaluator::Configure</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>ns-3 propagation loss model (3GPP or NYU subclass). </dd></dl>
 
 </div>
 </div>
@@ -452,17 +423,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Install <code>ns3::ConstantVelocityMobilityModel</code> on a node. </p>
+<p>Sets the initial position from <a class="el" href="structmesh__sim_1_1NodeSpec.html#abbdb0e3af176cbb0aeb06710b9d41637">NodeSpec::position</a> and the constant velocity vector from <a class="el" href="structmesh__sim_1_1NodeSpec.html#a1b12dcff6f2970af61495782f68dc77a">NodeSpec::velocity</a> after the model is installed, since <code>MobilityHelper</code> does not accept a velocity at install time.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">node</td><td>ns-3 node to install the model on. </td></tr>
+    <tr><td class="paramname">spec</td><td>Node specification providing the initial position and velocity. </td></tr>
   </table>
   </dd>
 </dl>
@@ -502,17 +469,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Install <code>ns3::ConstantPositionMobilityModel</code> on a node. </p>
+<p>Uses a <code>ListPositionAllocator</code> to set the initial position from <a class="el" href="structmesh__sim_1_1NodeSpec.html#abbdb0e3af176cbb0aeb06710b9d41637">NodeSpec::position</a>. The node does not move for the entire simulation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">node</td><td>ns-3 node to install the model on. </td></tr>
+    <tr><td class="paramname">spec</td><td>Node specification providing the fixed position. </td></tr>
   </table>
   </dd>
 </dl>
@@ -552,17 +515,17 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Install <code>ns3::RandomWalk2dMobilityModel</code> on a node. </p>
+<p>Configures the walk with:</p><ul>
+<li><b>Bounds</b>: rectangle from <a class="el" href="structmesh__sim_1_1RandomWalkParams.html">RandomWalkParams</a>.</li>
+<li><b>Speed</b>: <code>ConstantRandomVariable</code> at <code>speed_mps</code>.</li>
+<li><b>Mode</b>: <code>Time</code> — direction is resampled every 1 simulated second.</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">node</td><td>ns-3 node to install the model on. </td></tr>
+    <tr><td class="paramname">spec</td><td>Node specification providing the initial position and walk params. </td></tr>
   </table>
   </dd>
 </dl>
@@ -602,17 +565,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description of what the method does.</p>
+
+<p>Install <code>ns3::WaypointMobilityModel</code> on a node. </p>
+<p>Adds every <a class="el" href="structmesh__sim_1_1Waypoint.html">Waypoint</a> from <code>spec.waypoints</code> via <code>WaypointMobilityModel::AddWaypoint</code>, using <code>ns3::Seconds</code>(wp.t) as the arrival time. The validator ensures at least two waypoints with strictly increasing times exist before this is called.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
+    <tr><td class="paramname">node</td><td>ns-3 node to install the model on. </td></tr>
+    <tr><td class="paramname">spec</td><td>Node specification providing the ordered waypoint list. </td></tr>
   </table>
   </dd>
 </dl>
@@ -640,6 +599,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Simulation configuration (const reference; not owned). </p>
+
 </div>
 </div>
 <a id="a4f6a7de855f309ef42a02a4c8b259895"></a>
@@ -661,6 +622,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Configured after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f" title="Create all ns-3 topology objects in the required order.">Build()</a>. </p>
 
 </div>
 </div>
@@ -684,6 +647,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>One entry per cfg.nodes entry, in index order. </p>
+
 </div>
 </div>
 <a id="abc3684aac2b770de5c23929d5cdd8d1c"></a>
@@ -706,6 +671,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>All created ns-3 nodes. </p>
+
 </div>
 </div>
 <a id="aba196a5c3823f52ed0bedfd9736da8b6"></a>
@@ -727,6 +694,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Configured after <a class="el" href="classmesh__sim_1_1TopologyBuilder.html#a66846486902eb1ebdee7ad105662759f" title="Create all ns-3 topology objects in the required order.">Build()</a>. </p>
 
 </div>
 </div>

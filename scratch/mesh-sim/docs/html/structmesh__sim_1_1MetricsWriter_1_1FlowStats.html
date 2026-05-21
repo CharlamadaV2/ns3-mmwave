@@ -73,21 +73,32 @@ $(function() {
 <div class="title">mesh_sim::MetricsWriter::FlowStats Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Per-flow-pair running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>.  
+ <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a500520c7017a771b8e9b58b6da9e7add"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a500520c7017a771b8e9b58b6da9e7add">demand_sum</a> = 0.0</td></tr>
+<tr class="memdesc:a500520c7017a771b8e9b58b6da9e7add"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of demand_mbps across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a500520c7017a771b8e9b58b6da9e7add">More...</a><br /></td></tr>
 <tr class="separator:a500520c7017a771b8e9b58b6da9e7add"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4d271e01aa99b2c9111c456692ff28d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#ae4d271e01aa99b2c9111c456692ff28d">delivered_sum</a> = 0.0</td></tr>
+<tr class="memdesc:ae4d271e01aa99b2c9111c456692ff28d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of delivered_mbps across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#ae4d271e01aa99b2c9111c456692ff28d">More...</a><br /></td></tr>
 <tr class="separator:ae4d271e01aa99b2c9111c456692ff28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70f4bd4a2aa1a290301e34f87c4b2a6b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a70f4bd4a2aa1a290301e34f87c4b2a6b">latency_sum</a> = 0.0</td></tr>
+<tr class="memdesc:a70f4bd4a2aa1a290301e34f87c4b2a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of latency_ms across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a70f4bd4a2aa1a290301e34f87c4b2a6b">More...</a><br /></td></tr>
 <tr class="separator:a70f4bd4a2aa1a290301e34f87c4b2a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6ed6c54c7f7859ba0675fb23724cb32"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#ab6ed6c54c7f7859ba0675fb23724cb32">hop_count_sum</a> = 0.0</td></tr>
+<tr class="memdesc:ab6ed6c54c7f7859ba0675fb23724cb32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of hop_count across ticks.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#ab6ed6c54c7f7859ba0675fb23724cb32">More...</a><br /></td></tr>
 <tr class="separator:ab6ed6c54c7f7859ba0675fb23724cb32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60a3666af0639ba9a669ade26372b37a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a60a3666af0639ba9a669ade26372b37a">tick_count</a> = 0</td></tr>
+<tr class="memdesc:a60a3666af0639ba9a669ade26372b37a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of ticks this flow pair was observed.  <a href="structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a60a3666af0639ba9a669ade26372b37a">More...</a><br /></td></tr>
 <tr class="separator:a60a3666af0639ba9a669ade26372b37a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Per-flow-pair running totals accumulated by <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a12a3fe3d90a9a8095f0a64667f5e503e">AccumulateTick</a>. </p>
+<p>Keyed by <code></code>(src_idx, dst_idx); time-averages computed in <a class="el" href="classmesh__sim_1_1MetricsWriter.html#a62a9a193e9c6f182491282265f62f1e0">Write</a>. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae4d271e01aa99b2c9111c456692ff28d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4d271e01aa99b2c9111c456692ff28d">&#9670;&nbsp;</a></span>delivered_sum</h2>
 
@@ -99,6 +110,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum of delivered_mbps across ticks. </p>
 
 </div>
 </div>
@@ -114,6 +127,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sum of demand_mbps across ticks. </p>
+
 </div>
 </div>
 <a id="ab6ed6c54c7f7859ba0675fb23724cb32"></a>
@@ -127,6 +142,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sum of hop_count across ticks. </p>
 
 </div>
 </div>
@@ -142,6 +159,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Sum of latency_ms across ticks. </p>
+
 </div>
 </div>
 <a id="a60a3666af0639ba9a669ade26372b37a"></a>
@@ -155,6 +174,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Number of ticks this flow pair was observed. </p>
 
 </div>
 </div>
