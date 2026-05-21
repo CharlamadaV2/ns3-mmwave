@@ -3,7 +3,6 @@
  * @file sim-config.h
  * @brief Top-level simulation configuration and runtime metadata POD types.
  *
- *
  * @ref SimConfig is the single root object that flows through the entire
  * simulation.  It is produced by @ref ConfigLoader::Load, validated by
  * @ref ValidateConfig, and then passed by const-reference to every
