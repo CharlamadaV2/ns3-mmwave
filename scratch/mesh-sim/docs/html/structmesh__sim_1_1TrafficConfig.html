@@ -74,6 +74,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Flow-level traffic demand configuration.  
+ <a href="structmesh__sim_1_1TrafficConfig.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mesh-config_8h_source.html">mesh-config.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -81,12 +84,16 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:af21f47eb33a40cac975d964c5469f6ca"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#af21f47eb33a40cac975d964c5469f6ca">model</a> = &quot;constant&quot;</td></tr>
 <tr class="separator:af21f47eb33a40cac975d964c5469f6ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca15ac6c3d33a250bb1a2d463698f679"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">demand_mbps</a> = 10.0</td></tr>
+<tr class="memdesc:aca15ac6c3d33a250bb1a2d463698f679"><td class="mdescLeft">&#160;</td><td class="mdescRight">as the rate during the ON phase.  <a href="structmesh__sim_1_1TrafficConfig.html#aca15ac6c3d33a250bb1a2d463698f679">More...</a><br /></td></tr>
 <tr class="separator:aca15ac6c3d33a250bb1a2d463698f679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addd560e3c4c07d97672b66820f637b30"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#addd560e3c4c07d97672b66820f637b30">arrival_rate_hz</a> = 1.0</td></tr>
+<tr class="memdesc:addd560e3c4c07d97672b66820f637b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used only when <code>model</code> is <code>"poisson"</code>.  <a href="structmesh__sim_1_1TrafficConfig.html#addd560e3c4c07d97672b66820f637b30">More...</a><br /></td></tr>
 <tr class="separator:addd560e3c4c07d97672b66820f637b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc9b9af8726f872228eed7f6f1af0249"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249">on_time_s</a> = 1.0</td></tr>
+<tr class="memdesc:adc9b9af8726f872228eed7f6f1af0249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used only when <code>model</code> is <code>"on_off"</code>.  <a href="structmesh__sim_1_1TrafficConfig.html#adc9b9af8726f872228eed7f6f1af0249">More...</a><br /></td></tr>
 <tr class="separator:adc9b9af8726f872228eed7f6f1af0249"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cf2c89d671412a79f89bacc5abb5da9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9">off_time_s</a> = 1.0</td></tr>
+<tr class="memdesc:a5cf2c89d671412a79f89bacc5abb5da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used only when <code>model</code> is <code>"on_off"</code>.  <a href="structmesh__sim_1_1TrafficConfig.html#a5cf2c89d671412a79f89bacc5abb5da9">More...</a><br /></td></tr>
 <tr class="separator:a5cf2c89d671412a79f89bacc5abb5da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24f36f1ba3e2211afde4d6778c25b831"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#a24f36f1ba3e2211afde4d6778c25b831">holding_time_s</a> = 0.0</td></tr>
 <tr class="separator:a24f36f1ba3e2211afde4d6778c25b831"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -97,7 +104,31 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a2a8ba7805d165c6efd34edfa08c368a3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html#a2a8ba7805d165c6efd34edfa08c368a3">gateway_node_id</a> = &quot;&quot;</td></tr>
 <tr class="separator:a2a8ba7805d165c6efd34edfa08c368a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Flow-level traffic demand configuration. </p>
+<p>Three traffic models are supported, selected by <code>model:</code> </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>model</code>   </th><th class="markdownTableHeadNone">Behaviour    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"constant"</code>   </td><td class="markdownTableBodyNone">All flows are active for the full simulation at <code>demand_mbps</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"poisson"</code>   </td><td class="markdownTableBodyNone">New flows arrive at <code>arrival_rate_hz</code> (network-wide Poisson process). Each flow has an exponentially distributed holding time when <code>holding_time_s</code> &gt; 0, otherwise it is permanent.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"on_off"</code>   </td><td class="markdownTableBodyNone">Each flow alternates between ON (sending at <code>demand_mbps</code>) and OFF phases. Phase durations are drawn from exponential distributions with means <code>on_time_s</code> and <code>off_time_s</code> respectively.   </td></tr>
+</table>
+<p>Three flow topologies are supported, selected by <code>flow_topology:</code> </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>flow_topology</code>   </th><th class="markdownTableHeadNone">Behaviour    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"all_pairs"</code>   </td><td class="markdownTableBodyNone">One flow per unordered node pair (N*(N-1)/2 flows total).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"random_pairs"</code>   </td><td class="markdownTableBodyNone"><code>random_pair_count</code> flows with uniformly random src/dst.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"gateway"</code>   </td><td class="markdownTableBodyNone">Every non-gateway node sends to the gateway node.   </td></tr>
+</table>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="addd560e3c4c07d97672b66820f637b30"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#addd560e3c4c07d97672b66820f637b30">&#9670;&nbsp;</a></span>arrival_rate_hz</h2>
 
@@ -109,6 +140,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Used only when <code>model</code> is <code>"poisson"</code>. </p>
+<p>Network-wide flow arrival rate (flows/s). </p>
 
 </div>
 </div>
@@ -124,6 +158,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>as the rate during the ON phase. </p>
+<p>Per-flow demand in Mbps. Used by all models </p>
+
 </div>
 </div>
 <a id="a00bfca9630b9b8d2efd0e1f00006cdfd"></a>
@@ -137,6 +174,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>How node pairs are assigned flows: <code>"all_pairs"</code>, <code>"random_pairs"</code>, or <code>"gateway"</code>. </p>
 
 </div>
 </div>
@@ -151,6 +189,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>ID or numeric index of the gateway node. Required when <code>flow_topology</code> is <code>"gateway"</code>; ignored otherwise. </p>
 
 </div>
 </div>
@@ -165,6 +204,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Mean flow lifetime in seconds (exponential). <code>0</code> means the flow lasts the entire simulation. For <code>"poisson"</code> this sets how long each arrived flow persists before expiring. </p>
 
 </div>
 </div>
@@ -179,6 +219,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Traffic model: <code>"constant"</code>, <code>"poisson"</code>, or <code>"on_off"</code>. </p>
 
 </div>
 </div>
@@ -194,6 +235,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Used only when <code>model</code> is <code>"on_off"</code>. </p>
+<p>Mean OFF-phase duration in seconds (exponential). </p>
+
 </div>
 </div>
 <a id="adc9b9af8726f872228eed7f6f1af0249"></a>
@@ -208,6 +252,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Used only when <code>model</code> is <code>"on_off"</code>. </p>
+<p>Mean ON-phase duration in seconds (exponential). </p>
+
 </div>
 </div>
 <a id="a4355f0c7788e6f383bd26b137c92d4b3"></a>
@@ -221,6 +268,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Number of randomly chosen src/dst pairs. Used only when <code>flow_topology</code> is <code>"random_pairs"</code>. </p>
 
 </div>
 </div>

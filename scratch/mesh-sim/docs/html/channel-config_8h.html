@@ -94,11 +94,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="channel-config_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2channel-config_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2channel-config_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2channel-config_8hdep">
 <area shape="rect" title="Radio and channel configuration POD types." alt="" coords="933,5,1141,61"/>
-<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="933,109,1141,165"/>
+<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="933,109,1141,165"/>
 <area shape="rect" href="cli-parser_8h.html" title="Command&#45;line parsing and pre&#45;simulation setup helpers." alt="" coords="187,213,395,269"/>
 <area shape="rect" href="run-logger_8h.html" title="RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved config for reproducibility...." alt="" coords="237,317,445,373"/>
-<area shape="rect" href="config-loader_8h.html" title="ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S..." alt="" coords="469,213,677,269"/>
-<area shape="rect" href="config-validator_8h.html" title="Config validation: checks a fully&#45;loaded SimConfig for invalid or inconsistent values before the simu..." alt="" coords="701,213,909,269"/>
+<area shape="rect" href="config-loader_8h.html" title="Parses run.ini and all referenced JSON files into a fully populated SimConfig." alt="" coords="469,213,677,269"/>
+<area shape="rect" href="config-validator_8h.html" title="Post&#45;load validation of a fully populated SimConfig." alt="" coords="701,213,909,269"/>
 <area shape="rect" href="link-evaluator_8h.html" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="933,213,1141,269"/>
 <area shape="rect" href="metrics-writer_8h.html" title="MetricsWriter: accumulates per&#45;tick metrics in&#45;memory during the step loop, then writes summary...." alt="" coords="1075,421,1283,477"/>
 <area shape="rect" href="viz-writer_8h.html" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="1564,421,1772,477"/>
@@ -135,7 +135,6 @@ Namespaces</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Radio and channel configuration POD types. </p>
-<p>No ns-3 headers are included — keeps compilation fast and allows use in post-run I/O code without ns-3 linkage.</p>
 <p>Two channel models are supported, selected by ChannelConfig::channel_model:</p><ul>
 <li><code>"3gpp"</code> — 3GPP TR 38.901 statistical model (default).</li>
 <li><code>"nyu"</code> — NYU WIRELESS mmWave model; requires the additional parameters in NyuChannelConfig. </li>

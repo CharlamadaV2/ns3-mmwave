@@ -2,19 +2,21 @@
 \label{config-loader_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/loader.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/loader.h}}
 
 
-Config\+Loader\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated Sim\+Config struct.  
+Parses {\ttfamily run.\+ini} and all referenced JSON files into a fully populated Sim\+Config.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$string$>$}\newline
-Include dependency graph for config-\/loader.h\+:\nopagebreak
+Include dependency graph for config-\/loader.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{config-loader_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -25,7 +27,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{mesh\+\_\+sim\+::\+Config\+Loader}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Static factory that loads a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from disk. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -34,6 +36,23 @@ class \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{mesh\+\_\+sim\+::\+Config
 
 
 \doxysubsection{Detailed Description}
-Config\+Loader\+: parses run.\+ini + referenced nodes.\+json / buildings.\+json and returns a fully populated Sim\+Config struct. 
+Parses {\ttfamily run.\+ini} and all referenced JSON files into a fully populated Sim\+Config. 
 
-No ns-\/3 headers included — this code can be compiled and tested independently of the ns-\/3 build. 
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Section   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Key fields loaded    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Section   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Key fields loaded    }\\\cline{1-2}
+\endhead
+{\ttfamily }\mbox{[}scenario\mbox{]}   &{\ttfamily name}, {\ttfamily seed}, {\ttfamily run\+\_\+id}, {\ttfamily duration\+\_\+s}, {\ttfamily warmup\+\_\+s}, {\ttfamily tick\+\_\+s}, {\ttfamily nodes\+\_\+file}, {\ttfamily buildings\+\_\+file}    \\\cline{1-2}
+{\ttfamily }\mbox{[}output\mbox{]}   &{\ttfamily dir}, {\ttfamily viz\+\_\+tick\+\_\+ms}    \\\cline{1-2}
+{\ttfamily }\mbox{[}channel\mbox{]}   &{\ttfamily frequency\+\_\+ghz}, {\ttfamily tx\+\_\+power\+\_\+dbm}, {\ttfamily scenario}, {\ttfamily channel\+\_\+model}, {\ttfamily blockage\+\_\+enabled}, {\ttfamily beamforming\+\_\+model}, {\ttfamily amc\+\_\+model}, {\ttfamily noise\+\_\+figure\+\_\+db}, {\ttfamily bandwidth\+\_\+mhz}, {\ttfamily tx\+\_\+array\+\_\+gain\+\_\+dbi}, {\ttfamily rx\+\_\+array\+\_\+gain\+\_\+dbi}    \\\cline{1-2}
+{\ttfamily }\mbox{[}nyu\+\_\+channel\mbox{]}   &All Nyu\+Channel\+Config fields; only applied when {\ttfamily channel\+\_\+model} is {\ttfamily \char`\"{}nyu\char`\"{}}    \\\cline{1-2}
+{\ttfamily }\mbox{[}traffic\mbox{]}   &{\ttfamily model}, {\ttfamily demand\+\_\+mbps}, {\ttfamily arrival\+\_\+rate\+\_\+hz}, {\ttfamily on\+\_\+time\+\_\+s}, {\ttfamily off\+\_\+time\+\_\+s}, {\ttfamily holding\+\_\+time\+\_\+s}, {\ttfamily flow\+\_\+topology}, {\ttfamily random\+\_\+pair\+\_\+count}, {\ttfamily gateway\+\_\+node\+\_\+id}    \\\cline{1-2}
+{\ttfamily }\mbox{[}routing\mbox{]}   &{\ttfamily algorithm}, {\ttfamily max\+\_\+hops}    \\\cline{1-2}
+{\ttfamily }\mbox{[}rl\mbox{]}   &{\ttfamily enabled}, {\ttfamily controlled\+\_\+node\+\_\+id}, {\ttfamily action\+\_\+type}, {\ttfamily reward\+\_\+type}, {\ttfamily step\+\_\+size\+\_\+m}, {\ttfamily arrival\+\_\+threshold\+\_\+m}, {\ttfamily x\+\_\+min/x\+\_\+max/y\+\_\+min/y\+\_\+max}   \\\cline{1-2}
+\end{longtabu}

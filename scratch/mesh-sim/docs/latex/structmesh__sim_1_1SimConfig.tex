@@ -2,11 +2,17 @@
 \label{structmesh__sim_1_1SimConfig}\index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 
 
+Root simulation configuration aggregating all subsystem parameters.  
+
+
+
+
 {\ttfamily \#include $<$sim-\/config.\+h$>$}
 
 
 
-Collaboration diagram for mesh\+\_\+sim\+::Sim\+Config\+:\nopagebreak
+Collaboration diagram for mesh\+\_\+sim\+::Sim\+Config\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -17,32 +23,44 @@ Collaboration diagram for mesh\+\_\+sim\+::Sim\+Config\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a39db45a0e1c8cc5dcc7ada81e58b8674}{scenario\+\_\+name}}
-\item 
+\begin{DoxyCompactList}\small\item\em Human-\/readable scenario label (from {\ttfamily }\mbox{[}scenario\mbox{]} name). \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a37fb915b2bfd049c40ea83fa3701130c}{seed}} = 42
-\item 
+\begin{DoxyCompactList}\small\item\em RNG seed passed to ns-\/3 {\ttfamily Rng\+Seed\+Manager}. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a24a4c67e2ea2331520d65b0d140680b0}{run\+\_\+id}} = 1
-\item 
+\begin{DoxyCompactList}\small\item\em Run identifier written to output metadata. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1SimConfig_ab8dd75898df21622829cb205e3396968}{duration\+\_\+s}} = 10.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Total simulated time in seconds. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a570ed017a25501890d2a1ca2e4efa073}{warmup\+\_\+s}} = 0.\+0
-\item 
+\begin{DoxyCompactList}\small\item\em Must be $<$ {\ttfamily duration\+\_\+s}. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a1b1169831081b79a02f7a6400110cafe}{tick\+\_\+s}} = 0.\+1
-\item 
+\begin{DoxyCompactList}\small\item\em Simulation time step in seconds (100 ms default). \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a114989a068597302c49c37251a7ed0f5}{output\+\_\+dir}}
 \item 
 \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}} \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a794b4d72aa2281b802622b536613343b}{channel}}
-\item 
+\begin{DoxyCompactList}\small\item\em Radio and channel model parameters. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{Mesh\+Config}} \mbox{\hyperlink{structmesh__sim_1_1SimConfig_abf6303595604ef96c398b64ab347156b}{mesh}}
-\item 
+\begin{DoxyCompactList}\small\item\em Traffic generation and routing parameters. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{structmesh__sim_1_1SimConfig_ac5c9744af5cb54e83c2cc7e23342c37e}{viz\+\_\+tick\+\_\+ms}} = 100
-\item 
+\begin{DoxyCompactList}\small\item\em (positions, link results) are written to disk. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structmesh__sim_1_1RlConfig}{Rl\+Config}} \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a5c8cba653b69f26cdf5776e73190b5c7}{rl}}
-\item 
+\begin{DoxyCompactList}\small\item\em Ignored when {\ttfamily rl.\+enabled} is {\ttfamily false}. \end{DoxyCompactList}\item 
 std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}} $>$ \mbox{\hyperlink{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}{nodes}}
 \item 
 std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spec}} $>$ \mbox{\hyperlink{structmesh__sim_1_1SimConfig_a685236554627b074685b64537c9de8e4}{buildings}}
 \end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Root simulation configuration aggregating all subsystem parameters. 
+
+Produced by \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Config\+Loader\+::\+Load}} from {\ttfamily run.\+ini} and the JSON files it references. Validated by \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} before any ns-\/3 objects are constructed. Passed by const-\/reference to every subsystem constructor.
+
+{\bfseries{Timing parameters}}
+\begin{DoxyItemize}
+\item {\ttfamily tick\+\_\+s} must be ≤ {\ttfamily duration\+\_\+s}.
+\item {\ttfamily warmup\+\_\+s} samples are excluded from all output metrics but the simulation still runs for the full {\ttfamily duration\+\_\+s}.
+\item {\ttfamily viz\+\_\+tick\+\_\+ms} controls how frequently CSV position/link snapshots are written; it is independent of {\ttfamily tick\+\_\+s}. 
+\end{DoxyItemize}
 
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a685236554627b074685b64537c9de8e4}\label{structmesh__sim_1_1SimConfig_a685236554627b074685b64537c9de8e4}} 
@@ -51,11 +69,15 @@ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spe
 \doxysubsubsection{\texorpdfstring{buildings}{buildings}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spec}}$>$ mesh\+\_\+sim\+::\+Sim\+Config\+::buildings}
 
-\mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a794b4d72aa2281b802622b536613343b}\label{structmesh__sim_1_1SimConfig_a794b4d72aa2281b802622b536613343b}} 
+Optional building obstacles used for deterministic LOS/\+NLOS classification. Empty when no {\ttfamily buildings\+\_\+file} is set. \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a794b4d72aa2281b802622b536613343b}\label{structmesh__sim_1_1SimConfig_a794b4d72aa2281b802622b536613343b}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!channel@{channel}}
 \index{channel@{channel}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{channel}{channel}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}} mesh\+\_\+sim\+::\+Sim\+Config\+::channel}
+
+
+
+Radio and channel model parameters. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_ab8dd75898df21622829cb205e3396968}\label{structmesh__sim_1_1SimConfig_ab8dd75898df21622829cb205e3396968}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!duration\_s@{duration\_s}}
@@ -63,11 +85,19 @@ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spe
 \doxysubsubsection{\texorpdfstring{duration\_s}{duration\_s}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sim\+Config\+::duration\+\_\+s = 10.\+0}
 
+
+
+Total simulated time in seconds. 
+
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_abf6303595604ef96c398b64ab347156b}\label{structmesh__sim_1_1SimConfig_abf6303595604ef96c398b64ab347156b}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!mesh@{mesh}}
 \index{mesh@{mesh}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{mesh}{mesh}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{Mesh\+Config}} mesh\+\_\+sim\+::\+Sim\+Config\+::mesh}
+
+
+
+Traffic generation and routing parameters. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}\label{structmesh__sim_1_1SimConfig_adfe60e22b8a1b3e3883d72cd29c47c8d}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!nodes@{nodes}}
@@ -75,23 +105,31 @@ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spe
 \doxysubsubsection{\texorpdfstring{nodes}{nodes}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}}$>$ mesh\+\_\+sim\+::\+Sim\+Config\+::nodes}
 
-\mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a114989a068597302c49c37251a7ed0f5}\label{structmesh__sim_1_1SimConfig_a114989a068597302c49c37251a7ed0f5}} 
+All simulation nodes, in index order. Node IDs assigned by \mbox{\hyperlink{classmesh__sim_1_1TrafficMatrix}{Traffic\+Matrix}} and the link evaluator are indices into this vector. \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a114989a068597302c49c37251a7ed0f5}\label{structmesh__sim_1_1SimConfig_a114989a068597302c49c37251a7ed0f5}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!output\_dir@{output\_dir}}
 \index{output\_dir@{output\_dir}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{output\_dir}{output\_dir}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Sim\+Config\+::output\+\_\+dir}
 
-\mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a5c8cba653b69f26cdf5776e73190b5c7}\label{structmesh__sim_1_1SimConfig_a5c8cba653b69f26cdf5776e73190b5c7}} 
+Root output directory. Auto-\/generated as a timestamped path under {\ttfamily outputs/} when empty in {\ttfamily run.\+ini} (see \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Config\+Loader\+::\+Load}}). \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a5c8cba653b69f26cdf5776e73190b5c7}\label{structmesh__sim_1_1SimConfig_a5c8cba653b69f26cdf5776e73190b5c7}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!rl@{rl}}
 \index{rl@{rl}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{rl}{rl}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1RlConfig}{Rl\+Config}} mesh\+\_\+sim\+::\+Sim\+Config\+::rl}
 
-\mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a24a4c67e2ea2331520d65b0d140680b0}\label{structmesh__sim_1_1SimConfig_a24a4c67e2ea2331520d65b0d140680b0}} 
+
+
+Ignored when {\ttfamily rl.\+enabled} is {\ttfamily false}. 
+
+Reinforcement-\/learning controller parameters. \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a24a4c67e2ea2331520d65b0d140680b0}\label{structmesh__sim_1_1SimConfig_a24a4c67e2ea2331520d65b0d140680b0}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!run\_id@{run\_id}}
 \index{run\_id@{run\_id}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{run\_id}{run\_id}}
 {\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Sim\+Config\+::run\+\_\+id = 1}
+
+
+
+Run identifier written to output metadata. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a39db45a0e1c8cc5dcc7ada81e58b8674}\label{structmesh__sim_1_1SimConfig_a39db45a0e1c8cc5dcc7ada81e58b8674}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!scenario\_name@{scenario\_name}}
@@ -99,11 +137,19 @@ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spe
 \doxysubsubsection{\texorpdfstring{scenario\_name}{scenario\_name}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Sim\+Config\+::scenario\+\_\+name}
 
+
+
+Human-\/readable scenario label (from {\ttfamily }\mbox{[}scenario\mbox{]} name). 
+
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a37fb915b2bfd049c40ea83fa3701130c}\label{structmesh__sim_1_1SimConfig_a37fb915b2bfd049c40ea83fa3701130c}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!seed@{seed}}
 \index{seed@{seed}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{seed}{seed}}
 {\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Sim\+Config\+::seed = 42}
+
+
+
+RNG seed passed to ns-\/3 {\ttfamily Rng\+Seed\+Manager}. 
 
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a1b1169831081b79a02f7a6400110cafe}\label{structmesh__sim_1_1SimConfig_a1b1169831081b79a02f7a6400110cafe}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!tick\_s@{tick\_s}}
@@ -111,19 +157,31 @@ std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spe
 \doxysubsubsection{\texorpdfstring{tick\_s}{tick\_s}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sim\+Config\+::tick\+\_\+s = 0.\+1}
 
+
+
+Simulation time step in seconds (100 ms default). 
+
 \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_ac5c9744af5cb54e83c2cc7e23342c37e}\label{structmesh__sim_1_1SimConfig_ac5c9744af5cb54e83c2cc7e23342c37e}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!viz\_tick\_ms@{viz\_tick\_ms}}
 \index{viz\_tick\_ms@{viz\_tick\_ms}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{viz\_tick\_ms}{viz\_tick\_ms}}
 {\footnotesize\ttfamily uint32\+\_\+t mesh\+\_\+sim\+::\+Sim\+Config\+::viz\+\_\+tick\+\_\+ms = 100}
 
-\mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a570ed017a25501890d2a1ca2e4efa073}\label{structmesh__sim_1_1SimConfig_a570ed017a25501890d2a1ca2e4efa073}} 
+
+
+(positions, link results) are written to disk. 
+
+Interval in milliseconds at which CSV snapshots \mbox{\Hypertarget{structmesh__sim_1_1SimConfig_a570ed017a25501890d2a1ca2e4efa073}\label{structmesh__sim_1_1SimConfig_a570ed017a25501890d2a1ca2e4efa073}} 
 \index{mesh\_sim::SimConfig@{mesh\_sim::SimConfig}!warmup\_s@{warmup\_s}}
 \index{warmup\_s@{warmup\_s}!mesh\_sim::SimConfig@{mesh\_sim::SimConfig}}
 \doxysubsubsection{\texorpdfstring{warmup\_s}{warmup\_s}}
 {\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Sim\+Config\+::warmup\+\_\+s = 0.\+0}
 
 
+
+Must be $<$ {\ttfamily duration\+\_\+s}. 
+
+Seconds to exclude from output metrics. 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

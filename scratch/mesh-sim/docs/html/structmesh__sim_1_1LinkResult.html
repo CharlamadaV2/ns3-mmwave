@@ -74,15 +74,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Radio evaluation result for one directed link at one time step.  
+ <a href="structmesh__sim_1_1LinkResult.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="link-result_8h_source.html">link-result.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a5eac09f0bea61612785de78f2ee04ed3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a5eac09f0bea61612785de78f2ee04ed3">tx_id</a> = 0</td></tr>
+<tr class="memdesc:a5eac09f0bea61612785de78f2ee04ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmitter index into the <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a> array.  <a href="structmesh__sim_1_1LinkResult.html#a5eac09f0bea61612785de78f2ee04ed3">More...</a><br /></td></tr>
 <tr class="separator:a5eac09f0bea61612785de78f2ee04ed3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed68b40b653592ba0650edb93a622aa5"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#aed68b40b653592ba0650edb93a622aa5">rx_id</a> = 0</td></tr>
+<tr class="memdesc:aed68b40b653592ba0650edb93a622aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receiver index into the <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a> array.  <a href="structmesh__sim_1_1LinkResult.html#aed68b40b653592ba0650edb93a622aa5">More...</a><br /></td></tr>
 <tr class="separator:aed68b40b653592ba0650edb93a622aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f805500ff96006af714e42b2be88f49"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a0f805500ff96006af714e42b2be88f49">distance_m</a> = 0.0</td></tr>
+<tr class="memdesc:a0f805500ff96006af714e42b2be88f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">3-D Euclidean distance between tx and rx (m).  <a href="structmesh__sim_1_1LinkResult.html#a0f805500ff96006af714e42b2be88f49">More...</a><br /></td></tr>
 <tr class="separator:a0f805500ff96006af714e42b2be88f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9018ba829e5e79ec4f5b965115d79141"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a9018ba829e5e79ec4f5b965115d79141">is_los</a> = false</td></tr>
 <tr class="separator:a9018ba829e5e79ec4f5b965115d79141"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -91,29 +97,20 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:afadd7a01b701fbd86dab7860850164e7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#afadd7a01b701fbd86dab7860850164e7">rx_power_dbm</a> = -999.0</td></tr>
 <tr class="separator:afadd7a01b701fbd86dab7860850164e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a302dec73819368a16ff10407d8f0d6ff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a302dec73819368a16ff10407d8f0d6ff">sinr_db</a> = -999.0</td></tr>
+<tr class="memdesc:a302dec73819368a16ff10407d8f0d6ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialised to -999.0 as a sentinel.  <a href="structmesh__sim_1_1LinkResult.html#a302dec73819368a16ff10407d8f0d6ff">More...</a><br /></td></tr>
 <tr class="separator:a302dec73819368a16ff10407d8f0d6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d25cb63e3888350df8cc0c17f4227e6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a3d25cb63e3888350df8cc0c17f4227e6">capacity_mbps</a> = 0.0</td></tr>
+<tr class="memdesc:a3d25cb63e3888350df8cc0c17f4227e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">AMC model (<code>"shannon"</code> or <code>"table"</code>).  <a href="structmesh__sim_1_1LinkResult.html#a3d25cb63e3888350df8cc0c17f4227e6">More...</a><br /></td></tr>
 <tr class="separator:a3d25cb63e3888350df8cc0c17f4227e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88965144d9738c21a5ea0dcb0d1a742e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#a88965144d9738c21a5ea0dcb0d1a742e">mcs_index</a> = 0</td></tr>
+<tr class="memdesc:a88965144d9738c21a5ea0dcb0d1a742e"><td class="mdescLeft">&#160;</td><td class="mdescRight">by the AMC model based on <code>sinr_db</code>.  <a href="structmesh__sim_1_1LinkResult.html#a88965144d9738c21a5ea0dcb0d1a742e">More...</a><br /></td></tr>
 <tr class="separator:a88965144d9738c21a5ea0dcb0d1a742e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4d8f79dacb43aa9aacc88e7f8be661a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html#af4d8f79dacb43aa9aacc88e7f8be661a">condition_from_buildings</a> = false</td></tr>
 <tr class="separator:af4d8f79dacb43aa9aacc88e7f8be661a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Description of what the method does.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>Description of parameter. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Description of return value. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Exception</td><td>Description of exception. </td></tr>
-  </table>
-  </dd>
-</dl>
+<div class="textblock"><p>Radio evaluation result for one directed link at one time step. </p>
+<p>Produced by the link evaluator and consumed by the metrics writer, routing engine, and RL reward calculator. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a3d25cb63e3888350df8cc0c17f4227e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d25cb63e3888350df8cc0c17f4227e6">&#9670;&nbsp;</a></span>capacity_mbps</h2>
@@ -126,6 +123,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>AMC model (<code>"shannon"</code> or <code>"table"</code>). </p>
+<p>Link capacity in Mbps, computed by the configured </p>
 
 </div>
 </div>
@@ -140,6 +140,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p><code>true</code> when the LOS/NLOS condition was determined deterministically by the buildings model rather than statistically. </p>
 
 </div>
 </div>
@@ -155,6 +156,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>3-D Euclidean distance between tx and rx (m). </p>
+
 </div>
 </div>
 <a id="a9018ba829e5e79ec4f5b965115d79141"></a>
@@ -168,6 +171,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p><code>true</code> if the link is Line-of-Sight; <code>false</code> for Non-Line-of-Sight. </p>
 
 </div>
 </div>
@@ -183,6 +187,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>by the AMC model based on <code>sinr_db</code>. </p>
+<p>MCS / CQI table index in the range [0, 14] selected </p>
+
 </div>
 </div>
 <a id="a0d4b1a0776a2d12b1d940e1521c0ee8c"></a>
@@ -196,6 +203,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Total path loss in dB, including shadow fading (and foliage / atmospheric components when those NYU options are enabled). </p>
 
 </div>
 </div>
@@ -211,6 +219,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Receiver index into the <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a> array. </p>
+
 </div>
 </div>
 <a id="afadd7a01b701fbd86dab7860850164e7"></a>
@@ -224,6 +234,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Received signal power in dBm after applying TX power, TX/RX array gains, and path loss. Initialised to -999.0 as a sentinel for "not evaluated / below noise floor". </p>
 
 </div>
 </div>
@@ -239,6 +250,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initialised to -999.0 as a sentinel. </p>
+<p>Signal-to-Interference-plus-Noise Ratio in dB. </p>
+
 </div>
 </div>
 <a id="a5eac09f0bea61612785de78f2ee04ed3"></a>
@@ -252,6 +266,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transmitter index into the <a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">SimConfig::nodes</a> array. </p>
 
 </div>
 </div>

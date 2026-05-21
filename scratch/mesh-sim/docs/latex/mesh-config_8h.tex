@@ -2,19 +2,21 @@
 \label{mesh-config_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/mesh-\/config.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/mesh-\/config.h}}
 
 
-Mesh-\/specific configuration POD types\+: traffic generation and routing. No ns-\/3 headers included.  
+Mesh-\/specific configuration POD types\+: traffic generation and routing.  
 
 
 {\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
-Include dependency graph for mesh-\/config.h\+:\nopagebreak
+Include dependency graph for mesh-\/config.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=236pt]{mesh-config_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -25,11 +27,11 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1TrafficConfig}{mesh\+\_\+sim\+::\+Traffic\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Flow-\/level traffic demand configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1RoutingConfig}{mesh\+\_\+sim\+::\+Routing\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Routing algorithm configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{mesh\+\_\+sim\+::\+Mesh\+Config}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Aggregates all mesh-\/layer configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -38,5 +40,6 @@ struct \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{mesh\+\_\+sim\+::\+Mesh\+
 
 
 \doxysubsection{Detailed Description}
-Mesh-\/specific configuration POD types\+: traffic generation and routing. No ns-\/3 headers included. 
+Mesh-\/specific configuration POD types\+: traffic generation and routing. 
 
+These types model {\itshape flow-\/level} demand only; there are no packets. The traffic model determines how many Mbps node A \char`\"{}wants\char`\"{} to send to node B at each tick; the routing algorithm determines which path carries that demand. 

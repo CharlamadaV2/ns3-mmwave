@@ -2,18 +2,20 @@
 \label{link-result_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/link-\/result.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/domain/link-\/result.h}}
 
 
-Per-\/link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-\/3 headers included.  
+Per-\/link radio evaluation result POD type.  
 
 
 {\ttfamily \#include $<$cstdint$>$}\newline
-Include dependency graph for link-\/result.h\+:\nopagebreak
+Include dependency graph for link-\/result.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=236pt]{link-result_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -24,7 +26,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{mesh\+\_\+sim\+::\+Link\+Result}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Radio evaluation result for one directed link at one time step. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -33,5 +35,8 @@ struct \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{mesh\+\_\+sim\+::\+Link\+
 
 
 \doxysubsection{Detailed Description}
-Per-\/link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-\/3 headers included. 
+Per-\/link radio evaluation result POD type. 
 
+One Link\+Result is produced per ordered (tx, rx) node pair per simulation tick. The pair is {\itshape directed}\+: a {\ttfamily Link\+Result} for (tx=0, rx=1) is independent of (tx=1, rx=0) because path loss, shadow fading, and blockage are evaluated separately for each direction.
+
+{\bfseries{Sentinel values}} {\ttfamily rx\+\_\+power\+\_\+dbm} and {\ttfamily sinr\+\_\+db} are initialised to {\ttfamily -\/999.\+0} d\+Bm/dB to indicate \char`\"{}no valid measurement\char`\"{} (e.\+g. the link was not evaluated this tick, or the path loss exceeds the noise floor). Consumers should treat any value below a reasonable threshold (e.\+g. -\/200 dB) as invalid. 

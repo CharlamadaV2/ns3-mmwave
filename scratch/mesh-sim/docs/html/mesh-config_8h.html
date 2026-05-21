@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Mesh-specific configuration POD types: traffic generation and routing. No ns-3 headers included.  
+<p>Mesh-specific configuration POD types: traffic generation and routing.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -83,7 +83,7 @@ Include dependency graph for mesh-config.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="mesh-config_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8h">
-<area shape="rect" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Mesh&#45;specific configuration POD types: traffic generation and routing." alt="" coords="5,5,213,61"/>
 <area shape="rect" title=" " alt="" coords="33,109,100,136"/>
 <area shape="rect" title=" " alt="" coords="124,109,183,136"/>
 </map>
@@ -93,13 +93,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="mesh-config_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2mesh-config_8hdep">
-<area shape="rect" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="1151,5,1359,61"/>
-<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="732,109,940,165"/>
+<area shape="rect" title="Mesh&#45;specific configuration POD types: traffic generation and routing." alt="" coords="1151,5,1359,61"/>
+<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="732,109,940,165"/>
 <area shape="rect" href="mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="1731,317,1939,373"/>
 <area shape="rect" href="cli-parser_8h.html" title="Command&#45;line parsing and pre&#45;simulation setup helpers." alt="" coords="237,213,445,269"/>
 <area shape="rect" href="run-logger_8h.html" title="RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved config for reproducibility...." alt="" coords="5,317,213,373"/>
-<area shape="rect" href="config-loader_8h.html" title="ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S..." alt="" coords="1035,213,1243,269"/>
-<area shape="rect" href="config-validator_8h.html" title="Config validation: checks a fully&#45;loaded SimConfig for invalid or inconsistent values before the simu..." alt="" coords="1267,213,1475,269"/>
+<area shape="rect" href="config-loader_8h.html" title="Parses run.ini and all referenced JSON files into a fully populated SimConfig." alt="" coords="1035,213,1243,269"/>
+<area shape="rect" href="config-validator_8h.html" title="Post&#45;load validation of a fully populated SimConfig." alt="" coords="1267,213,1475,269"/>
 <area shape="rect" href="link-evaluator_8h.html" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="469,213,677,269"/>
 <area shape="rect" href="metrics-writer_8h.html" title="MetricsWriter: accumulates per&#45;tick metrics in&#45;memory during the step loop, then writes summary...." alt="" coords="775,421,983,477"/>
 <area shape="rect" href="viz-writer_8h.html" title="VizWriter: writes per&#45;tick CSV snapshots for GUI and plotting consumption. Called from the step loop ..." alt="" coords="1335,421,1543,477"/>
@@ -122,10 +122,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TrafficConfig.html">mesh_sim::TrafficConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flow-level traffic demand configuration.  <a href="structmesh__sim_1_1TrafficConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1RoutingConfig.html">mesh_sim::RoutingConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Routing algorithm configuration.  <a href="structmesh__sim_1_1RoutingConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1MeshConfig.html">mesh_sim::MeshConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aggregates all mesh-layer configuration.  <a href="structmesh__sim_1_1MeshConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -134,7 +137,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Mesh-specific configuration POD types: traffic generation and routing. No ns-3 headers included. </p>
+<div class="textblock"><p>Mesh-specific configuration POD types: traffic generation and routing. </p>
+<p>These types model <em>flow-level</em> demand only; there are no packets. The traffic model determines how many Mbps node A "wants" to send to node B at each tick; the routing algorithm determines which path carries that demand. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

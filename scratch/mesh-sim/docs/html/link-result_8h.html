@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Per-link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-3 headers included.  
+<p>Per-link radio evaluation result POD type.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -82,7 +82,7 @@ Include dependency graph for link-result.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="link-result_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8h">
-<area shape="rect" title="Per&#45;link evaluation result POD type. One instance per ordered pair (tx, rx) per time step...." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Per&#45;link radio evaluation result POD type." alt="" coords="5,5,213,61"/>
 <area shape="rect" title=" " alt="" coords="76,109,143,136"/>
 </map>
 </div>
@@ -91,7 +91,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="link-result_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2domain_2link-result_8hdep">
-<area shape="rect" title="Per&#45;link evaluation result POD type. One instance per ordered pair (tx, rx) per time step...." alt="" coords="237,5,445,61"/>
+<area shape="rect" title="Per&#45;link radio evaluation result POD type." alt="" coords="237,5,445,61"/>
 <area shape="rect" href="link-evaluator_8h.html" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="51,109,259,165"/>
 <area shape="rect" href="link-table_8h.html" title="LinkTable: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::Evaluat..." alt="" coords="379,109,587,165"/>
 <area shape="rect" href="mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="237,213,445,269"/>
@@ -110,6 +110,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1LinkResult.html">mesh_sim::LinkResult</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Radio evaluation result for one directed link at one time step.  <a href="structmesh__sim_1_1LinkResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -118,7 +119,9 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Per-link evaluation result POD type. One instance per ordered pair (tx, rx) per time step. No ns-3 headers included. </p>
+<div class="textblock"><p>Per-link radio evaluation result POD type. </p>
+<p>One LinkResult is produced per ordered (tx, rx) node pair per simulation tick. The pair is <em>directed</em>: a <code>LinkResult</code> for (tx=0, rx=1) is independent of (tx=1, rx=0) because path loss, shadow fading, and blockage are evaluated separately for each direction.</p>
+<p><b>Sentinel values</b> <code>rx_power_dbm</code> and <code>sinr_db</code> are initialised to <code>-999.0</code> dBm/dB to indicate "no valid measurement" (e.g. the link was not evaluated this tick, or the path loss exceeds the noise floor). Consumers should treat any value below a reasonable threshold (e.g. -200 dB) as invalid. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

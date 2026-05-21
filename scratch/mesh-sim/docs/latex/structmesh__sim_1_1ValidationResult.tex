@@ -2,19 +2,29 @@
 \label{structmesh__sim_1_1ValidationResult}\index{mesh\_sim::ValidationResult@{mesh\_sim::ValidationResult}}
 
 
+Result of a \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} call.  
+
+
+
+
 {\ttfamily \#include $<$config-\/validator.\+h$>$}
 
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 bool \mbox{\hyperlink{structmesh__sim_1_1ValidationResult_a68d91f6b81fc7cf63bba5bf9dfbaf96c}{ok}} () const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Return {\ttfamily true} if no validation errors were found. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{structmesh__sim_1_1ValidationResult_a768c735a60d0e8c2ec764e4a9718fc18}{errors}}
 \end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Result of a \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} call. 
+
+On success {\ttfamily errors} is empty and \mbox{\hyperlink{structmesh__sim_1_1ValidationResult_a68d91f6b81fc7cf63bba5bf9dfbaf96c}{ok}} returns {\ttfamily true}. On failure {\ttfamily errors} contains one human-\/readable string per problem found; all problems are reported together so the user can fix them in one pass. 
 
 \doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1ValidationResult_a68d91f6b81fc7cf63bba5bf9dfbaf96c}\label{structmesh__sim_1_1ValidationResult_a68d91f6b81fc7cf63bba5bf9dfbaf96c}} 
@@ -25,6 +35,13 @@ std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{structmesh__sim_1_1Validatio
 
 
 
+Return {\ttfamily true} if no validation errors were found. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} when {\ttfamily errors} is empty, {\ttfamily false} otherwise. 
+\end{DoxyReturn}
+
+
 \doxysubsection{Member Data Documentation}
 \mbox{\Hypertarget{structmesh__sim_1_1ValidationResult_a768c735a60d0e8c2ec764e4a9718fc18}\label{structmesh__sim_1_1ValidationResult_a768c735a60d0e8c2ec764e4a9718fc18}} 
 \index{mesh\_sim::ValidationResult@{mesh\_sim::ValidationResult}!errors@{errors}}
@@ -32,7 +49,7 @@ std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{structmesh__sim_1_1Validatio
 \doxysubsubsection{\texorpdfstring{errors}{errors}}
 {\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ mesh\+\_\+sim\+::\+Validation\+Result\+::errors}
 
-
+One entry per validation failure; empty on success. 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

@@ -74,17 +74,20 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Root simulation configuration aggregating all subsystem parameters.  
+ <a href="structmesh__sim_1_1SimConfig.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="sim-config_8h_source.html">sim-config.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for mesh_sim::SimConfig:</div>
 <div class="dyncontent">
 <div class="center"><img src="structmesh__sim_1_1SimConfig__coll__graph.png" border="0" usemap="#amesh__sim_1_1SimConfig_coll__map" alt="Collaboration graph"/></div>
 <map name="amesh__sim_1_1SimConfig_coll__map" id="amesh__sim_1_1SimConfig_coll__map">
-<area shape="rect" title=" " alt="" coords="331,184,494,211"/>
-<area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title=" " alt="" coords="139,95,313,121"/>
-<area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title=" " alt="" coords="5,5,193,32"/>
-<area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title=" " alt="" coords="217,5,395,32"/>
-<area shape="rect" href="structmesh__sim_1_1RlConfig.html" title=" " alt="" coords="337,95,488,121"/>
+<area shape="rect" title="Root simulation configuration aggregating all subsystem parameters." alt="" coords="331,184,494,211"/>
+<area shape="rect" href="structmesh__sim_1_1MeshConfig.html" title="Aggregates all mesh&#45;layer configuration." alt="" coords="139,95,313,121"/>
+<area shape="rect" href="structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
+<area shape="rect" href="structmesh__sim_1_1TrafficConfig.html" title="Flow&#45;level traffic demand configuration." alt="" coords="217,5,395,32"/>
+<area shape="rect" href="structmesh__sim_1_1RlConfig.html" title="Reinforcement&#45;learning controller configuration." alt="" coords="337,95,488,121"/>
 <area shape="rect" href="structmesh__sim_1_1ChannelConfig.html" title="Complete radio and channel configuration for a simulation run." alt="" coords="512,95,703,121"/>
 <area shape="rect" href="structmesh__sim_1_1NyuChannelConfig.html" title="Parameters specific to the NYU mmWave channel model." alt="" coords="499,5,716,32"/>
 </map>
@@ -93,33 +96,51 @@ Collaboration diagram for mesh_sim::SimConfig:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a39db45a0e1c8cc5dcc7ada81e58b8674"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a39db45a0e1c8cc5dcc7ada81e58b8674">scenario_name</a></td></tr>
+<tr class="memdesc:a39db45a0e1c8cc5dcc7ada81e58b8674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Human-readable scenario label (from <code></code>[scenario] name).  <a href="structmesh__sim_1_1SimConfig.html#a39db45a0e1c8cc5dcc7ada81e58b8674">More...</a><br /></td></tr>
 <tr class="separator:a39db45a0e1c8cc5dcc7ada81e58b8674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37fb915b2bfd049c40ea83fa3701130c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a37fb915b2bfd049c40ea83fa3701130c">seed</a> = 42</td></tr>
+<tr class="memdesc:a37fb915b2bfd049c40ea83fa3701130c"><td class="mdescLeft">&#160;</td><td class="mdescRight">RNG seed passed to ns-3 <code>RngSeedManager</code>.  <a href="structmesh__sim_1_1SimConfig.html#a37fb915b2bfd049c40ea83fa3701130c">More...</a><br /></td></tr>
 <tr class="separator:a37fb915b2bfd049c40ea83fa3701130c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24a4c67e2ea2331520d65b0d140680b0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a24a4c67e2ea2331520d65b0d140680b0">run_id</a> = 1</td></tr>
+<tr class="memdesc:a24a4c67e2ea2331520d65b0d140680b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run identifier written to output metadata.  <a href="structmesh__sim_1_1SimConfig.html#a24a4c67e2ea2331520d65b0d140680b0">More...</a><br /></td></tr>
 <tr class="separator:a24a4c67e2ea2331520d65b0d140680b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8dd75898df21622829cb205e3396968"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#ab8dd75898df21622829cb205e3396968">duration_s</a> = 10.0</td></tr>
+<tr class="memdesc:ab8dd75898df21622829cb205e3396968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total simulated time in seconds.  <a href="structmesh__sim_1_1SimConfig.html#ab8dd75898df21622829cb205e3396968">More...</a><br /></td></tr>
 <tr class="separator:ab8dd75898df21622829cb205e3396968"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a570ed017a25501890d2a1ca2e4efa073"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a570ed017a25501890d2a1ca2e4efa073">warmup_s</a> = 0.0</td></tr>
+<tr class="memdesc:a570ed017a25501890d2a1ca2e4efa073"><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be &lt; <code>duration_s</code>.  <a href="structmesh__sim_1_1SimConfig.html#a570ed017a25501890d2a1ca2e4efa073">More...</a><br /></td></tr>
 <tr class="separator:a570ed017a25501890d2a1ca2e4efa073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b1169831081b79a02f7a6400110cafe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a1b1169831081b79a02f7a6400110cafe">tick_s</a> = 0.1</td></tr>
+<tr class="memdesc:a1b1169831081b79a02f7a6400110cafe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation time step in seconds (100 ms default).  <a href="structmesh__sim_1_1SimConfig.html#a1b1169831081b79a02f7a6400110cafe">More...</a><br /></td></tr>
 <tr class="separator:a1b1169831081b79a02f7a6400110cafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a114989a068597302c49c37251a7ed0f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a114989a068597302c49c37251a7ed0f5">output_dir</a></td></tr>
 <tr class="separator:a114989a068597302c49c37251a7ed0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a794b4d72aa2281b802622b536613343b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1ChannelConfig.html">ChannelConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a794b4d72aa2281b802622b536613343b">channel</a></td></tr>
+<tr class="memdesc:a794b4d72aa2281b802622b536613343b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Radio and channel model parameters.  <a href="structmesh__sim_1_1SimConfig.html#a794b4d72aa2281b802622b536613343b">More...</a><br /></td></tr>
 <tr class="separator:a794b4d72aa2281b802622b536613343b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6303595604ef96c398b64ab347156b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1MeshConfig.html">MeshConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#abf6303595604ef96c398b64ab347156b">mesh</a></td></tr>
+<tr class="memdesc:abf6303595604ef96c398b64ab347156b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Traffic generation and routing parameters.  <a href="structmesh__sim_1_1SimConfig.html#abf6303595604ef96c398b64ab347156b">More...</a><br /></td></tr>
 <tr class="separator:abf6303595604ef96c398b64ab347156b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5c9744af5cb54e83c2cc7e23342c37e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#ac5c9744af5cb54e83c2cc7e23342c37e">viz_tick_ms</a> = 100</td></tr>
+<tr class="memdesc:ac5c9744af5cb54e83c2cc7e23342c37e"><td class="mdescLeft">&#160;</td><td class="mdescRight">(positions, link results) are written to disk.  <a href="structmesh__sim_1_1SimConfig.html#ac5c9744af5cb54e83c2cc7e23342c37e">More...</a><br /></td></tr>
 <tr class="separator:ac5c9744af5cb54e83c2cc7e23342c37e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c8cba653b69f26cdf5776e73190b5c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmesh__sim_1_1RlConfig.html">RlConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a5c8cba653b69f26cdf5776e73190b5c7">rl</a></td></tr>
+<tr class="memdesc:a5c8cba653b69f26cdf5776e73190b5c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ignored when <code>rl.enabled</code> is <code>false</code>.  <a href="structmesh__sim_1_1SimConfig.html#a5c8cba653b69f26cdf5776e73190b5c7">More...</a><br /></td></tr>
 <tr class="separator:a5c8cba653b69f26cdf5776e73190b5c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfe60e22b8a1b3e3883d72cd29c47c8d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1NodeSpec.html">NodeSpec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#adfe60e22b8a1b3e3883d72cd29c47c8d">nodes</a></td></tr>
 <tr class="separator:adfe60e22b8a1b3e3883d72cd29c47c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a685236554627b074685b64537c9de8e4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmesh__sim_1_1BuildingSpec.html">BuildingSpec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1SimConfig.html#a685236554627b074685b64537c9de8e4">buildings</a></td></tr>
 <tr class="separator:a685236554627b074685b64537c9de8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Root simulation configuration aggregating all subsystem parameters. </p>
+<p>Produced by <a class="el" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">ConfigLoader::Load</a> from <code>run.ini</code> and the JSON files it references. Validated by <a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">ValidateConfig</a> before any ns-3 objects are constructed. Passed by const-reference to every subsystem constructor.</p>
+<p><b>Timing parameters</b></p><ul>
+<li><code>tick_s</code> must be ≤ <code>duration_s</code>.</li>
+<li><code>warmup_s</code> samples are excluded from all output metrics but the simulation still runs for the full <code>duration_s</code>.</li>
+<li><code>viz_tick_ms</code> controls how frequently CSV position/link snapshots are written; it is independent of <code>tick_s</code>. </li>
+</ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a685236554627b074685b64537c9de8e4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a685236554627b074685b64537c9de8e4">&#9670;&nbsp;</a></span>buildings</h2>
 
@@ -131,6 +152,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Optional building obstacles used for deterministic LOS/NLOS classification. Empty when no <code>buildings_file</code> is set. </p>
 
 </div>
 </div>
@@ -146,6 +168,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Radio and channel model parameters. </p>
+
 </div>
 </div>
 <a id="ab8dd75898df21622829cb205e3396968"></a>
@@ -159,6 +183,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Total simulated time in seconds. </p>
 
 </div>
 </div>
@@ -174,6 +200,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Traffic generation and routing parameters. </p>
+
 </div>
 </div>
 <a id="adfe60e22b8a1b3e3883d72cd29c47c8d"></a>
@@ -187,6 +215,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>All simulation nodes, in index order. Node IDs assigned by <a class="el" href="classmesh__sim_1_1TrafficMatrix.html">TrafficMatrix</a> and the link evaluator are indices into this vector. </p>
 
 </div>
 </div>
@@ -201,6 +230,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Root output directory. Auto-generated as a timestamped path under <code>outputs/</code> when empty in <code>run.ini</code> (see <a class="el" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">ConfigLoader::Load</a>). </p>
 
 </div>
 </div>
@@ -216,6 +246,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Ignored when <code>rl.enabled</code> is <code>false</code>. </p>
+<p>Reinforcement-learning controller parameters. </p>
+
 </div>
 </div>
 <a id="a24a4c67e2ea2331520d65b0d140680b0"></a>
@@ -229,6 +262,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Run identifier written to output metadata. </p>
 
 </div>
 </div>
@@ -244,6 +279,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Human-readable scenario label (from <code></code>[scenario] name). </p>
+
 </div>
 </div>
 <a id="a37fb915b2bfd049c40ea83fa3701130c"></a>
@@ -257,6 +294,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>RNG seed passed to ns-3 <code>RngSeedManager</code>. </p>
 
 </div>
 </div>
@@ -272,6 +311,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Simulation time step in seconds (100 ms default). </p>
+
 </div>
 </div>
 <a id="ac5c9744af5cb54e83c2cc7e23342c37e"></a>
@@ -286,6 +327,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>(positions, link results) are written to disk. </p>
+<p>Interval in milliseconds at which CSV snapshots </p>
+
 </div>
 </div>
 <a id="a570ed017a25501890d2a1ca2e4efa073"></a>
@@ -299,6 +343,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Must be &lt; <code>duration_s</code>. </p>
+<p>Seconds to exclude from output metrics. </p>
 
 </div>
 </div>

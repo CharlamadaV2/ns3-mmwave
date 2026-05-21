@@ -74,16 +74,34 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Routing algorithm configuration.  
+ <a href="structmesh__sim_1_1RoutingConfig.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mesh-config_8h_source.html">mesh-config.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:af0f64d12d4838a395cd7a5f8725ea341"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1RoutingConfig.html#af0f64d12d4838a395cd7a5f8725ea341">algorithm</a> = &quot;shortest_path&quot;</td></tr>
+<tr class="memdesc:af0f64d12d4838a395cd7a5f8725ea341"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code>"max_throughput"</code>, or <code>"min_hop"</code>.  <a href="structmesh__sim_1_1RoutingConfig.html#af0f64d12d4838a395cd7a5f8725ea341">More...</a><br /></td></tr>
 <tr class="separator:af0f64d12d4838a395cd7a5f8725ea341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb2492a079f4c3315c2f93e43e19efe8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1RoutingConfig.html#abb2492a079f4c3315c2f93e43e19efe8">max_hops</a> = 5</td></tr>
+<tr class="memdesc:abb2492a079f4c3315c2f93e43e19efe8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code>0</code> means unlimited.  <a href="structmesh__sim_1_1RoutingConfig.html#abb2492a079f4c3315c2f93e43e19efe8">More...</a><br /></td></tr>
 <tr class="separator:abb2492a079f4c3315c2f93e43e19efe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Routing algorithm configuration. </p>
+<p>The routing algorithm is applied once per tick to the current link-capacity graph produced by the link evaluator.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><code>algorithm</code>   </th><th class="markdownTableHeadNone">Strategy    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"shortest_path"</code>   </td><td class="markdownTableBodyNone">Dijkstra on the inverse-capacity-weighted graph (default).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>"max_throughput"</code>   </td><td class="markdownTableBodyNone">Widest-path: maximise the bottleneck link capacity.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>"min_hop"</code>   </td><td class="markdownTableBodyNone">Minimum hop count, ignoring link quality entirely.   </td></tr>
+</table>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="af0f64d12d4838a395cd7a5f8725ea341"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af0f64d12d4838a395cd7a5f8725ea341">&#9670;&nbsp;</a></span>algorithm</h2>
 
@@ -95,6 +113,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><code>"max_throughput"</code>, or <code>"min_hop"</code>. </p>
+<p>Routing algorithm: <code>"shortest_path"</code>, </p>
 
 </div>
 </div>
@@ -109,6 +130,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><code>0</code> means unlimited. </p>
+<p>Maximum number of hops allowed per path. </p>
 
 </div>
 </div>

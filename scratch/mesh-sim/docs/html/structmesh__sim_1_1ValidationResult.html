@@ -75,11 +75,15 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Result of a <a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">ValidateConfig</a> call.  
+ <a href="structmesh__sim_1_1ValidationResult.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="config-validator_8h_source.html">config-validator.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a68d91f6b81fc7cf63bba5bf9dfbaf96c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1ValidationResult.html#a68d91f6b81fc7cf63bba5bf9dfbaf96c">ok</a> () const</td></tr>
+<tr class="memdesc:a68d91f6b81fc7cf63bba5bf9dfbaf96c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <code>true</code> if no validation errors were found.  <a href="structmesh__sim_1_1ValidationResult.html#a68d91f6b81fc7cf63bba5bf9dfbaf96c">More...</a><br /></td></tr>
 <tr class="separator:a68d91f6b81fc7cf63bba5bf9dfbaf96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -87,7 +91,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a768c735a60d0e8c2ec764e4a9718fc18"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1ValidationResult.html#a768c735a60d0e8c2ec764e4a9718fc18">errors</a></td></tr>
 <tr class="separator:a768c735a60d0e8c2ec764e4a9718fc18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Result of a <a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">ValidateConfig</a> call. </p>
+<p>On success <code>errors</code> is empty and <a class="el" href="structmesh__sim_1_1ValidationResult.html#a68d91f6b81fc7cf63bba5bf9dfbaf96c">ok</a> returns <code>true</code>. On failure <code>errors</code> contains one human-readable string per problem found; all problems are reported together so the user can fix them in one pass. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a68d91f6b81fc7cf63bba5bf9dfbaf96c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68d91f6b81fc7cf63bba5bf9dfbaf96c">&#9670;&nbsp;</a></span>ok()</h2>
 
@@ -111,6 +118,9 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Return <code>true</code> if no validation errors were found. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> when <code>errors</code> is empty, <code>false</code> otherwise. </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -125,6 +135,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>One entry per validation failure; empty on success. </p>
 
 </div>
 </div>

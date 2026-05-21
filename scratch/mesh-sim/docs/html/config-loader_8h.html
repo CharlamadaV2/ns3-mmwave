@@ -74,7 +74,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated SimConfig struct.  
+<p>Parses <code>run.ini</code> and all referenced JSON files into a fully populated SimConfig.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="sim-config_8h_source.html">src/domain/sim-config.h</a>&quot;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -83,12 +83,12 @@ Include dependency graph for config-loader.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="config-loader_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8h">
-<area shape="rect" title="ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S..." alt="" coords="384,5,592,61"/>
-<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="285,109,464,136"/>
+<area shape="rect" title="Parses run.ini and all referenced JSON files into a fully populated SimConfig." alt="" coords="384,5,592,61"/>
+<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="285,109,464,136"/>
 <area shape="rect" title=" " alt="" coords="392,259,450,285"/>
 <area shape="rect" href="channel-config_8h.html" title="Radio and channel configuration POD types." alt="" coords="24,184,154,211"/>
 <area shape="rect" title=" " alt="" coords="56,259,122,285"/>
-<area shape="rect" href="mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="269,184,384,211"/>
+<area shape="rect" href="mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing." alt="" coords="269,184,384,211"/>
 <area shape="rect" href="node-spec_8h.html" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="458,184,560,211"/>
 <area shape="rect" title=" " alt="" coords="522,259,584,285"/>
 <area shape="rect" title=" " alt="" coords="178,184,245,211"/>
@@ -99,7 +99,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="config-loader_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-loader_8hdep">
-<area shape="rect" title="ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated S..." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Parses run.ini and all referenced JSON files into a fully populated SimConfig." alt="" coords="5,5,213,61"/>
 <area shape="rect" href="config-loader_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 </map>
 </div>
@@ -109,6 +109,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1ConfigLoader.html">mesh_sim::ConfigLoader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static factory that loads a complete <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from disk.  <a href="classmesh__sim_1_1ConfigLoader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -117,8 +118,25 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>ConfigLoader: parses run.ini + referenced nodes.json / buildings.json and returns a fully populated SimConfig struct. </p>
-<p>No ns-3 headers included — this code can be compiled and tested independently of the ns-3 build. </p>
+<div class="textblock"><p>Parses <code>run.ini</code> and all referenced JSON files into a fully populated SimConfig. </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Section   </th><th class="markdownTableHeadNone">Key fields loaded    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code></code>[scenario]   </td><td class="markdownTableBodyNone"><code>name</code>, <code>seed</code>, <code>run_id</code>, <code>duration_s</code>, <code>warmup_s</code>, <code>tick_s</code>, <code>nodes_file</code>, <code>buildings_file</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code></code>[output]   </td><td class="markdownTableBodyNone"><code>dir</code>, <code>viz_tick_ms</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code></code>[channel]   </td><td class="markdownTableBodyNone"><code>frequency_ghz</code>, <code>tx_power_dbm</code>, <code>scenario</code>, <code>channel_model</code>, <code>blockage_enabled</code>, <code>beamforming_model</code>, <code>amc_model</code>, <code>noise_figure_db</code>, <code>bandwidth_mhz</code>, <code>tx_array_gain_dbi</code>, <code>rx_array_gain_dbi</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code></code>[nyu_channel]   </td><td class="markdownTableBodyNone">All NyuChannelConfig fields; only applied when <code>channel_model</code> is <code>"nyu"</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code></code>[traffic]   </td><td class="markdownTableBodyNone"><code>model</code>, <code>demand_mbps</code>, <code>arrival_rate_hz</code>, <code>on_time_s</code>, <code>off_time_s</code>, <code>holding_time_s</code>, <code>flow_topology</code>, <code>random_pair_count</code>, <code>gateway_node_id</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code></code>[routing]   </td><td class="markdownTableBodyNone"><code>algorithm</code>, <code>max_hops</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code></code>[rl]   </td><td class="markdownTableBodyNone"><code>enabled</code>, <code>controlled_node_id</code>, <code>action_type</code>, <code>reward_type</code>, <code>step_size_m</code>, <code>arrival_threshold_m</code>, <code>x_min/x_max/y_min/y_max</code>   </td></tr>
+</table>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

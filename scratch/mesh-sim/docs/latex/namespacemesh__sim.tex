@@ -6,21 +6,21 @@
 struct \mbox{\hyperlink{structmesh__sim_1_1CliArgs}{Cli\+Args}}
 \begin{DoxyCompactList}\small\item\em Parsed command-\/line arguments for one simulator invocation. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader}{Config\+Loader}}
-\item 
+\begin{DoxyCompactList}\small\item\em Static factory that loads a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from disk. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}}
-\item 
+\begin{DoxyCompactList}\small\item\em Result of a \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} call. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1NyuChannelConfig}{Nyu\+Channel\+Config}}
 \begin{DoxyCompactList}\small\item\em Parameters specific to the NYU mm\+Wave channel model. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1ChannelConfig}{Channel\+Config}}
 \begin{DoxyCompactList}\small\item\em Complete radio and channel configuration for a simulation run. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1LinkResult}{Link\+Result}}
-\item 
+\begin{DoxyCompactList}\small\item\em Radio evaluation result for one directed link at one time step. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1TrafficConfig}{Traffic\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Flow-\/level traffic demand configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1RoutingConfig}{Routing\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Routing algorithm configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1MeshConfig}{Mesh\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Aggregates all mesh-\/layer configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1Position}{Position}}
 \begin{DoxyCompactList}\small\item\em Cartesian position in metres. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1Velocity}{Velocity}}
@@ -34,11 +34,11 @@ struct \mbox{\hyperlink{structmesh__sim_1_1NodeSpec}{Node\+Spec}}
 struct \mbox{\hyperlink{structmesh__sim_1_1BuildingSpec}{Building\+Spec}}
 \begin{DoxyCompactList}\small\item\em Axis-\/aligned bounding-\/box specification for one building. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1TimingInfo}{Timing\+Info}}
-\item 
+\begin{DoxyCompactList}\small\item\em Wall-\/clock timing metadata for one simulation run. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1RlConfig}{Rl\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Reinforcement-\/learning controller configuration. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}}
-\item 
+\begin{DoxyCompactList}\small\item\em Root simulation configuration aggregating all subsystem parameters. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator}{Link\+Evaluator}}
 \item 
 class \mbox{\hyperlink{classmesh__sim_1_1LinkTable}{Link\+Table}}
@@ -76,7 +76,7 @@ std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{namespacemesh__sim_accda71be
 void \mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{Archive\+Scenario\+Inputs}} (const std\+::string \&base\+\_\+output\+\_\+dir, const std\+::string \&run\+\_\+config\+\_\+path)
 \begin{DoxyCompactList}\small\item\em Copy all scenario input files into the batch output directory for reproducibility. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}} \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} (const \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \&cfg)
-\begin{DoxyCompactList}\small\item\em Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after loading. Returns all errors found (not just the first) so the user can fix them in one pass. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} for invalid or inconsistent values. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{namespacemesh__sim_af2a6f1ff9d88d47a0edc29deaa4b1a41}{Max\+Speed\+For\+Type}} (const std\+::string \&node\+\_\+type)
 \begin{DoxyCompactList}\small\item\em Return the maximum speed (m/s) allowed for a given node type. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{namespacemesh__sim_ad9ccac6586eaef254fffab3f801a7fd0}{Sinr\+To\+Mcs\+Index}} (double sinr\+\_\+db)
@@ -488,13 +488,18 @@ Description of return value.
 
 
 
-Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after loading. Returns all errors found (not just the first) so the user can fix them in one pass. 
+Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} for invalid or inconsistent values. 
+
+Intended to be called immediately after \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Config\+Loader\+::\+Load}}, before any ns-\/3 objects are constructed. All checks are independent — every rule is evaluated even if earlier ones have already failed — so the returned \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}} accumulates the full set of problems in one call.
 
 
 \begin{DoxyParams}{Parameters}
-{\em } & \\
+{\em cfg} & Fully loaded \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} to validate. \\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{Validation\+Result}} containing all errors found, or an empty error list if the config is valid. 
+\end{DoxyReturn}
 \mbox{\Hypertarget{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}\label{namespacemesh__sim_a2bb5debe49dfd3b43e6f25b3740a670e}} 
 \index{mesh\_sim@{mesh\_sim}!WriteRunLog@{WriteRunLog}}
 \index{WriteRunLog@{WriteRunLog}!mesh\_sim@{mesh\_sim}}

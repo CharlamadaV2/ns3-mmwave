@@ -75,7 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Config validation: checks a fully-loaded SimConfig for invalid or inconsistent values before the simulation runs. No ns-3 headers &ndash; can be tested independently.  
+<p>Post-load validation of a fully populated SimConfig.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="sim-config_8h_source.html">src/domain/sim-config.h</a>&quot;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -85,13 +85,13 @@ Include dependency graph for config-validator.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="config-validator_8h__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8h" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8h" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8h">
-<area shape="rect" title="Config validation: checks a fully&#45;loaded SimConfig for invalid or inconsistent values before the simu..." alt="" coords="544,5,752,61"/>
-<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="285,109,464,136"/>
+<area shape="rect" title="Post&#45;load validation of a fully populated SimConfig." alt="" coords="544,5,752,61"/>
+<area shape="rect" href="sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="285,109,464,136"/>
 <area shape="rect" title=" " alt="" coords="301,259,360,285"/>
 <area shape="rect" title=" " alt="" coords="475,259,538,285"/>
 <area shape="rect" href="channel-config_8h.html" title="Radio and channel configuration POD types." alt="" coords="24,184,154,211"/>
 <area shape="rect" title=" " alt="" coords="56,259,122,285"/>
-<area shape="rect" href="mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="178,184,293,211"/>
+<area shape="rect" href="mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing." alt="" coords="178,184,293,211"/>
 <area shape="rect" href="node-spec_8h.html" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="368,184,469,211"/>
 <area shape="rect" title=" " alt="" coords="544,184,610,211"/>
 </map>
@@ -101,7 +101,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="config-validator_8h__dep__incl.png" border="0" usemap="#a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8hdep" alt=""/></div>
 <map name="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8hdep" id="a_2home_2kimson_2ns3-mmwave_2scratch_2mesh-sim_2src_2config_2config-validator_8hdep">
-<area shape="rect" title="Config validation: checks a fully&#45;loaded SimConfig for invalid or inconsistent values before the simu..." alt="" coords="5,5,213,61"/>
+<area shape="rect" title="Post&#45;load validation of a fully populated SimConfig." alt="" coords="5,5,213,61"/>
 <area shape="rect" href="config-validator_8cc.html" title=" " alt="" coords="5,109,213,165"/>
 </map>
 </div>
@@ -111,6 +111,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1ValidationResult.html">mesh_sim::ValidationResult</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of a <a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">ValidateConfig</a> call.  <a href="structmesh__sim_1_1ValidationResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -121,11 +122,29 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a09050ff52e549176ef6ec6f11b137eea"><td class="memItemLeft" align="right" valign="top">ValidationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">mesh_sim::ValidateConfig</a> (const SimConfig &amp;cfg)</td></tr>
-<tr class="memdesc:a09050ff52e549176ef6ec6f11b137eea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> after loading. Returns all errors found (not just the first) so the user can fix them in one pass.  <a href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">More...</a><br /></td></tr>
+<tr class="memdesc:a09050ff52e549176ef6ec6f11b137eea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> for invalid or inconsistent values.  <a href="namespacemesh__sim.html#a09050ff52e549176ef6ec6f11b137eea">More...</a><br /></td></tr>
 <tr class="separator:a09050ff52e549176ef6ec6f11b137eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Config validation: checks a fully-loaded SimConfig for invalid or inconsistent values before the simulation runs. No ns-3 headers &ndash; can be tested independently. </p>
+<div class="textblock"><p>Post-load validation of a fully populated SimConfig. </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Domain   </th><th class="markdownTableHeadNone">Rules enforced    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Timing   </td><td class="markdownTableBodyNone"><code>duration_s</code> &gt; 0; <code>tick_s</code> &gt; 0; <code>tick_s</code> &lt;= <code>duration_s</code>; <code>warmup_s</code> &gt;= 0; <code>warmup_s</code> &lt; <code>duration_s</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Nodes   </td><td class="markdownTableBodyNone">At least 2 nodes; each node's <code>mobility</code> and <code>node_type</code> must be a recognised value; waypoint nodes require &gt;= 2 waypoints with strictly monotonically increasing times and a non-negative first timestamp    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Channel   </td><td class="markdownTableBodyNone"><code>frequency_ghz</code> &gt; 0; <code>bandwidth_mhz</code> &gt; 0; <code>channel_model</code> ∈ {3gpp, nyu}; <code>scenario</code> ∈ {UMi, UMa, RMa, InH, InF}; both array gains &gt;= 0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Traffic   </td><td class="markdownTableBodyNone"><code>model</code> ∈ {constant, poisson, on_off}; <code>flow_topology</code> ∈ {all_pairs, random_pairs, gateway}; <code>demand_mbps</code> &gt; 0; <code>gateway</code> topology requires a non-empty <code>gateway_node_id</code> that matches a node; <code>random_pairs</code> requires <code>random_pair_count</code> &gt; 0    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Routing   </td><td class="markdownTableBodyNone"><code>algorithm</code> ∈ {shortest_path, max_throughput, min_hop}    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RL   </td><td class="markdownTableBodyNone">(when enabled) <code>action_type</code> ∈ {discrete, continuous}; <code>reward_type</code> ∈ {throughput, mean_sinr}; <code>step_size_m</code> &gt; 0 (discrete); <code>arrival_threshold_m</code> &gt; 0 (continuous); <code>x_min</code> &lt; <code>x_max</code>; <code>y_min</code> &lt; <code>y_max</code>; <code>controlled_node_id</code> must match a node if set    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Buildings   </td><td class="markdownTableBodyNone">Each building's <code>x_min</code> &lt; <code>x_max</code>; <code>y_min</code> &lt; <code>y_max</code>; <code>z_min</code> &lt; <code>z_max</code>   </td></tr>
+</table>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

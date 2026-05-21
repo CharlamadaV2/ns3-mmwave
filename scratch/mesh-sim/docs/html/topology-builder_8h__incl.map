@@ -1,6 +1,6 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/setup/topology&#45;builder.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/setup/topology&#45;builder.h">
 <area shape="rect" id="node1" title="TopologyBuilder: creates ns&#45;3 mobility models, buildings, and propagation models for the mesh topolog..." alt="" coords="757,5,965,61"/>
-<area shape="rect" id="node2" href="$sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types. No ns&#45;3 headers included — keeps c..." alt="" coords="297,117,476,143"/>
+<area shape="rect" id="node2" href="$sim-config_8h.html" title="Top&#45;level simulation configuration and runtime metadata POD types." alt="" coords="297,117,476,143"/>
 <area shape="rect" id="node8" title=" " alt="" coords="566,273,628,300"/>
 <area shape="rect" id="node10" title=" " alt="" coords="685,109,850,151"/>
 <area shape="rect" id="node11" title=" " alt="" coords="875,117,1036,143"/>
@@ -9,7 +9,7 @@
 <area shape="rect" id="node3" href="$channel-config_8h.html" title="Radio and channel configuration POD types." alt="" coords="24,199,154,225"/>
 <area shape="rect" id="node4" title=" " alt="" coords="56,273,122,300"/>
 <area shape="rect" id="node5" title=" " alt="" coords="298,273,357,300"/>
-<area shape="rect" id="node6" href="$mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing. No ns&#45;3 headers included." alt="" coords="178,199,293,225"/>
+<area shape="rect" id="node6" href="$mesh-config_8h.html" title="Mesh&#45;specific configuration POD types: traffic generation and routing." alt="" coords="178,199,293,225"/>
 <area shape="rect" id="node7" href="$node-spec_8h.html" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="458,199,560,225"/>
 <area shape="rect" id="node9" title=" " alt="" coords="317,199,384,225"/>
 </map>

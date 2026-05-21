@@ -1,5 +1,5 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/link&#45;result.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/link&#45;result.h">
-<area shape="rect" id="node1" title="Per&#45;link evaluation result POD type. One instance per ordered pair (tx, rx) per time step...." alt="" coords="237,5,445,61"/>
+<area shape="rect" id="node1" title="Per&#45;link radio evaluation result POD type." alt="" coords="237,5,445,61"/>
 <area shape="rect" id="node2" href="$link-evaluator_8h.html" title="LinkEvaluator: wraps ns&#45;3 propagation models to compute per&#45;link path loss, SINR, and capacity...." alt="" coords="51,109,259,165"/>
 <area shape="rect" id="node4" href="$link-table_8h.html" title="LinkTable: NxN link quality matrix updated each tick. Wraps the flat output of LinkEvaluator::Evaluat..." alt="" coords="379,109,587,165"/>
 <area shape="rect" id="node10" href="$mesh-router_8h.html" title="MeshRouter: routes flows over the mesh link graph. Supports Dijkstra shortest&#45;path,..." alt="" coords="237,213,445,269"/>

@@ -74,18 +74,26 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Wall-clock timing metadata for one simulation run.  
+ <a href="structmesh__sim_1_1TimingInfo.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="sim-config_8h_source.html">sim-config.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a34fbf68a1ab72419c50d1e0c9d63d830"><td class="memItemLeft" align="right" valign="top">std::chrono::system_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TimingInfo.html#a34fbf68a1ab72419c50d1e0c9d63d830">start</a></td></tr>
+<tr class="memdesc:a34fbf68a1ab72419c50d1e0c9d63d830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wall-clock time at sim start.  <a href="structmesh__sim_1_1TimingInfo.html#a34fbf68a1ab72419c50d1e0c9d63d830">More...</a><br /></td></tr>
 <tr class="separator:a34fbf68a1ab72419c50d1e0c9d63d830"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bf122b7737c31012b2d020d7e3dfcd"><td class="memItemLeft" align="right" valign="top">std::chrono::system_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TimingInfo.html#ac6bf122b7737c31012b2d020d7e3dfcd">end</a></td></tr>
+<tr class="memdesc:ac6bf122b7737c31012b2d020d7e3dfcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wall-clock time at sim end.  <a href="structmesh__sim_1_1TimingInfo.html#ac6bf122b7737c31012b2d020d7e3dfcd">More...</a><br /></td></tr>
 <tr class="separator:ac6bf122b7737c31012b2d020d7e3dfcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24af2d1c05903868da05b9c49f17309a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmesh__sim_1_1TimingInfo.html#a24af2d1c05903868da05b9c49f17309a">elapsed_s</a> = 0.0</td></tr>
 <tr class="separator:a24af2d1c05903868da05b9c49f17309a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Wall-clock timing metadata for one simulation run. </p>
+<p>Not loaded from any configuration file. Populated by <code>sim.cc</code> immediately before and after the main step loop, then passed to <code><a class="el" href="classmesh__sim_1_1MetricsWriter.html">MetricsWriter</a></code> which converts the <code>time_point</code> values to ISO-8601 strings in the output JSON. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a24af2d1c05903868da05b9c49f17309a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a24af2d1c05903868da05b9c49f17309a">&#9670;&nbsp;</a></span>elapsed_s</h2>
 
@@ -97,6 +105,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Total wall-clock duration in seconds (<code>end</code> - <code>start</code> as a double). </p>
 
 </div>
 </div>
@@ -112,6 +121,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Wall-clock time at sim end. </p>
+
 </div>
 </div>
 <a id="a34fbf68a1ab72419c50d1e0c9d63d830"></a>
@@ -125,6 +136,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Wall-clock time at sim start. </p>
 
 </div>
 </div>

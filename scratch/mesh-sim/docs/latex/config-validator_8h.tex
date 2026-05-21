@@ -2,20 +2,22 @@
 \label{config-validator_8h}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/validator.h@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/src/config/config-\/validator.h}}
 
 
-Config validation\+: checks a fully-\/loaded Sim\+Config for invalid or inconsistent values before the simulation runs. No ns-\/3 headers -- can be tested independently.  
+Post-\/load validation of a fully populated Sim\+Config.  
 
 
 {\ttfamily \#include \char`\"{}src/domain/sim-\/config.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$string$>$}\newline
 {\ttfamily \#include $<$vector$>$}\newline
-Include dependency graph for config-\/validator.h\+:\nopagebreak
+Include dependency graph for config-\/validator.h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{config-validator_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -26,7 +28,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{mesh\+\_\+sim\+::\+Validation\+Result}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Result of a \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{Validate\+Config}} call. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
@@ -36,9 +38,27 @@ struct \mbox{\hyperlink{structmesh__sim_1_1ValidationResult}{mesh\+\_\+sim\+::\+
 \begin{DoxyCompactItemize}
 \item 
 Validation\+Result \mbox{\hyperlink{namespacemesh__sim_a09050ff52e549176ef6ec6f11b137eea}{mesh\+\_\+sim\+::\+Validate\+Config}} (const Sim\+Config \&cfg)
-\begin{DoxyCompactList}\small\item\em Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} after loading. Returns all errors found (not just the first) so the user can fix them in one pass. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Validate a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} for invalid or inconsistent values. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Config validation\+: checks a fully-\/loaded Sim\+Config for invalid or inconsistent values before the simulation runs. No ns-\/3 headers -- can be tested independently. 
+Post-\/load validation of a fully populated Sim\+Config. 
 
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Domain   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Rules enforced    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Domain   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Rules enforced    }\\\cline{1-2}
+\endhead
+Timing   &{\ttfamily duration\+\_\+s} $>$ 0; {\ttfamily tick\+\_\+s} $>$ 0; {\ttfamily tick\+\_\+s} $<$= {\ttfamily duration\+\_\+s}; {\ttfamily warmup\+\_\+s} $>$= 0; {\ttfamily warmup\+\_\+s} $<$ {\ttfamily duration\+\_\+s}    \\\cline{1-2}
+Nodes   &At least 2 nodes; each node\textquotesingle{}s {\ttfamily mobility} and {\ttfamily node\+\_\+type} must be a recognised value; waypoint nodes require $>$= 2 waypoints with strictly monotonically increasing times and a non-\/negative first timestamp    \\\cline{1-2}
+Channel   &{\ttfamily frequency\+\_\+ghz} $>$ 0; {\ttfamily bandwidth\+\_\+mhz} $>$ 0; {\ttfamily channel\+\_\+model} ∈ \{3gpp, nyu\}; {\ttfamily scenario} ∈ \{UMi, UMa, RMa, InH, InF\}; both array gains $>$= 0    \\\cline{1-2}
+Traffic   &{\ttfamily model} ∈ \{constant, poisson, on\+\_\+off\}; {\ttfamily flow\+\_\+topology} ∈ \{all\+\_\+pairs, random\+\_\+pairs, gateway\}; {\ttfamily demand\+\_\+mbps} $>$ 0; {\ttfamily gateway} topology requires a non-\/empty {\ttfamily gateway\+\_\+node\+\_\+id} that matches a node; {\ttfamily random\+\_\+pairs} requires {\ttfamily random\+\_\+pair\+\_\+count} $>$ 0    \\\cline{1-2}
+Routing   &{\ttfamily algorithm} ∈ \{shortest\+\_\+path, max\+\_\+throughput, min\+\_\+hop\}    \\\cline{1-2}
+RL   &(when enabled) {\ttfamily action\+\_\+type} ∈ \{discrete, continuous\}; {\ttfamily reward\+\_\+type} ∈ \{throughput, mean\+\_\+sinr\}; {\ttfamily step\+\_\+size\+\_\+m} $>$ 0 (discrete); {\ttfamily arrival\+\_\+threshold\+\_\+m} $>$ 0 (continuous); {\ttfamily x\+\_\+min} $<$ {\ttfamily x\+\_\+max}; {\ttfamily y\+\_\+min} $<$ {\ttfamily y\+\_\+max}; {\ttfamily controlled\+\_\+node\+\_\+id} must match a node if set    \\\cline{1-2}
+Buildings   &Each building\textquotesingle{}s {\ttfamily x\+\_\+min} $<$ {\ttfamily x\+\_\+max}; {\ttfamily y\+\_\+min} $<$ {\ttfamily y\+\_\+max}; {\ttfamily z\+\_\+min} $<$ {\ttfamily z\+\_\+max}   \\\cline{1-2}
+\end{longtabu}

@@ -74,15 +74,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Static factory that loads a complete <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from disk.  
+ <a href="classmesh__sim_1_1ConfigLoader.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="config-loader_8h_source.html">config-loader.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af4aedd6c4bb1368e4ac53e7483b19809"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">Load</a> (const std::string &amp;run_config_path, const std::string &amp;positions_override_path=&quot;&quot;)</td></tr>
-<tr class="memdesc:af4aedd6c4bb1368e4ac53e7483b19809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a complete <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from a run.ini file.  <a href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">More...</a><br /></td></tr>
+<tr class="memdesc:af4aedd6c4bb1368e4ac53e7483b19809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from a <code>run.ini</code> file and its referenced assets.  <a href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">More...</a><br /></td></tr>
 <tr class="separator:af4aedd6c4bb1368e4ac53e7483b19809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Static factory that loads a complete <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from disk. </p>
+<p>The class has no state — all functionality is exposed through the single static method <a class="el" href="classmesh__sim_1_1ConfigLoader.html#af4aedd6c4bb1368e4ac53e7483b19809">Load</a>. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af4aedd6c4bb1368e4ac53e7483b19809"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af4aedd6c4bb1368e4ac53e7483b19809">&#9670;&nbsp;</a></span>Load()</h2>
 
@@ -117,11 +123,18 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Load a complete <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from a run.ini file. </p>
+<p>Load a <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> from a <code>run.ini</code> file and its referenced assets. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">run_config_path</td><td>Path to run.ini (required). </td></tr>
-    <tr><td class="paramname">positions_override_path</td><td>Optional path to positions_override.json. If non-empty, the positions of matching node IDs are overwritten after loading nodes.json. All other node fields are unchanged. This is the RL extension point. </td></tr>
+    <tr><td class="paramname">run_config_path</td><td>Path to the <code>run.ini</code> file (required). </td></tr>
+    <tr><td class="paramname">positions_override_path</td><td>Optional path to a positions-override JSON file. Positions are applied after <code>nodes.json</code> is loaded. Pass an empty string (the default) to skip. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Fully populated <a class="el" href="structmesh__sim_1_1SimConfig.html">SimConfig</a> ready for validation and use. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>If <code>channel_model</code> is neither <code>"3gpp"</code> nor <code>"nyu"</code>; if <code>nodes.json</code> cannot be opened; if a <code>buildings_file</code> is specified but cannot be opened; or if <code>positions_override_path</code> is non-empty but the file cannot be opened. </td></tr>
   </table>
   </dd>
 </dl>

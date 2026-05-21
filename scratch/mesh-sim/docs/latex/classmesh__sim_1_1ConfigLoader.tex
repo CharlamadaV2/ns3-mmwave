@@ -2,14 +2,24 @@
 \label{classmesh__sim_1_1ConfigLoader}\index{mesh\_sim::ConfigLoader@{mesh\_sim::ConfigLoader}}
 
 
+Static factory that loads a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from disk.  
+
+
+
+
 {\ttfamily \#include $<$config-\/loader.\+h$>$}
 
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 static \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Load}} (const std\+::string \&run\+\_\+config\+\_\+path, const std\+::string \&positions\+\_\+override\+\_\+path=\char`\"{}\char`\"{})
-\begin{DoxyCompactList}\small\item\em Load a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from a run.\+ini file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Load a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from a {\ttfamily run.\+ini} file and its referenced assets. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+Static factory that loads a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from disk. 
+
+The class has no state — all functionality is exposed through the single static method \mbox{\hyperlink{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}{Load}}. 
 
 \doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}\label{classmesh__sim_1_1ConfigLoader_af4aedd6c4bb1368e4ac53e7483b19809}} 
@@ -20,15 +30,23 @@ static \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} \mbox{\hyper
 
 
 
-Load a complete \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from a run.\+ini file. 
+Load a \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} from a {\ttfamily run.\+ini} file and its referenced assets. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em run\+\_\+config\+\_\+path} & Path to run.\+ini (required). \\
+{\em run\+\_\+config\+\_\+path} & Path to the {\ttfamily run.\+ini} file (required). \\
 \hline
-{\em positions\+\_\+override\+\_\+path} & Optional path to positions\+\_\+override.\+json. If non-\/empty, the positions of matching node IDs are overwritten after loading nodes.\+json. All other node fields are unchanged. This is the RL extension point. \\
+{\em positions\+\_\+override\+\_\+path} & Optional path to a positions-\/override JSON file. Positions are applied after {\ttfamily nodes.\+json} is loaded. Pass an empty string (the default) to skip. \\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Fully populated \mbox{\hyperlink{structmesh__sim_1_1SimConfig}{Sim\+Config}} ready for validation and use. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & If {\ttfamily channel\+\_\+model} is neither {\ttfamily \char`\"{}3gpp\char`\"{}} nor {\ttfamily \char`\"{}nyu\char`\"{}}; if {\ttfamily nodes.\+json} cannot be opened; if a {\ttfamily buildings\+\_\+file} is specified but cannot be opened; or if {\ttfamily positions\+\_\+override\+\_\+path} is non-\/empty but the file cannot be opened. \\
+\hline
+\end{DoxyExceptions}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
