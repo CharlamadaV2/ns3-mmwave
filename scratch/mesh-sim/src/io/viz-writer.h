@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file viz-writer.h
+ * @brief
  * VizWriter: writes per-tick CSV snapshots for GUI and plotting consumption.
  * Called from the step loop at viz_tick_ms intervals.
  *

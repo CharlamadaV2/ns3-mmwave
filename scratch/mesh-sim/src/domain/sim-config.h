@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file sim-config.h
+ * @brief
  * Top-level simulation configuration and runtime metadata POD types.
  * No ns-3 headers included — keeps compilation fast and allows use in
  * post-run IO code without ns-3 linkage.

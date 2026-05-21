@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file string-utils.cc */
+
 #include "src/util/string-utils.h"
 
 #include <chrono>

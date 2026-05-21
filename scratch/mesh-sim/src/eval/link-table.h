@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file link-table.h
+ * @brief
  * LinkTable: NxN link quality matrix updated each tick.
  * Wraps the flat output of LinkEvaluator::EvaluateAll() into
  * a symmetric matrix with O(1) per-link lookup.

@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file link-evaluator.h
+ * @brief
  * LinkEvaluator: wraps ns-3 propagation models to compute per-link
  * path loss, SINR, and capacity.  Core physics engine of mesh-sim.
  */

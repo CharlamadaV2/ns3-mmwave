@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file metrics-writer.cc*/
+
 #include "src/io/metrics-writer.h"
 #include "src/util/string-utils.h"
 #include "third_party/json.hpp"

@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file mesh-config.h
+ * @brief
  * Mesh-specific configuration POD types: traffic generation and routing.
  * No ns-3 headers included.
  */

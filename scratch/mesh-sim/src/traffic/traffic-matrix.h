@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/**  @file traffic-matrix.h
+ * @brief
  * TrafficMatrix: flow-level traffic demand generation for the mesh.
  * Supports constant-rate, Poisson arrival, and on-off (bursty) models.
  * No packets -- just "node A wants X Mbps to node B."

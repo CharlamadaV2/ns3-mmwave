@@ -1,4 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file string-utils.h
+ * 
+ * 
+ * 
+*/
+
 #pragma once
 
 #include <chrono>

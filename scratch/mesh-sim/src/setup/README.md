@@ -1,12 +1,12 @@
-\dir src/setup
 # src/setup
 
 ## Output
 
 ## Module Layout
-```
-src/setup/
-```
+| File Name | Description |
+| -- | -- |
+@ref topology-builder.h "topology-builder.h" | filler
+@ref topology-builder.cc "topology-builder.cc" | filler
 
 ## Conventions 
 

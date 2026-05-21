@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file cli-parser.cc */ 
+
 
 #include "src/cli/cli-parser.h"
 #include "src/util/string-utils.h"

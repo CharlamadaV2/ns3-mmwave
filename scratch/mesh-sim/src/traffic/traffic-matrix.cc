@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file traffic-matrix.cc*/
+
 #include "src/traffic/traffic-matrix.h"
 
 #include "ns3/double.h"

@@ -1,14 +1,12 @@
-\dir src/traffic
 # src/traffic
 
 ## Output
 
 ## Module Layout
-```
-src/traffic/
-    -
-    -
-```
+| File Name | Description |
+| -- | -- |
+@ref traffic-matrix.h "traffic-matrix.h" | filler
+@ref traffic-matrix.cc "traffic-matrix.cc" | filler
 
 ## Conventions 
 

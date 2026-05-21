@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file progress-logger.h
+ * @brief
  * ProgressLogger: prints simulation progress to stderr.
  * Called directly from the step loop (no Simulator::Schedule).
  * Header-only.

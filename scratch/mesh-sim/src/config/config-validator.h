@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file config-validator.h
+ * @brief
  * Config validation: checks a fully-loaded SimConfig for invalid
  * or inconsistent values before the simulation runs.
  * No ns-3 headers -- can be tested independently.

@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file topology-builder.h
+ * @brief
  * TopologyBuilder: creates ns-3 mobility models, buildings, and propagation
  * models for the mesh topology.  This is the only layer that creates ns-3
  * objects.  No EPC, RRC, MAC, or protocol stack.

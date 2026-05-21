@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file topology-builder.cc*/
+
 #include "src/setup/topology-builder.h"
 
 #include "ns3/boolean.h"

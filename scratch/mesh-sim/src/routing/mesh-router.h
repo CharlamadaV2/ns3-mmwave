@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file mesh-router.h
+ * @brief
  * MeshRouter: routes flows over the mesh link graph.
  * Supports Dijkstra shortest-path, widest-path (max throughput),
  * and min-hop (BFS) algorithms. Applies proportional-fairness

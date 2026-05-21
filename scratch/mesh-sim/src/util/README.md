@@ -1,17 +1,14 @@
-\dir src/util
 # src/util
 
 ## Output
 
 ## Module Layout
-```
-src/util/
-    -
-    -
-    -
-    -
-    
-```
+| File Name | Description |
+| -- | -- |
+@ref ini-parser.h "ini-parser.h"|  filler
+@ref ini-parser.cc "ini-parser.cc"| filler
+@ref string-utils.h "string-utils.h"| filler
+@ref string-utils.cc "string-utils.cc"| filler
 
 ## Conventions 
 

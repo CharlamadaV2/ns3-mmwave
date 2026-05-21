@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file run-logger.h
+ * @brief
  * RunLogger: writes a run.log capturing seeds, CLI overrides, and resolved
  * config for reproducibility.  Header-only (same pattern as progress-logger.h).
  * No ns-3 dependency.

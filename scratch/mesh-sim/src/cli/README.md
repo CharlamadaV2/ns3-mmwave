@@ -43,11 +43,10 @@ exactly.
 
 ## Module Layout
 
-```
-src/cli/
-  cli-parser.h   # CliArgs struct + three public function declarations
-  cli-parser.cc  # implementations; the only file in src/ that includes ns3/command-line.h
-```
+| File Name | Description |
+| -- | -- |
+ @ref cli-parser.h "cli-parser.h"   | CliArgs struct + three public function declarations
+ @ref cli-parser.cc "cli-parser.cc"  | implementations; the only file in src/ that includes ns3/command-line.h
 
 ## Conventions
 

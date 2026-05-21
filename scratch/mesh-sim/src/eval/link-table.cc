@@ -1,4 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+
+/** @file link-table.cc*/
+
 #include "src/eval/link-table.h"
 
 #include "ns3/log.h"

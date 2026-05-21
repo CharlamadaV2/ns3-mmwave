@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @brief
+/** @file metrics-writer.h
+ * @brief
  * MetricsWriter: accumulates per-tick metrics in-memory during the step loop,
  * then writes summary.json after the simulation completes.
  *

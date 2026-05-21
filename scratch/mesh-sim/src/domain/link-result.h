@@ -1,6 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @brief
+/** @file link-result.h
+ * @brief
  * Per-link evaluation result POD type.
  * One instance per ordered pair (tx, rx) per time step.
  * No ns-3 headers included.

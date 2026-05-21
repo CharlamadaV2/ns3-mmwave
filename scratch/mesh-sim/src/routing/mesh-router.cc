@@ -1,4 +1,5 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file mesh-router.cc */
 
 #include "src/routing/mesh-router.h"
 
