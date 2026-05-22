@@ -34,7 +34,7 @@ python -m scripts.sweep.cli --config inputs/custom/sherpa/1.1/sweep.ini
 ```
 
 ## Documentation
-The documentation of this module is available at ```file:///C:/Users/[Your Name]/[Repository File Path]/ns3-mmwave/scratch/mesh-sim/docs/html/index.html```
+The documentation of this module is available at @c file:///C:/Users/[Your Name]/[Repository File Path]/ns3-mmwave/scratch/mesh-sim/docs/html/index.html  
 This link is accessable through your favorite brower.
 
 ## About

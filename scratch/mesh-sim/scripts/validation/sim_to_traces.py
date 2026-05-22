@@ -6,9 +6,6 @@
 # reshapes those wide outputs into the narrow per-link trace format expected
 # by the field-data pipeline:
 #
-# @code
-# sim_traces/<seed>/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv
-# @endcode
 #
 # Each trace CSV has the same column layout as the field trace CSVs produced
 # by ``arpo_data.cli plot``, enabling @ref compare to treat sim and field

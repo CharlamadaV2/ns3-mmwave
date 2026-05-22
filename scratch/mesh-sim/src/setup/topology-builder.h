@@ -9,17 +9,6 @@
  * accessor methods and operate entirely through the domain types defined
  * in @c src/domain/. No EPC, RRC, MAC, or protocol stack is created.
  *
- * **Build sequence**
- * @code
- * TopologyBuilder builder(cfg);
- * builder.Build();   // must be called before any accessor
- *
- * auto mobs    = builder.GetMobilityModels();   // one per cfg.nodes entry
- * auto plModel = builder.GetPropagationModel();
- * auto ccModel = builder.GetConditionModel();
- *
- * evaluator.Configure(cfg, plModel, ccModel);
- * @endcode
  *
  * **Mobility models**
  *

@@ -12,12 +12,6 @@
 # centroid. The sim uses its own metre-based XY plane. Alignment is done by
 # computing the mean field position of the anchor node and translating so
 # that it coincides with the anchor's position in ``nodes.json``.
-#
-# **Typical usage**
-# @code
-# python -m scripts.sim.build_waypoints arpo-1-1-static-04172026 --dry-run
-# python -m scripts.sim.build_waypoints --all --time-mode scale
-# @endcode
 
 from __future__ import annotations
 

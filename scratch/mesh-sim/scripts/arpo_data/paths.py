@@ -43,13 +43,6 @@ KNOWN_BAD_SCENARIOS: tuple[str, ...] = (
 # Frozen so it can be used as a dict key or placed in a set. Construct a
 # custom instance to point at a different zip/extract tree without touching
 # any module-level state.
-#
-# @code
-# custom = DatasetPaths(
-#     zip_path=Path("/mnt/data/other_bundle.zip"),
-#     extract_dir=Path("/mnt/data/other_extracted"),
-# )
-# @endcode
 @dataclass(frozen=True)
 class DatasetPaths:
 

@@ -17,9 +17,6 @@
 # | ``__peer__``  | str              | Peer label resolved via topology (bh2 only).|
 # | ``__lat__``   | float            | Latitude in decimal degrees (GPS only).     |
 # | ``__lon__``   | float            | Longitude in decimal degrees (GPS only).    |
-#
-# All public loaders return ``DataFrame | None``; ``None`` means no usable
-# data was found for this scenario.
 
 from pathlib import Path
 
@@ -60,13 +57,6 @@ def session_relative_seconds(df: pd.DataFrame) -> pd.Series:
 # Backhaul-2 (bh2) logs contain per-link radio metrics sampled at the
 # driver level: SNR, RCPI, MCS (TX/RX), byte counters, PER, and AGC.
 #
-# Steps performed:
-# -# Discover all node subdirectories (skipping ``sdwan``).
-# -# Coerce all numeric field columns with ``errors="coerce"`` so bad rows
-#    become NaN rather than causing type errors downstream.
-# -# Resolve peer MACs to human-readable labels via @ref build_topology.
-# -# Add ``__sec__`` via @ref session_relative_seconds.
-# -# Store the topology map in ``df.attrs["topology"]`` for plot functions.
 #
 # @param scen_dir Path to the scenario directory (contains one subdir per node).
 # @return Concatenated DataFrame, or ``None`` if no ``bh2.csv`` files were found.

@@ -85,12 +85,6 @@ python -m scripts.validation.run_batch --auto-waypoints
 | `sim_to_traces` | `outputs/.../<scenario>/sim_traces/seed-N/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv` |
 | `compare` | `outputs/.../<scenario>/validation/pngs/<src>/ecdf_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
 
-Each ECDF figure plots the sim curve with a shaded pointwise bootstrap CI
-band (default 90%, B=1000) and the field curve as a single step line. The
-K-S statistic, asymptotic p-value, and |Δmedians| are annotated in the
-subtitle. The summary CSV has one row per (scenario, link, metric) with
-medians, IQRs, sample counts, and K-S.
-
 
 ## Module layout
 

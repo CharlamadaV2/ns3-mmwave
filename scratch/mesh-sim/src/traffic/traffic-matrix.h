@@ -7,16 +7,6 @@
  * them each tick according to the configured traffic model. There are no
  * packets — a flow simply represents "node A wants X Mbps to node B."
  *
- * **Lifecycle**
- * @code
- * TrafficMatrix tm(cfg);
- * tm.Initialize(numNodes, 0.0);   // once, before the step loop
- *
- * // each tick, before routing:
- * tm.Tick(currentTime);
- * auto& flows = tm.GetActiveFlows();
- * auto results = router.Route(links, flows, numNodes);
- * @endcode
  *
  * **Traffic models**
  *

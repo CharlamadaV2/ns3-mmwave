@@ -26,8 +26,6 @@ namespace mesh_sim
 /**
  * @brief Static factory that loads a complete @ref SimConfig from disk.
  *
- * The class has no state — all functionality is exposed through the single
- * static method @ref Load.
  */
 class ConfigLoader
 {

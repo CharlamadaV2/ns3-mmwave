@@ -1,4 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
+/** @file sim
+*/
 
 #include "src/cli/cli-parser.h"
 #include "src/config/config-loader.h"
@@ -128,7 +130,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         auto wallStart = std::chrono::system_clock::now();
 
         // Build topology (ns-3 nodes, mobility, propagation models)
-       mesh_sim::TopologyBuilder topo(cfg);
+        mesh_sim::TopologyBuilder topo(cfg);
         topo.Build();
         auto mobs = topo.GetMobilityModels();
         uint32_t N = static_cast<uint32_t>(mobs.size());

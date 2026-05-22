@@ -1,16 +1,16 @@
 # src/cli
 
-Command-line parsing and pre-simulation setup for mesh-sim.
-This module keeps `sim.cc` focused on orchestration by isolating argument
-handling, seed resolution, and input archiving into standalone functions
-with no ns-3 types in their public signatures (except `ns3::CommandLine`
-inside the `.cc`).
+@brief Command-line parsing and pre-simulation setup for mesh-sim.  
+
+This module contains `sim.cc` argument handling, seed resolution, 
+and input archiving into standalone functions with no ns-3 types in 
+their public signatures (except `ns3::CommandLine`inside the `.cc`).
 
 ## Flags
 
 | Flag | Required | Default | Description |
 |------|----------|---------|-------------|
-| `--run-config=<path>` | **yes** | — | Path to `run.ini` for the scenario. |
+| `--run-config=<path>` | yes | — | Path to `run.ini` for the scenario. |
 | `--seeds=<list>` | no | `run.ini` value | Comma-separated seed list. Each seed runs as an independent simulation with its own output subdirectory. |
 | `--seed=<int>` | no | `run.ini` value | Single-seed override. Ignored when `--seeds` is also set. |
 | `--run-id=<int>` | no | `run.ini` value | Override `run_id` metadata written to output files. |
@@ -50,9 +50,6 @@ exactly.
 
 ## Conventions
 
-- **No ns-3 types in the public API.** `cli-parser.h` is included by `sim.cc`
-  but its declarations use only standard-library types, keeping downstream
-  code (validators, loaders, tests) free of ns-3 build dependencies.
 - **Hard exits on bad input.** `ParseCommandLine` and `ResolveSeeds` call
   `std::exit(1)` with a message to `stderr` rather than throwing.  This
   matches ns-3 convention for fatal startup errors and means `sim.cc` never

@@ -1,5 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /** @file config-loader.cc */
+
 #include "src/config/config-loader.h"
 #include "src/util/ini-parser.h"
 #include "src/util/string-utils.h"

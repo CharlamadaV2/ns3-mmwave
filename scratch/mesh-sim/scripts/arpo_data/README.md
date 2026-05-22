@@ -66,6 +66,7 @@ and `_pairwise_ks.csv`.
 - Loaders return `pd.DataFrame | None`.
 - Node clocks are skewed -- comparisons use `__sec__` (session-relative),
   not raw UTC.
+- Comments will be using Doxygen style (## or ##<) to enable special commands (@).
 
 ## Dependencies
 

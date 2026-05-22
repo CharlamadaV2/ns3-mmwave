@@ -1,6 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @file config-validator.cc*/
+/** @file config-validator.cc */
 
 
 #include "src/config/config-validator.h"

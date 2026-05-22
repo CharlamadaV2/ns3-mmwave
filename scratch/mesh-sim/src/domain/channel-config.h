@@ -58,7 +58,7 @@ struct NyuChannelConfig
 };
 
 /**
- * @brief Complete radio and channel configuration for a simulation run.
+ * @brief Complete radio and channel configuration for simulation run.
  *
  * Parameters shared between the 3GPP and NYU models are at the top level.
  * NYU-specific parameters live in the @ref nyu sub-struct.
