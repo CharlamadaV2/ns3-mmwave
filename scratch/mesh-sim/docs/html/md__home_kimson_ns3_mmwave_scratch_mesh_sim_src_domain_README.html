@@ -66,29 +66,34 @@ $(function() {
 <div class="title">src/domain </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md26"></a>
-Output</h1>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<div class="textblock"><p>Configuration header to be by <a class="el" href="config-loader_8cc.html">config-loader.cc</a>. <br  />
+</p>
+<p>The domain folder contains the configuration for classes and objects used in the simulation. The <a class="el" href="sim-config_8h.html">sim-config.h</a> is contains main config struct which defines the variables and objects configurations inside the simulation.</p>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="channel-config_8h.html">channel-config.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="channel-config_8h.html">channel-config.h</a>   </td><td class="markdownTableBodyNone">Radio config for model selection and propogation variables.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="link-result_8h.html">link-result.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="link-result_8h.html">link-result.h</a>   </td><td class="markdownTableBodyNone">Snapshot of the radio conditions.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="mesh-config_8h.html">mesh-config.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="mesh-config_8h.html">mesh-config.h</a>   </td><td class="markdownTableBodyNone">Traffic generation and routing algorithm config.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="node-spec_8h.html">node-spec.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="node-spec_8h.html">node-spec.h</a>   </td><td class="markdownTableBodyNone">Config for node positioning, velocity, and mobility models.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="sim-config_8h.html">sim-config.h</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="sim-config_8h.html">sim-config.h</a>   </td><td class="markdownTableBodyNone">Root config struct. Aggregates everything below it plus runtime metadata.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<ul>
+<li>Declare config structs inside sim-config, while defining their parameters in their respective header.</li>
+<li>Comment convention will enforce JavaDoc like styling (/** */).</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Dependencies</h1>
-<p>no dependencies </p>
+<p>No dependencies </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

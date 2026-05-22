@@ -103,12 +103,8 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock"><p>Scenario names whose CSVs are known to be contaminated or partial. </p>
 <p>For example, the collection process crashed mid-run and wrote malformed JSONL. These are silently skipped during multi-day aggregation.</p>
 <p>Locations and filename conventions for one ARPO-style dataset.</p>
-<p>Frozen so it can be used as a dict key or placed in a set. Construct a custom instance to point at a different zip/extract tree without touching any module-level state.</p>
-<div class="fragment"><div class="line">custom = DatasetPaths(</div>
-<div class="line">    zip_path=Path(<span class="stringliteral">&quot;/mnt/data/other_bundle.zip&quot;</span>),</div>
-<div class="line">    extract_dir=Path(<span class="stringliteral">&quot;/mnt/data/other_extracted&quot;</span>),</div>
-<div class="line">)</div>
-</div><!-- fragment --> </div><h2 class="groupheader">Member Function Documentation</h2>
+<p>Frozen so it can be used as a dict key or placed in a set. Construct a custom instance to point at a different zip/extract tree without touching any module-level state. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5f26bbd84495a5df1109335d3ed2ae92"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f26bbd84495a5df1109335d3ed2ae92">&#9670;&nbsp;</a></span>csv_root()</h2>
 

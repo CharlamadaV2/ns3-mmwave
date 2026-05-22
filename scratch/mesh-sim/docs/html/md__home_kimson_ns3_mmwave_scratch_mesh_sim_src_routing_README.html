@@ -66,22 +66,32 @@ $(function() {
 <div class="title">src/routing </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md41"></a>
+<div class="textblock"><p>Files for network routing protocols based on simulation config <br  />
+</p>
+<p>Flow-level network routing for the mesh simulation. Given the current link quality matrix and a set of active traffic demands, finds a path for each flow and returns the delivered throughput after congestion scaling.</p>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md42"></a>
+<p>The routing module produces result of route flows over the mesh.</p>
+<h1><a class="anchor" id="autotoc_md41"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="mesh-router_8h.html">mesh-router.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="mesh-router_8h.html">mesh-router.h</a>   </td><td class="markdownTableBodyNone">FlowResult struct and MeshRouter class declaration.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="mesh-router_8cc.html">mesh-router.cc</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="mesh-router_8cc.html">mesh-router.cc</a>   </td><td class="markdownTableBodyNone">Path-finding algorithms, congestion scaling, and latency model.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md43"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md44"></a>
+<ul>
+<li>Flow-level only. There are no packets, queues, or transmission delays</li>
+<li>max_hops = 0 means unlimited. Any positive value discards paths that exceed it, leaving the flow unroutable rather than using a longer path.</li>
+<li>Comment convention will enforce JavaDoc like styling (/** */).</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md43"></a>
 Dependencies</h1>
+<p>No dependencies </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

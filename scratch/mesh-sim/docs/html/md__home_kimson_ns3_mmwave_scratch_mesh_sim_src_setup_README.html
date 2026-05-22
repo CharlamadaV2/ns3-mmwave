@@ -66,23 +66,31 @@ $(function() {
 <div class="title">src/setup </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md46"></a>
+<div class="textblock"><p>Files for generating buildings, nodes, and propogration model. <br  />
+</p>
+<p>Based on parameters and <a class="el" href="sim-config_8h.html">simulation config</a>, the topology builder constructs ns-3 nodes, mobility models, propagration models, and buildings accordingly.</p>
+<h1><a class="anchor" id="autotoc_md45"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<p>When sim config is passed in parameter, topology data structure is generated.</p>
+<h1><a class="anchor" id="autotoc_md46"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="topology-builder_8h.html">topology-builder.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="topology-builder_8h.html">topology-builder.h</a>   </td><td class="markdownTableBodyNone">Contains information on function and class behavior.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="topology-builder_8cc.html">topology-builder.cc</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="topology-builder_8cc.html">topology-builder.cc</a>   </td><td class="markdownTableBodyNone">Logic of how Topology builder interacts with simulation config.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<ul>
+<li>Have topology-builder behaviors be based on sim configuration.</li>
+<li>Comment convention will enforce JavaDoc like styling (/** */).</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md48"></a>
 Dependencies</h1>
-<p>no dependencies </p>
+<p>No dependencies </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

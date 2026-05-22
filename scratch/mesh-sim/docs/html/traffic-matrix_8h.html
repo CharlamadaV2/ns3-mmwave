@@ -132,14 +132,7 @@ Namespaces</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Flow-level traffic demand generation for the mesh. </p>
 <p>TrafficMatrix maintains a list of Flow objects and updates them each tick according to the configured traffic model. There are no packets — a flow simply represents "node A wants X Mbps to node B."</p>
-<p><b>Lifecycle</b> </p><div class="fragment"><div class="line">TrafficMatrix tm(cfg);</div>
-<div class="line">tm.Initialize(numNodes, 0.0);   <span class="comment">// once, before the step loop</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// each tick, before routing:</span></div>
-<div class="line">tm.Tick(currentTime);</div>
-<div class="line"><span class="keyword">auto</span>&amp; flows = tm.GetActiveFlows();</div>
-<div class="line"><span class="keyword">auto</span> results = router.Route(links, flows, numNodes);</div>
-</div><!-- fragment --><p><b>Traffic models</b></p>
+<p><b>Traffic models</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"><code>model</code>   </th><th class="markdownTableHeadNone">Flow creation   </th><th class="markdownTableHeadNone">Per-tick update    </th></tr>

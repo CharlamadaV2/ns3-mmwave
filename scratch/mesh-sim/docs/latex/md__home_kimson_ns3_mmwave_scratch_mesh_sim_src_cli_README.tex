@@ -1,4 +1,7 @@
-Command-\/line parsing and pre-\/simulation setup for mesh-\/sim. This module keeps {\ttfamily sim.\+cc} focused on orchestration by isolating argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line} inside the {\ttfamily .cc}).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}{}\doxysection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}
+Command-\/line parsing and pre-\/simulation setup for mesh-\/sim. ~\newline
+
+
+This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line}inside the {\ttfamily .cc}).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}{}\doxysection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
 \hline
@@ -9,7 +12,7 @@ Command-\/line parsing and pre-\/simulation setup for mesh-\/sim. This module ke
 \hline
 \PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Flag   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Required   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-4}
 \endhead
-{\ttfamily -\/-\/run-\/config=$<$path$>$}   &{\bfseries{yes}}   &—   &Path to {\ttfamily run.\+ini} for the scenario.    \\\cline{1-4}
+{\ttfamily -\/-\/run-\/config=$<$path$>$}   &yes   &—   &Path to {\ttfamily run.\+ini} for the scenario.    \\\cline{1-4}
 {\ttfamily -\/-\/seeds=$<$list$>$}   &no   &{\ttfamily run.\+ini} value   &Comma-\/separated seed list. Each seed runs as an independent simulation with its own output subdirectory.    \\\cline{1-4}
 {\ttfamily -\/-\/seed=$<$int$>$}   &no   &{\ttfamily run.\+ini} value   &Single-\/seed override. Ignored when {\ttfamily -\/-\/seeds} is also set.    \\\cline{1-4}
 {\ttfamily -\/-\/run-\/id=$<$int$>$}   &no   &{\ttfamily run.\+ini} value   &Override {\ttfamily run\+\_\+id} metadata written to output files.    \\\cline{1-4}
@@ -53,7 +56,6 @@ The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+In
 \hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md18}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md18}
 
 \begin{DoxyItemize}
-\item {\bfseries{No ns-\/3 types in the public API.}} {\ttfamily \mbox{\hyperlink{cli-parser_8h}{cli-\/parser.\+h}}} is included by {\ttfamily sim.\+cc} but its declarations use only standard-\/library types, keeping downstream code (validators, loaders, tests) free of ns-\/3 build dependencies.
 \item {\bfseries{Hard exits on bad input.}} {\ttfamily Parse\+Command\+Line} and {\ttfamily Resolve\+Seeds} call {\ttfamily std\+::exit(1)} with a message to {\ttfamily stderr} rather than throwing. This matches ns-\/3 convention for fatal startup errors and means {\ttfamily sim.\+cc} never needs to handle missing-\/flag cases.
 \item {\bfseries{Overwrite-\/safe archiving.}} {\ttfamily Archive\+Scenario\+Inputs} uses {\ttfamily copy\+\_\+options\+::overwrite\+\_\+existing} so re-\/running into the same output directory is safe.
 \end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md19}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md19}

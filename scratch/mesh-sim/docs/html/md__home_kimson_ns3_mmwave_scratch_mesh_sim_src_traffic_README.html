@@ -66,23 +66,32 @@ $(function() {
 <div class="title">src/traffic </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md51"></a>
+<div class="textblock"><p>Component for generating network traffic flow per tick for simulation <br  />
+</p>
+<p>The traffic matrix advances the flow population each tick according to the configured model and hands the current list to the routing layer.</p>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<p>Returns vector of active flows per tick in simulation.</p>
+<h1><a class="anchor" id="autotoc_md51"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="traffic-matrix_8h.html">traffic-matrix.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="traffic-matrix_8h.html">traffic-matrix.h</a>   </td><td class="markdownTableBodyNone">Flow struct and TrafficMatrix class declaration.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="traffic-matrix_8cc.html">traffic-matrix.cc</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="traffic-matrix_8cc.html">traffic-matrix.cc</a>   </td><td class="markdownTableBodyNone">Traffic model logic: initialisation, per-tick update, Poisson generation, on-off state machine.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md52"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<ul>
+<li>Traffic patterns are deterministic for a given seed — the same seed always produces the same flow arrivals, random pairs, and on-off phase durations.</li>
+<li>Updates the</li>
+<li>Purely tracking the traffic flow between two nodes.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md53"></a>
 Dependencies</h1>
-<p>no dependencies </p>
+<p>No dependencies </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

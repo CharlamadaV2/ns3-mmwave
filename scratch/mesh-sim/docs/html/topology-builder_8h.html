@@ -128,15 +128,7 @@ Namespaces</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Creates ns-3 mobility models, buildings, and propagation models for the mesh topology. </p>
 <p>TopologyBuilder is the <b>only layer in mesh-sim that creates ns-3 objects</b>. All other subsystems receive the resulting pointers via the accessor methods and operate entirely through the domain types defined in <code>src/domain/</code>. No EPC, RRC, MAC, or protocol stack is created.</p>
-<p><b>Build sequence</b> </p><div class="fragment"><div class="line">TopologyBuilder builder(cfg);</div>
-<div class="line">builder.Build();   <span class="comment">// must be called before any accessor</span></div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">auto</span> mobs    = builder.GetMobilityModels();   <span class="comment">// one per cfg.nodes entry</span></div>
-<div class="line"><span class="keyword">auto</span> plModel = builder.GetPropagationModel();</div>
-<div class="line"><span class="keyword">auto</span> ccModel = builder.GetConditionModel();</div>
-<div class="line"> </div>
-<div class="line">evaluator.Configure(cfg, plModel, ccModel);</div>
-</div><!-- fragment --><p><b>Mobility models</b></p>
+<p><b>Mobility models</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">NodeSpec::mobility   </th><th class="markdownTableHeadNone">ns-3 class   </th><th class="markdownTableHeadNone">Notes    </th></tr>

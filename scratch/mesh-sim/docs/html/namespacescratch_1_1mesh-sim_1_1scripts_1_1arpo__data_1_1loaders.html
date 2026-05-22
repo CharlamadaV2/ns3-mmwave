@@ -149,13 +149,6 @@ Functions</h2></td></tr>
 
 <p>Load and concatenate every node's <code>bh2.csv</code> for a scenario. </p>
 <p>Backhaul-2 (bh2) logs contain per-link radio metrics sampled at the driver level: SNR, RCPI, MCS (TX/RX), byte counters, PER, and AGC.</p>
-<p>Steps performed:</p><ol type="1">
-<li>Discover all node subdirectories (skipping <code>sdwan</code>).</li>
-<li>Coerce all numeric field columns with <code>errors="coerce"</code> so bad rows become NaN rather than causing type errors downstream.</li>
-<li>Resolve peer MACs to human-readable labels via build_topology.</li>
-<li>Add <code>__sec__</code> via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders.html#aafb2c61715a8b342f0644968dc467943">session_relative_seconds</a>.</li>
-<li>Store the topology map in <code>df.attrs["topology"]</code> for plot functions.</li>
-</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">scen_dir</td><td>Path to the scenario directory (contains one subdir per node). </td></tr>

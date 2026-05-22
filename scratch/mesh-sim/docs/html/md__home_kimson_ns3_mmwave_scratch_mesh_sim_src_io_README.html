@@ -66,31 +66,67 @@ $(function() {
 <div class="title">src/io </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md36"></a>
+<div class="textblock"><p>Writes and logs simulation metric output summary. <br  />
+</p>
+<p>Handles all simulation output: per-tick CSV snapshots for visualisation, a post-run JSON metrics summary, a human-readable run log, and a stderr progress reporter.</p>
+<h1><a class="anchor" id="autotoc_md35"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md37"></a>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Written by   </th><th class="markdownTableHeadNone">When    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>positions.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>links.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>rx-power.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>mcs.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>flows.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>routes.csv</code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code>   </td><td class="markdownTableBodyNone">Every <code>viz_tick_ms</code> milliseconds during the step loop.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>summary.json</code>   </td><td class="markdownTableBodyNone"><code>MetricsWriter</code>   </td><td class="markdownTableBodyNone">Once, after the step loop completes.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run.log</code>   </td><td class="markdownTableBodyNone"><code>RunLogger</code>   </td><td class="markdownTableBodyNone">Once, before the step loop starts.   </td></tr>
+</table>
+<p>All files are written to <code>cfg.output_dir/&lt;seed&gt;/</code> per seed run. <code>run.log</code> is written to the batch root (not per-seed).</p>
+<h1><a class="anchor" id="autotoc_md36"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="run-logger_8h.html">run-logger.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="run-logger_8h.html" title="Writes a human-readable run.log capturing seeds, CLI overrides, and the fully resolved configuration ...">run-logger.h</a></code>   </td><td class="markdownTableBodyNone">Header-only: <code>WriteRunLog</code> writes <code>run.log</code> capturing seeds, CLI overrides, and resolved config before the step loop starts.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="progress-logger_8h.html">progress-logger.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="progress-logger_8h.html" title="Lightweight simulation progress reporter.">progress-logger.h</a></code>   </td><td class="markdownTableBodyNone">Header-only: <code>ProgressLogger</code> prints sim-time progress, wall elapsed, and ETA to stderr at configurable tick intervals.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="metrics-writer_8h.html">metrics-writer.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="metrics-writer_8h.html" title="Accumulates per-tick simulation metrics and writes summary.json.">metrics-writer.h</a></code>   </td><td class="markdownTableBodyNone"><code>MetricsWriter</code> class declaration and private accumulator structs.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="metrics-writer_8cc.html">metrics-writer.cc</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="metrics-writer_8cc.html">metrics-writer.cc</a></code>   </td><td class="markdownTableBodyNone">Per-tick accumulation (<code>AccumulateTick</code>) and post-run JSON serialisation (<code>Write</code>).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="viz-writer_8h.html">viz-writer.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="viz-writer_8h.html" title="Writes per-tick CSV snapshots for GUI and offline plotting.">viz-writer.h</a></code>   </td><td class="markdownTableBodyNone"><code>VizWriter</code> class declaration; documents all six CSV schemas.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="viz-writer_8cc.html">viz-writer.cc</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="viz-writer_8cc.html">viz-writer.cc</a></code>   </td><td class="markdownTableBodyNone">Per-tick CSV writing rate-limited by <code>viz_tick_ms</code>; edge-flow aggregation for <code>links.csv</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md38"></a>
+<h1><a class="anchor" id="autotoc_md37"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md39"></a>
+<ul>
+<li><b>Two-phase pattern for <code>MetricsWriter</code>.</b> <code>AccumulateTick</code> is called every tick during the step loop; <code>Write</code> is called once after it completes. Calling <code>Write</code> before the loop ends produces a valid but incomplete summary.</li>
+<li><b>SINR sentinel filtering.</b> <code>AccumulateTick</code> only counts links with <code>sinr_db &gt; −900.0</code>. Links at the −999.0 sentinel (unevaluated or below noise floor) are excluded from all SINR accumulators.</li>
+<li>**<code>ProgressLogger</code> and <code>RunLogger</code> are header-only.** They have no <code>.cc</code> file and no ns-3 dependency — they can be included anywhere without affecting build times.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md38"></a>
 Dependencies</h1>
-<p>no dependencies </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Dependency   </th><th class="markdownTableHeadNone">Reason    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ns3/mobility-model.h</code>   </td><td class="markdownTableBodyNone"><code>VizWriter::WritePositions</code> queries node positions via <code>MobilityModel::GetPosition</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>third_party/json.hpp</code>   </td><td class="markdownTableBodyNone"><code>MetricsWriter::Write</code> serialises <code>summary.json</code> via nlohmann/json.   </td></tr>
+</table>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

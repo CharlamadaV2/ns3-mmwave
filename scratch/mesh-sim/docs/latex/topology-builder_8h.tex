@@ -11,16 +11,14 @@ Creates ns-\/3 mobility models, buildings, and propagation models for the mesh t
 {\ttfamily \#include \char`\"{}ns3/node-\/container.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}ns3/propagation-\/loss-\/model.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$vector$>$}\newline
-Include dependency graph for topology-\/builder.h\+:
-\nopagebreak
+Include dependency graph for topology-\/builder.h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{topology-builder_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -43,20 +41,6 @@ class \mbox{\hyperlink{classmesh__sim_1_1TopologyBuilder}{mesh\+\_\+sim\+::\+Top
 Creates ns-\/3 mobility models, buildings, and propagation models for the mesh topology. 
 
 Topology\+Builder is the {\bfseries{only layer in mesh-\/sim that creates ns-\/3 objects}}. All other subsystems receive the resulting pointers via the accessor methods and operate entirely through the domain types defined in {\ttfamily src/domain/}. No EPC, RRC, MAC, or protocol stack is created.
-
-{\bfseries{Build sequence}} 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{TopologyBuilder builder(cfg);}
-\DoxyCodeLine{builder.Build();   \textcolor{comment}{// must be called before any accessor}}
-\DoxyCodeLine{}
-\DoxyCodeLine{\textcolor{keyword}{auto} mobs    = builder.GetMobilityModels();   \textcolor{comment}{// one per cfg.nodes entry}}
-\DoxyCodeLine{\textcolor{keyword}{auto} plModel = builder.GetPropagationModel();}
-\DoxyCodeLine{\textcolor{keyword}{auto} ccModel = builder.GetConditionModel();}
-\DoxyCodeLine{}
-\DoxyCodeLine{evaluator.Configure(cfg, plModel, ccModel);}
-
-\end{DoxyCode}
-
 
 {\bfseries{Mobility models}}
 

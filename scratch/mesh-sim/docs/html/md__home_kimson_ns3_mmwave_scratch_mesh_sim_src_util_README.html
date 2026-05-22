@@ -66,27 +66,38 @@ $(function() {
 <div class="title">src/util </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md56"></a>
+<div class="textblock"><p>Low-level string, path, and INI parsing utilities shared across all modules. <br  />
+</p>
+<p>No ns-3 dependency, no domain types, no simulation logic — just the small reusable functions that every other module needs but that don't belong anywhere specific.</p>
+<h1><a class="anchor" id="autotoc_md55"></a>
 Output</h1>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<p>None. All functions return values to their callers; nothing is written to disk.</p>
+<h1><a class="anchor" id="autotoc_md56"></a>
 Module Layout</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">File Name   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="ini-parser_8h.html">ini-parser.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="ini-parser_8h.html" title="Minimal INI-file parser used by ConfigLoader.">ini-parser.h</a></code>   </td><td class="markdownTableBodyNone"><code>IniMap</code> type alias and declarations for <code>parseIni</code>, <code>iniGet</code>, <code>iniGetBool</code>.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="ini-parser_8cc.html">ini-parser.cc</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="ini-parser_8cc.html">ini-parser.cc</a></code>   </td><td class="markdownTableBodyNone">Line-by-line INI parser: comment stripping, section headers, key-value splitting.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="string-utils_8h.html">string-utils.h</a>   </td><td class="markdownTableBodyNone">filler    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="string-utils_8h.html" title="String and path manipulation utilities shared across all modules.">string-utils.h</a></code>   </td><td class="markdownTableBodyNone">Declarations for <code>trimStr</code>, <code>splitTab</code>, <code>toIso8601</code>, <code>resolvePath</code>, <code>dirOf</code>, <code>parseSeedList</code>.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="string-utils_8cc.html">string-utils.cc</a>   </td><td class="markdownTableBodyNone">filler   </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="string-utils_8cc.html">string-utils.cc</a></code>   </td><td class="markdownTableBodyNone">Implementations of all string and path utility functions.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md58"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 Conventions</h1>
-<h1><a class="anchor" id="autotoc_md59"></a>
+<ul>
+<li>**<code>parseIni</code> strips both <code>#</code> and <code>;</code> comments.** Both comment styles are supported on the same line. Everything from the first <code>#</code> or <code>;</code> to the end of the line is discarded before any other processing.</li>
+<li><b>Keys before any <code>[section]</code> header are stored under the empty string key.</b> <code>ini[""]</code> holds any key-value pairs that appear before the first section header in the file. In practice <code>run.ini</code> always starts with a section, so this is rarely relevant.</li>
+<li>**<code>iniGetBool</code> treats <code>"true"</code>, <code>"1"</code>, and <code>"yes"</code> as true (case-insensitive).** Everything else — including <code>"false"</code>, <code>"0"</code>, and <code>"no"</code> — is false. There is no error for unrecognised values; they silently return <code>false</code>.</li>
+<li>**<code>toIso8601</code> uses <code>gmtime_r</code> (POSIX only).** The output is always UTC, formatted as <code>"YYYY-MM-DDTHH:MM:SSZ"</code>. Sub-second precision is discarded. This function is not portable to Windows without a compatibility shim.</li>
+<li>**<code>resolvePath</code> returns the path unchanged if empty or absolute.** It never throws — an empty path in, an empty path out. Callers that need to validate existence must do so separately.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Dependencies</h1>
-<p>no dependencies </p>
+<p>No Dependency </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

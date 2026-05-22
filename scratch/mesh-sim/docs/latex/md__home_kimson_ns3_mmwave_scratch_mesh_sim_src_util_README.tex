@@ -1,20 +1,30 @@
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}
+Low-\/level string, path, and INI parsing utilities shared across all modules. ~\newline
+
+
+No ns-\/3 dependency, no domain types, no simulation logic — just the small reusable functions that every other module needs but that don\textquotesingle{}t belong anywhere specific.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}
+None. All functions return values to their callers; nothing is written to disk.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File Name   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
 \endfirsthead
 \hline
 \endfoot
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File Name   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
 \endhead
-\mbox{\hyperlink{ini-parser_8h}{ini-\/parser.h}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{ini-parser_8cc}{ini-\/parser.cc}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{string-utils_8h}{string-\/utils.h}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{string-utils_8cc}{string-\/utils.cc}}   &filler   \\\cline{1-2}
+{\ttfamily \mbox{\hyperlink{ini-parser_8h}{ini-\/parser.\+h}}}   &{\ttfamily Ini\+Map} type alias and declarations for {\ttfamily parse\+Ini}, {\ttfamily ini\+Get}, {\ttfamily ini\+Get\+Bool}.    \\\cline{1-2}
+{\ttfamily \mbox{\hyperlink{ini-parser_8cc}{ini-\/parser.\+cc}}}   &Line-\/by-\/line INI parser\+: comment stripping, section headers, key-\/value splitting.    \\\cline{1-2}
+{\ttfamily \mbox{\hyperlink{string-utils_8h}{string-\/utils.\+h}}}   &Declarations for {\ttfamily trim\+Str}, {\ttfamily split\+Tab}, {\ttfamily to\+Iso8601}, {\ttfamily resolve\+Path}, {\ttfamily dir\+Of}, {\ttfamily parse\+Seed\+List}.    \\\cline{1-2}
+{\ttfamily \mbox{\hyperlink{string-utils_8cc}{string-\/utils.\+cc}}}   &Implementations of all string and path utility functions.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md59}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md59}
-no dependencies 
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}
+
+\begin{DoxyItemize}
+\item $\ast$$\ast${\ttfamily parse\+Ini} strips both {\ttfamily \#} and {\ttfamily ;} comments.$\ast$$\ast$ Both comment styles are supported on the same line. Everything from the first {\ttfamily \#} or {\ttfamily ;} to the end of the line is discarded before any other processing.
+\item {\bfseries{Keys before any {\ttfamily \mbox{[}section\mbox{]}} header are stored under the empty string key.}} {\ttfamily ini\mbox{[}\char`\"{}\char`\"{}\mbox{]}} holds any key-\/value pairs that appear before the first section header in the file. In practice {\ttfamily run.\+ini} always starts with a section, so this is rarely relevant.
+\item $\ast$$\ast${\ttfamily ini\+Get\+Bool} treats {\ttfamily \char`\"{}true\char`\"{}}, {\ttfamily \char`\"{}1\char`\"{}}, and {\ttfamily \char`\"{}yes\char`\"{}} as true (case-\/insensitive).$\ast$$\ast$ Everything else — including {\ttfamily \char`\"{}false\char`\"{}}, {\ttfamily \char`\"{}0\char`\"{}}, and {\ttfamily \char`\"{}no\char`\"{}} — is false. There is no error for unrecognised values; they silently return {\ttfamily false}.
+\item $\ast$$\ast${\ttfamily to\+Iso8601} uses {\ttfamily gmtime\+\_\+r} (POSIX only).$\ast$$\ast$ The output is always UTC, formatted as {\ttfamily \char`\"{}\+YYYY-\/\+MM-\/\+DDTHH\+:\+MM\+:\+SSZ\char`\"{}}. Sub-\/second precision is discarded. This function is not portable to Windows without a compatibility shim.
+\item $\ast$$\ast${\ttfamily resolve\+Path} returns the path unchanged if empty or absolute.$\ast$$\ast$ It never throws — an empty path in, an empty path out. Callers that need to validate existence must do so separately.
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}
+No Dependency 

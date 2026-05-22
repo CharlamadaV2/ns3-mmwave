@@ -53,12 +53,4 @@ Generate waypoint mobility for a sim node from its field GPS trace.
 
 Reads the per-\/day {\ttfamily gps\+\_\+track\+\_\+trace.\+csv} (centroid-\/\+ENU metres) emitted by {\ttfamily arpo\+\_\+data.\+cli plot}, aligns the field coordinate frame to the sim frame using a stationary anchor node (default\+: rab1), downsamples the moving node\textquotesingle{}s track to N waypoints, and patches them into the scenario\textquotesingle{}s {\ttfamily nodes.\+json}.
 
-{\bfseries{Coordinate frames}} Field GPS fixes are expressed in ENU metres relative to an arbitrary centroid. The sim uses its own metre-\/based XY plane. Alignment is done by computing the mean field position of the anchor node and translating so that it coincides with the anchor\textquotesingle{}s position in {\ttfamily nodes.\+json}.
-
-{\bfseries{Typical usage}} 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{python -\/m scripts.sim.build\_waypoints arpo-\/1-\/1-\/static-\/04172026 -\/-\/dry-\/run}
-\DoxyCodeLine{python -\/m scripts.sim.build\_waypoints -\/-\/all -\/-\/time-\/mode scale}
-
-\end{DoxyCode}
- 
+{\bfseries{Coordinate frames}} Field GPS fixes are expressed in ENU metres relative to an arbitrary centroid. The sim uses its own metre-\/based XY plane. Alignment is done by computing the mean field position of the anchor node and translating so that it coincides with the anchor\textquotesingle{}s position in {\ttfamily nodes.\+json}. 

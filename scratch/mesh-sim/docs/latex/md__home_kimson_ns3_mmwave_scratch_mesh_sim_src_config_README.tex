@@ -1,5 +1,18 @@
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md21}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md21}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md22}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md22}
+Contains scripts for loading the simulation\textquotesingle{}s configuration files and config validators. ~\newline
+
+
+
+\begin{DoxyItemize}
+\item The \mbox{\hyperlink{config-validator_8h}{validator}} checks whether the domains\textquotesingle{} configuration file falls under the rule.
+\item The \mbox{\hyperlink{config-loader_8h}{loader}} parses through the JSON files and {\ttfamily run.\+ini} contained in inputs/baselines for the scenarios
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md21}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md21}
+
+\begin{DoxyItemize}
+\item The config loader populates Sim\+Config object with scenarios config parameters
+\item The config validator returns list of errors and boolean for success
+\end{DoxyItemize}
+
+The outputs are passed into their respective data structures\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md22}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md22}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -10,11 +23,16 @@
 \hline
 \PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File Name   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
 \endhead
-\mbox{\hyperlink{config-loader_8h}{config-\/loader.h}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{config-loader_8cc}{config-\/loader.cc}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{config-validator_8h}{config-\/validator.h}}   &filler    \\\cline{1-2}
-\mbox{\hyperlink{config-validator_8cc}{config-\/validator.cc}}   &filler   \\\cline{1-2}
+\mbox{\hyperlink{config-loader_8h}{config-\/loader.h}}   &Contains class for simulation config loader    \\\cline{1-2}
+\mbox{\hyperlink{config-loader_8cc}{config-\/loader.cc}}   &Logic for parsing through scenario object parameters.    \\\cline{1-2}
+\mbox{\hyperlink{config-validator_8h}{config-\/validator.h}}   &Contains struct for validation boolean.    \\\cline{1-2}
+\mbox{\hyperlink{config-validator_8cc}{config-\/validator.cc}}   &Contains logic for resultant {\ttfamily errors} on failed checks.   \\\cline{1-2}
 \end{longtabu}
 \hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md23}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md23}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md24}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md24}
-requires \char`\"{}third\+\_\+party/json.\+hpp\char`\"{} 
+
+\begin{DoxyItemize}
+\item Validation checks should only check for failures and perform {\ttfamily push\+\_\+back} for errors.
+\item Read to Sim\+Config object {\ttfamily cfg} for loading configuration parameters.
+\item Comment convention will enforce Java\+Doc like styling (/$\ast$$\ast$ $\ast$/).
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md24}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README_autotoc_md24}
+Requires \char`\"{}third\+\_\+party/json.\+hpp\char`\"{} to run 

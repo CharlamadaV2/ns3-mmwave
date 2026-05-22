@@ -116,8 +116,7 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Convert sim seed CSVs into arpo_data-style per-link trace CSVs. </p>
 <p>The ns-3 sim writes one CSV per metric (e.g. <code>links.csv</code>, <code>mcs.csv</code>) containing rows for every link sample across all nodes. This module reshapes those wide outputs into the narrow per-link trace format expected by the field-data pipeline:</p>
-<div class="fragment"><div class="line">sim_traces/&lt;seed&gt;/csvs/&lt;src&gt;/bh2_&lt;metric&gt;__&lt;src&gt;_to_&lt;peer&gt;_trace.csv</div>
-</div><!-- fragment --><p>Each trace CSV has the same column layout as the field trace CSVs produced by <code>arpo_data.cli plot</code>, enabling compare to treat sim and field data identically.</p>
+<p>Each trace CSV has the same column layout as the field trace CSVs produced by <code>arpo_data.cli plot</code>, enabling compare to treat sim and field data identically.</p>
 <p><b>Warmup trimming</b> Samples before <code>warmup_s</code> (read from <code>run.ini</code>) are dropped so that the transient period before the network reaches steady state is excluded from validation metrics. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->

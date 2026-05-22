@@ -66,14 +66,16 @@ $(function() {
 <div class="title">src/cli </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Command-line parsing and pre-simulation setup for mesh-sim. This module keeps <code>sim.cc</code> focused on orchestration by isolating argument handling, seed resolution, and input archiving into standalone functions with no ns-3 types in their public signatures (except <code>ns3::CommandLine</code> inside the <code>.cc</code>).</p>
+<div class="textblock"><p>Command-line parsing and pre-simulation setup for mesh-sim. <br  />
+</p>
+<p>This module contains <code>sim.cc</code> argument handling, seed resolution, and input archiving into standalone functions with no ns-3 types in their public signatures (except <code>ns3::CommandLine</code>inside the <code>.cc</code>).</p>
 <h1><a class="anchor" id="autotoc_md15"></a>
 Flags</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Flag   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>--run-config=&lt;path&gt;</code>   </td><td class="markdownTableBodyNone"><b>yes</b>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Path to <code>run.ini</code> for the scenario.    </td></tr>
+<td class="markdownTableBodyNone"><code>--run-config=&lt;path&gt;</code>   </td><td class="markdownTableBodyNone">yes   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Path to <code>run.ini</code> for the scenario.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>--seeds=&lt;list&gt;</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>run.ini</code> value   </td><td class="markdownTableBodyNone">Comma-separated seed list. Each seed runs as an independent simulation with its own output subdirectory.    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -115,7 +117,6 @@ Module Layout</h1>
 <h1><a class="anchor" id="autotoc_md18"></a>
 Conventions</h1>
 <ul>
-<li><b>No ns-3 types in the public API.</b> <code><a class="el" href="cli-parser_8h.html" title="Command-line parsing and pre-simulation setup helpers.">cli-parser.h</a></code> is included by <code>sim.cc</code> but its declarations use only standard-library types, keeping downstream code (validators, loaders, tests) free of ns-3 build dependencies.</li>
 <li><b>Hard exits on bad input.</b> <code>ParseCommandLine</code> and <code>ResolveSeeds</code> call <code>std::exit(1)</code> with a message to <code>stderr</code> rather than throwing. This matches ns-3 convention for fatal startup errors and means <code>sim.cc</code> never needs to handle missing-flag cases.</li>
 <li><b>Overwrite-safe archiving.</b> <code>ArchiveScenarioInputs</code> uses <code>copy_options::overwrite_existing</code> so re-running into the same output directory is safe.</li>
 </ul>

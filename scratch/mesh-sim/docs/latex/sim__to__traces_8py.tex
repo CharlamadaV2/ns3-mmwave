@@ -39,13 +39,6 @@ Convert sim seed CSVs into arpo\+\_\+data-\/style per-\/link trace CSVs.
 
 The ns-\/3 sim writes one CSV per metric (e.\+g. {\ttfamily links.\+csv}, {\ttfamily mcs.\+csv}) containing rows for every link sample across all nodes. This module reshapes those wide outputs into the narrow per-\/link trace format expected by the field-\/data pipeline\+:
 
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{sim\_traces/<seed>/csvs/<src>/bh2\_<metric>\_\_<src>\_to\_<peer>\_trace.csv}
-
-\end{DoxyCode}
-
-
 Each trace CSV has the same column layout as the field trace CSVs produced by {\ttfamily arpo\+\_\+data.\+cli plot}, enabling compare to treat sim and field data identically.
 
 {\bfseries{Warmup trimming}} Samples before {\ttfamily warmup\+\_\+s} (read from {\ttfamily run.\+ini}) are dropped so that the transient period before the network reaches steady state is excluded from validation metrics. 
