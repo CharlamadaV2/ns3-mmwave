@@ -66,7 +66,8 @@ $(function() {
 <div class="title">scripts/validation </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Sim-vs-field comparison pipeline. Runs mesh-sim across a directory of scenarios (multi-seed), then overlays the pooled sim distribution against ARPO field traces as an ECDF with a bootstrap 90% CI band and a two-sample K-S statistic.</p>
+<div class="textblock"><p>Module for comparing simulation results to arpo_data</p>
+<p>Sim-vs-field comparison pipeline. Runs mesh-sim across a directory of scenarios (multi-seed), then overlays the pooled sim distribution against ARPO field traces as an ECDF with a bootstrap 90% CI band and a two-sample K-S statistic.</p>
 <p><b>Scenario inputs</b> come from <code>inputs/custom/sherpa/spring_lake/</code> — one subdirectory per scenario, each containing <code>run.ini</code> and <code>nodes.json</code>. <b>Field traces</b> come from <code>data/arpo_extracted/_plots/per_day/&lt;scenario&gt;/csvs/&lt;src&gt;/</code> and must be generated up-front via <code>scripts.arpo_data.cli plot</code>.</p>
 <h1><a class="anchor" id="autotoc_md8"></a>
 Run</h1>
