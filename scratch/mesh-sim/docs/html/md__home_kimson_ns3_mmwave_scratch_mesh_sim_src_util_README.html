@@ -66,12 +66,12 @@ $(function() {
 <div class="title">src/util </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Low-level string, path, and INI parsing utilities shared across all modules. <br  />
-</p>
-<p>No ns-3 dependency, no domain types, no simulation logic — just the small reusable functions that every other module needs but that don't belong anywhere specific.</p>
+<div class="textblock"><p>Low-level string, path, and INI parsing utilities shared across all modules.</p>
+<p>Performs reads run.ini into a two-level map (section → key → value) that ConfigLoader then queries to populate the SimConfig.</p>
+<p>Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-8601, resolving relative paths against a base directory, and parsing comma-separated seed lists.</p>
 <h1><a class="anchor" id="autotoc_md55"></a>
 Output</h1>
-<p>None. All functions return values to their callers; nothing is written to disk.</p>
+<p>All functions return values to their callers.</p>
 <h1><a class="anchor" id="autotoc_md56"></a>
 Module Layout</h1>
 <table class="markdownTable">

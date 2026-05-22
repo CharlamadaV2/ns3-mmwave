@@ -1,8 +1,9 @@
-Low-\/level string, path, and INI parsing utilities shared across all modules. ~\newline
+Low-\/level string, path, and INI parsing utilities shared across all modules.
 
+Performs reads run.\+ini into a two-\/level map (section → key → value) that Config\+Loader then queries to populate the Sim\+Config.
 
-No ns-\/3 dependency, no domain types, no simulation logic — just the small reusable functions that every other module needs but that don\textquotesingle{}t belong anywhere specific.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}
-None. All functions return values to their callers; nothing is written to disk.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
+Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-\/8601, resolving relative paths against a base directory, and parsing comma-\/separated seed lists.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}
+All functions return values to their callers.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
