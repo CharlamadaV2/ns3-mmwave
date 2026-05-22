@@ -1,8 +1,8 @@
 # src/util
 
-@brief Low-level string, path, and INI parsing utilities shared across all modules.  \
+@brief Low-level string, path, and INI parsing utilities shared across all modules.
 
-Performs reads run.ini into a two-level map (section → key → value)
+Reads run.ini and tranfers data into a two-level map (section → key → value)
 that ConfigLoader then queries to populate the SimConfig.
 
 Contains helpers for trimming whitespace, splitting on tabs,

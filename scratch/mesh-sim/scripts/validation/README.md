@@ -1,5 +1,7 @@
 # scripts/validation
 
+@brief Module for comparing simulation results to arpo_data
+
 Sim-vs-field comparison pipeline. Runs mesh-sim across a directory of
 scenarios (multi-seed), then overlays the pooled sim distribution against
 ARPO field traces as an ECDF with a bootstrap 90% CI band and a two-sample

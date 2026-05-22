@@ -1,5 +1,7 @@
 # scripts/arpo_data
 
+@brief Module for managing producing plots for ARPO Data
+
 Quicklook tooling for the **ARPO Spring Lake** mmWave-mesh field-test
 dataset (CSV exports from outdoor radio deployments). Read-only with
 respect to the source CSVs.
