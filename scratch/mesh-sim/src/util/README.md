@@ -1,15 +1,17 @@
 # src/util
 
-@brief Low-level string, path, and INI parsing utilities shared across all modules.  
+@brief Low-level string, path, and INI parsing utilities shared across all modules.  \
 
-No ns-3 dependency, no domain types, no simulation logic — just the small
-reusable functions that every other module needs but that don't belong anywhere
-specific.
+Performs reads run.ini into a two-level map (section → key → value)
+that ConfigLoader then queries to populate the SimConfig.
 
+Contains helpers for trimming whitespace, splitting on tabs,
+formatting timestamps as ISO-8601, resolving relative paths against a base
+directory, and parsing comma-separated seed lists.
 
 ## Output
 
-None. All functions return values to their callers; nothing is written to disk.
+All functions return values to their callers.
 
 
 ## Module Layout
