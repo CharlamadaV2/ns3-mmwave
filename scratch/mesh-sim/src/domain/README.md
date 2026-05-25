@@ -1,5 +1,5 @@
 # src/domain
-@brief Configuration header to be by @ref config-loader.cc.  
+@brief Configuration headers to be used by @ref config-loader.cc.  
 
 The domain folder contains the configuration for classes and objects used in the simulation.
 The @ref sim-config.h is contains main config struct which defines the variables and objects

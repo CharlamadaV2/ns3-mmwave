@@ -4,7 +4,6 @@
 
 Reads run.ini and tranfers data into a two-level map (section → key → value)
 that ConfigLoader then queries to populate the SimConfig.
-
 Contains helpers for trimming whitespace, splitting on tabs,
 formatting timestamps as ISO-8601, resolving relative paths against a base
 directory, and parsing comma-separated seed lists.
