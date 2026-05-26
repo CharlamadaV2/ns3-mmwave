@@ -1,7 +1,7 @@
 Low-\/level string, path, and INI parsing utilities shared across all modules.
 
-Reads run.\+ini and tranfers data into a two-\/level map (section → key → value) that Config\+Loader then queries to populate the Sim\+Config. Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-\/8601, resolving relative paths against a base directory, and parsing comma-\/separated seed lists.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}
-All functions return values to their callers.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
+Reads run.\+ini and tranfers data into a two-\/level map (section → key → value) that Config\+Loader then queries to populate the Sim\+Config. Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-\/8601, resolving relative paths against a base directory, and parsing comma-\/separated seed lists.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md53}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md53}
+All functions return values to their callers.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md54}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md54}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -17,7 +17,7 @@ All functions return values to their callers.\hypertarget{md__home_kimson_ns3_mm
 {\ttfamily \mbox{\hyperlink{string-utils_8h}{string-\/utils.\+h}}}   &Declarations for {\ttfamily trim\+Str}, {\ttfamily split\+Tab}, {\ttfamily to\+Iso8601}, {\ttfamily resolve\+Path}, {\ttfamily dir\+Of}, {\ttfamily parse\+Seed\+List}.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{string-utils_8cc}{string-\/utils.\+cc}}}   &Implementations of all string and path utility functions.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md57}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md55}
 
 \begin{DoxyItemize}
 \item $\ast$$\ast${\ttfamily parse\+Ini} strips both {\ttfamily \#} and {\ttfamily ;} comments.$\ast$$\ast$ Both comment styles are supported on the same line. Everything from the first {\ttfamily \#} or {\ttfamily ;} to the end of the line is discarded before any other processing.
@@ -25,5 +25,5 @@ All functions return values to their callers.\hypertarget{md__home_kimson_ns3_mm
 \item $\ast$$\ast${\ttfamily ini\+Get\+Bool} treats {\ttfamily \char`\"{}true\char`\"{}}, {\ttfamily \char`\"{}1\char`\"{}}, and {\ttfamily \char`\"{}yes\char`\"{}} as true (case-\/insensitive).$\ast$$\ast$ Everything else — including {\ttfamily \char`\"{}false\char`\"{}}, {\ttfamily \char`\"{}0\char`\"{}}, and {\ttfamily \char`\"{}no\char`\"{}} — is false. There is no error for unrecognised values; they silently return {\ttfamily false}.
 \item $\ast$$\ast${\ttfamily to\+Iso8601} uses {\ttfamily gmtime\+\_\+r} (POSIX only).$\ast$$\ast$ The output is always UTC, formatted as {\ttfamily \char`\"{}\+YYYY-\/\+MM-\/\+DDTHH\+:\+MM\+:\+SSZ\char`\"{}}. Sub-\/second precision is discarded. This function is not portable to Windows without a compatibility shim.
 \item $\ast$$\ast${\ttfamily resolve\+Path} returns the path unchanged if empty or absolute.$\ast$$\ast$ It never throws — an empty path in, an empty path out. Callers that need to validate existence must do so separately.
-\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md58}
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README_autotoc_md56}
 No Dependency 

@@ -2,7 +2,7 @@ Module for comparing simulation results to arpo\+\_\+data
 
 Sim-\/vs-\/field comparison pipeline. Runs mesh-\/sim across a directory of scenarios (multi-\/seed), then overlays the pooled sim distribution against ARPO field traces as an ECDF with a bootstrap 90\% CI band and a two-\/sample K-\/S statistic.
 
-{\bfseries{Scenario inputs}} come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} — one subdirectory per scenario, each containing {\ttfamily run.\+ini} and {\ttfamily nodes.\+json}. {\bfseries{Field traces}} come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}{}\doxysection{Run}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}
+{\bfseries{Scenario inputs}} come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} — one subdirectory per scenario, each containing {\ttfamily run.\+ini} and {\ttfamily nodes.\+json}. {\bfseries{Field traces}} come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md7}{}\doxysection{Run}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md7}
 From {\ttfamily scratch/mesh-\/sim/}\+:
 
 
@@ -26,7 +26,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity outputs/<batch>}
 
 \end{DoxyCode}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}{}\doxysubsection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}{}\doxysubsection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md8}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\# Run with more seeds}
@@ -65,7 +65,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/auto-\/waypoints}
 
 \end{DoxyCode}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md9}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -80,7 +80,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 {\ttfamily sim\+\_\+to\+\_\+traces}   &{\ttfamily outputs/.../$<$scenario$>$/sim\+\_\+traces/seed-\/\+N/csvs/$<$src$>$/bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv}    \\\cline{1-2}
 {\ttfamily compare}   &{\ttfamily outputs/.../$<$scenario$>$/validation/pngs/$<$src$>$/ecdf\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$.png} + per-\/scenario {\ttfamily metrics.\+csv} + top-\/level {\ttfamily validation\+\_\+summary.\+csv}   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}{}\doxysection{Module layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}{}\doxysection{Module layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md10}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -98,7 +98,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \mbox{\hyperlink{scenario__fidelity_8py}{scenario\+\_\+fidelity}}   &Per-\/scenario sim-\/vs-\/field layout/mobility audit    \\\cline{1-2}
 \mbox{\hyperlink{build__waypoints_8py}{build\+\_\+waypoints}}   &Generate waypoint mobility for a node from its field GPS trace   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md11}
 
 \begin{DoxyItemize}
 \item {\bfseries{Distributional comparison, not temporal.}} Sim and field samples are pooled raw (no smoothing, no time alignment). The comparison is over the marginal distribution of each metric.
@@ -108,5 +108,5 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \item {\bfseries{NaN rows in {\ttfamily validation\+\_\+summary.\+csv}}} mean the field collect did not capture telemetry for that link (e.\+g. rab2 and rab3 were not beam-\/paired during the scenario). This is expected for some scenarios and is not a pipeline error.
 \item $\ast$$\ast${\ttfamily -\/-\/auto-\/waypoints} mutates {\ttfamily inputs/}.$\ast$$\ast$ The patch is permanent for the duration of the run. Use {\ttfamily git diff inputs/} to review and {\ttfamily git checkout inputs/} to revert.
 \item $\ast$$\ast${\ttfamily build\+\_\+waypoints} mobility classifier is bbox-\/based$\ast$$\ast$ (threshold\+: 20 m max bounding-\/box dimension). Path length alone is GPS-\/noise-\/prone and would misclassify jittery static nodes as mobile.
-\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md13}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md13}
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README_autotoc_md12}
 {\ttfamily pandas}, {\ttfamily numpy}, and {\ttfamily matplotlib} 

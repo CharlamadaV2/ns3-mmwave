@@ -25,88 +25,13 @@
 var NAVTREE =
 [
   [ "Mesh-Sim", "index.html", [
-    [ "Build", "index.html#autotoc_md60", null ],
-    [ "Run", "index.html#autotoc_md61", [
-      [ "Single scenario", "index.html#autotoc_md62", null ],
-      [ "Sweep", "index.html#autotoc_md63", null ]
-    ] ],
-    [ "Documentation", "index.html#autotoc_md64", null ],
-    [ "About", "index.html#autotoc_md65", null ],
-    [ "scripts/arpo_data", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html", [
-      [ "Setup", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md1", null ],
-      [ "Run", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md2", null ],
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md3", null ],
-      [ "Module layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md4", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md5", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_arpo_data_README.html#autotoc_md6", null ]
-    ] ],
-    [ "scripts/validation", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html", [
-      [ "Run", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md8", [
-        [ "Flags", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md9", null ]
-      ] ],
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md10", null ],
-      [ "Module layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md11", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md12", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_scripts_validation_README.html#autotoc_md13", null ]
-    ] ],
-    [ "src/cli", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html", [
-      [ "Flags", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html#autotoc_md15", null ],
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html#autotoc_md16", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html#autotoc_md17", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html#autotoc_md18", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README.html#autotoc_md19", null ]
-    ] ],
-    [ "src/config", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README.html#autotoc_md21", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README.html#autotoc_md22", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README.html#autotoc_md23", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_config_README.html#autotoc_md24", null ]
-    ] ],
-    [ "src/domain", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_domain_README.html", [
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_domain_README.html#autotoc_md26", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_domain_README.html#autotoc_md27", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_domain_README.html#autotoc_md28", null ]
-    ] ],
-    [ "src/eval", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README.html#autotoc_md30", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README.html#autotoc_md31", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README.html#autotoc_md32", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README.html#autotoc_md33", null ]
-    ] ],
-    [ "src/io", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README.html#autotoc_md35", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README.html#autotoc_md36", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README.html#autotoc_md37", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README.html#autotoc_md38", null ]
-    ] ],
-    [ "src/routing", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_routing_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_routing_README.html#autotoc_md40", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_routing_README.html#autotoc_md41", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_routing_README.html#autotoc_md42", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_routing_README.html#autotoc_md43", null ]
-    ] ],
-    [ "src/setup", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_setup_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_setup_README.html#autotoc_md45", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_setup_README.html#autotoc_md46", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_setup_README.html#autotoc_md47", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_setup_README.html#autotoc_md48", null ]
-    ] ],
-    [ "src/traffic", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_traffic_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_traffic_README.html#autotoc_md50", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_traffic_README.html#autotoc_md51", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_traffic_README.html#autotoc_md52", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_traffic_README.html#autotoc_md53", null ]
-    ] ],
-    [ "src/util", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README.html", [
-      [ "Output", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README.html#autotoc_md55", null ],
-      [ "Module Layout", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README.html#autotoc_md56", null ],
-      [ "Conventions", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README.html#autotoc_md57", null ],
-      [ "Dependencies", "md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_util_README.html#autotoc_md58", null ]
-    ] ],
+    [ "Overview", "index.html", null ],
+    [ "Scripts", "scripts.html", "scripts" ],
+    [ "Src", "src.html", "src" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ]
@@ -115,6 +40,7 @@ var NAVTREE =
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
@@ -135,9 +61,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "",
-"dir_6a9741636fbd49336bedc3d20e806985.html",
-"namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multiday__variance.html",
-"structmesh__sim_1_1ChannelConfig.html#a46faa875060c3b19c65291cadf3a523d"
+"compare_8py.html#a038552e8343d81abde2b2a730fe0444c",
+"namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1loaders.html#aafb2c61715a8b342f0644968dc467943",
+"paths_8py.html#a1c854a346a27158aadfca7ae11526ee1",
+"structmesh__sim_1_1MetricsWriter_1_1FlowStats.html#a70f4bd4a2aa1a290301e34f87c4b2a6b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

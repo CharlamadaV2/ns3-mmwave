@@ -1,4 +1,4 @@
-# src/routing
+@page src_routing src/routing
 
 @brief Files for network routing protocols based on simulation config  
 

@@ -1,4 +1,4 @@
-# src/config
+@page src_config src/config
 
 @brief Contains scripts for loading the simulation's configuration files and config validators.  
 

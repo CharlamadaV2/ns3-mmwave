@@ -1,4 +1,4 @@
-# src/setup
+@page src_setup src/setup
 
 @brief Files for generating buildings, nodes, and propogration model.  
 

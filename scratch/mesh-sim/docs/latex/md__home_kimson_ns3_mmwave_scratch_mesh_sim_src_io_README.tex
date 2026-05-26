@@ -1,7 +1,7 @@
 Writes and logs simulation metric output summary. ~\newline
 
 
-Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a post-\/run JSON metrics summary, a human-\/readable run log, and a stderr progress reporter.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md35}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md35}
+Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a post-\/run JSON metrics summary, a human-\/readable run log, and a stderr progress reporter.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md33}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md33}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
 \hline
@@ -23,7 +23,7 @@ Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a p
 \end{longtabu}
 
 
-All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed run. {\ttfamily run.\+log} is written to the batch root (not per-\/seed).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md36}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md36}
+All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed run. {\ttfamily run.\+log} is written to the batch root (not per-\/seed).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md34}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md34}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -41,13 +41,13 @@ All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed 
 {\ttfamily \mbox{\hyperlink{viz-writer_8h}{viz-\/writer.\+h}}}   &{\ttfamily Viz\+Writer} class declaration; documents all six CSV schemas.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{viz-writer_8cc}{viz-\/writer.\+cc}}}   &Per-\/tick CSV writing rate-\/limited by {\ttfamily viz\+\_\+tick\+\_\+ms}; edge-\/flow aggregation for {\ttfamily links.\+csv}.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md37}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md37}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md35}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md35}
 
 \begin{DoxyItemize}
 \item {\bfseries{Two-\/phase pattern for {\ttfamily Metrics\+Writer}.}} {\ttfamily Accumulate\+Tick} is called every tick during the step loop; {\ttfamily Write} is called once after it completes. Calling {\ttfamily Write} before the loop ends produces a valid but incomplete summary.
 \item {\bfseries{SINR sentinel filtering.}} {\ttfamily Accumulate\+Tick} only counts links with {\ttfamily sinr\+\_\+db $>$ −900.0}. Links at the −999.0 sentinel (unevaluated or below noise floor) are excluded from all SINR accumulators.
 \item $\ast$$\ast${\ttfamily Progress\+Logger} and {\ttfamily Run\+Logger} are header-\/only.$\ast$$\ast$ They have no {\ttfamily .cc} file and no ns-\/3 dependency — they can be included anywhere without affecting build times.
-\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md38}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md38}
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md36}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_io_README_autotoc_md36}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline

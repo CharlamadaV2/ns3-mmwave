@@ -1,0 +1,36 @@
+\hypertarget{arpo__data_2cli_8py}{}\doxysection{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\+\_\+data/cli.py File Reference}
+\label{arpo__data_2cli_8py}\index{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/cli.py@{/home/kimson/ns3-\/mmwave/scratch/mesh-\/sim/scripts/arpo\_data/cli.py}}
+
+
+Main script to be ran for manipulating ARPO data as desired.  
+
+
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_ae60b64cc363fdd27504f3f565f78136b}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+save}} (result, Path png\+\_\+path, Path$\vert$None csv\+\_\+path=None)
+\begin{DoxyCompactList}\small\item\em Save a figure (and an optional trace CSV) returned from a plot fn. \end{DoxyCompactList}\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aa786b86ecae5a115e179926745abbc3a}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+save\+\_\+pairs}} (results, Path scen\+\_\+dir, str base\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Saves the (src, peer, fig, trace) tuples emitted by per-\/radio plot fns. \end{DoxyCompactList}\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_a32eee3c4188c061f4b920c4c3d47a9ab}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+plot\+\_\+one}} (Path scen\+\_\+dir)
+\begin{DoxyCompactList}\small\item\em plots different metrics for specific scenario of given day \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_af02fc347a42cd0fbaccf4362c53d039c}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+\_\+cmd\+\_\+plot}} (argparse.\+Namespace args)
+\begin{DoxyCompactList}\small\item\em manages command line argument for multi or single plot generator \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1cli_aec6d2ce5b2e265c08b8cb984165611f7}{scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+cli.\+main}} ()
+\begin{DoxyCompactList}\small\item\em Takes command line arguements to interact with ARPO data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main script to be ran for manipulating ARPO data as desired. 
+
+Provides a command line interface that can do one of the following commands\+:
+\begin{DoxyItemize}
+\item Extract unzips data folder into extraction target direction
+\item Multi-\/day compares day vs day data for multi day scenarios
+\item Plot generates figures for specific scenario or all scenarios per individual day 
+\end{DoxyItemize}

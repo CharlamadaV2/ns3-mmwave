@@ -1,4 +1,5 @@
-# src/io
+@page src_io src/io
+
 @brief Writes and logs simulation metric output summary.  
 
 Handles all simulation output: per-tick CSV snapshots for visualisation,

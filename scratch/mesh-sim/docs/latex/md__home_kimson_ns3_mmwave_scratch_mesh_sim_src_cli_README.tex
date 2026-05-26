@@ -1,7 +1,7 @@
 Command-\/line parsing and pre-\/simulation setup for mesh-\/sim. ~\newline
 
 
-This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line}inside the {\ttfamily .cc}).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}{}\doxysection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}
+This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line}inside the {\ttfamily .cc}).\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md13}{}\doxysection{Flags}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md13}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
 \hline
@@ -21,7 +21,7 @@ This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, an
 {\ttfamily -\/-\/debug-\/links}   &no   &{\ttfamily false}   &Enable verbose per-\/link evaluation logging.    \\\cline{1-4}
 {\ttfamily -\/-\/rl-\/mode}   &no   &{\ttfamily false}   &Enable RL mode — the sim exchanges observations and actions via stdin/stdout JSON.   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md16}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md16}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md14}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md14}
 Each seed produces its own subdirectory under the batch root\+:
 
 
@@ -39,7 +39,7 @@ Each seed produces its own subdirectory under the batch root\+:
 \end{DoxyCode}
 
 
-The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+Inputs} before any seed runs, so re-\/running with the archived files reproduces the original results exactly.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md17}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md17}
+The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+Inputs} before any seed runs, so re-\/running with the archived files reproduces the original results exactly.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md15}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -53,10 +53,10 @@ The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+In
 \mbox{\hyperlink{cli-parser_8h}{cli-\/parser.h}}   &Cli\+Args struct + three public function declarations    \\\cline{1-2}
 \mbox{\hyperlink{cli-parser_8cc}{cli-\/parser.cc}}   &implementations; the only file in src/ that includes ns3/command-\/line.\+h   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md18}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md18}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md16}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md16}
 
 \begin{DoxyItemize}
 \item {\bfseries{Hard exits on bad input.}} {\ttfamily Parse\+Command\+Line} and {\ttfamily Resolve\+Seeds} call {\ttfamily std\+::exit(1)} with a message to {\ttfamily stderr} rather than throwing. This matches ns-\/3 convention for fatal startup errors and means {\ttfamily sim.\+cc} never needs to handle missing-\/flag cases.
 \item {\bfseries{Overwrite-\/safe archiving.}} {\ttfamily Archive\+Scenario\+Inputs} uses {\ttfamily copy\+\_\+options\+::overwrite\+\_\+existing} so re-\/running into the same output directory is safe.
-\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md19}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md19}
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md17}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_cli_README_autotoc_md17}
 Depends on ns3 framework 

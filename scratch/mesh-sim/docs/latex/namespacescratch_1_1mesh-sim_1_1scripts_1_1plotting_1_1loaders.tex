@@ -1,0 +1,94 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders}\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+list\mbox{[}str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a637aee28a1189170151337ec297eb2f6}{discover\+\_\+seed\+\_\+dirs}} (str data\+\_\+dir)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_afa6016c828fd150b3a5684d8b12b8826}{load\+\_\+links\+\_\+csv}} (str path)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_acc3fb921f589e67a2bb9afb21d011732}{load\+\_\+rx\+\_\+power\+\_\+csv}} (str path)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_af045d3929899b82f2bb09859e07a33ab}{load\+\_\+mcs\+\_\+csv}} (str path)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a404841ca0e8c6d850f0a566e21e3c154}{load\+\_\+flows\+\_\+csv}} (str path)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6cac9ecec2fcdef52c211f7948f3dced}{load\+\_\+routes\+\_\+csv}} (str path)
+\item 
+pd.\+Data\+Frame$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a29e265a5230054111d39d60469afdc2d}{load\+\_\+positions\+\_\+csv}} (str path)
+\item 
+dict$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a86aeea626fad7e4005680c8a7e690079}{load\+\_\+summary}} (str path)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6b27112ea7e1341e4be7c3fba8de6c80}{\+\_\+\+SEED\+\_\+\+DIR\+\_\+\+RE}} = re.\+compile(r\char`\"{}$^\wedge$seed-\/(\textbackslash{}d+)\$\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a637aee28a1189170151337ec297eb2f6}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a637aee28a1189170151337ec297eb2f6}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!discover\_seed\_dirs@{discover\_seed\_dirs}}
+\index{discover\_seed\_dirs@{discover\_seed\_dirs}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{discover\_seed\_dirs()}{discover\_seed\_dirs()}}
+{\footnotesize\ttfamily  list\mbox{[}str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+discover\+\_\+seed\+\_\+dirs (\begin{DoxyParamCaption}\item[{str}]{data\+\_\+dir }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Find all seed-N/ subdirs in *data_dir*, sorted by seed number.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a404841ca0e8c6d850f0a566e21e3c154}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a404841ca0e8c6d850f0a566e21e3c154}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_flows\_csv@{load\_flows\_csv}}
+\index{load\_flows\_csv@{load\_flows\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_flows\_csv()}{load\_flows\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+flows\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load flows.csv.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_afa6016c828fd150b3a5684d8b12b8826}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_afa6016c828fd150b3a5684d8b12b8826}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_links\_csv@{load\_links\_csv}}
+\index{load\_links\_csv@{load\_links\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_links\_csv()}{load\_links\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+links\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load links.csv (comment lines start with #).\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_af045d3929899b82f2bb09859e07a33ab}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_af045d3929899b82f2bb09859e07a33ab}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_mcs\_csv@{load\_mcs\_csv}}
+\index{load\_mcs\_csv@{load\_mcs\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_mcs\_csv()}{load\_mcs\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+mcs\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load mcs.csv.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a29e265a5230054111d39d60469afdc2d}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a29e265a5230054111d39d60469afdc2d}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_positions\_csv@{load\_positions\_csv}}
+\index{load\_positions\_csv@{load\_positions\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_positions\_csv()}{load\_positions\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+positions\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load positions.csv (comment lines start with #).\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6cac9ecec2fcdef52c211f7948f3dced}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6cac9ecec2fcdef52c211f7948f3dced}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_routes\_csv@{load\_routes\_csv}}
+\index{load\_routes\_csv@{load\_routes\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_routes\_csv()}{load\_routes\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+routes\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load routes.csv.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_acc3fb921f589e67a2bb9afb21d011732}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_acc3fb921f589e67a2bb9afb21d011732}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_rx\_power\_csv@{load\_rx\_power\_csv}}
+\index{load\_rx\_power\_csv@{load\_rx\_power\_csv}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_rx\_power\_csv()}{load\_rx\_power\_csv()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+rx\+\_\+power\+\_\+csv (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load rx-power.csv.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a86aeea626fad7e4005680c8a7e690079}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a86aeea626fad7e4005680c8a7e690079}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!load\_summary@{load\_summary}}
+\index{load\_summary@{load\_summary}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{load\_summary()}{load\_summary()}}
+{\footnotesize\ttfamily  dict $\vert$ None scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+load\+\_\+summary (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load summary.json.\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6b27112ea7e1341e4be7c3fba8de6c80}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders_a6b27112ea7e1341e4be7c3fba8de6c80}} 
+\index{scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}!\_SEED\_DIR\_RE@{\_SEED\_DIR\_RE}}
+\index{\_SEED\_DIR\_RE@{\_SEED\_DIR\_RE}!scratch.mesh-\/sim.scripts.plotting.loaders@{scratch.mesh-\/sim.scripts.plotting.loaders}}
+\doxysubsubsection{\texorpdfstring{\_SEED\_DIR\_RE}{\_SEED\_DIR\_RE}}
+{\footnotesize\ttfamily scratch.\+mesh-\/sim.\+scripts.\+plotting.\+loaders.\+\_\+\+SEED\+\_\+\+DIR\+\_\+\+RE = re.\+compile(r\char`\"{}$^\wedge$seed-\/(\textbackslash{}d+)\$\char`\"{})\hspace{0.3cm}{\ttfamily [private]}}
+

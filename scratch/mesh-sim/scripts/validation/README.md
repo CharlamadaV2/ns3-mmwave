@@ -1,4 +1,4 @@
-# scripts/validation
+@page scripts_validation scripts/validation
 
 @brief Module for comparing simulation results to arpo_data
 

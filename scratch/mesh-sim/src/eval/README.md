@@ -1,4 +1,4 @@
-# src/eval
+@page src_eval src/eval
 
 @brief Computes radio link quality for every node pair each simulation tick.  
 

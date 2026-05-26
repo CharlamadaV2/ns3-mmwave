@@ -1,4 +1,4 @@
-# scripts/arpo_data
+@page scripts_arpo_data scripts/arpo_data
 
 @brief Module for managing producing plots for ARPO Data
 

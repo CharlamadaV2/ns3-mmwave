@@ -1,4 +1,4 @@
-# src/traffic
+@page src_traffic src/traffic
 
 @brief Component for generating network traffic flow per tick for simulation  
 

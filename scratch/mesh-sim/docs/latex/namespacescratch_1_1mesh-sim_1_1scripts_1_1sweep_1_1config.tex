@@ -1,0 +1,43 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+sweep.\+config Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config}\index{scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_1_1SweepDimension}{Sweep\+Dimension}}
+\item 
+class \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_1_1SweepConfig}{Sweep\+Config}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+list\mbox{[}int\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a6bdee8b69ca17540a348701c41665404}{\+\_\+parse\+\_\+seeds}} (str seeds\+\_\+str)
+\item 
+tuple\mbox{[}str, str\mbox{]} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a67852328e2a7ca5c0f0d19771ca4040f}{\+\_\+parse\+\_\+section\+\_\+key}} (str dotted)
+\item 
+\mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_1_1SweepConfig}{Sweep\+Config}} \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_ad64ee8f739eca89512df99ab169cb5dd}{parse\+\_\+sweep\+\_\+config}} (str path)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a67852328e2a7ca5c0f0d19771ca4040f}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a67852328e2a7ca5c0f0d19771ca4040f}} 
+\index{scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}!\_parse\_section\_key@{\_parse\_section\_key}}
+\index{\_parse\_section\_key@{\_parse\_section\_key}!scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}}
+\doxysubsubsection{\texorpdfstring{\_parse\_section\_key()}{\_parse\_section\_key()}}
+{\footnotesize\ttfamily  tuple\mbox{[}str, str\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+sweep.\+config.\+\_\+parse\+\_\+section\+\_\+key (\begin{DoxyParamCaption}\item[{str}]{dotted }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}Split 'section.key' into (section, key). Exits on bad format.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a6bdee8b69ca17540a348701c41665404}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_a6bdee8b69ca17540a348701c41665404}} 
+\index{scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}!\_parse\_seeds@{\_parse\_seeds}}
+\index{\_parse\_seeds@{\_parse\_seeds}!scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}}
+\doxysubsubsection{\texorpdfstring{\_parse\_seeds()}{\_parse\_seeds()}}
+{\footnotesize\ttfamily  list\mbox{[}int\mbox{]} scratch.\+mesh-\/sim.\+scripts.\+sweep.\+config.\+\_\+parse\+\_\+seeds (\begin{DoxyParamCaption}\item[{str}]{seeds\+\_\+str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyVerb}Parse seeds string supporting ranges (e.g. '1-1000') and lists (e.g. '1, 2, 3').\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_ad64ee8f739eca89512df99ab169cb5dd}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_ad64ee8f739eca89512df99ab169cb5dd}} 
+\index{scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}!parse\_sweep\_config@{parse\_sweep\_config}}
+\index{parse\_sweep\_config@{parse\_sweep\_config}!scratch.mesh-\/sim.scripts.sweep.config@{scratch.mesh-\/sim.scripts.sweep.config}}
+\doxysubsubsection{\texorpdfstring{parse\_sweep\_config()}{parse\_sweep\_config()}}
+{\footnotesize\ttfamily  \mbox{\hyperlink{classscratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config_1_1SweepConfig}{Sweep\+Config}} scratch.\+mesh-\/sim.\+scripts.\+sweep.\+config.\+parse\+\_\+sweep\+\_\+config (\begin{DoxyParamCaption}\item[{str}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Parse a sweep INI file and return a validated SweepConfig.\end{DoxyVerb}
+ 

@@ -1,0 +1,72 @@
+Module for managing producing plots for ARPO Data
+
+Quicklook tooling for the {\bfseries{ARPO Spring Lake}} mm\+Wave-\/mesh field-\/test dataset (CSV exports from outdoor radio deployments). Read-\/only with respect to the source CSVs.\hypertarget{scripts_arpo_data_autotoc_md0}{}\doxysubsection{Setup}\label{scripts_arpo_data_autotoc_md0}
+Place the bundle here\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{scratch/mesh-\/sim/data/arpo\_spring\_lake\_data.zip}
+
+\end{DoxyCode}
+
+
+Each scenario inside has up to four node dirs ({\ttfamily rab1}, {\ttfamily rab2}, {\ttfamily rab3}, {\ttfamily sdwan}). The tool reads {\ttfamily bh2.\+csv} (per-\/link SNR/\+MCS/throughput/peer MAC), {\ttfamily gps.\+csv} / {\ttfamily geotak\+\_\+gps.\+csv}, and ignores the $\sim$25 host-\/telemetry CSVs.\hypertarget{scripts_arpo_data_autotoc_md1}{}\doxysubsection{Run}\label{scripts_arpo_data_autotoc_md1}
+From {\ttfamily scratch/mesh-\/sim/}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli extract                       \# unzip}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/scenario <name>        \# one scenario}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/all                    \# every scenario}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli multi-\/day                     \# day-\/vs-\/day ECDFs + K-\/S}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.multiday\_variance                 \# variance table from \_pairwise\_ks.csv}
+
+\end{DoxyCode}
+
+
+{\ttfamily multiday\+\_\+variance} is a read-\/only summary over the CSV produced by {\ttfamily multi-\/day}. It prints three views — per-\/family rollup, per-\/link rollup, and the detail table sorted by {\ttfamily $\vert$Δmed$\vert$} descending — so unstable day-\/to-\/day links surface at the top without opening any PNGs. Flags\+: {\ttfamily -\/-\/metric \{snr,rcpi,mcs,per,throughput\}}, {\ttfamily -\/-\/family $<$name$>$}, {\ttfamily -\/-\/top N}, {\ttfamily -\/-\/csv $<$out$>$}.\hypertarget{scripts_arpo_data_autotoc_md2}{}\doxysubsection{Output}\label{scripts_arpo_data_autotoc_md2}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
+\endhead
+{\ttfamily extract}   &{\ttfamily data/arpo\+\_\+extracted/csv/$<$scenario$>$/$<$node$>$/}    \\\cline{1-2}
+{\ttfamily plot}   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/\{pngs,csvs\}/$<$src$>$/}    \\\cline{1-2}
+{\ttfamily multi-\/day}   &{\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/multi\+\_\+day/$<$family$>$/} + two CSVs   \\\cline{1-2}
+\end{longtabu}
+
+
+{\ttfamily plot} emits per-\/radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. {\ttfamily multi-\/day} pools those traces by scenario family and writes ECDF overlays + {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv} and {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}.\hypertarget{scripts_arpo_data_autotoc_md3}{}\doxysubsection{Module layout}\label{scripts_arpo_data_autotoc_md3}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endhead
+\mbox{\hyperlink{sweep_2cli_8py}{cli}}   &Subcommand parser; saves figures returned by plot fns    \\\cline{1-2}
+\mbox{\hyperlink{paths_8py}{paths}}   &Filesystem constants    \\\cline{1-2}
+\mbox{\hyperlink{extract_8py}{extract}}   &{\ttfamily extract} subcommand    \\\cline{1-2}
+\mbox{\hyperlink{topology_8py}{topology}}   &MAC -\/$>$ rab label resolution + plot colors    \\\cline{1-2}
+\mbox{\hyperlink{plotting_2loaders_8py}{loaders}}   &Per-\/scenario {\ttfamily bh2} / {\ttfamily gps} / {\ttfamily mcm} loaders    \\\cline{1-2}
+plots/   &Per-\/scenario plot functions (bh2 metrics, GPS)    \\\cline{1-2}
+\mbox{\hyperlink{multi__day_8py}{multi\+\_\+day}}   &{\ttfamily multi-\/day} subcommand    \\\cline{1-2}
+\mbox{\hyperlink{multiday__variance_8py}{multiday\+\_\+variance}}   &Variance table over {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{scripts_arpo_data_autotoc_md4}{}\doxysubsection{Conventions}\label{scripts_arpo_data_autotoc_md4}
+
+\begin{DoxyItemize}
+\item Plot fns return a {\ttfamily matplotlib.\+Figure}; only {\ttfamily cli.\+py} calls {\ttfamily savefig}.
+\item Loaders return {\ttfamily pd.\+Data\+Frame $\vert$ None}.
+\item Node clocks are skewed -- comparisons use {\ttfamily \+\_\+\+\_\+sec\+\_\+\+\_\+} (session-\/relative), not raw UTC.
+\item Comments will be using Doxygen style (\#\# or \#\#$<$) to enable special commands (@).
+\end{DoxyItemize}\hypertarget{scripts_arpo_data_autotoc_md5}{}\doxysubsection{Dependencies}\label{scripts_arpo_data_autotoc_md5}
+{\ttfamily pandas}, {\ttfamily numpy}, and {\ttfamily matplotlib} 

@@ -1,4 +1,4 @@
-# src/cli
+@page src_cli src/cli
 
 @brief Command-line parsing and pre-simulation setup for mesh-sim.  
 

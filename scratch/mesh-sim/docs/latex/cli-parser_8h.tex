@@ -51,9 +51,9 @@ Separates argument handling and reproducibility bookkeeping from the top-\/level
 {\bfseries{Typical call sequence in sim.\+cc}} 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{CliArgs    args  = \mbox{\hyperlink{namespacemesh__sim_aa4b2ecd87a1d107fde936d7039ba25d3}{ParseCommandLine}}(argc, argv);}
-\DoxyCodeLine{SimConfig  cfg   = ConfigLoader::Load(args.run\_config\_path,}
+\DoxyCodeLine{SimConfig  \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train_a7f3537cd42bfe184e460675e4142c50d}{cfg}}   = ConfigLoader::Load(args.run\_config\_path,}
 \DoxyCodeLine{                                      args.positions\_override\_path);}
-\DoxyCodeLine{\textcolor{keyword}{auto}       seeds = \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{ResolveSeeds}}(args, cfg);}
+\DoxyCodeLine{\textcolor{keyword}{auto}       seeds = \mbox{\hyperlink{namespacemesh__sim_accda71be7646550a00f0f0492a9c93ed}{ResolveSeeds}}(args, \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train_a7f3537cd42bfe184e460675e4142c50d}{cfg}});}
 \DoxyCodeLine{\mbox{\hyperlink{namespacemesh__sim_aa1d04f3bb0ee54771ce1ee82f2b3cd27}{ArchiveScenarioInputs}}(args.output\_dir, args.run\_config\_path);}
 
 \end{DoxyCode}

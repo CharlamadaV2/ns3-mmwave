@@ -1,0 +1,30 @@
+\hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer}{}\doxysection{scratch.\+mesh-\/sim.\+scripts.\+sweep.\+ini\+\_\+writer Namespace Reference}
+\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer}\index{scratch.mesh-\/sim.scripts.sweep.ini\_writer@{scratch.mesh-\/sim.scripts.sweep.ini\_writer}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+str \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_aa62efb46da5e5e36f122998d1d341acf}{write\+\_\+point\+\_\+ini}} (str base\+\_\+run\+\_\+ini, str point\+\_\+dir, dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, str\mbox{]} overrides, dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, str\mbox{]} point\+\_\+params, str scenario\+\_\+name)
+\item 
+None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_a209851b0b2c4ac948e203716f196b9db}{copy\+\_\+scenario\+\_\+files}} (str base\+\_\+scenario\+\_\+dir, str point\+\_\+dir, str nodes\+\_\+file=\char`\"{}nodes.\+json\char`\"{}, str buildings\+\_\+file=\char`\"{}\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_a209851b0b2c4ac948e203716f196b9db}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_a209851b0b2c4ac948e203716f196b9db}} 
+\index{scratch.mesh-\/sim.scripts.sweep.ini\_writer@{scratch.mesh-\/sim.scripts.sweep.ini\_writer}!copy\_scenario\_files@{copy\_scenario\_files}}
+\index{copy\_scenario\_files@{copy\_scenario\_files}!scratch.mesh-\/sim.scripts.sweep.ini\_writer@{scratch.mesh-\/sim.scripts.sweep.ini\_writer}}
+\doxysubsubsection{\texorpdfstring{copy\_scenario\_files()}{copy\_scenario\_files()}}
+{\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+sweep.\+ini\+\_\+writer.\+copy\+\_\+scenario\+\_\+files (\begin{DoxyParamCaption}\item[{str}]{base\+\_\+scenario\+\_\+dir,  }\item[{str}]{point\+\_\+dir,  }\item[{str }]{nodes\+\_\+file = {\ttfamily \char`\"{}nodes.json\char`\"{}},  }\item[{str }]{buildings\+\_\+file = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Copy nodes.json and buildings.json from the base scenario to point_dir.\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_aa62efb46da5e5e36f122998d1d341acf}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer_aa62efb46da5e5e36f122998d1d341acf}} 
+\index{scratch.mesh-\/sim.scripts.sweep.ini\_writer@{scratch.mesh-\/sim.scripts.sweep.ini\_writer}!write\_point\_ini@{write\_point\_ini}}
+\index{write\_point\_ini@{write\_point\_ini}!scratch.mesh-\/sim.scripts.sweep.ini\_writer@{scratch.mesh-\/sim.scripts.sweep.ini\_writer}}
+\doxysubsubsection{\texorpdfstring{write\_point\_ini()}{write\_point\_ini()}}
+{\footnotesize\ttfamily  str scratch.\+mesh-\/sim.\+scripts.\+sweep.\+ini\+\_\+writer.\+write\+\_\+point\+\_\+ini (\begin{DoxyParamCaption}\item[{str}]{base\+\_\+run\+\_\+ini,  }\item[{str}]{point\+\_\+dir,  }\item[{dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, str\mbox{]}}]{overrides,  }\item[{dict\mbox{[}tuple\mbox{[}str, str\mbox{]}, str\mbox{]}}]{point\+\_\+params,  }\item[{str}]{scenario\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Read base run.ini, apply overrides + point params, write to point_dir.
+
+Returns the path to the written run.ini.
+\end{DoxyVerb}
+ 

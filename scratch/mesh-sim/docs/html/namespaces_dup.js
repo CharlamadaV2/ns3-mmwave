@@ -3,6 +3,7 @@ var namespaces_dup =
     [ "docstring", "namespacedocstring.html", null ],
     [ "mesh_sim", "namespacemesh__sim.html", "namespacemesh__sim" ],
     [ "scratch", null, [
+      [ "mesh", "namespacescratch_1_1mesh.html", null ],
       [ "mesh-sim", null, [
         [ "scripts", null, [
           [ "arpo_data", null, [
@@ -63,6 +64,85 @@ var namespaces_dup =
               [ "radio_index", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a681a7d7ef34c18f98dd0246058233021", null ],
               [ "radio_label", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a06665ab6680c5342211daa86aa07bf58", null ],
               [ "resolve_peer", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a1a580f5cccded40f10bd3f9e95cf3a05", null ]
+            ] ]
+          ] ],
+          [ "plotting", null, [
+            [ "aggregation", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html", [
+              [ "_stats", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#a527d0d3df1ae6d4439d95c8ce1d33cd4", null ],
+              [ "_t_critical", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#a3cd75abe10dbcc814e208e09e6b8aa9c", null ],
+              [ "aggregate_summaries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#acbc84a0c6ac1176164de98192654389f", null ],
+              [ "aggregate_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#a56f48c03fa8c7e4888d179a29fe7c27d", null ],
+              [ "_CI_METRICS", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#ace23b2929991c39adb993e76ad090ba1", null ],
+              [ "_T_TABLE_95", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1aggregation.html#a65937da96f826823905e5ecfe036ad7e", null ]
+            ] ],
+            [ "cli", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1cli.html", [
+              [ "_enabled", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1cli.html#a40b76679a29b39af29bda561e7afb059", null ],
+              [ "_save", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1cli.html#a45c25d9a3db681312dd2f1d929aaaf84", null ],
+              [ "main", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1cli.html#a8e38354c4bbe3c36f48e254236afc0c3", null ]
+            ] ],
+            [ "loaders", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html", [
+              [ "discover_seed_dirs", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a637aee28a1189170151337ec297eb2f6", null ],
+              [ "load_flows_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a404841ca0e8c6d850f0a566e21e3c154", null ],
+              [ "load_links_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#afa6016c828fd150b3a5684d8b12b8826", null ],
+              [ "load_mcs_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#af045d3929899b82f2bb09859e07a33ab", null ],
+              [ "load_positions_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a29e265a5230054111d39d60469afdc2d", null ],
+              [ "load_routes_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a6cac9ecec2fcdef52c211f7948f3dced", null ],
+              [ "load_rx_power_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#acc3fb921f589e67a2bb9afb21d011732", null ],
+              [ "load_summary", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a86aeea626fad7e4005680c8a7e690079", null ],
+              [ "_SEED_DIR_RE", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1loaders.html#a6b27112ea7e1341e4be7c3fba8de6c80", null ]
+            ] ],
+            [ "plots_summary", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html", [
+              [ "_bar_chart", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#aa1898dac9505c27a3b04066dd401c0b9", null ],
+              [ "_label", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#aeeb645f4d4b8bcfc31f36f983086d2c0", null ],
+              [ "plot_network_summary", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#ad967e80f5ef98abd23bb5f16419dcf61", null ],
+              [ "plot_per_flow_bars", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#a93b02ae18afb6ee4b96ecb216bd1882c", null ],
+              [ "plot_per_node_bars", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#ac28d13c6690ab25e40d33258df36fa14", null ],
+              [ "plot_sim_runtime", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#a98bc0f98ba1033469ace5b2ababd68a6", null ],
+              [ "_COLORS", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#a39bb5b87e77e58e8de37396d225ff1b5", null ],
+              [ "_METRIC_LABELS", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__summary.html#a49f150eaa996d4c68899650b727b3c95", null ]
+            ] ],
+            [ "plots_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html", [
+              [ "_plot_per_flow", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a31e0a41ef3ede396b016cf52b8a83c51", null ],
+              [ "_plot_per_link", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a78e84c3bd732537cd5e2546f5bbec9ea", null ],
+              [ "_style_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a62ba3801274db66bf0172574660d45cf", null ],
+              [ "plot_capacity_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#ae36978a2c31d2493ff01ce524e38e06a", null ],
+              [ "plot_derived_geometry", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#ac85e5b792f6aae1755498a5c53a1d470", null ],
+              [ "plot_latency_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a95be57362842c2e7f303de383088e22a", null ],
+              [ "plot_mcs_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#abd8501512b4b57552d5d5ad91a2a5af2", null ],
+              [ "plot_rx_power_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#aa14d59b2a5dad1d41930d9505111857e", null ],
+              [ "plot_sinr_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a479bde3f8d732790003ced6f9c9945ad", null ],
+              [ "plot_throughput_timeseries", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a3384c846e11d5088dc6b4edfae4e59ae", null ],
+              [ "_COLORS", "namespacescratch_1_1mesh-sim_1_1scripts_1_1plotting_1_1plots__timeseries.html#a11e278bc821d7bab7df5d4e217814e80", null ]
+            ] ]
+          ] ],
+          [ "rl", null, [
+            [ "agent", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1agent.html", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1agent" ],
+            [ "config", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1config.html", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1config" ],
+            [ "env", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1env.html", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1env" ],
+            [ "train", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train.html", [
+              [ "_read_rl_bounds", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train.html#a81acbc1782755060e823d7974ae6d731", null ],
+              [ "parse_args", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train.html#a89fc919b519816f7a7e45621d25dc64c", null ],
+              [ "train", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train.html#ac86fffe08fa4486ab9de29a19fc4c88f", null ],
+              [ "cfg", "namespacescratch_1_1mesh-sim_1_1scripts_1_1rl_1_1train.html#a7f3537cd42bfe184e460675e4142c50d", null ]
+            ] ]
+          ] ],
+          [ "sweep", null, [
+            [ "cli", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1cli.html", [
+              [ "main", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1cli.html#a7bd8db761b7e25804b9e0d5054804231", null ]
+            ] ],
+            [ "config", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config.html", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1config" ],
+            [ "ini_writer", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer.html", [
+              [ "copy_scenario_files", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer.html#a209851b0b2c4ac948e203716f196b9db", null ],
+              [ "write_point_ini", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1ini__writer.html#aa62efb46da5e5e36f122998d1d341acf", null ]
+            ] ],
+            [ "runner", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html", [
+              [ "_find_sim_binary", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#a6421d3fc6ebcb785ae97ebcd4bdd0fc2", null ],
+              [ "_is_point_complete", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#a2cadbf04f7d3f4b9eec77ed81a0363ec", null ],
+              [ "_point_label", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#a1c91eaccaaeb9c22c111b05798acf969", null ],
+              [ "_read_buildings_file", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#a9315819b43a4143fb45bf5239f606010", null ],
+              [ "_read_nodes_file", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#ad686f69ca2594a89e8af0fb4d176d2ab", null ],
+              [ "_run_plotting", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#aa936559f5bcf7ac43a8797b821a845e2", null ],
+              [ "run_sweep", "namespacescratch_1_1mesh-sim_1_1scripts_1_1sweep_1_1runner.html#a723dd4dcbcd90bb738c5f4effac8c244", null ]
             ] ]
           ] ],
           [ "validation", null, [

@@ -1,7 +1,7 @@
 Computes radio link quality for every node pair each simulation tick. ~\newline
 
 
-Given the current node positions and ns-\/3 propagation models, this module produces path loss, SINR, capacity, and MCS for each link, then stores the results in a symmetric matrix for O(1) lookup by the routing and metrics layers.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md30}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md30}
+Given the current node positions and ns-\/3 propagation models, this module produces path loss, SINR, capacity, and MCS for each link, then stores the results in a symmetric matrix for O(1) lookup by the routing and metrics layers.\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md28}{}\doxysection{Output}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md28}
 The eval module produces no files. It outputs two in-\/memory data structures each tick\+:
 
 $\ast$$\ast${\ttfamily std\+::vector$<$Link\+Result$>$}$\ast$$\ast$ — returned by {\ttfamily Link\+Evaluator\+::\+Evaluate\+All}. One entry per unordered node pair (N·(N−1)/2 total), in (i $<$ j) index order.
@@ -28,7 +28,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 {\ttfamily mcs\+\_\+index}   &CQI index \mbox{[}0–14\mbox{]} selected by the AMC model.    \\\cline{1-2}
 {\ttfamily condition\+\_\+from\+\_\+buildings}   &{\ttfamily true} if LOS/\+NLOS was determined deterministically by buildings.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md31}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md31}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md29}{}\doxysection{Module Layout}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md29}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -45,7 +45,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 {\ttfamily \mbox{\hyperlink{link-table_8h}{link-\/table.\+h}}}   &{\ttfamily Link\+Table} class\+: symmetric N×N matrix with O(1) lookup and aggregate queries.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{link-table_8cc}{link-\/table.\+cc}}}   &{\ttfamily Update}, {\ttfamily Get}, {\ttfamily Max\+Capacity}, {\ttfamily Connected\+Link\+Count}, {\ttfamily Is\+Connected} implementations.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md32}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md32}
+\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md30}{}\doxysection{Conventions}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md30}
 
 \begin{DoxyItemize}
 \item {\bfseries{No inter-\/node interference.}} mm\+Wave beams are assumed orthogonal so SINR is computed as received signal power vs thermal noise floor only — no ICI term. The noise floor is\+: {\ttfamily −174 + 10·log₂(bandwidth\+\_\+\+Hz) + noise\+\_\+figure\+\_\+dB}.
@@ -55,7 +55,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 \item {\bfseries{SINR sentinel is −999.0.}} Links that are unevaluated or below the noise floor carry {\ttfamily sinr\+\_\+db = −999.0}. Consumers check {\ttfamily sinr\+\_\+db $>$ −900.0} to filter these out rather than using a boolean flag.
 \item {\bfseries{Connectivity threshold is −6.7 dB.}} This matches {\ttfamily SINR\+\_\+\+MIN\+\_\+\+DB} in {\ttfamily \mbox{\hyperlink{sinr-capacity_8h}{sinr-\/capacity.\+h}}} — the minimum SINR for any MCS entry. Links below this have zero capacity and are treated as disconnected by the routing layer.
 \item $\ast$$\ast${\ttfamily Link\+Evaluator\+::\+Configure} must be called before any evaluation.$\ast$$\ast$ It caches the noise floor and beamforming gain derived from {\ttfamily Sim\+Config} and stores the propagation model pointers. Calling {\ttfamily Evaluate} or {\ttfamily Evaluate\+All} without configuring first is a null pointer dereference.
-\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md33}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md33}
+\end{DoxyItemize}\hypertarget{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md31}{}\doxysection{Dependencies}\label{md__home_kimson_ns3_mmwave_scratch_mesh_sim_src_eval_README_autotoc_md31}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline

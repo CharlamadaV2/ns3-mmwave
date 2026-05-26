@@ -1,0 +1,112 @@
+Module for comparing simulation results to arpo\+\_\+data
+
+Sim-\/vs-\/field comparison pipeline. Runs mesh-\/sim across a directory of scenarios (multi-\/seed), then overlays the pooled sim distribution against ARPO field traces as an ECDF with a bootstrap 90\% CI band and a two-\/sample K-\/S statistic.
+
+{\bfseries{Scenario inputs}} come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} — one subdirectory per scenario, each containing {\ttfamily run.\+ini} and {\ttfamily nodes.\+json}. {\bfseries{Field traces}} come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{scripts_validation_autotoc_md6}{}\doxysubsection{Run}\label{scripts_validation_autotoc_md6}
+From {\ttfamily scratch/mesh-\/sim/}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# 1. Produce field trace CSVs (one-\/time per dataset; skip if already done)}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/all}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 2. Run the sim across all scenarios (default: 5 seeds each)}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 3. Convert per-\/seed sim outputs to arpo\_data-\/style trace CSVs}
+\DoxyCodeLine{python -\/m scripts.validation.sim\_to\_traces outputs/<batch>}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 4. ECDF + bootstrap CI + K-\/S vs field}
+\DoxyCodeLine{python -\/m scripts.validation.compare outputs/<batch>}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 5. Cross-\/batch summary (overall + per-\/scenario)}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# 6. Scenario fidelity audit (sim vs field layout / mobility)}
+\DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity outputs/<batch>}
+
+\end{DoxyCode}
+\hypertarget{scripts_validation_autotoc_md7}{}\doxysubsubsection{Flags}\label{scripts_validation_autotoc_md7}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# Run with more seeds}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/seeds 1,2,3,4,5,6,7,8,9,10}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Dry-\/run a single scenario}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/only arpo-\/1-\/1-\/static-\/04172026 -\/-\/dry-\/run}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Compare only SNR and RCPI with a tighter CI}
+\DoxyCodeLine{python -\/m scripts.validation.compare <batch> -\/-\/metrics snr,rcpi -\/-\/ci 95}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Compare two specific batches}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs <batch1> <batch2> -\/-\/metric snr}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Overall tables only (suppress per-\/scenario matrix)}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs -\/-\/no-\/per-\/scenario}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Export comparison results to CSV}
+\DoxyCodeLine{python -\/m scripts.validation.compare\_runs \(\backslash\)}
+\DoxyCodeLine{    -\/-\/csv outputs/cmp.csv \(\backslash\)}
+\DoxyCodeLine{    -\/-\/per-\/scenario-\/csv outputs/cmp\_long.csv}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Fidelity check for a single scenario with a looser tolerance}
+\DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity <batch> \(\backslash\)}
+\DoxyCodeLine{    -\/-\/only arpo-\/2-\/2-\/los-\/obstruction-\/04172026 -\/-\/tol-\/m 10}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Preview waypoint patch without writing}
+\DoxyCodeLine{python -\/m scripts.validation.build\_waypoints \(\backslash\)}
+\DoxyCodeLine{    arpo-\/2-\/2-\/los-\/obstruction-\/04172026 -\/-\/dry-\/run}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Patch waypoints scaled to a 120 s sim window, then run}
+\DoxyCodeLine{python -\/m scripts.validation.build\_waypoints -\/-\/all -\/-\/time-\/mode scale -\/-\/duration 120}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# Same thing in one step}
+\DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/auto-\/waypoints}
+
+\end{DoxyCode}
+\hypertarget{scripts_validation_autotoc_md8}{}\doxysubsection{Output}\label{scripts_validation_autotoc_md8}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Location    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Location    }\\\cline{1-2}
+\endhead
+{\ttfamily run\+\_\+batch}   &{\ttfamily outputs/.../$<$scenario$>$/seed-\/\+N/\{links,mcs,rx-\/power\}.csv} + {\ttfamily batch\+\_\+manifest.\+json}    \\\cline{1-2}
+{\ttfamily sim\+\_\+to\+\_\+traces}   &{\ttfamily outputs/.../$<$scenario$>$/sim\+\_\+traces/seed-\/\+N/csvs/$<$src$>$/bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv}    \\\cline{1-2}
+{\ttfamily compare}   &{\ttfamily outputs/.../$<$scenario$>$/validation/pngs/$<$src$>$/ecdf\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$.png} + per-\/scenario {\ttfamily metrics.\+csv} + top-\/level {\ttfamily validation\+\_\+summary.\+csv}   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{scripts_validation_autotoc_md9}{}\doxysubsection{Module layout}\label{scripts_validation_autotoc_md9}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ File   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Role    }\\\cline{1-2}
+\endhead
+\mbox{\hyperlink{run__batch_8py}{run\+\_\+batch}}   &One sim binary call per scenario, fanning out seeds via {\ttfamily -\/-\/seeds=}    \\\cline{1-2}
+\mbox{\hyperlink{sim__to__traces_8py}{sim\+\_\+to\+\_\+traces}}   &Rewrites per-\/seed sim CSVs into arpo\+\_\+data-\/compatible trace CSVs    \\\cline{1-2}
+\mbox{\hyperlink{compare_8py}{compare}}   &Pools sim seeds + field directions, renders ECDF overlays + K-\/S    \\\cline{1-2}
+\mbox{\hyperlink{compare__runs_8py}{compare\+\_\+runs}}   &Cross-\/batch summary table (overall + per-\/scenario)    \\\cline{1-2}
+\mbox{\hyperlink{scenario__fidelity_8py}{scenario\+\_\+fidelity}}   &Per-\/scenario sim-\/vs-\/field layout/mobility audit    \\\cline{1-2}
+\mbox{\hyperlink{build__waypoints_8py}{build\+\_\+waypoints}}   &Generate waypoint mobility for a node from its field GPS trace   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{scripts_validation_autotoc_md10}{}\doxysubsection{Conventions}\label{scripts_validation_autotoc_md10}
+
+\begin{DoxyItemize}
+\item {\bfseries{Distributional comparison, not temporal.}} Sim and field samples are pooled raw (no smoothing, no time alignment). The comparison is over the marginal distribution of each metric.
+\item {\bfseries{MCS cap.}} Sim MCS is post-\/capped at 12 to match the field firmware limit before any comparison is made.
+\item {\bfseries{Sim trace MAC columns are empty.}} {\ttfamily sim\+\_\+to\+\_\+traces} leaves {\ttfamily tag\+\_\+local\+\_\+mac}, {\ttfamily tag\+\_\+sta\+\_\+mac}, and {\ttfamily tag\+\_\+interface} blank — the sim has no per-\/antenna identity.
+\item {\bfseries{Scenario name mapping.}} Sim names translate to field names by stripping {\ttfamily arpo-\/}, joining the middle tokens with {\ttfamily \+\_\+}, and upper-\/casing single-\/letter family tokens\+: {\ttfamily arpo-\/1-\/x-\/misc-\/04172026} → {\ttfamily 1-\/X\+\_\+misc\+\_\+04172026}.
+\item {\bfseries{NaN rows in {\ttfamily validation\+\_\+summary.\+csv}}} mean the field collect did not capture telemetry for that link (e.\+g. rab2 and rab3 were not beam-\/paired during the scenario). This is expected for some scenarios and is not a pipeline error.
+\item $\ast$$\ast${\ttfamily -\/-\/auto-\/waypoints} mutates {\ttfamily inputs/}.$\ast$$\ast$ The patch is permanent for the duration of the run. Use {\ttfamily git diff inputs/} to review and {\ttfamily git checkout inputs/} to revert.
+\item $\ast$$\ast${\ttfamily build\+\_\+waypoints} mobility classifier is bbox-\/based$\ast$$\ast$ (threshold\+: 20 m max bounding-\/box dimension). Path length alone is GPS-\/noise-\/prone and would misclassify jittery static nodes as mobile.
+\end{DoxyItemize}\hypertarget{scripts_validation_autotoc_md11}{}\doxysubsection{Dependencies}\label{scripts_validation_autotoc_md11}
+{\ttfamily pandas}, {\ttfamily numpy}, and {\ttfamily matplotlib} 

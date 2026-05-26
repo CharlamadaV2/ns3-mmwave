@@ -1,4 +1,4 @@
-# src/util
+@page src_util src/util
 
 @brief Low-level string, path, and INI parsing utilities shared across all modules.
 

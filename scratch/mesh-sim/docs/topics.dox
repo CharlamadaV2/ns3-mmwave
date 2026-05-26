@@ -1,0 +1,24 @@
+/**
+ * @page scripts Scripts
+ * Field data processing and simulation validation pipelines.
+ *
+ * ## Packages
+ * - @subpage scripts_arpo_data
+ * - @subpage scripts_validation
+ */
+
+/**
+ * @page src Src
+ * ns-3 mesh simulator source modules.
+ *
+ * ## Modules
+ * - @subpage src_domain
+ * - @subpage src_config
+ * - @subpage src_eval
+ * - @subpage src_routing
+ * - @subpage src_traffic
+ * - @subpage src_io
+ * - @subpage src_util
+ * - @subpage src_cli
+ * - @subpage src_setup
+ */

@@ -1,4 +1,5 @@
-# src/domain
+@page src_domain src/domain
+
 @brief Configuration headers to be used by @ref config-loader.cc.  
 
 The domain folder contains the configuration for classes and objects used in the simulation.

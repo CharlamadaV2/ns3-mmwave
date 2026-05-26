@@ -1,0 +1,112 @@
+\hypertarget{namespacescratch_1_1mesh}{}\doxysection{scratch.\+mesh Namespace Reference}
+\label{namespacescratch_1_1mesh}\index{scratch.mesh@{scratch.mesh}}
+
+
+-\/sim\+::scripts\+::plotting\+::aggregation  
+
+
+
+
+\doxysubsection{Detailed Description}
+-\/sim\+::scripts\+::plotting\+::aggregation 
+
+-\/sim\+::scripts\+::sweep\+::runner
+
+-\/sim\+::scripts\+::sweep\+::ini\+\_\+writer
+
+-\/sim\+::scripts\+::sweep\+::config
+
+-\/sim\+::scripts\+::sweep\+::cli
+
+-\/sim\+::scripts\+::rl\+::train
+
+-\/sim\+::scripts\+::rl\+::env
+
+-\/sim\+::scripts\+::rl\+::config
+
+-\/sim\+::scripts\+::rl\+::agent
+
+-\/sim\+::scripts\+::plotting\+::plots\+\_\+timeseries
+
+-\/sim\+::scripts\+::plotting\+::plots\+\_\+summary
+
+-\/sim\+::scripts\+::plotting\+::loaders
+
+-\/sim\+::scripts\+::plotting\+::cli
+
+\begin{DoxyVerb}Multi-seed aggregation with 95% confidence intervals.
+
+Two strategies:
+  1. aggregate_timeseries — for CSV time-series data (mean + CI per timestep)
+  2. aggregate_summaries  — for summary.json scalar metrics
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}CLI entry point for mesh-sim plotting.
+
+Usage:
+    python -m scripts.plotting.cli --config scripts/plotting/plot.example.ini
+    python scripts/plotting/cli.py --config path/to/plot.ini
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Single-file data loaders and seed directory discovery for mesh-sim outputs.\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Summary plot functions for mesh-sim outputs (from summary.json).
+
+Each function takes aggregated summary data and returns a matplotlib Figure.
+No function calls savefig or plt.show.
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Time-series plot functions for mesh-sim outputs.
+
+Each function takes a pre-aggregated DataFrame (output of aggregate_timeseries)
+and returns a matplotlib Figure. No function calls savefig or plt.show.
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Tabular Q-learning agent for mesh-sim RL positioning.
+
+Discretizes the continuous observation into (x_bin, y_bin, sinr_bin) and
+maintains a Q-table over that state space.  Follows the SB3
+``predict(obs) -> (action, None)`` interface so it can be swapped for a
+Stable Baselines 3 policy later with minimal changes.
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}RL training configuration dataclass.\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Gymnasium environment wrapping the C++ mesh simulator via stdin/stdout JSON.\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Training entry point for the mesh-sim RL agent.
+
+Usage
+-----
+    python -m scripts.rl.train \
+        --sim-binary build/scratch/mesh-sim/ns3*-sim-* \
+        --run-config scratch/mesh-sim/inputs/baselines/rl-test/run.ini \
+        --num-episodes 50
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}CLI entry point for mesh-sim parameter sweeps.
+
+Usage:
+    python -m scripts.sweep.cli --config inputs/sweeps/example.ini
+    python -m scripts.sweep.cli --config inputs/sweeps/example.ini --dry-run
+    python -m scripts.sweep.cli --config inputs/sweeps/example.ini --resume
+\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Parse sweep INI configuration files.\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Generate per-sweep-point run.ini files from a base scenario.\end{DoxyVerb}
+
+
+\begin{DoxyVerb}Orchestrate a parameter sweep: generate configs, run sims, plot.\end{DoxyVerb}
+ 
