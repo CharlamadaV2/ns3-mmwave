@@ -12,6 +12,7 @@
  */
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -80,16 +81,18 @@ struct Waypoint
  */
 struct NodeSpec
 {
-    std::string id;         ///< Unique node identifier (e.g. @c "rab1").
-    std::string role;       ///< Node role; always @c "peer" in mesh-sim.
-    std::string mobility;   ///< Mobility model: @c "fixed", @c "constant_velocity",
-                            ///<   @c "random_walk", or @c "waypoint".
-    std::string node_type;  ///< Physical category: @c "drone", @c "vehicle", or
-                            ///<   @c "pedestrian". Determines the RL speed cap.
-    Position    position;   ///< Initial position (and fixed position for @c "fixed" nodes).
-    Velocity    velocity;   ///< Constant velocity (used only when @c mobility == "constant_velocity").
-    RandomWalkParams random_walk;           ///< Walk parameters (used only when @c mobility == "random_walk").
-    std::vector<Waypoint> waypoints;        ///< Ordered waypoint list (used only when @c mobility == "waypoint").
+    std::string id;
+    std::string role;       // "peer" (all nodes are peers in mesh-sim)
+    std::string mobility;   // "fixed", "constant_velocity", "random_walk", "waypoint"
+    std::string node_type;  // "drone", "vehicle", "pedestrian" — determines max speed
+    Position    position;
+    Velocity    velocity;
+    RandomWalkParams random_walk;
+    std::vector<Waypoint> waypoints;  // used only when mobility == "waypoint"
+
+    // Per-node array gain overrides; fall back to channel.tx/rx_array_gain_dbi.
+    std::optional<double> tx_array_gain_dbi;
+    std::optional<double> rx_array_gain_dbi;
 };
 
 /**

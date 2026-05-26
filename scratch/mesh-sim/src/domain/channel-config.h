@@ -69,7 +69,20 @@ struct NyuChannelConfig
  */
 struct ChannelConfig
 {
-    // ---- Shared parameters (both 3gpp and nyu) -----------------------------
+    // Shared between 3gpp and nyu
+    double      frequency_ghz    = 28.0;
+    double      tx_power_dbm     = 30.0;   // per-node transmit power (dBm)
+    std::string scenario         = "UMi";  // "UMi", "UMa", "RMa", "InH", "InF"
+    std::string channel_model    = "3gpp"; // "3gpp" or "nyu"
+    std::string condition_model  = "auto"; // "auto" or "static_los"
+    bool        blockage_enabled = true;   // 3gpp: ThreeGppChannelModel::Blockage
+                                           // nyu:  NYUChannelModel::Blockage
+    std::string beamforming_model = "svd";    // for reference; simplified in mesh-sim
+    std::string amc_model         = "shannon"; // "shannon" or "table"
+    double      noise_figure_db   = 5.0;      // receiver noise figure
+    double      bandwidth_mhz     = 400.0;    // system bandwidth for noise floor and capacity
+    double      tx_array_gain_dbi = 12.0;     // peak directional gain per side
+    double      rx_array_gain_dbi = 12.0;
 
     double      frequency_ghz     = 28.0;    ///< Carrier frequency in GHz.
     double      tx_power_dbm      = 30.0;    ///< Per-node transmit power in dBm.

@@ -116,6 +116,8 @@ class _DayBag:
 # @return Dict keyed by ``(day, src_rab, peer_rab, metric_short)`` → @ref _DayBag.
 def _load_traces_for_family(
     days: dict[str, list[Path]],
+    *,
+    audit: bool = False,
 ) -> dict[tuple[str, str, str, str], _DayBag]:
     bags: dict[tuple[str, str, str, str], _DayBag] = {}
     for day, scen_dirs in days.items():
@@ -139,7 +141,10 @@ def _load_traces_for_family(
                                      (spec.column, "tag_local_mac", "tag_sta_mac"))
                     if spec.column not in df.columns or df.empty:
                         continue
-                    vals = pd.to_numeric(df[spec.column], errors="coerce").dropna()
+                    raw_col = df[spec.column]
+                    vals = pd.to_numeric(raw_col, errors="coerce").dropna()
+                    if audit:
+                        _audit_csv(csv_path, raw_col, vals, day, src, peer, spec.short)
                     if vals.empty:
                         continue
                     key = (day, src, peer, spec.short)
@@ -157,6 +162,24 @@ def _load_traces_for_family(
                     bag.n_scenarios += 1
     return bags
 
+
+def _audit_csv(csv_path: Path, raw_col: pd.Series, parsed: pd.Series,
+               day: str, src: str, peer: str, metric: str) -> None:
+    """Compare raw vs parsed counts/max — surfaces NaN-coerce drops + tail-loss."""
+    raw_n = int(raw_col.size)
+    parsed_n = int(parsed.size)
+    raw_max = pd.to_numeric(raw_col, errors="coerce").max()
+    parsed_max = float(parsed.max()) if parsed_n else float("nan")
+    dropped = raw_n - parsed_n
+    flag = ""
+    if dropped > 0:
+        flag += f"  DROPPED={dropped}"
+    if parsed_n and pd.notna(raw_max) and float(raw_max) > parsed_max + 1e-9:
+        flag += f"  MAX_MISMATCH(raw={float(raw_max):.3f} > parsed={parsed_max:.3f})"
+    print(f"  [audit] {day} {src}->{peer} {metric:>10s}: "
+          f"raw_n={raw_n} parsed_n={parsed_n} "
+          f"raw_max={float(raw_max) if pd.notna(raw_max) else 'NaN'} "
+          f"parsed_max={parsed_max}{flag}")
 
 ## @brief Compute quantile summary statistics for an array of values.
 #
@@ -179,18 +202,6 @@ def _summary(values: np.ndarray) -> dict:
     }
 
 
-## @brief Compute the empirical CDF of a sample array.
-#
-# Uses a step ECDF: x is the sorted data; y(i) = (i+1)/n.
-#
-# @param values 1-D numeric array.
-# @return Tuple ``(x, y)`` of sorted values and their cumulative probabilities.
-def _ecdf(values: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    x = np.sort(values)
-    y = np.arange(1, x.size + 1) / x.size
-    return x, y
-
-
 ## @brief Compute the two-sample Kolmogorov-Smirnov statistic without scipy.
 #
 # Evaluates ``max |F_a(x) − F_b(x)|`` over the joint support by merging
@@ -209,61 +220,88 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
-## @brief Metric unit strings for axis and legend annotation.
-_UNIT_BY_SHORT: dict[str, str] = {
-    "snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"
-}
+def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
+                  max_samples: int = 20000) -> np.ndarray:
+    """Gaussian KDE on ``x_grid``, Silverman bandwidth, numpy-only."""
+    n = values.size
+    if n == 0 or x_grid.size == 0:
+        return np.full_like(x_grid, np.nan, dtype=np.float64)
+    if n > max_samples:
+        idx = np.random.default_rng(0).choice(n, size=max_samples, replace=False)
+        values = values[idx]
+        n = max_samples
+    sigma = float(np.std(values))
+    if sigma <= 0:
+        sigma = 1.0
+    h = 1.06 * sigma * n ** (-1.0 / 5.0)
+    if h <= 0:
+        h = 1e-3
+    diff = (x_grid[:, None] - values[None, :]) / h
+    return np.sum(np.exp(-0.5 * diff * diff), axis=1) / (n * h * np.sqrt(2.0 * np.pi))
 
 
-## @brief Render an ECDF overlay figure for one (family, link, metric) combination.
-#
-# One step-curve is drawn per day, with a vertical dotted line at the median.
-# A subtitle line shows the median delta and, for two-day comparisons, the K-S
-# statistic.
-#
-# @param family      Scenario family name (used in the title).
-# @param src         Source rab hostname.
-# @param peer        Peer rab hostname.
-# @param metric      @ref _MetricSpec describing the metric being plotted.
-# @param bags_by_day Mapping from date string to @ref _DayBag.
-# @param ks_value    Pre-computed K-S statistic to annotate, or ``None``.
-# @return Matplotlib Figure object (caller is responsible for saving/closing).
-def _plot_ecdfs(
-    family:      str,
-    src:         str,
-    peer:        str,
-    metric:      _MetricSpec,
+_UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
+
+
+def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.ndarray:
+    """Freedman-Diaconis bin edges across pooled values."""
+    if values.size < 2:
+        lo = float(np.min(values)) if values.size else 0.0
+        return np.linspace(lo, lo + 1.0, min_bins + 1)
+    q25, q75 = np.percentile(values, [25, 75])
+    iqr = float(q75 - q25)
+    lo, hi = float(np.min(values)), float(np.max(values))
+    if iqr <= 0 or hi <= lo:
+        return np.linspace(lo, hi + 1e-9, min_bins + 1)
+    width = 2.0 * iqr / (values.size ** (1.0 / 3.0))
+    n_bins = int(np.clip(round((hi - lo) / width), min_bins, max_bins))
+    return np.linspace(lo, hi, n_bins + 1)
+
+
+def _plot_histograms(
+    family: str,
+    src: str,
+    peer: str,
+    metric: _MetricSpec,
     bags_by_day: dict[str, _DayBag],
     ks_value:    float | None,
 ) -> plt.Figure:
+    """One normalized histogram per day, overlaid."""
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
-    days    = sorted(bags_by_day.keys())
+    days = sorted(bags_by_day.keys())
+    pooled = np.concatenate([bags_by_day[d].values for d in days])
+    bins = _fd_bins(pooled)
+    lo, hi = float(bins[0]), float(bins[-1])
+    pad = max(0.05 * (hi - lo), 1e-6)
+    x_grid = np.linspace(lo - pad, hi + pad, 400)
+
     medians = {d: float(np.median(bags_by_day[d].values)) for d in days}
-    unit    = _UNIT_BY_SHORT.get(metric.short, "")
+    means = {d: float(np.mean(bags_by_day[d].values)) for d in days}
+    unit = _UNIT_BY_SHORT.get(metric.short, "")
     unit_suffix = f" {unit}" if unit else ""
 
     cmap = plt.get_cmap("tab10")
     for i, day in enumerate(days):
-        bag  = bags_by_day[day]
-        x, y = _ecdf(bag.values)
-        ax.step(
-            x, y, where="post",
-            color=cmap(i % 10), linewidth=1.6, alpha=0.9,
-            label=(f"{_fmt_day(day)}   n={bag.values.size:,}   "
-                   f"pairs={len(bag.beam_pairs)}   scn={bag.n_scenarios}   "
-                   f"med={medians[day]:.2f}{unit_suffix}"),
+        bag = bags_by_day[day]
+        color = cmap(i % 10)
+
+        density, edges = np.histogram(bag.values, bins=bins, density=True)
+        ax.stairs(
+            density, edges, fill=True,
+            color=color, alpha=0.18, edgecolor=color, linewidth=1.2,
+            label=f"{_fmt_day(day)}   n={bag.values.size:,}   "
+                  f"med={medians[day]:.2f}  mean={means[day]:.2f}{unit_suffix}",
         )
-        ax.axvline(medians[day], color=cmap(i % 10),
+        kde = _kde_gaussian(bag.values, x_grid)
+        ax.plot(x_grid, kde, color=color, linewidth=2.0, alpha=0.95)
+        ax.axvline(medians[day], color=color,
                    linestyle=":", linewidth=0.8, alpha=0.6)
 
     ax.set_xlabel(metric.label, fontweight="bold")
-    ax.set_ylabel("ECDF  (fraction of samples ≤ x)", fontweight="bold")
+    ax.set_ylabel("density  (area = 1, comparable across N)", fontweight="bold")
     ax.grid(True, alpha=0.3)
-    ax.set_ylim(-0.02, 1.02)
-    ax.legend(loc="lower right", fontsize=8, framealpha=0.9,
-              title="day              samples / beam-pairs / scenarios / median",
-              title_fontsize=8)
+    ax.legend(loc="best", fontsize=8, framealpha=0.9)
 
     # Build the subtitle: median delta between the two most-different days.
     if len(days) == 2:
@@ -291,10 +329,10 @@ def _plot_ecdfs(
     if ks_value is not None:
         sub_bits.append(f"K–S = {ks_value:.3f}")
     sub = "   ·   ".join(sub_bits)
+    fig.suptitle(main, fontsize=13, fontweight="bold", y=0.98)
+    fig.text(0.5, 0.905, sub, fontsize=10, ha="center", color="0.2")
 
-    fig.suptitle(main, fontsize=13, fontweight="bold")
-    fig.text(0.5, 0.92, sub, fontsize=10, ha="center", color="0.2")
-    fig.tight_layout(rect=(0, 0, 1, 0.90))
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
     return fig
 
 
@@ -326,11 +364,19 @@ def _fmt_day(day: str) -> str:
 def run_multi_day(
     per_day_root:   Path,
     multi_day_root: Path,
+    *,
+    audit: bool = False,
+    family_filter: str | None = None,
 ) -> tuple[list[dict], list[dict]]:
     if not per_day_root.is_dir():
         raise FileNotFoundError(f"per-day plots dir not found: {per_day_root}")
 
-    families       = _scenarios_by_family(per_day_root)
+    families = _scenarios_by_family(per_day_root)
+    if family_filter is not None:
+        families = {f: d for f, d in families.items() if f == family_filter}
+        if not families:
+            print(f"No family matches --family={family_filter!r}.")
+            return [], []
     multi_families = {fam: days for fam, days in families.items() if len(days) >= 2}
 
     print(f"Found {len(families)} scenario families "
@@ -353,12 +399,13 @@ def run_multi_day(
 
     for family, days in sorted(multi_families.items()):
         print(f"\n[{family}]")
-        bags = _load_traces_for_family(days)
-
-        # Re-index by (src, peer, metric_short) → {day: bag} for ECDF rendering.
+        bags = _load_traces_for_family(days, audit=audit)
         by_link_metric: dict[tuple[str, str, str], dict[str, _DayBag]] = defaultdict(dict)
         for (day, src, peer, metric_short), bag in bags.items():
             if bag.values.size < _MIN_SAMPLES_PER_DAY:
+                if audit:
+                    print(f"  [audit] dropped (n<{_MIN_SAMPLES_PER_DAY}): "
+                          f"{day} {src}->{peer} {metric_short} n={bag.values.size}")
                 continue
             by_link_metric[(src, peer, metric_short)][day] = bag
 
@@ -386,11 +433,14 @@ def run_multi_day(
             ks_value: float | None = None
             for i, day_a in enumerate(days_sorted):
                 for day_b in days_sorted[i + 1:]:
-                    bag_a        = bags_by_day[day_a]
-                    bag_b        = bags_by_day[day_b]
-                    ks           = _ks_2samp(bag_a.values, bag_b.values)
-                    median_delta = float(
-                        np.median(bag_b.values) - np.median(bag_a.values))
+                    bag_a = bags_by_day[day_a]
+                    bag_b = bags_by_day[day_b]
+                    a_vals, b_vals = bag_a.values, bag_b.values
+                    ks = _ks_2samp(a_vals, b_vals)
+                    med_a = float(np.median(a_vals))
+                    med_b = float(np.median(b_vals))
+                    mean_a = float(np.mean(a_vals))
+                    mean_b = float(np.mean(b_vals))
                     pairwise_rows.append({
                         "family":       family,
                         "src_rab":      src,
@@ -398,17 +448,20 @@ def run_multi_day(
                         "metric":       metric_short,
                         "day_a":        day_a,
                         "day_b":        day_b,
-                        "n_a":          int(bag_a.values.size),
-                        "n_b":          int(bag_b.values.size),
+                        "n_a":          int(a_vals.size),
+                        "n_b":          int(b_vals.size),
                         "ks_statistic": ks,
-                        "median_a":     float(np.median(bag_a.values)),
-                        "median_b":     float(np.median(bag_b.values)),
-                        "median_delta": median_delta,
+                        "median_a":     med_a,
+                        "median_b":     med_b,
+                        "median_delta": med_b - med_a,
+                        "mean_a":       mean_a,
+                        "mean_b":       mean_b,
+                        "mean_delta":   mean_b - mean_a,
                     })
                     # With exactly 2 days this is the only pair; surface it on the plot.
                     ks_value = ks
 
-            fig     = _plot_ecdfs(family, src, peer, metric, bags_by_day, ks_value)
+            fig = _plot_histograms(family, src, peer, metric, bags_by_day, ks_value)
             png_dir = fam_dir / "pngs" / src
             png_dir.mkdir(parents=True, exist_ok=True)
             png_path = png_dir / f"{metric.prefix}__{src}_to_{peer}.png"
@@ -432,6 +485,8 @@ def run_multi_day(
 # @ref MULTI_DAY_DIR paths.
 #
 # @return 0 on success.
-def multi_day() -> int:
-    run_multi_day(PER_DAY_DIR, MULTI_DAY_DIR)
+def multi_day(audit: bool = False, family_filter: str | None = None) -> int:
+    # CLI entrypoint.
+    run_multi_day(PER_DAY_DIR, MULTI_DAY_DIR,
+                  audit=audit, family_filter=family_filter)
     return 0

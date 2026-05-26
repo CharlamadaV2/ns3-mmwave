@@ -103,10 +103,14 @@ class LinkEvaluator
     double      m_noiseFloorDbm    = -174.0;  ///< Thermal noise floor in dBm; computed by
                                                ///<   @ref Configure from bandwidth and noise figure.
     double      m_bandwidthHz      = 400e6;   ///< System bandwidth in Hz.
-    double      m_bfGainDb         = 0.0;     ///< Combined TX + RX array gain in dB.
     std::string m_amcModel         = "shannon"; ///< Capacity model: @c "shannon" or @c "table".
     bool        m_buildingsEnabled = false;    ///< @c true when buildings are present;
                                                ///<   written to @ref LinkResult::condition_from_buildings.
+    // Per-node array gains, indexed parallel to cfg.nodes (and to mobs in
+    // EvaluateAll). Resolved at Configure() from each NodeSpec's override
+    // or the channel default.
+    std::vector<double> m_txGainDbi;
+    std::vector<double> m_rxGainDbi;
 
     ns3::Ptr<ns3::PropagationLossModel>  m_plModel;    ///< ns-3 path-loss model (set by @ref Configure).
     ns3::Ptr<ns3::ChannelConditionModel> m_condModel;  ///< ns-3 LOS/NLOS model (set by @ref Configure).

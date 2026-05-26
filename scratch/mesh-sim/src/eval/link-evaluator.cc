@@ -40,14 +40,28 @@ LinkEvaluator::Configure(const SimConfig& cfg,
 
     m_noiseFloorDbm = -174.0 + 10.0 * std::log10(m_bandwidthHz) + cfg.channel.noise_figure_db;
 
-    m_bfGainDb = cfg.channel.tx_array_gain_dbi + cfg.channel.rx_array_gain_dbi;
+    m_txGainDbi.clear();
+    m_rxGainDbi.clear();
+    m_txGainDbi.reserve(cfg.nodes.size());
+    m_rxGainDbi.reserve(cfg.nodes.size());
+    uint32_t n_overrides = 0;
+    for (const auto& spec : cfg.nodes)
+    {
+        m_txGainDbi.push_back(spec.tx_array_gain_dbi.value_or(cfg.channel.tx_array_gain_dbi));
+        m_rxGainDbi.push_back(spec.rx_array_gain_dbi.value_or(cfg.channel.rx_array_gain_dbi));
+        if (spec.tx_array_gain_dbi.has_value() || spec.rx_array_gain_dbi.has_value())
+        {
+            ++n_overrides;
+        }
+    }
 
     NS_LOG_DEBUG("Configure: txPower=" << m_txPowerDbm << " dBm, BW="
                  << m_bandwidthHz / 1e6 << " MHz, noiseFloor="
-                 << m_noiseFloorDbm << " dBm, bfGain=" << m_bfGainDb
-                 << " dB (tx=" << cfg.channel.tx_array_gain_dbi
-                 << " + rx=" << cfg.channel.rx_array_gain_dbi
-                 << " dBi), amc=" << m_amcModel);
+                 << m_noiseFloorDbm << " dBm, gain default tx="
+                 << cfg.channel.tx_array_gain_dbi << " rx="
+                 << cfg.channel.rx_array_gain_dbi << " dBi, "
+                 << n_overrides << "/" << cfg.nodes.size()
+                 << " nodes have gain overrides, amc=" << m_amcModel);
 }
 
 // ---------------------------------------------------------------------------
@@ -66,12 +80,16 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 
     r.distance_m = txMob->GetDistanceFrom(rxMob);
 
+    // Per-link beamforming gain: tx end's array + rx end's array. Either side
+    // may be a per-node override from nodes.json; otherwise the channel default.
+    const double bfGainDb = m_txGainDbi[txIdx] + m_rxGainDbi[rxIdx];
+
     // Guard against log10(0) for co-located nodes.
     if (r.distance_m < 1.0)
     {
         r.is_los                   = true;
         r.path_loss_db             = 0.0;
-        r.rx_power_dbm             = m_txPowerDbm + m_bfGainDb;
+        r.rx_power_dbm             = m_txPowerDbm + bfGainDb;
         r.sinr_db                  = r.rx_power_dbm - m_noiseFloorDbm;
         r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
         r.mcs_index                = SinrToMcsIndex(r.sinr_db);
@@ -87,7 +105,7 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 
     double rxPowerDbm = m_plModel->CalcRxPower(m_txPowerDbm, txMob, rxMob);
     r.path_loss_db = m_txPowerDbm - rxPowerDbm;
-    r.rx_power_dbm = rxPowerDbm + m_bfGainDb;
+    r.rx_power_dbm = rxPowerDbm + bfGainDb;
     // SINR with no inter-node interference (mmWave beams assumed orthogonal).
     r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
 

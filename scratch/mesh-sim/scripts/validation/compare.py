@@ -14,7 +14,6 @@
 from __future__ import annotations
 
 import argparse
-import math
 import re
 import sys
 from dataclasses import dataclass
@@ -87,6 +86,16 @@ def sim_to_field_scenario(sim_name: str) -> str | None:
     mid_joined = mid.replace("-", "_")
     return f"{major}-{minor.upper()}_{mid_joined}_{day}"
 
+
+def _scenario_label(name: str) -> str:
+    """`arpo-1-1-static-04172026` -> `1-1 static\n04/17/2026`."""
+    m = _SIM_NAME_RE.match(name)
+    if not m:
+        return name
+    major, minor, mid, day = m.groups()
+    mid = mid.replace("-", " ")
+    date = f"{day[0:2]}/{day[2:4]}/{day[4:8]}"
+    return f"{major}-{minor.upper()} {mid}\n{date}"
 
 ## @brief Read one column from a trace CSV, coercing non-numeric values to NaN.
 #
@@ -179,77 +188,70 @@ def _pool_field(field_scen_dir: Path, src: str, peer: str,
     return np.concatenate(arrs) if arrs else np.array([])
 
 
-## @brief Compute the empirical CDF of a sample array.
-#
-# @param values 1-D numeric array.
-# @return Tuple ``(x, y)`` of sorted values and cumulative probabilities.
-def _ecdf(values: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    x = np.sort(values)
-    y = np.arange(1, x.size + 1) / x.size
-    return x, y
-
-
-## @brief Compute the two-sample K-S statistic and an asymptotic p-value.
-#
-# Uses the Kolmogorov-Smirnov large-sample approximation for the p-value:
-# ``p ≈ 2 · exp(−2 · n_e · D²)`` where ``n_e`` is the effective sample size.
-#
-# @param a First sample array.
-# @param b Second sample array.
-# @return Tuple ``(D, p)`` where D is in [0, 1] and p is in [0, 1].
-#         Returns ``(nan, nan)`` if either array is empty.
-def _ks_2samp(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
+def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
+    """Two-sample K-S D-statistic. P-value intentionally dropped: with N in the
+    tens of thousands, p ≈ 0 for operationally-trivial differences."""
     if a.size == 0 or b.size == 0:
-        return float("nan"), float("nan")
-    a_s   = np.sort(a)
-    b_s   = np.sort(b)
+        return float("nan")
+    a_s = np.sort(a)
+    b_s = np.sort(b)
     joint = np.sort(np.concatenate([a_s, b_s]))
     cdf_a = np.searchsorted(a_s, joint, side="right") / a_s.size
     cdf_b = np.searchsorted(b_s, joint, side="right") / b_s.size
-    d     = float(np.max(np.abs(cdf_a - cdf_b)))
-    n_e   = (a_s.size * b_s.size) / (a_s.size + b_s.size)
-    p     = float(min(1.0, 2.0 * math.exp(-2.0 * n_e * d * d)))
-    return d, p
+    return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
-## @brief Compute a bootstrap confidence band for an ECDF on a fixed x-grid.
-#
-# Resamples the input with replacement ``n_boot`` times, evaluates the ECDF
-# at each x-grid point, and returns the lower and upper percentile envelopes.
-#
-# @param values  Sample array to bootstrap.
-# @param x_grid  1-D grid of x values at which to evaluate the ECDF.
-# @param n_boot  Number of bootstrap resamples.
-# @param ci_pct  Confidence level as a percentage (e.g. 90.0).
-# @param rng     NumPy random generator for reproducibility.
-# @return Tuple ``(lower_band, upper_band)`` of float64 arrays the same
-#         length as ``x_grid``. Full-NaN arrays are returned for empty input.
-def _bootstrap_ecdf_band(values: np.ndarray, x_grid: np.ndarray,
-                         n_boot: int, ci_pct: float,
-                         rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.ndarray:
+    """Freedman-Diaconis bin edges across pooled values."""
+    if values.size < 2:
+        lo = float(np.min(values)) if values.size else 0.0
+        return np.linspace(lo, lo + 1.0, min_bins + 1)
+    q25, q75 = np.percentile(values, [25, 75])
+    iqr = float(q75 - q25)
+    lo, hi = float(np.min(values)), float(np.max(values))
+    if iqr <= 0 or hi <= lo:
+        return np.linspace(lo, hi + 1e-9, min_bins + 1)
+    width = 2.0 * iqr / (values.size ** (1.0 / 3.0))
+    n_bins = int(np.clip(round((hi - lo) / width), min_bins, max_bins))
+    return np.linspace(lo, hi, n_bins + 1)
+
+
+def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
+                  max_samples: int = 20000) -> np.ndarray:
+    """Gaussian KDE on ``x_grid``, Silverman bandwidth, numpy-only."""
     n = values.size
     if n == 0 or x_grid.size == 0:
-        empty = np.full_like(x_grid, np.nan, dtype=np.float64)
-        return empty, empty
-    sorted_vals = np.sort(values)
-    boot = np.empty((n_boot, x_grid.size), dtype=np.float64)
-    for i in range(n_boot):
-        idx        = rng.integers(0, n, size=n)
-        sample     = np.sort(sorted_vals[idx])
-        boot[i]    = np.searchsorted(sample, x_grid, side="right") / n
-    half = (100.0 - ci_pct) / 2.0
-    return np.percentile(boot, half, axis=0), np.percentile(boot, 100.0 - half, axis=0)
+        return np.full_like(x_grid, np.nan, dtype=np.float64)
+    if n > max_samples:
+        idx = np.random.default_rng(0).choice(n, size=max_samples, replace=False)
+        values = values[idx]
+        n = max_samples
+    sigma = float(np.std(values))
+    if sigma <= 0:
+        sigma = 1.0
+    h = 1.06 * sigma * n ** (-1.0 / 5.0)
+    if h <= 0:
+        h = 1e-3
+    diff = (x_grid[:, None] - values[None, :]) / h
+    return np.sum(np.exp(-0.5 * diff * diff), axis=1) / (n * h * np.sqrt(2.0 * np.pi))
 
 
-## @brief Return the median and IQR of a sample array.
-#
-# @param values 1-D numeric array.
-# @return Tuple ``(median, IQR)``; both are NaN for an empty array.
-def _stats(values: np.ndarray) -> tuple[float, float]:
+def _summary(values: np.ndarray) -> dict[str, float]:
+    """Median, mean, IQR for one distribution."""
     if values.size == 0:
-        return float("nan"), float("nan")
+        nan = float("nan")
+        return {"median": nan, "mean": nan, "iqr": nan}
     q25, med, q75 = np.percentile(values, [25, 50, 75])
-    return float(med), float(q75 - q25)
+    return {
+        "median": float(med),
+        "mean":   float(np.mean(values)),
+        "iqr":    float(q75 - q25),
+    }
+
+
+_SIM_COLOR = "#ff7f0e"
+_FIELD_COLOR = "#1f77b4"
+_UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
 
 ## @brief Render the sim-vs-field ECDF comparison figure for one (link, metric).
@@ -272,62 +274,67 @@ def _stats(values: np.ndarray) -> tuple[float, float]:
 # @return Matplotlib Figure (caller saves and closes).
 def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
               spec: _MetricSpec, scenario: str, src: str, peer: str,
-              ks_d: float, ks_p: float,
-              n_boot: int, ci_pct: float,
-              rng: np.random.Generator) -> plt.Figure:
+              ks_d: float) -> plt.Figure:
+    """Normalized-histogram (filled bars + KDE overlay) sim vs field."""
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
-    sim_med,   sim_iqr   = _stats(sim_vals)
-    field_med, field_iqr = _stats(field_vals)
+    sim_s = _summary(sim_vals)
+    field_s = _summary(field_vals)
 
-    lo_x = np.nanmin([sim_vals.min()   if sim_vals.size   else np.nan,
-                      field_vals.min() if field_vals.size else np.nan])
-    hi_x = np.nanmax([sim_vals.max()   if sim_vals.size   else np.nan,
-                      field_vals.max() if field_vals.size else np.nan])
-    if not (np.isfinite(lo_x) and np.isfinite(hi_x)):
+    if sim_vals.size == 0 and field_vals.size == 0:
         ax.text(0.5, 0.5, "no samples", ha="center", va="center",
                 transform=ax.transAxes, color="0.5")
         return fig
-    pad    = max(0.05 * (hi_x - lo_x), 1e-6)
-    x_grid = np.linspace(lo_x - pad, hi_x + pad, 256)
+
+    pooled = np.concatenate([v for v in (sim_vals, field_vals) if v.size])
+    bins = _fd_bins(pooled)
+    lo, hi = float(bins[0]), float(bins[-1])
+    pad = max(0.05 * (hi - lo), 1e-6)
+    x_grid = np.linspace(lo - pad, hi + pad, 400)
+    unit = _UNIT_BY_SHORT.get(spec.short, "")
+    unit_suffix = f" {unit}" if unit else ""
 
     if sim_vals.size:
-        lo_band, hi_band = _bootstrap_ecdf_band(sim_vals, x_grid, n_boot, ci_pct, rng)
-        ax.fill_between(x_grid, lo_band, hi_band, color="#ff7f0e", alpha=0.25,
-                        step="post",
-                        label=f"sim {int(ci_pct)}% CI (bootstrap, B={n_boot})")
-        sx, sy = _ecdf(sim_vals)
-        ax.step(sx, sy, where="post", color="#ff7f0e", linewidth=1.8,
-                label=(f"sim ECDF   n={sim_vals.size:,}   "
-                       f"med={sim_med:.2f}  IQR={sim_iqr:.2f}"))
-        ax.axvline(sim_med, color="#ff7f0e", linestyle=":", linewidth=0.8, alpha=0.6)
-
+        sim_den, _ = np.histogram(sim_vals, bins=bins, density=True)
+        ax.stairs(sim_den, bins, fill=True,
+                  color=_SIM_COLOR, alpha=0.18, edgecolor=_SIM_COLOR, linewidth=1.2,
+                  label=f"sim  n={sim_vals.size:,}  "
+                        f"med={sim_s['median']:.2f}  mean={sim_s['mean']:.2f}{unit_suffix}")
+        sim_kde = _kde_gaussian(sim_vals, x_grid)
+        ax.plot(x_grid, sim_kde, color=_SIM_COLOR, linewidth=2.0, alpha=0.95)
+        ax.axvline(sim_s["median"], color=_SIM_COLOR,
+                   linestyle=":", linewidth=0.8, alpha=0.6)
     if field_vals.size:
-        fx, fy = _ecdf(field_vals)
-        ax.step(fx, fy, where="post", color="#1f77b4", linewidth=1.8,
-                label=(f"field ECDF n={field_vals.size:,}   "
-                       f"med={field_med:.2f}  IQR={field_iqr:.2f}"))
-        ax.axvline(field_med, color="#1f77b4", linestyle=":", linewidth=0.8, alpha=0.6)
+        field_den, _ = np.histogram(field_vals, bins=bins, density=True)
+        ax.stairs(field_den, bins, fill=True,
+                  color=_FIELD_COLOR, alpha=0.18, edgecolor=_FIELD_COLOR, linewidth=1.2,
+                  label=f"field  n={field_vals.size:,}  "
+                        f"med={field_s['median']:.2f}  mean={field_s['mean']:.2f}{unit_suffix}")
+        field_kde = _kde_gaussian(field_vals, x_grid)
+        ax.plot(x_grid, field_kde, color=_FIELD_COLOR, linewidth=2.0, alpha=0.95)
+        ax.axvline(field_s["median"], color=_FIELD_COLOR,
+                   linestyle=":", linewidth=0.8, alpha=0.6)
 
     ax.set_xlabel(spec.label, fontweight="bold")
-    ax.set_ylabel("ECDF  (fraction of samples ≤ x)", fontweight="bold")
-    ax.set_ylim(-0.02, 1.02)
+    ax.set_ylabel("density  (area = 1, comparable across N)", fontweight="bold")
     ax.grid(True, alpha=0.3)
-    ax.legend(loc="lower right", fontsize=8, framealpha=0.9)
+    ax.legend(loc="best", fontsize=8, framealpha=0.9)
 
     main = f"{scenario}:  {src} ↔ {peer}   ({spec.label})"
     bits = []
     if np.isfinite(ks_d):
-        bits.append(f"K–S D={ks_d:.3f}   p≈{ks_p:.2g}")
-    if np.isfinite(sim_med) and np.isfinite(field_med):
-        bits.append(f"|Δmedians|={abs(sim_med - field_med):.2f}")
+        bits.append(f"K–S = {ks_d:.3f}")
+    if np.isfinite(sim_s["median"]) and np.isfinite(field_s["median"]):
+        bits.append(f"|Δmed| = {abs(sim_s['median'] - field_s['median']):.2f}{unit_suffix}")
+    if np.isfinite(sim_s["mean"]) and np.isfinite(field_s["mean"]):
+        bits.append(f"|Δmean| = {abs(sim_s['mean'] - field_s['mean']):.2f}{unit_suffix}")
     if spec.integer_cap is not None:
-        bits.append(f"sim MCS post-capped at {spec.integer_cap}")
+        bits.append(f"MCS capped at {spec.integer_cap} (firmware ceiling)")
     sub = "   ·   ".join(bits) if bits else ""
-    fig.suptitle(main, fontsize=13, fontweight="bold")
+    fig.suptitle(main, fontsize=13, fontweight="bold", y=0.98)
     if sub:
-        fig.text(0.5, 0.92, sub, fontsize=10, ha="center", color="0.2")
-    fig.tight_layout(rect=(0, 0, 1, 0.90))
+        fig.text(0.5, 0.905, sub, fontsize=10, ha="center", color="0.2")
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
     return fig
 
 
@@ -344,23 +351,75 @@ def _apply_mcs_cap(values: np.ndarray, cap: int | None) -> np.ndarray:
     return np.clip(values, None, cap)
 
 
-## @brief Run the comparison pipeline for one scenario directory.
-#
-# Discovers link pairs from the first seed's trace directory, then for each
-# (link, metric) pair: pools sim and field samples, computes statistics, and
-# saves a PNG. Returns a list of row dicts for the ``metrics.csv`` output.
-#
-# @param scenario_dir Scenario output directory containing ``sim_traces/``.
-# @param field_root   Root of the per-day field trace tree.
-# @param metrics      List of @ref _MetricSpec objects to process.
-# @param out_dir      Directory to write PNGs and ``metrics.csv`` into.
-# @param n_boot       Bootstrap iteration count.
-# @param ci_pct       Confidence level (percent) for the CI band.
-# @param rng          NumPy random generator.
-# @return List of result dicts (one per (link, metric) pair with valid data).
+def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
+                 value_label: str, out_path: Path) -> bool:
+    """One heatmap: rows = scenarios (with dates), cols = rab links,
+    cells = ``value_col`` for ``spec.short``."""
+    rel = [r for r in rows
+           if r["metric"] == spec.short and np.isfinite(r.get(value_col, np.nan))]
+    if not rel:
+        return False
+
+    scenarios = sorted({r["scenario"] for r in rel})
+    links: list[tuple[str, str]] = sorted(
+        {tuple(sorted([r["src_rab"], r["peer_rab"]])) for r in rel}
+    )
+    grid = np.full((len(scenarios), len(links)), np.nan)
+    for r in rel:
+        si = scenarios.index(r["scenario"])
+        li = links.index(tuple(sorted([r["src_rab"], r["peer_rab"]])))
+        grid[si, li] = float(r[value_col])
+
+    fig_w = max(5.0, 1.5 + 1.8 * len(links))
+    fig_h = max(3.0, 1.2 + 0.55 * len(scenarios))
+    fig, ax = plt.subplots(figsize=(fig_w, fig_h))
+    vmax = float(np.nanmax(grid)) or 1.0
+    im = ax.imshow(grid, aspect="auto", cmap="viridis", vmin=0.0, vmax=vmax)
+
+    for si in range(len(scenarios)):
+        for li in range(len(links)):
+            v = grid[si, li]
+            if np.isfinite(v):
+                txt_color = "white" if v < 0.5 * vmax else "black"
+                ax.text(li, si, f"{v:.2f}", ha="center", va="center",
+                        fontsize=9, fontweight="bold", color=txt_color)
+
+    ax.set_xticks(range(len(links)))
+    ax.set_xticklabels([f"{a}↔{b}" for (a, b) in links], fontsize=10)
+    ax.set_yticks(range(len(scenarios)))
+    ax.set_yticklabels([_scenario_label(s) for s in scenarios], fontsize=9)
+    ax.set_xlabel("link", fontweight="bold")
+
+    unit = _UNIT_BY_SHORT.get(spec.short, "") if value_col != "ks_statistic" else ""
+    unit_suffix = f" [{unit}]" if unit else ""
+    cbar = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
+    cbar.set_label(f"{value_label}{unit_suffix}")
+
+    ax.set_title(f"{value_label}  —  {spec.label}", fontweight="bold")
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=180, bbox_inches="tight")
+    plt.close(fig)
+    return True
+
+
+def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
+                          batch_root: Path) -> None:
+    """One PNG per (metric, score) for the batch."""
+    out_dir = batch_root / "summary"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    scores = [("abs_diff_medians", "|Δmedian|"),
+              ("abs_diff_means",   "|Δmean|"),
+              ("ks_statistic",     "K-S")]
+    for spec in metrics:
+        for col, label in scores:
+            tag = label.replace("|", "").replace("Δ", "d").replace("-", "")
+            out = out_dir / f"heatmap_{spec.short}_{tag}.png"
+            if _heatmap_png(rows, spec, col, label, out):
+                print(f"  wrote {out.relative_to(batch_root)}")
+
+
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
-                      out_dir: Path, n_boot: int, ci_pct: float,
-                      rng: np.random.Generator) -> list[dict]:
+                      out_dir: Path) -> list[dict]:
     field_name = sim_to_field_scenario(scenario_dir.name)
     field_dir  = (field_root / field_name) if field_name else None
     if field_dir is None or not field_dir.is_dir():
@@ -384,9 +443,11 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
                                         spec.integer_cap)
             if sim_vals.size == 0 and field_vals.size == 0:
                 continue
-            ks_d, ks_p         = _ks_2samp(sim_vals, field_vals)
-            sim_med,   sim_iqr = _stats(sim_vals)
-            field_med, field_iqr = _stats(field_vals)
+            ks_d = _ks_2samp(sim_vals, field_vals)
+            sim_s = _summary(sim_vals)
+            field_s = _summary(field_vals)
+            both_med  = np.isfinite(sim_s["median"]) and np.isfinite(field_s["median"])
+            both_mean = np.isfinite(sim_s["mean"])   and np.isfinite(field_s["mean"])
             rows.append({
                 "scenario":         scenario_dir.name,
                 "field_scenario":   field_name,
@@ -395,21 +456,21 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
                 "metric":           spec.short,
                 "n_sim":            int(sim_vals.size),
                 "n_field":          int(field_vals.size),
-                "sim_median":       sim_med,
-                "sim_iqr":          sim_iqr,
-                "field_median":     field_med,
-                "field_iqr":        field_iqr,
-                "abs_diff_medians": (abs(sim_med - field_med)
-                                     if np.isfinite(sim_med) and np.isfinite(field_med)
-                                     else float("nan")),
+                "sim_median":       sim_s["median"],
+                "sim_mean":         sim_s["mean"],
+                "sim_iqr":          sim_s["iqr"],
+                "field_median":     field_s["median"],
+                "field_mean":       field_s["mean"],
+                "field_iqr":        field_s["iqr"],
+                "abs_diff_medians": (abs(field_s["median"] - sim_s["median"]) if both_med  else float("nan")),
+                "abs_diff_means":   (abs(field_s["mean"]   - sim_s["mean"])   if both_mean else float("nan")),
                 "ks_statistic":     ks_d,
-                "ks_pvalue":        ks_p,
             })
             fig = _plot_one(sim_vals, field_vals, spec, scenario_dir.name,
-                            src, peer, ks_d, ks_p, n_boot, ci_pct, rng)
-            png_dir  = out_dir / "pngs" / src
+                            src, peer, ks_d)
+            png_dir = out_dir / "pngs" / src
             png_dir.mkdir(parents=True, exist_ok=True)
-            png_path = png_dir / f"ecdf_{spec.short}__{src}_to_{peer}.png"
+            png_path = png_dir / f"hist_{spec.short}__{src}_to_{peer}.png"
             fig.savefig(png_path, dpi=180, bbox_inches="tight")
             plt.close(fig)
             print(f"    wrote {png_path.relative_to(scenario_dir)}")
@@ -426,22 +487,14 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
 # @return 0 on success, 1 on argument or I/O error.
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(
-        description="ECDF + bootstrap-CI comparison of sim vs ARPO field.")
-    p.add_argument("batch_root",
-                   help="batch output dir (parent of per-scenario dirs)")
+    p = argparse.ArgumentParser(description="Histogram + KDE comparison of sim vs ARPO field.")
+    p.add_argument("batch_root", help="batch output dir (parent of per-scenario dirs)")
     p.add_argument("--field-root", default=str(FIELD_TRACES_ROOT),
                    help="root holding <field_scenario>/csvs/<src>/*.csv trace files")
     p.add_argument("--only", default=None,
                    help="restrict to one scenario name (basename of a dir in batch_root)")
     p.add_argument("--metrics", default="snr,rcpi,mcs",
                    help="comma-separated metric shorts to compare")
-    p.add_argument("--n-boot", type=int, default=1000,
-                   help="bootstrap iterations for the sim ECDF CI band")
-    p.add_argument("--ci", type=float, default=90.0,
-                   help="confidence level (percent) for the sim ECDF band")
-    p.add_argument("--seed", type=int, default=42,
-                   help="rng seed for the bootstrap")
     args = p.parse_args(argv)
 
     batch_root = Path(args.batch_root).resolve()
@@ -467,14 +520,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no scenarios with sim_traces/ under {batch_root}", file=sys.stderr)
         return 1
 
-    rng      = np.random.default_rng(args.seed)
     all_rows: list[dict] = []
     for scen in scenarios:
         print(f"[{scen.name}]")
         out_dir = scen / "validation"
         out_dir.mkdir(parents=True, exist_ok=True)
-        rows = _process_scenario(scen, field_root, metrics, out_dir,
-                                 args.n_boot, args.ci, rng)
+        rows = _process_scenario(scen, field_root, metrics, out_dir)
         if rows:
             scen_csv = out_dir / "metrics.csv"
             pd.DataFrame(rows).to_csv(scen_csv, index=False)
@@ -485,6 +536,8 @@ def main(argv: list[str] | None = None) -> int:
         summary_csv = batch_root / "validation_summary.csv"
         pd.DataFrame(all_rows).to_csv(summary_csv, index=False)
         print(f"\nsummary: {summary_csv}")
+        print("\nbatch heatmaps:")
+        _write_batch_heatmaps(all_rows, metrics, batch_root)
     return 0
 
 

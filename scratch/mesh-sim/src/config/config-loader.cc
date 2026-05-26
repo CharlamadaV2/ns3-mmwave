@@ -74,6 +74,15 @@ parseNodeSpec(const json& j)
         }
     }
 
+    if (j.contains("tx_array_gain_dbi"))
+    {
+        n.tx_array_gain_dbi = j["tx_array_gain_dbi"].get<double>();
+    }
+    if (j.contains("rx_array_gain_dbi"))
+    {
+        n.rx_array_gain_dbi = j["rx_array_gain_dbi"].get<double>();
+    }
+
     return n;
 }
 
@@ -163,6 +172,7 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.channel.tx_power_dbm     = std::stod(iniGet(ini, "channel", "tx_power_dbm",     "30.0"));
     cfg.channel.scenario         = iniGet(ini, "channel", "scenario",         "UMi");
     cfg.channel.channel_model    = iniGet(ini, "channel", "channel_model",    "3gpp");
+    cfg.channel.condition_model  = iniGet(ini, "channel", "condition_model",  "auto");
     cfg.channel.blockage_enabled = iniGetBool(ini, "channel", "blockage_enabled", true);
     cfg.channel.beamforming_model = iniGet(ini, "channel", "beamforming_model", "svd");
     cfg.channel.amc_model        = iniGet(ini, "channel", "amc_model",        "shannon");
