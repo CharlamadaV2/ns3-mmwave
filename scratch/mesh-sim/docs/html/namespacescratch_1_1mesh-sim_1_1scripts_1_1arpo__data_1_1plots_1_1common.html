@@ -101,13 +101,13 @@ $(document).ready(function(){initNavTree('namespacescratch_1_1mesh-sim_1_1script
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af20171290e3eedc301375d7538f29300"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#af20171290e3eedc301375d7538f29300">scenario_caption</a> (pd.DataFrame df)</td></tr>
-<tr class="memdesc:af20171290e3eedc301375d7538f29300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Documentation for a function.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#af20171290e3eedc301375d7538f29300">More...</a><br /></td></tr>
+<tr class="memdesc:af20171290e3eedc301375d7538f29300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a short human-readable caption summarising a scenario DataFrame.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#af20171290e3eedc301375d7538f29300">More...</a><br /></td></tr>
 <tr class="separator:af20171290e3eedc301375d7538f29300"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add52ef8cda31f2a5d524a244fcc6c110"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#add52ef8cda31f2a5d524a244fcc6c110">crashed_suffix</a> (str scenario)</td></tr>
-<tr class="memdesc:add52ef8cda31f2a5d524a244fcc6c110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Documentation for a function.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#add52ef8cda31f2a5d524a244fcc6c110">More...</a><br /></td></tr>
+<tr class="memdesc:add52ef8cda31f2a5d524a244fcc6c110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a crash-warning suffix for a scenario name if it is known to be bad.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#add52ef8cda31f2a5d524a244fcc6c110">More...</a><br /></td></tr>
 <tr class="separator:add52ef8cda31f2a5d524a244fcc6c110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a516e0fb812a437fb775dc186310b23a0"><td class="memItemLeft" align="right" valign="top">pd.DataFrame&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#a516e0fb812a437fb775dc186310b23a0">concat_trace</a> (list[pd.DataFrame] rows)</td></tr>
-<tr class="memdesc:a516e0fb812a437fb775dc186310b23a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Documentation for a function.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#a516e0fb812a437fb775dc186310b23a0">More...</a><br /></td></tr>
+<tr class="memdesc:a516e0fb812a437fb775dc186310b23a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenates a list of DataFrames into a single DataFrame.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1common.html#a516e0fb812a437fb775dc186310b23a0">More...</a><br /></td></tr>
 <tr class="separator:a516e0fb812a437fb775dc186310b23a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -127,8 +127,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Documentation for a function. </p>
-<p>More details. </p>
+<p>Concatenates a list of DataFrames into a single DataFrame. </p>
+<p>Resets the index so the result has a clean integer index regardless of the input indices. Returns an empty DataFrame when <code>rows</code> is empty, which lets callers test with <code>df.empty</code> rather than checking the list length first.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>List of DataFrames to concatenate. May be empty. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Single concatenated DataFrame, or an empty DataFrame if <code>rows</code> is empty. </dd></dl>
 
 </div>
 </div>
@@ -148,8 +155,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Documentation for a function. </p>
-<p>More details. </p>
+<p>Returns a crash-warning suffix for a scenario name if it is known to be bad. </p>
+<p>Looks up <code>scenario</code> in KNOWN_BAD_SCENARIOS. Used to annotate plot titles so readers know the underlying data may be contaminated or partial.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scenario</td><td>Scenario directory name to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Warning string <code>"  [CRASHED -- see event log]"</code> if the scenario is known bad, otherwise an empty string. </dd></dl>
 
 </div>
 </div>
@@ -169,8 +183,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Documentation for a function. </p>
-<p>More details. </p>
+<p>Generates a short human-readable caption summarising a scenario DataFrame. </p>
+<p>Counts the number of unique nodes and computes the total duration from either <code>__sec__</code> (float seconds) or <code>__t__</code> (datetime). Duration is formatted as kiloseconds when &gt;= 1000 s, otherwise as whole seconds.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">df</td><td>Loaded scenario DataFrame. Must contain <code>__node__</code> and either <code>__sec__</code> or <code>__t__</code> columns for a non-trivial caption. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Caption string, e.g. <code>"3 rabs, 9.7 ks"</code> or <code>"1 rab, 120 s"</code>. </dd></dl>
 
 </div>
 </div>

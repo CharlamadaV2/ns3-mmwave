@@ -1,17 +1,18 @@
 var src =
 [
     [ "src/domain", "src_domain.html", [
-      [ "Modules", "src.html#autotoc_md55", [
-        [ "Run", "scripts_validation.html#autotoc_md6", [
-          [ "Flags", "scripts_validation.html#autotoc_md7", null ]
+      [ "Modules", "src.html#autotoc_md57", [
+        [ "Run", "scripts_validation.html#autotoc_md7", [
+          [ "Flags", "scripts_validation.html#autotoc_md8", null ]
         ] ],
-        [ "Output", "scripts_validation.html#autotoc_md8", null ],
-        [ "Module layout", "scripts_validation.html#autotoc_md9", null ],
-        [ "Conventions", "scripts_validation.html#autotoc_md10", null ],
-        [ "Dependencies", "scripts_validation.html#autotoc_md11", null ],
-        [ "Module Layout", "src_domain.html#autotoc_md21", null ],
-        [ "Conventions", "src_domain.html#autotoc_md22", null ],
-        [ "Dependencies", "src_domain.html#autotoc_md23", null ]
+        [ "How to read the chart", "scripts_validation.html#autotoc_md9", null ],
+        [ "Output", "scripts_validation.html#autotoc_md10", null ],
+        [ "Module layout", "scripts_validation.html#autotoc_md11", null ],
+        [ "Conventions", "scripts_validation.html#autotoc_md12", null ],
+        [ "Dependencies", "scripts_validation.html#autotoc_md13", null ],
+        [ "Module Layout", "src_domain.html#autotoc_md23", null ],
+        [ "Conventions", "src_domain.html#autotoc_md24", null ],
+        [ "Dependencies", "src_domain.html#autotoc_md25", null ]
       ] ]
     ] ],
     [ "src/config", "src_config.html", null ],

@@ -111,6 +111,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a7680a2ae72fd86be19588c600ab04245"><td class="memItemLeft" align="right" valign="top">str|None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a7680a2ae72fd86be19588c600ab04245">sim_to_field_scenario</a> (str sim_name)</td></tr>
 <tr class="memdesc:a7680a2ae72fd86be19588c600ab04245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a sim scenario name to its corresponding field scenario name.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a7680a2ae72fd86be19588c600ab04245">More...</a><br /></td></tr>
 <tr class="separator:a7680a2ae72fd86be19588c600ab04245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a486eeeb76ff279e17c68bb3faf1517c0"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a486eeeb76ff279e17c68bb3faf1517c0">_scenario_label</a> (str name)</td></tr>
+<tr class="memdesc:a486eeeb76ff279e17c68bb3faf1517c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format a sim scenario name as a compact two-line plot label.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a486eeeb76ff279e17c68bb3faf1517c0">More...</a><br /></td></tr>
+<tr class="separator:a486eeeb76ff279e17c68bb3faf1517c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d69e73831350c6ec3a7872958d1bc7d"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a5d69e73831350c6ec3a7872958d1bc7d">_read_metric_column</a> (Path csv_path, str column)</td></tr>
 <tr class="memdesc:a5d69e73831350c6ec3a7872958d1bc7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read one column from a trace CSV, coercing non-numeric values to NaN.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a5d69e73831350c6ec3a7872958d1bc7d">More...</a><br /></td></tr>
 <tr class="separator:a5d69e73831350c6ec3a7872958d1bc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,27 +126,33 @@ Functions</h2></td></tr>
 <tr class="memitem:a11559f61b033d6bd37f546396400e82a"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a11559f61b033d6bd37f546396400e82a">_pool_field</a> (Path field_scen_dir, str src, str peer, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> spec)</td></tr>
 <tr class="memdesc:a11559f61b033d6bd37f546396400e82a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool metric samples for a (src, peer) link from the field trace.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a11559f61b033d6bd37f546396400e82a">More...</a><br /></td></tr>
 <tr class="separator:a11559f61b033d6bd37f546396400e82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79dbff9e0a2d726ffc444e58004da974"><td class="memItemLeft" align="right" valign="top">tuple[np.ndarray, np.ndarray]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a79dbff9e0a2d726ffc444e58004da974">_ecdf</a> (np.ndarray values)</td></tr>
-<tr class="memdesc:a79dbff9e0a2d726ffc444e58004da974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the empirical CDF of a sample array.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a79dbff9e0a2d726ffc444e58004da974">More...</a><br /></td></tr>
-<tr class="separator:a79dbff9e0a2d726ffc444e58004da974"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aded9aaa52952bffec88121fcaaaf5c16"><td class="memItemLeft" align="right" valign="top">tuple[float, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aded9aaa52952bffec88121fcaaaf5c16">_ks_2samp</a> (np.ndarray a, np.ndarray b)</td></tr>
-<tr class="memdesc:aded9aaa52952bffec88121fcaaaf5c16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the two-sample K-S statistic and an asymptotic p-value.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aded9aaa52952bffec88121fcaaaf5c16">More...</a><br /></td></tr>
-<tr class="separator:aded9aaa52952bffec88121fcaaaf5c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fa1d12b05182957cf10383d1432b28e"><td class="memItemLeft" align="right" valign="top">tuple[np.ndarray, np.ndarray]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a8fa1d12b05182957cf10383d1432b28e">_bootstrap_ecdf_band</a> (np.ndarray values, np.ndarray x_grid, int n_boot, float ci_pct, np.random.Generator rng)</td></tr>
-<tr class="memdesc:a8fa1d12b05182957cf10383d1432b28e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a bootstrap confidence band for an ECDF on a fixed x-grid.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a8fa1d12b05182957cf10383d1432b28e">More...</a><br /></td></tr>
-<tr class="separator:a8fa1d12b05182957cf10383d1432b28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a4786696c54d07bf036812842727f3e"><td class="memItemLeft" align="right" valign="top">tuple[float, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a3a4786696c54d07bf036812842727f3e">_stats</a> (np.ndarray values)</td></tr>
-<tr class="memdesc:a3a4786696c54d07bf036812842727f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the median and IQR of a sample array.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a3a4786696c54d07bf036812842727f3e">More...</a><br /></td></tr>
-<tr class="separator:a3a4786696c54d07bf036812842727f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a409f0c09b8a24dd2c983d8c09857aecd"><td class="memItemLeft" align="right" valign="top">plt.Figure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a409f0c09b8a24dd2c983d8c09857aecd">_plot_one</a> (np.ndarray sim_vals, np.ndarray field_vals, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> spec, str scenario, str src, str peer, float ks_d, float ks_p, int n_boot, float ci_pct, np.random.Generator rng)</td></tr>
-<tr class="memdesc:a409f0c09b8a24dd2c983d8c09857aecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render the sim-vs-field ECDF comparison figure for one (link, metric).  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a409f0c09b8a24dd2c983d8c09857aecd">More...</a><br /></td></tr>
-<tr class="separator:a409f0c09b8a24dd2c983d8c09857aecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7eace5cff05344b78ca5e22650e3d08"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#af7eace5cff05344b78ca5e22650e3d08">_ks_2samp</a> (np.ndarray a, np.ndarray b)</td></tr>
+<tr class="memdesc:af7eace5cff05344b78ca5e22650e3d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the two-sample Kolmogorov-Smirnov D-statistic without scipy.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#af7eace5cff05344b78ca5e22650e3d08">More...</a><br /></td></tr>
+<tr class="separator:af7eace5cff05344b78ca5e22650e3d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12f31d4e6e99916e02c03ff72e8e550"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#ab12f31d4e6e99916e02c03ff72e8e550">_fd_bins</a> (np.ndarray values, int max_bins=80, int min_bins=20)</td></tr>
+<tr class="memdesc:ab12f31d4e6e99916e02c03ff72e8e550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute Freedman-Diaconis bin edges for pooled sim and field values.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#ab12f31d4e6e99916e02c03ff72e8e550">More...</a><br /></td></tr>
+<tr class="separator:ab12f31d4e6e99916e02c03ff72e8e550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db3e47d2352cb7f2f266dac0a46155e"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a3db3e47d2352cb7f2f266dac0a46155e">_kde_gaussian</a> (np.ndarray values, np.ndarray x_grid, int max_samples=20000)</td></tr>
+<tr class="memdesc:a3db3e47d2352cb7f2f266dac0a46155e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a3db3e47d2352cb7f2f266dac0a46155e">More...</a><br /></td></tr>
+<tr class="separator:a3db3e47d2352cb7f2f266dac0a46155e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b463aa0719251cb3fadc710d49990c"><td class="memItemLeft" align="right" valign="top">dict[str, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a74b463aa0719251cb3fadc710d49990c">_summary</a> (np.ndarray values)</td></tr>
+<tr class="memdesc:a74b463aa0719251cb3fadc710d49990c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute median, mean, and IQR for one distribution.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a74b463aa0719251cb3fadc710d49990c">More...</a><br /></td></tr>
+<tr class="separator:a74b463aa0719251cb3fadc710d49990c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedf49c2080377436efea12a81e66f895"><td class="memItemLeft" align="right" valign="top">plt.Figure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aedf49c2080377436efea12a81e66f895">_plot_one</a> (np.ndarray sim_vals, np.ndarray field_vals, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> spec, str scenario, str src, str peer, float ks_d)</td></tr>
+<tr class="memdesc:aedf49c2080377436efea12a81e66f895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render the sim-vs-field ECDF comparison figure for one (link, metric).  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aedf49c2080377436efea12a81e66f895">More...</a><br /></td></tr>
+<tr class="separator:aedf49c2080377436efea12a81e66f895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5604f6a0ec6368f13aa0212b2033f8b1"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a5604f6a0ec6368f13aa0212b2033f8b1">_apply_mcs_cap</a> (np.ndarray values, int|None cap)</td></tr>
 <tr class="memdesc:a5604f6a0ec6368f13aa0212b2033f8b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clip values to the metric's integer cap (if any).  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a5604f6a0ec6368f13aa0212b2033f8b1">More...</a><br /></td></tr>
 <tr class="separator:a5604f6a0ec6368f13aa0212b2033f8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedff246be431f05650175630fa3fd18a"><td class="memItemLeft" align="right" valign="top">list[dict]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aedff246be431f05650175630fa3fd18a">_process_scenario</a> (Path scenario_dir, Path field_root, list[<a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a>] metrics, Path out_dir, int n_boot, float ci_pct, np.random.Generator rng)</td></tr>
-<tr class="memdesc:aedff246be431f05650175630fa3fd18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the comparison pipeline for one scenario directory.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aedff246be431f05650175630fa3fd18a">More...</a><br /></td></tr>
-<tr class="separator:aedff246be431f05650175630fa3fd18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b6bf4e23f634bc6da0671cb8ade3143"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a9b6bf4e23f634bc6da0671cb8ade3143">_heatmap_png</a> (list[dict] rows, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> spec, str value_col, str value_label, Path out_path)</td></tr>
+<tr class="memdesc:a9b6bf4e23f634bc6da0671cb8ade3143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render a heatmap PNG for one (metric, score) combination across all scenarios and links.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a9b6bf4e23f634bc6da0671cb8ade3143">More...</a><br /></td></tr>
+<tr class="separator:a9b6bf4e23f634bc6da0671cb8ade3143"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5b296f5c3e69536c89b633ca802de1b"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#ad5b296f5c3e69536c89b633ca802de1b">_write_batch_heatmaps</a> (list[dict] rows, list[<a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a>] metrics, Path batch_root)</td></tr>
+<tr class="memdesc:ad5b296f5c3e69536c89b633ca802de1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write one heatmap PNG per (metric, score) for a completed batch.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#ad5b296f5c3e69536c89b633ca802de1b">More...</a><br /></td></tr>
+<tr class="separator:ad5b296f5c3e69536c89b633ca802de1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1edf4a93fc51142fa34d38abd1021884"><td class="memItemLeft" align="right" valign="top">list[dict]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a1edf4a93fc51142fa34d38abd1021884">_process_scenario</a> (Path scenario_dir, Path field_root, list[<a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a>] metrics, Path out_dir)</td></tr>
+<tr class="memdesc:a1edf4a93fc51142fa34d38abd1021884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the full sim-vs-field comparison for one scenario directory.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a1edf4a93fc51142fa34d38abd1021884">More...</a><br /></td></tr>
+<tr class="separator:a1edf4a93fc51142fa34d38abd1021884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9a5e1a4058d81a85ec007859fe7eee7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aa9a5e1a4058d81a85ec007859fe7eee7">main</a> (list[str]|None argv=None)</td></tr>
 <tr class="memdesc:aa9a5e1a4058d81a85ec007859fe7eee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLI entry point for the sim-vs-field comparison tool.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aa9a5e1a4058d81a85ec007859fe7eee7">More...</a><br /></td></tr>
 <tr class="separator:aa9a5e1a4058d81a85ec007859fe7eee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,6 +175,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a90c7dc394d724d01d2d30f0e15b14a2c"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a90c7dc394d724d01d2d30f0e15b14a2c">_METRICS_BY_SHORT</a> = {m.short: m for m in _METRICS}</td></tr>
 <tr class="memdesc:a90c7dc394d724d01d2d30f0e15b14a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">All metrics supported by the comparison pipeline.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a90c7dc394d724d01d2d30f0e15b14a2c">More...</a><br /></td></tr>
 <tr class="separator:a90c7dc394d724d01d2d30f0e15b14a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ad96b4bd6e72555f654d290b53a08ed"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a0ad96b4bd6e72555f654d290b53a08ed">_SIM_COLOR</a> = &quot;#ff7f0e&quot;</td></tr>
+<tr class="separator:a0ad96b4bd6e72555f654d290b53a08ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1e3795c7bbdfa67f52546ab73812257"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#ae1e3795c7bbdfa67f52546ab73812257">_FIELD_COLOR</a> = &quot;#1f77b4&quot;</td></tr>
+<tr class="separator:ae1e3795c7bbdfa67f52546ab73812257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c9298602a8a3d833072ed60671e859"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a10c9298602a8a3d833072ed60671e859">_UNIT_BY_SHORT</a> = {&quot;snr&quot;: &quot;dB&quot;, &quot;rcpi&quot;: &quot;dB&quot;, &quot;mcs&quot;: &quot;&quot;, &quot;per&quot;: &quot;&quot;, &quot;throughput&quot;: &quot;Mbps&quot;}</td></tr>
+<tr class="separator:a10c9298602a8a3d833072ed60671e859"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a5604f6a0ec6368f13aa0212b2033f8b1"></a>
@@ -215,74 +230,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a8fa1d12b05182957cf10383d1432b28e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fa1d12b05182957cf10383d1432b28e">&#9670;&nbsp;</a></span>_bootstrap_ecdf_band()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[np.ndarray, np.ndarray] scratch.mesh-sim.scripts.validation.compare._bootstrap_ecdf_band </td>
-          <td>(</td>
-          <td class="paramtype">np.ndarray&#160;</td>
-          <td class="paramname"><em>values</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">np.ndarray&#160;</td>
-          <td class="paramname"><em>x_grid</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_boot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ci_pct</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">np.random.Generator&#160;</td>
-          <td class="paramname"><em>rng</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Compute a bootstrap confidence band for an ECDF on a fixed x-grid. </p>
-<p>Resamples the input with replacement <code>n_boot</code> times, evaluates the ECDF at each x-grid point, and returns the lower and upper percentile envelopes.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">values</td><td>Sample array to bootstrap. </td></tr>
-    <tr><td class="paramname">x_grid</td><td>1-D grid of x values at which to evaluate the ECDF. </td></tr>
-    <tr><td class="paramname">n_boot</td><td>Number of bootstrap resamples. </td></tr>
-    <tr><td class="paramname">ci_pct</td><td>Confidence level as a percentage (e.g. 90.0). </td></tr>
-    <tr><td class="paramname">rng</td><td>NumPy random generator for reproducibility. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(lower_band, upper_band)</code> of float64 arrays the same length as <code>x_grid</code>. Full-NaN arrays are returned for empty input. </dd></dl>
-
-</div>
-</div>
 <a id="aecbefe4aabe1063a72c541b6418c7e9a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aecbefe4aabe1063a72c541b6418c7e9a">&#9670;&nbsp;</a></span>_discover_pairs()</h2>
 
@@ -319,8 +266,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a79dbff9e0a2d726ffc444e58004da974"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79dbff9e0a2d726ffc444e58004da974">&#9670;&nbsp;</a></span>_ecdf()</h2>
+<a id="ab12f31d4e6e99916e02c03ff72e8e550"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab12f31d4e6e99916e02c03ff72e8e550">&#9670;&nbsp;</a></span>_fd_bins()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -329,11 +276,27 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[np.ndarray, np.ndarray] scratch.mesh-sim.scripts.validation.compare._ecdf </td>
+          <td class="memname"> np.ndarray scratch.mesh-sim.scripts.validation.compare._fd_bins </td>
           <td>(</td>
           <td class="paramtype">np.ndarray&#160;</td>
-          <td class="paramname"><em>values</em></td><td>)</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>max_bins</em> = <code>80</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>min_bins</em> = <code>20</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -343,19 +306,25 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute the empirical CDF of a sample array. </p>
+<p>Compute Freedman-Diaconis bin edges for pooled sim and field values. </p>
+<p>The Freedman-Diaconis rule selects bin width as: </p><p class="formulaDsp">
+<img class="formulaDsp" alt="\[ w = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3} \]" src="form_3.png"/>
+</p>
+<p> Making bin width proportional to the IQR produces robust binning when one distribution has heavy tails or outliers. The bin count is clamped to [<code>min_bins</code>, <code>max_bins</code>]. Falls back to a linear grid of <code>min_bins</code> bins when the IQR is zero or all values are identical.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">values</td><td>1-D numeric array. </td></tr>
+    <tr><td class="paramname">values</td><td>1-D array of all pooled values (both sim and field combined). </td></tr>
+    <tr><td class="paramname">max_bins</td><td>Maximum number of bins. Defaults to 80. </td></tr>
+    <tr><td class="paramname">min_bins</td><td>Minimum number of bins. Defaults to 20. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(x, y)</code> of sorted values and cumulative probabilities. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>1-D array of <code>n_bins</code> + 1 bin edge values. </dd></dl>
 
 </div>
 </div>
-<a id="aded9aaa52952bffec88121fcaaaf5c16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aded9aaa52952bffec88121fcaaaf5c16">&#9670;&nbsp;</a></span>_ks_2samp()</h2>
+<a id="a9b6bf4e23f634bc6da0671cb8ade3143"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b6bf4e23f634bc6da0671cb8ade3143">&#9670;&nbsp;</a></span>_heatmap_png()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +333,133 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[float, float] scratch.mesh-sim.scripts.validation.compare._ks_2samp </td>
+          <td class="memname"> bool scratch.mesh-sim.scripts.validation.compare._heatmap_png </td>
+          <td>(</td>
+          <td class="paramtype">list[dict]&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a>&#160;</td>
+          <td class="paramname"><em>spec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>value_col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>value_label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Path&#160;</td>
+          <td class="paramname"><em>out_path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Render a heatmap PNG for one (metric, score) combination across all scenarios and links. </p>
+<p>Rows are scenario names, columns are unordered (src, peer) link pairs. Each cell shows the value of <code>value_col</code> for that (scenario, link) combination. Text colour flips from white to black at 50 % of the colour scale maximum for legibility on the viridis palette.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>List of result dicts produced by <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a1edf4a93fc51142fa34d38abd1021884">_process_scenario</a>. </td></tr>
+    <tr><td class="paramname">spec</td><td>Metric specification used to filter rows and label the colour bar. </td></tr>
+    <tr><td class="paramname">value_col</td><td>Column key to read from each row (e.g. <code>"abs_diff_medians"</code>). </td></tr>
+    <tr><td class="paramname">value_label</td><td>Human-readable label for the colour bar (e.g. <code>"|Δmedian|"</code>). </td></tr>
+    <tr><td class="paramname">out_path</td><td>Destination path for the PNG file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>True</code> if the figure was written, <code>False</code> if no matching rows exist. </dd></dl>
+
+</div>
+</div>
+<a id="a3db3e47d2352cb7f2f266dac0a46155e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3db3e47d2352cb7f2f266dac0a46155e">&#9670;&nbsp;</a></span>_kde_gaussian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> np.ndarray scratch.mesh-sim.scripts.validation.compare._kde_gaussian </td>
+          <td>(</td>
+          <td class="paramtype">np.ndarray&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">np.ndarray&#160;</td>
+          <td class="paramname"><em>x_grid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>max_samples</em> = <code>20000</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule. </p>
+<p>Pure numpy implementation — no scipy dependency. Subsamples <code>values</code> to at most <code>max_samples</code> points using a fixed RNG seed (0) for reproducibility when the O(n × m) kernel evaluation would be too slow.</p>
+<p>Bandwidth uses Silverman's rule of thumb: </p><p class="formulaDsp">
+<img class="formulaDsp" alt="\[ h = 1.06 \hat\sigma n^{-1/5} \]" src="form_0.png"/>
+</p>
+<p> When the standard deviation is zero (all identical values), <img class="formulaInl" alt="$ \sigma $" src="form_2.png"/> is clamped to 1.0 and the bandwidth floor is 1e-3 to prevent division by zero.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>1-D array of observed values to estimate the density of. </td></tr>
+    <tr><td class="paramname">x_grid</td><td>1-D array of evaluation points. </td></tr>
+    <tr><td class="paramname">max_samples</td><td>Maximum samples to use; larger inputs are randomly subsampled. Defaults to 20,000. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1-D array of density estimates at each point in <code>x_grid</code>. Returns an array of NaN if either input is empty. </dd></dl>
+
+</div>
+</div>
+<a id="af7eace5cff05344b78ca5e22650e3d08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7eace5cff05344b78ca5e22650e3d08">&#9670;&nbsp;</a></span>_ks_2samp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> float scratch.mesh-sim.scripts.validation.compare._ks_2samp </td>
           <td>(</td>
           <td class="paramtype">np.ndarray&#160;</td>
           <td class="paramname"><em>a</em>, </td>
@@ -388,21 +483,22 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute the two-sample K-S statistic and an asymptotic p-value. </p>
-<p>Uses the Kolmogorov-Smirnov large-sample approximation for the p-value: <code>p ≈ 2 · exp(−2 · n_e · D²)</code> where <code>n_e</code> is the effective sample size.</p>
+<p>Compute the two-sample Kolmogorov-Smirnov D-statistic without scipy. </p>
+<p>Evaluates <code>max |F_a(x) − F_b(x)|</code> over the joint support by merging both sorted arrays and using binary search to evaluate each empirical CDF. Returns NaN when either input is empty.</p>
+<p>The p-value is intentionally not returned: with sample sizes in the tens of thousands, p ≈ 0 even for operationally trivial distributional differences, making it uninformative for this use case.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">a</td><td>First sample array. </td></tr>
-    <tr><td class="paramname">b</td><td>Second sample array. </td></tr>
+    <tr><td class="paramname">a</td><td>First sample array (sim or field). </td></tr>
+    <tr><td class="paramname">b</td><td>Second sample array (sim or field). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(D, p)</code> where D is in [0, 1] and p is in [0, 1]. Returns <code>(nan, nan)</code> if either array is empty. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>K-S D statistic in [0, 1]; NaN if either array is empty. </dd></dl>
 
 </div>
 </div>
-<a id="a409f0c09b8a24dd2c983d8c09857aecd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a409f0c09b8a24dd2c983d8c09857aecd">&#9670;&nbsp;</a></span>_plot_one()</h2>
+<a id="aedf49c2080377436efea12a81e66f895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedf49c2080377436efea12a81e66f895">&#9670;&nbsp;</a></span>_plot_one()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -450,31 +546,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ks_d</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ks_p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_boot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ci_pct</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">np.random.Generator&#160;</td>
-          <td class="paramname"><em>rng</em>&#160;</td>
+          <td class="paramname"><em>ks_d</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -633,8 +705,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aedff246be431f05650175630fa3fd18a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedff246be431f05650175630fa3fd18a">&#9670;&nbsp;</a></span>_process_scenario()</h2>
+<a id="a1edf4a93fc51142fa34d38abd1021884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1edf4a93fc51142fa34d38abd1021884">&#9670;&nbsp;</a></span>_process_scenario()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -664,25 +736,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Path&#160;</td>
-          <td class="paramname"><em>out_dir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_boot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ci_pct</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">np.random.Generator&#160;</td>
-          <td class="paramname"><em>rng</em>&#160;</td>
+          <td class="paramname"><em>out_dir</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -697,21 +751,23 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Run the comparison pipeline for one scenario directory. </p>
-<p>Discovers link pairs from the first seed's trace directory, then for each (link, metric) pair: pools sim and field samples, computes statistics, and saves a PNG. Returns a list of row dicts for the <code>metrics.csv</code> output.</p>
+<p>Run the full sim-vs-field comparison for one scenario directory. </p>
+<ol type="1">
+<li>Resolves the field scenario name via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a7680a2ae72fd86be19588c600ab04245">sim_to_field_scenario</a>.</li>
+<li>Discovers link pairs from the first seed's trace directory.</li>
+<li>For each (link, metric) pair: pools sim and field samples, computes K-S and summary stats, renders a histogram PNG, and appends a result row.</li>
+<li>Returns an empty list if the field directory is not found or no seeds exist.</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">scenario_dir</td><td>Scenario output directory containing <code>sim_traces/</code>. </td></tr>
-    <tr><td class="paramname">field_root</td><td>Root of the per-day field trace tree. </td></tr>
-    <tr><td class="paramname">metrics</td><td>List of <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> objects to process. </td></tr>
-    <tr><td class="paramname">out_dir</td><td>Directory to write PNGs and <code>metrics.csv</code> into. </td></tr>
-    <tr><td class="paramname">n_boot</td><td>Bootstrap iteration count. </td></tr>
-    <tr><td class="paramname">ci_pct</td><td>Confidence level (percent) for the CI band. </td></tr>
-    <tr><td class="paramname">rng</td><td>NumPy random generator. </td></tr>
+    <tr><td class="paramname">scenario_dir</td><td>Scenario directory containing a <code>sim_traces/</code> subdirectory. </td></tr>
+    <tr><td class="paramname">field_root</td><td>Root of the field trace tree (see <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a52ea7cdb39eec67113c441c4f75fc2bd">FIELD_TRACES_ROOT</a>). </td></tr>
+    <tr><td class="paramname">metrics</td><td>List of <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> instances to evaluate. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Output directory for per-link PNGs (<code>validation/</code> subdir). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>List of result dicts (one per (link, metric) pair with valid data). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>List of result dicts, one per (link, metric) combination. </dd></dl>
 
 </div>
 </div>
@@ -762,8 +818,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a3a4786696c54d07bf036812842727f3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a4786696c54d07bf036812842727f3e">&#9670;&nbsp;</a></span>_stats()</h2>
+<a id="a486eeeb76ff279e17c68bb3faf1517c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486eeeb76ff279e17c68bb3faf1517c0">&#9670;&nbsp;</a></span>_scenario_label()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -772,7 +828,43 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[float, float] scratch.mesh-sim.scripts.validation.compare._stats </td>
+          <td class="memname"> str scratch.mesh-sim.scripts.validation.compare._scenario_label </td>
+          <td>(</td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Format a sim scenario name as a compact two-line plot label. </p>
+<p>Converts the sim naming convention to a human-readable form suitable for axis tick labels in heatmap figures. The date portion is reformatted from <code>MMDDYYYY</code> to <code>MM/DD/YYYY</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Sim scenario directory name (e.g. <code>"arpo-1-1-static-04172026"</code>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Two-line string such as <code>"1-1 static\n04/17/2026"</code>, or <code>name</code> unchanged if it does not match the expected pattern. </dd></dl>
+
+</div>
+</div>
+<a id="a74b463aa0719251cb3fadc710d49990c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74b463aa0719251cb3fadc710d49990c">&#9670;&nbsp;</a></span>_summary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> dict[str, float] scratch.mesh-sim.scripts.validation.compare._summary </td>
           <td>(</td>
           <td class="paramtype">np.ndarray&#160;</td>
           <td class="paramname"><em>values</em></td><td>)</td>
@@ -786,14 +878,68 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Return the median and IQR of a sample array. </p>
+<p>Compute median, mean, and IQR for one distribution. </p>
+<p>Returns NaN for all statistics when <code>values</code> is empty, allowing callers to check <code>np.isfinite(s["median"])</code> rather than testing array size.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">values</td><td>1-D numeric array. </td></tr>
+    <tr><td class="paramname">values</td><td>1-D float64 array of samples. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(median, IQR)</code>; both are NaN for an empty array. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Dict with keys <code>"median"</code>, <code>"mean"</code>, and <code>"iqr"</code>. </dd></dl>
+
+</div>
+</div>
+<a id="ad5b296f5c3e69536c89b633ca802de1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5b296f5c3e69536c89b633ca802de1b">&#9670;&nbsp;</a></span>_write_batch_heatmaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> None scratch.mesh-sim.scripts.validation.compare._write_batch_heatmaps </td>
+          <td>(</td>
+          <td class="paramtype">list[dict]&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">list[<a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a>]&#160;</td>
+          <td class="paramname"><em>metrics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Path&#160;</td>
+          <td class="paramname"><em>batch_root</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write one heatmap PNG per (metric, score) for a completed batch. </p>
+<p>Creates a <code>summary/</code> subdirectory under <code>batch_root</code> and calls <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a9b6bf4e23f634bc6da0671cb8ade3143">_heatmap_png</a> for each combination of metric and score type (<code>|Δmedian|</code>, <code>|Δmean|</code>, K-S). Skips combinations with no matching rows.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>All result dicts from the batch (combined across scenarios). </td></tr>
+    <tr><td class="paramname">metrics</td><td>List of <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html">_MetricSpec</a> instances to iterate over. </td></tr>
+    <tr><td class="paramname">batch_root</td><td>Root directory of the batch; <code>summary/</code> is created here. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -814,7 +960,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>CLI entry point for the sim-vs-field comparison tool. </p>
-<p>Iterates all scenario directories under <code>batch_root</code> that contain a <code>sim_traces/</code> subdirectory, runs <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#aedff246be431f05650175630fa3fd18a">_process_scenario</a> for each, and writes <code>validation/metrics.csv</code> per scenario and <code>validation_summary.csv</code> at the batch root.</p>
+<p>Iterates all scenario directories under <code>batch_root</code> that contain a <code>sim_traces/</code> subdirectory, runs <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html#a1edf4a93fc51142fa34d38abd1021884">_process_scenario</a> for each, and writes <code>validation/metrics.csv</code> per scenario and <code>validation_summary.csv</code> at the batch root.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">argv</td><td>Argument list; defaults to <code>sys.argv[1:]</code> when <code>None</code>. </td></tr>
@@ -858,6 +1004,28 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="ae1e3795c7bbdfa67f52546ab73812257"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1e3795c7bbdfa67f52546ab73812257">&#9670;&nbsp;</a></span>_FIELD_COLOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string scratch.mesh-sim.scripts.validation.compare._FIELD_COLOR = &quot;#1f77b4&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acec4f0725f7d207c7261775032ffa162"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acec4f0725f7d207c7261775032ffa162">&#9670;&nbsp;</a></span>_MCS_FIELD_CAP</h2>
 
@@ -904,6 +1072,28 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>All metrics supported by the comparison pipeline. </p>
+
+</div>
+</div>
+<a id="a0ad96b4bd6e72555f654d290b53a08ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ad96b4bd6e72555f654d290b53a08ed">&#9670;&nbsp;</a></span>_SIM_COLOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string scratch.mesh-sim.scripts.validation.compare._SIM_COLOR = &quot;#ff7f0e&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -957,6 +1147,28 @@ Variables</h2></td></tr>
 </div><!-- fragment -->
 <p>Regex for matching a per-link trace CSV filename. </p>
 <p>Expected form: <code>bh2_&lt;metric&gt;__&lt;src&gt;_to_&lt;peer&gt;_trace.csv</code> </p>
+
+</div>
+</div>
+<a id="a10c9298602a8a3d833072ed60671e859"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10c9298602a8a3d833072ed60671e859">&#9670;&nbsp;</a></span>_UNIT_BY_SHORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">dictionary scratch.mesh-sim.scripts.validation.compare._UNIT_BY_SHORT = {&quot;snr&quot;: &quot;dB&quot;, &quot;rcpi&quot;: &quot;dB&quot;, &quot;mcs&quot;: &quot;&quot;, &quot;per&quot;: &quot;&quot;, &quot;throughput&quot;: &quot;Mbps&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

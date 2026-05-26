@@ -33,8 +33,16 @@ _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput":
 _BATCH_PATH_RE = re.compile(r"(\d{4}-\d{2})/(\d{2})/(\d{2}-\d{2}-\d{2})")
 
 
+## @brief Format a batch directory path as a compact two-line timestamp label.
+#
+# Extracts the ``YYYY-MM/DD/HH-MM-SS`` components from the path and
+# reformats them as ``HH:MM:SS\nYYYY-MM-DD`` for use as axis tick labels
+# in heatmap figures. Falls back to the directory's basename if the path
+# does not match the expected layout.
+#
+# @param batch_path Absolute or relative path string to a batch directory.
+# @return Two-line label such as ``"09:25:05\n2026-05-18"``.
 def _batch_label(batch_path: str) -> str:
-    """`outputs/2026-05/18/09-25-05-validation` -> `09:25:05\n2026-05-18`."""
     m = _BATCH_PATH_RE.search(batch_path.replace("\\", "/"))
     if not m:
         return Path(batch_path).name
@@ -42,8 +50,15 @@ def _batch_label(batch_path: str) -> str:
     return f"{hms.replace('-', ':')}\n{ym}-{dd}"
 
 
+## @brief Format a field scenario name as a compact two-line plot label.
+#
+# Splits off the 8-digit date suffix and reformats it from ``MMDDYYYY``
+# to ``MM/DD/YYYY``. The body has underscores replaced with spaces.
+# Falls back to @p name unchanged if the trailing date cannot be parsed.
+#
+# @param name Field scenario name (e.g. ``"1-1_static_04172026"``).
+# @return Two-line string such as ``"1-1 static\n04/17/2026"``.
 def _scenario_label(name: str) -> str:
-    """`1-1_static_04172026` -> `1-1 static\n04/17/2026`."""
     parts = name.rsplit("_", 1)
     if len(parts) == 2 and len(parts[1]) == 8 and parts[1].isdigit():
         body = parts[0].replace("_", " ")
@@ -62,9 +77,21 @@ def _discover_batches(root: Path) -> list[Path]:
     return sorted(p.parent for p in root.rglob("validation_summary.csv"))
 
 
+## @brief Render a cross-batch heatmap PNG for one (metric, score) combination.
+#
+# Rows are field scenarios, columns are batch directories. Each cell shows
+# the mean of @p value_col across all links for that (scenario, batch)
+# combination. Text colour flips from white to black at 50 % of the colour
+# scale maximum for legibility on the viridis palette.
+#
+# @param df          Combined DataFrame of all batches' ``validation_summary.csv`` contents.
+# @param metric      Short metric name to filter on (e.g. ``"snr"``).
+# @param value_col   Column to aggregate per cell (e.g. ``"abs_diff_medians"``).
+# @param value_label Human-readable label for the colour bar (e.g. ``"|Δmedian|"``).
+# @param out_path    Destination path for the PNG file.
+# @return            ``True`` if the figure was written, ``False`` if no matching rows exist.
 def _heatmap_png(df: pd.DataFrame, metric: str, value_col: str,
                  value_label: str, out_path: Path) -> bool:
-    """rows = scenarios, cols = batches, cells = mean of ``value_col`` across links."""
     sub = df[(df["metric"] == metric) & df[value_col].notna()].copy()
     if sub.empty:
         return False

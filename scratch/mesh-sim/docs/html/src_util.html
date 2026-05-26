@@ -97,10 +97,10 @@ $(document).ready(function(){initNavTree('src_util.html',''); initResizable(); }
 <div class="contents">
 <div class="textblock"><p>Low-level string, path, and INI parsing utilities shared across all modules.</p>
 <p>Reads run.ini and tranfers data into a two-level map (section → key → value) that ConfigLoader then queries to populate the SimConfig. Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-8601, resolving relative paths against a base directory, and parsing comma-separated seed lists.</p>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md46"></a>
 Output</h2>
 <p>All functions return values to their callers.</p>
-<h2><a class="anchor" id="autotoc_md45"></a>
+<h2><a class="anchor" id="autotoc_md47"></a>
 Module Layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -114,7 +114,7 @@ Module Layout</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="string-utils_8cc.html">string-utils.cc</a></code>   </td><td class="markdownTableBodyNone">Implementations of all string and path utility functions.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md48"></a>
 Conventions</h2>
 <ul>
 <li>**<code>parseIni</code> strips both <code>#</code> and <code>;</code> comments.** Both comment styles are supported on the same line. Everything from the first <code>#</code> or <code>;</code> to the end of the line is discarded before any other processing.</li>
@@ -123,7 +123,7 @@ Conventions</h2>
 <li>**<code>toIso8601</code> uses <code>gmtime_r</code> (POSIX only).** The output is always UTC, formatted as <code>"YYYY-MM-DDTHH:MM:SSZ"</code>. Sub-second precision is discarded. This function is not portable to Windows without a compatibility shim.</li>
 <li>**<code>resolvePath</code> returns the path unchanged if empty or absolute.** It never throws — an empty path in, an empty path out. Callers that need to validate existence must do so separately.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md49"></a>
 Dependencies</h2>
 <p>No Dependency </p>
 </div></div><!-- contents -->

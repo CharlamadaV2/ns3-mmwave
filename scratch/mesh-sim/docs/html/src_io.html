@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('src_io.html',''); initResizable(); });
 <div class="textblock"><p>Writes and logs simulation metric output summary. <br  />
 </p>
 <p>Handles all simulation output: per-tick CSV snapshots for visualisation, a post-run JSON metrics summary, a human-readable run log, and a stderr progress reporter.</p>
-<h2><a class="anchor" id="autotoc_md28"></a>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Output</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -121,7 +121,7 @@ Output</h2>
 <td class="markdownTableBodyNone"><code>run.log</code>   </td><td class="markdownTableBodyNone"><code>RunLogger</code>   </td><td class="markdownTableBodyNone">Once, before the step loop starts.   </td></tr>
 </table>
 <p>All files are written to <code>cfg.output_dir/&lt;seed&gt;/</code> per seed run. <code>run.log</code> is written to the batch root (not per-seed).</p>
-<h2><a class="anchor" id="autotoc_md29"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Module Layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -139,14 +139,14 @@ Module Layout</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="viz-writer_8cc.html">viz-writer.cc</a></code>   </td><td class="markdownTableBodyNone">Per-tick CSV writing rate-limited by <code>viz_tick_ms</code>; edge-flow aggregation for <code>links.csv</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Conventions</h2>
 <ul>
 <li><b>Two-phase pattern for <code>MetricsWriter</code>.</b> <code>AccumulateTick</code> is called every tick during the step loop; <code>Write</code> is called once after it completes. Calling <code>Write</code> before the loop ends produces a valid but incomplete summary.</li>
 <li><b>SINR sentinel filtering.</b> <code>AccumulateTick</code> only counts links with <code>sinr_db &gt; −900.0</code>. Links at the −999.0 sentinel (unevaluated or below noise floor) are excluded from all SINR accumulators.</li>
 <li>**<code>ProgressLogger</code> and <code>RunLogger</code> are header-only.** They have no <code>.cc</code> file and no ns-3 dependency — they can be included anywhere without affecting build times.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Dependencies</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">

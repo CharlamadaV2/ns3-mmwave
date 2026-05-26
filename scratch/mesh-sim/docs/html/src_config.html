@@ -101,14 +101,14 @@ $(document).ready(function(){initNavTree('src_config.html',''); initResizable();
 <li>The <a class="el" href="config-validator_8h.html">validator</a> checks whether the domains' configuration file falls under the rule.</li>
 <li>The <a class="el" href="config-loader_8h.html">loader</a> parses through the JSON files and <code>run.ini</code> contained in inputs/baselines for the scenarios</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Output</h2>
 <ul>
 <li>The config loader populates SimConfig object with scenarios config parameters</li>
 <li>The config validator returns list of errors and boolean for success</li>
 </ul>
 <p>The outputs are passed into their respective data structures</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Module Layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -122,14 +122,14 @@ Module Layout</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="config-validator_8cc.html">config-validator.cc</a>   </td><td class="markdownTableBodyNone">Contains logic for resultant <code>errors</code> on failed checks.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Conventions</h2>
 <ul>
 <li>Validation checks should only check for failures and perform <code>push_back</code> for errors.</li>
 <li>Read to SimConfig object <code>cfg</code> for loading configuration parameters.</li>
 <li>Comment convention will enforce JavaDoc like styling (/** */).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Dependencies</h2>
 <p>Requires "third_party/json.hpp" to run </p>
 </div></div><!-- contents -->

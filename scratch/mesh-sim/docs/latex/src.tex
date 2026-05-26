@@ -1,4 +1,4 @@
-ns-\/3 mesh simulator source modules.\hypertarget{src_autotoc_md55}{}\doxysubsection{Modules}\label{src_autotoc_md55}
+ns-\/3 mesh simulator source modules.\hypertarget{src_autotoc_md57}{}\doxysubsection{Modules}\label{src_autotoc_md57}
 
 \begin{DoxyItemize}
 \item \mbox{\hyperlink{src_domain}{src/domain}}
@@ -14,7 +14,7 @@ ns-\/3 mesh simulator source modules.\hypertarget{src_autotoc_md55}{}\doxysubsec
 Configuration headers to be used by \mbox{\hyperlink{config-loader_8cc}{config-\/loader.\+cc}}. ~\newline
 
 
-The domain folder contains the configuration for classes and objects used in the simulation. The \mbox{\hyperlink{sim-config_8h}{sim-\/config.\+h}} is contains main config struct which defines the variables and objects configurations inside the simulation.\hypertarget{src_domain_autotoc_md21}{}\doxysubsubsection{Module Layout}\label{src_domain_autotoc_md21}
+The domain folder contains the configuration for classes and objects used in the simulation. The \mbox{\hyperlink{sim-config_8h}{sim-\/config.\+h}} is contains main config struct which defines the variables and objects configurations inside the simulation.\hypertarget{src_domain_autotoc_md23}{}\doxysubsubsection{Module Layout}\label{src_domain_autotoc_md23}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -31,12 +31,12 @@ The domain folder contains the configuration for classes and objects used in the
 \mbox{\hyperlink{node-spec_8h}{node-\/spec.h}}   &Config for node positioning, velocity, and mobility models.    \\\cline{1-2}
 \mbox{\hyperlink{sim-config_8h}{sim-\/config.h}}   &Root config struct. Aggregates everything below it plus runtime metadata.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_domain_autotoc_md22}{}\doxysubsubsection{Conventions}\label{src_domain_autotoc_md22}
+\hypertarget{src_domain_autotoc_md24}{}\doxysubsubsection{Conventions}\label{src_domain_autotoc_md24}
 
 \begin{DoxyItemize}
 \item Declare config structs inside sim-\/config, while defining their parameters in their respective header.
 \item Comment convention will enforce Java\+Doc like styling (/$\ast$$\ast$ $\ast$/).
-\end{DoxyItemize}\hypertarget{src_domain_autotoc_md23}{}\doxysubsubsection{Dependencies}\label{src_domain_autotoc_md23}
+\end{DoxyItemize}\hypertarget{src_domain_autotoc_md25}{}\doxysubsubsection{Dependencies}\label{src_domain_autotoc_md25}
 No dependencies \hypertarget{src_config}{}\doxysection{src/config}\label{src_config}
 Contains scripts for loading the simulation\textquotesingle{}s configuration files and config validators. ~\newline
 
@@ -45,14 +45,14 @@ Contains scripts for loading the simulation\textquotesingle{}s configuration fil
 \begin{DoxyItemize}
 \item The \mbox{\hyperlink{config-validator_8h}{validator}} checks whether the domains\textquotesingle{} configuration file falls under the rule.
 \item The \mbox{\hyperlink{config-loader_8h}{loader}} parses through the JSON files and {\ttfamily run.\+ini} contained in inputs/baselines for the scenarios
-\end{DoxyItemize}\hypertarget{src_config_autotoc_md17}{}\doxysubsubsection{Output}\label{src_config_autotoc_md17}
+\end{DoxyItemize}\hypertarget{src_config_autotoc_md19}{}\doxysubsubsection{Output}\label{src_config_autotoc_md19}
 
 \begin{DoxyItemize}
 \item The config loader populates Sim\+Config object with scenarios config parameters
 \item The config validator returns list of errors and boolean for success
 \end{DoxyItemize}
 
-The outputs are passed into their respective data structures\hypertarget{src_config_autotoc_md18}{}\doxysubsubsection{Module Layout}\label{src_config_autotoc_md18}
+The outputs are passed into their respective data structures\hypertarget{src_config_autotoc_md20}{}\doxysubsubsection{Module Layout}\label{src_config_autotoc_md20}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -68,18 +68,18 @@ The outputs are passed into their respective data structures\hypertarget{src_con
 \mbox{\hyperlink{config-validator_8h}{config-\/validator.h}}   &Contains struct for validation boolean.    \\\cline{1-2}
 \mbox{\hyperlink{config-validator_8cc}{config-\/validator.cc}}   &Contains logic for resultant {\ttfamily errors} on failed checks.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_config_autotoc_md19}{}\doxysubsubsection{Conventions}\label{src_config_autotoc_md19}
+\hypertarget{src_config_autotoc_md21}{}\doxysubsubsection{Conventions}\label{src_config_autotoc_md21}
 
 \begin{DoxyItemize}
 \item Validation checks should only check for failures and perform {\ttfamily push\+\_\+back} for errors.
 \item Read to Sim\+Config object {\ttfamily cfg} for loading configuration parameters.
 \item Comment convention will enforce Java\+Doc like styling (/$\ast$$\ast$ $\ast$/).
-\end{DoxyItemize}\hypertarget{src_config_autotoc_md20}{}\doxysubsubsection{Dependencies}\label{src_config_autotoc_md20}
+\end{DoxyItemize}\hypertarget{src_config_autotoc_md22}{}\doxysubsubsection{Dependencies}\label{src_config_autotoc_md22}
 Requires \char`\"{}third\+\_\+party/json.\+hpp\char`\"{} to run \hypertarget{src_eval}{}\doxysection{src/eval}\label{src_eval}
 Computes radio link quality for every node pair each simulation tick. ~\newline
 
 
-Given the current node positions and ns-\/3 propagation models, this module produces path loss, SINR, capacity, and MCS for each link, then stores the results in a symmetric matrix for O(1) lookup by the routing and metrics layers.\hypertarget{src_eval_autotoc_md24}{}\doxysubsubsection{Output}\label{src_eval_autotoc_md24}
+Given the current node positions and ns-\/3 propagation models, this module produces path loss, SINR, capacity, and MCS for each link, then stores the results in a symmetric matrix for O(1) lookup by the routing and metrics layers.\hypertarget{src_eval_autotoc_md26}{}\doxysubsubsection{Output}\label{src_eval_autotoc_md26}
 The eval module produces no files. It outputs two in-\/memory data structures each tick\+:
 
 $\ast$$\ast${\ttfamily std\+::vector$<$Link\+Result$>$}$\ast$$\ast$ — returned by {\ttfamily Link\+Evaluator\+::\+Evaluate\+All}. One entry per unordered node pair (N·(N−1)/2 total), in (i $<$ j) index order.
@@ -106,7 +106,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 {\ttfamily mcs\+\_\+index}   &CQI index \mbox{[}0–14\mbox{]} selected by the AMC model.    \\\cline{1-2}
 {\ttfamily condition\+\_\+from\+\_\+buildings}   &{\ttfamily true} if LOS/\+NLOS was determined deterministically by buildings.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_eval_autotoc_md25}{}\doxysubsubsection{Module Layout}\label{src_eval_autotoc_md25}
+\hypertarget{src_eval_autotoc_md27}{}\doxysubsubsection{Module Layout}\label{src_eval_autotoc_md27}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -123,7 +123,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 {\ttfamily \mbox{\hyperlink{link-table_8h}{link-\/table.\+h}}}   &{\ttfamily Link\+Table} class\+: symmetric N×N matrix with O(1) lookup and aggregate queries.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{link-table_8cc}{link-\/table.\+cc}}}   &{\ttfamily Update}, {\ttfamily Get}, {\ttfamily Max\+Capacity}, {\ttfamily Connected\+Link\+Count}, {\ttfamily Is\+Connected} implementations.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_eval_autotoc_md26}{}\doxysubsubsection{Conventions}\label{src_eval_autotoc_md26}
+\hypertarget{src_eval_autotoc_md28}{}\doxysubsubsection{Conventions}\label{src_eval_autotoc_md28}
 
 \begin{DoxyItemize}
 \item {\bfseries{No inter-\/node interference.}} mm\+Wave beams are assumed orthogonal so SINR is computed as received signal power vs thermal noise floor only — no ICI term. The noise floor is\+: {\ttfamily −174 + 10·log₂(bandwidth\+\_\+\+Hz) + noise\+\_\+figure\+\_\+dB}.
@@ -133,7 +133,7 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 \item {\bfseries{SINR sentinel is −999.0.}} Links that are unevaluated or below the noise floor carry {\ttfamily sinr\+\_\+db = −999.0}. Consumers check {\ttfamily sinr\+\_\+db $>$ −900.0} to filter these out rather than using a boolean flag.
 \item {\bfseries{Connectivity threshold is −6.7 dB.}} This matches {\ttfamily SINR\+\_\+\+MIN\+\_\+\+DB} in {\ttfamily \mbox{\hyperlink{sinr-capacity_8h}{sinr-\/capacity.\+h}}} — the minimum SINR for any MCS entry. Links below this have zero capacity and are treated as disconnected by the routing layer.
 \item $\ast$$\ast${\ttfamily Link\+Evaluator\+::\+Configure} must be called before any evaluation.$\ast$$\ast$ It caches the noise floor and beamforming gain derived from {\ttfamily Sim\+Config} and stores the propagation model pointers. Calling {\ttfamily Evaluate} or {\ttfamily Evaluate\+All} without configuring first is a null pointer dereference.
-\end{DoxyItemize}\hypertarget{src_eval_autotoc_md27}{}\doxysubsubsection{Dependencies}\label{src_eval_autotoc_md27}
+\end{DoxyItemize}\hypertarget{src_eval_autotoc_md29}{}\doxysubsubsection{Dependencies}\label{src_eval_autotoc_md29}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -152,8 +152,8 @@ $\ast$$\ast${\ttfamily Link\+Table}$\ast$$\ast$ — populated by {\ttfamily Link
 Files for network routing protocols based on simulation config ~\newline
 
 
-Flow-\/level network routing for the mesh simulation. Given the current link quality matrix and a set of active traffic demands, finds a path for each flow and returns the delivered throughput after congestion scaling.\hypertarget{src_routing_autotoc_md32}{}\doxysubsubsection{Output}\label{src_routing_autotoc_md32}
-The routing module produces result of route flows over the mesh.\hypertarget{src_routing_autotoc_md33}{}\doxysubsubsection{Module Layout}\label{src_routing_autotoc_md33}
+Flow-\/level network routing for the mesh simulation. Given the current link quality matrix and a set of active traffic demands, finds a path for each flow and returns the delivered throughput after congestion scaling.\hypertarget{src_routing_autotoc_md34}{}\doxysubsubsection{Output}\label{src_routing_autotoc_md34}
+The routing module produces result of route flows over the mesh.\hypertarget{src_routing_autotoc_md35}{}\doxysubsubsection{Module Layout}\label{src_routing_autotoc_md35}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -167,19 +167,19 @@ The routing module produces result of route flows over the mesh.\hypertarget{src
 \mbox{\hyperlink{mesh-router_8h}{mesh-\/router.h}}   &Flow\+Result struct and Mesh\+Router class declaration.    \\\cline{1-2}
 \mbox{\hyperlink{mesh-router_8cc}{mesh-\/router.cc}}   &Path-\/finding algorithms, congestion scaling, and latency model.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_routing_autotoc_md34}{}\doxysubsubsection{Conventions}\label{src_routing_autotoc_md34}
+\hypertarget{src_routing_autotoc_md36}{}\doxysubsubsection{Conventions}\label{src_routing_autotoc_md36}
 
 \begin{DoxyItemize}
 \item Flow-\/level only. There are no packets, queues, or transmission delays
 \item max\+\_\+hops = 0 means unlimited. Any positive value discards paths that exceed it, leaving the flow unroutable rather than using a longer path.
 \item Comment convention will enforce Java\+Doc like styling (/$\ast$$\ast$ $\ast$/).
-\end{DoxyItemize}\hypertarget{src_routing_autotoc_md35}{}\doxysubsubsection{Dependencies}\label{src_routing_autotoc_md35}
+\end{DoxyItemize}\hypertarget{src_routing_autotoc_md37}{}\doxysubsubsection{Dependencies}\label{src_routing_autotoc_md37}
 No dependencies \hypertarget{src_traffic}{}\doxysection{src/traffic}\label{src_traffic}
 Component for generating network traffic flow per tick for simulation ~\newline
 
 
-The traffic matrix advances the flow population each tick according to the configured model and hands the current list to the routing layer.\hypertarget{src_traffic_autotoc_md40}{}\doxysubsubsection{Output}\label{src_traffic_autotoc_md40}
-Returns vector of active flows per tick in simulation.\hypertarget{src_traffic_autotoc_md41}{}\doxysubsubsection{Module Layout}\label{src_traffic_autotoc_md41}
+The traffic matrix advances the flow population each tick according to the configured model and hands the current list to the routing layer.\hypertarget{src_traffic_autotoc_md42}{}\doxysubsubsection{Output}\label{src_traffic_autotoc_md42}
+Returns vector of active flows per tick in simulation.\hypertarget{src_traffic_autotoc_md43}{}\doxysubsubsection{Module Layout}\label{src_traffic_autotoc_md43}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -193,18 +193,18 @@ Returns vector of active flows per tick in simulation.\hypertarget{src_traffic_a
 \mbox{\hyperlink{traffic-matrix_8h}{traffic-\/matrix.h}}   &Flow struct and Traffic\+Matrix class declaration.    \\\cline{1-2}
 \mbox{\hyperlink{traffic-matrix_8cc}{traffic-\/matrix.cc}}   &Traffic model logic\+: initialisation, per-\/tick update, Poisson generation, on-\/off state machine.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_traffic_autotoc_md42}{}\doxysubsubsection{Conventions}\label{src_traffic_autotoc_md42}
+\hypertarget{src_traffic_autotoc_md44}{}\doxysubsubsection{Conventions}\label{src_traffic_autotoc_md44}
 
 \begin{DoxyItemize}
 \item Traffic patterns are deterministic for a given seed — the same seed always produces the same flow arrivals, random pairs, and on-\/off phase durations.
 \item Updates the
 \item Purely tracking the traffic flow between two nodes.
-\end{DoxyItemize}\hypertarget{src_traffic_autotoc_md43}{}\doxysubsubsection{Dependencies}\label{src_traffic_autotoc_md43}
+\end{DoxyItemize}\hypertarget{src_traffic_autotoc_md45}{}\doxysubsubsection{Dependencies}\label{src_traffic_autotoc_md45}
 No dependencies \hypertarget{src_io}{}\doxysection{src/io}\label{src_io}
 Writes and logs simulation metric output summary. ~\newline
 
 
-Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a post-\/run JSON metrics summary, a human-\/readable run log, and a stderr progress reporter.\hypertarget{src_io_autotoc_md28}{}\doxysubsubsection{Output}\label{src_io_autotoc_md28}
+Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a post-\/run JSON metrics summary, a human-\/readable run log, and a stderr progress reporter.\hypertarget{src_io_autotoc_md30}{}\doxysubsubsection{Output}\label{src_io_autotoc_md30}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
 \hline
@@ -226,7 +226,7 @@ Handles all simulation output\+: per-\/tick CSV snapshots for visualisation, a p
 \end{longtabu}
 
 
-All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed run. {\ttfamily run.\+log} is written to the batch root (not per-\/seed).\hypertarget{src_io_autotoc_md29}{}\doxysubsubsection{Module Layout}\label{src_io_autotoc_md29}
+All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed run. {\ttfamily run.\+log} is written to the batch root (not per-\/seed).\hypertarget{src_io_autotoc_md31}{}\doxysubsubsection{Module Layout}\label{src_io_autotoc_md31}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -244,13 +244,13 @@ All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed 
 {\ttfamily \mbox{\hyperlink{viz-writer_8h}{viz-\/writer.\+h}}}   &{\ttfamily Viz\+Writer} class declaration; documents all six CSV schemas.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{viz-writer_8cc}{viz-\/writer.\+cc}}}   &Per-\/tick CSV writing rate-\/limited by {\ttfamily viz\+\_\+tick\+\_\+ms}; edge-\/flow aggregation for {\ttfamily links.\+csv}.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_io_autotoc_md30}{}\doxysubsubsection{Conventions}\label{src_io_autotoc_md30}
+\hypertarget{src_io_autotoc_md32}{}\doxysubsubsection{Conventions}\label{src_io_autotoc_md32}
 
 \begin{DoxyItemize}
 \item {\bfseries{Two-\/phase pattern for {\ttfamily Metrics\+Writer}.}} {\ttfamily Accumulate\+Tick} is called every tick during the step loop; {\ttfamily Write} is called once after it completes. Calling {\ttfamily Write} before the loop ends produces a valid but incomplete summary.
 \item {\bfseries{SINR sentinel filtering.}} {\ttfamily Accumulate\+Tick} only counts links with {\ttfamily sinr\+\_\+db $>$ −900.0}. Links at the −999.0 sentinel (unevaluated or below noise floor) are excluded from all SINR accumulators.
 \item $\ast$$\ast${\ttfamily Progress\+Logger} and {\ttfamily Run\+Logger} are header-\/only.$\ast$$\ast$ They have no {\ttfamily .cc} file and no ns-\/3 dependency — they can be included anywhere without affecting build times.
-\end{DoxyItemize}\hypertarget{src_io_autotoc_md31}{}\doxysubsubsection{Dependencies}\label{src_io_autotoc_md31}
+\end{DoxyItemize}\hypertarget{src_io_autotoc_md33}{}\doxysubsubsection{Dependencies}\label{src_io_autotoc_md33}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -267,8 +267,8 @@ All files are written to {\ttfamily cfg.\+output\+\_\+dir/$<$seed$>$/} per seed 
 \hypertarget{src_util}{}\doxysection{src/util}\label{src_util}
 Low-\/level string, path, and INI parsing utilities shared across all modules.
 
-Reads run.\+ini and tranfers data into a two-\/level map (section → key → value) that Config\+Loader then queries to populate the Sim\+Config. Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-\/8601, resolving relative paths against a base directory, and parsing comma-\/separated seed lists.\hypertarget{src_util_autotoc_md44}{}\doxysubsubsection{Output}\label{src_util_autotoc_md44}
-All functions return values to their callers.\hypertarget{src_util_autotoc_md45}{}\doxysubsubsection{Module Layout}\label{src_util_autotoc_md45}
+Reads run.\+ini and tranfers data into a two-\/level map (section → key → value) that Config\+Loader then queries to populate the Sim\+Config. Contains helpers for trimming whitespace, splitting on tabs, formatting timestamps as ISO-\/8601, resolving relative paths against a base directory, and parsing comma-\/separated seed lists.\hypertarget{src_util_autotoc_md46}{}\doxysubsubsection{Output}\label{src_util_autotoc_md46}
+All functions return values to their callers.\hypertarget{src_util_autotoc_md47}{}\doxysubsubsection{Module Layout}\label{src_util_autotoc_md47}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -284,7 +284,7 @@ All functions return values to their callers.\hypertarget{src_util_autotoc_md45}
 {\ttfamily \mbox{\hyperlink{string-utils_8h}{string-\/utils.\+h}}}   &Declarations for {\ttfamily trim\+Str}, {\ttfamily split\+Tab}, {\ttfamily to\+Iso8601}, {\ttfamily resolve\+Path}, {\ttfamily dir\+Of}, {\ttfamily parse\+Seed\+List}.    \\\cline{1-2}
 {\ttfamily \mbox{\hyperlink{string-utils_8cc}{string-\/utils.\+cc}}}   &Implementations of all string and path utility functions.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_util_autotoc_md46}{}\doxysubsubsection{Conventions}\label{src_util_autotoc_md46}
+\hypertarget{src_util_autotoc_md48}{}\doxysubsubsection{Conventions}\label{src_util_autotoc_md48}
 
 \begin{DoxyItemize}
 \item $\ast$$\ast${\ttfamily parse\+Ini} strips both {\ttfamily \#} and {\ttfamily ;} comments.$\ast$$\ast$ Both comment styles are supported on the same line. Everything from the first {\ttfamily \#} or {\ttfamily ;} to the end of the line is discarded before any other processing.
@@ -292,12 +292,12 @@ All functions return values to their callers.\hypertarget{src_util_autotoc_md45}
 \item $\ast$$\ast${\ttfamily ini\+Get\+Bool} treats {\ttfamily \char`\"{}true\char`\"{}}, {\ttfamily \char`\"{}1\char`\"{}}, and {\ttfamily \char`\"{}yes\char`\"{}} as true (case-\/insensitive).$\ast$$\ast$ Everything else — including {\ttfamily \char`\"{}false\char`\"{}}, {\ttfamily \char`\"{}0\char`\"{}}, and {\ttfamily \char`\"{}no\char`\"{}} — is false. There is no error for unrecognised values; they silently return {\ttfamily false}.
 \item $\ast$$\ast${\ttfamily to\+Iso8601} uses {\ttfamily gmtime\+\_\+r} (POSIX only).$\ast$$\ast$ The output is always UTC, formatted as {\ttfamily \char`\"{}\+YYYY-\/\+MM-\/\+DDTHH\+:\+MM\+:\+SSZ\char`\"{}}. Sub-\/second precision is discarded. This function is not portable to Windows without a compatibility shim.
 \item $\ast$$\ast${\ttfamily resolve\+Path} returns the path unchanged if empty or absolute.$\ast$$\ast$ It never throws — an empty path in, an empty path out. Callers that need to validate existence must do so separately.
-\end{DoxyItemize}\hypertarget{src_util_autotoc_md47}{}\doxysubsubsection{Dependencies}\label{src_util_autotoc_md47}
+\end{DoxyItemize}\hypertarget{src_util_autotoc_md49}{}\doxysubsubsection{Dependencies}\label{src_util_autotoc_md49}
 No Dependency \hypertarget{src_cli}{}\doxysection{src/cli}\label{src_cli}
 Command-\/line parsing and pre-\/simulation setup for mesh-\/sim. ~\newline
 
 
-This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line}inside the {\ttfamily .cc}).\hypertarget{src_cli_autotoc_md12}{}\doxysubsubsection{Flags}\label{src_cli_autotoc_md12}
+This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, and input archiving into standalone functions with no ns-\/3 types in their public signatures (except {\ttfamily ns3\+::\+Command\+Line}inside the {\ttfamily .cc}).\hypertarget{src_cli_autotoc_md14}{}\doxysubsubsection{Flags}\label{src_cli_autotoc_md14}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
 \hline
@@ -317,7 +317,7 @@ This module contains {\ttfamily sim.\+cc} argument handling, seed resolution, an
 {\ttfamily -\/-\/debug-\/links}   &no   &{\ttfamily false}   &Enable verbose per-\/link evaluation logging.    \\\cline{1-4}
 {\ttfamily -\/-\/rl-\/mode}   &no   &{\ttfamily false}   &Enable RL mode — the sim exchanges observations and actions via stdin/stdout JSON.   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{src_cli_autotoc_md13}{}\doxysubsubsection{Output}\label{src_cli_autotoc_md13}
+\hypertarget{src_cli_autotoc_md15}{}\doxysubsubsection{Output}\label{src_cli_autotoc_md15}
 Each seed produces its own subdirectory under the batch root\+:
 
 
@@ -335,7 +335,7 @@ Each seed produces its own subdirectory under the batch root\+:
 \end{DoxyCode}
 
 
-The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+Inputs} before any seed runs, so re-\/running with the archived files reproduces the original results exactly.\hypertarget{src_cli_autotoc_md14}{}\doxysubsubsection{Module Layout}\label{src_cli_autotoc_md14}
+The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+Inputs} before any seed runs, so re-\/running with the archived files reproduces the original results exactly.\hypertarget{src_cli_autotoc_md16}{}\doxysubsubsection{Module Layout}\label{src_cli_autotoc_md16}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -349,18 +349,18 @@ The {\ttfamily inputs/} directory is written by {\ttfamily Archive\+Scenario\+In
 \mbox{\hyperlink{cli-parser_8h}{cli-\/parser.h}}   &Cli\+Args struct + three public function declarations    \\\cline{1-2}
 \mbox{\hyperlink{cli-parser_8cc}{cli-\/parser.cc}}   &implementations; the only file in src/ that includes ns3/command-\/line.\+h   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_cli_autotoc_md15}{}\doxysubsubsection{Conventions}\label{src_cli_autotoc_md15}
+\hypertarget{src_cli_autotoc_md17}{}\doxysubsubsection{Conventions}\label{src_cli_autotoc_md17}
 
 \begin{DoxyItemize}
 \item {\bfseries{Hard exits on bad input.}} {\ttfamily Parse\+Command\+Line} and {\ttfamily Resolve\+Seeds} call {\ttfamily std\+::exit(1)} with a message to {\ttfamily stderr} rather than throwing. This matches ns-\/3 convention for fatal startup errors and means {\ttfamily sim.\+cc} never needs to handle missing-\/flag cases.
 \item {\bfseries{Overwrite-\/safe archiving.}} {\ttfamily Archive\+Scenario\+Inputs} uses {\ttfamily copy\+\_\+options\+::overwrite\+\_\+existing} so re-\/running into the same output directory is safe.
-\end{DoxyItemize}\hypertarget{src_cli_autotoc_md16}{}\doxysubsubsection{Dependencies}\label{src_cli_autotoc_md16}
+\end{DoxyItemize}\hypertarget{src_cli_autotoc_md18}{}\doxysubsubsection{Dependencies}\label{src_cli_autotoc_md18}
 Depends on ns3 framework \hypertarget{src_setup}{}\doxysection{src/setup}\label{src_setup}
 Files for generating buildings, nodes, and propogration model. ~\newline
 
 
-Based on parameters and \mbox{\hyperlink{sim-config_8h}{simulation config}}, the topology builder constructs ns-\/3 nodes, mobility models, propagration models, and buildings accordingly.\hypertarget{src_setup_autotoc_md36}{}\doxysubsubsection{Output}\label{src_setup_autotoc_md36}
-When sim config is passed in parameter, topology data structure is generated.\hypertarget{src_setup_autotoc_md37}{}\doxysubsubsection{Module Layout}\label{src_setup_autotoc_md37}
+Based on parameters and \mbox{\hyperlink{sim-config_8h}{simulation config}}, the topology builder constructs ns-\/3 nodes, mobility models, propagration models, and buildings accordingly.\hypertarget{src_setup_autotoc_md38}{}\doxysubsubsection{Output}\label{src_setup_autotoc_md38}
+When sim config is passed in parameter, topology data structure is generated.\hypertarget{src_setup_autotoc_md39}{}\doxysubsubsection{Module Layout}\label{src_setup_autotoc_md39}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -374,10 +374,10 @@ When sim config is passed in parameter, topology data structure is generated.\hy
 \mbox{\hyperlink{topology-builder_8h}{topology-\/builder.h}}   &Contains information on function and class behavior.    \\\cline{1-2}
 \mbox{\hyperlink{topology-builder_8cc}{topology-\/builder.cc}}   &Logic of how Topology builder interacts with simulation config.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{src_setup_autotoc_md38}{}\doxysubsubsection{Conventions}\label{src_setup_autotoc_md38}
+\hypertarget{src_setup_autotoc_md40}{}\doxysubsubsection{Conventions}\label{src_setup_autotoc_md40}
 
 \begin{DoxyItemize}
 \item Have topology-\/builder behaviors be based on sim configuration.
 \item Comment convention will enforce Java\+Doc like styling (/$\ast$$\ast$ $\ast$/).
-\end{DoxyItemize}\hypertarget{src_setup_autotoc_md39}{}\doxysubsubsection{Dependencies}\label{src_setup_autotoc_md39}
+\end{DoxyItemize}\hypertarget{src_setup_autotoc_md41}{}\doxysubsubsection{Dependencies}\label{src_setup_autotoc_md41}
 No dependencies 

@@ -117,30 +117,36 @@ Functions</h2></td></tr>
 <tr class="memitem:a9cbbb5fe41095ba630ce514887532ff1"><td class="memItemLeft" align="right" valign="top">dict[str, dict[str, list[Path]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a9cbbb5fe41095ba630ce514887532ff1">_scenarios_by_family</a> (Path per_day_root)</td></tr>
 <tr class="memdesc:a9cbbb5fe41095ba630ce514887532ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Group scenario directories under a per-day root by family and date.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a9cbbb5fe41095ba630ce514887532ff1">More...</a><br /></td></tr>
 <tr class="separator:a9cbbb5fe41095ba630ce514887532ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b9997a6932d0af1888918e7f2945af3"><td class="memItemLeft" align="right" valign="top">dict[tuple[str, str, str, str], <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3">_load_traces_for_family</a> (dict[str, list[Path]] days)</td></tr>
-<tr class="memdesc:a8b9997a6932d0af1888918e7f2945af3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load and pool trace CSVs across all scenarios for one family.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3">More...</a><br /></td></tr>
-<tr class="separator:a8b9997a6932d0af1888918e7f2945af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4081f2cd81545692fb7bf904b3776112"><td class="memItemLeft" align="right" valign="top">dict[tuple[str, str, str, str], <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4081f2cd81545692fb7bf904b3776112">_load_traces_for_family</a> (dict[str, list[Path]] days, *bool audit=False)</td></tr>
+<tr class="memdesc:a4081f2cd81545692fb7bf904b3776112"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load and pool trace CSVs across all scenarios for one family.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4081f2cd81545692fb7bf904b3776112">More...</a><br /></td></tr>
+<tr class="separator:a4081f2cd81545692fb7bf904b3776112"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6a497e2e7589c297e83ba22680be063"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae6a497e2e7589c297e83ba22680be063">_audit_csv</a> (Path csv_path, pd.Series raw_col, pd.Series parsed, str day, str src, str peer, str metric)</td></tr>
+<tr class="memdesc:ae6a497e2e7589c297e83ba22680be063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a diagnostic comparison between raw and parsed CSV columns.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae6a497e2e7589c297e83ba22680be063">More...</a><br /></td></tr>
+<tr class="separator:ae6a497e2e7589c297e83ba22680be063"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="memItemLeft" align="right" valign="top">dict&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2d96dd6eaaf290eb6bbb48df6347b6c3">_summary</a> (np.ndarray values)</td></tr>
 <tr class="memdesc:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute quantile summary statistics for an array of values.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2d96dd6eaaf290eb6bbb48df6347b6c3">More...</a><br /></td></tr>
 <tr class="separator:a2d96dd6eaaf290eb6bbb48df6347b6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae63443213ea5f0428b601243f1c683ed"><td class="memItemLeft" align="right" valign="top">tuple[np.ndarray, np.ndarray]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae63443213ea5f0428b601243f1c683ed">_ecdf</a> (np.ndarray values)</td></tr>
-<tr class="memdesc:ae63443213ea5f0428b601243f1c683ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the empirical CDF of a sample array.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae63443213ea5f0428b601243f1c683ed">More...</a><br /></td></tr>
-<tr class="separator:ae63443213ea5f0428b601243f1c683ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa0d2c89085334d215e55d0367ffea5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#aaa0d2c89085334d215e55d0367ffea5c">_ks_2samp</a> (np.ndarray a, np.ndarray b)</td></tr>
 <tr class="memdesc:aaa0d2c89085334d215e55d0367ffea5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the two-sample Kolmogorov-Smirnov statistic without scipy.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#aaa0d2c89085334d215e55d0367ffea5c">More...</a><br /></td></tr>
 <tr class="separator:aaa0d2c89085334d215e55d0367ffea5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf099d960ce8144a7a415317959fd03d"><td class="memItemLeft" align="right" valign="top">plt.Figure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#adf099d960ce8144a7a415317959fd03d">_plot_ecdfs</a> (str family, str src, str peer, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec.html">_MetricSpec</a> metric, dict[str, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>] bags_by_day, float|None ks_value)</td></tr>
-<tr class="memdesc:adf099d960ce8144a7a415317959fd03d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metric unit strings for axis and legend annotation.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#adf099d960ce8144a7a415317959fd03d">More...</a><br /></td></tr>
-<tr class="separator:adf099d960ce8144a7a415317959fd03d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ecc23bae2f12675d17748eb9667f187"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8ecc23bae2f12675d17748eb9667f187">_kde_gaussian</a> (np.ndarray values, np.ndarray x_grid, int max_samples=20000)</td></tr>
+<tr class="memdesc:a8ecc23bae2f12675d17748eb9667f187"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8ecc23bae2f12675d17748eb9667f187">More...</a><br /></td></tr>
+<tr class="separator:a8ecc23bae2f12675d17748eb9667f187"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fda8522f33b95a2e1ae491df34b128b"><td class="memItemLeft" align="right" valign="top">np.ndarray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8fda8522f33b95a2e1ae491df34b128b">_fd_bins</a> (np.ndarray values, int max_bins=80, int min_bins=20)</td></tr>
+<tr class="memdesc:a8fda8522f33b95a2e1ae491df34b128b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute Freedman-Diaconis histogram bin edges for pooled values.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8fda8522f33b95a2e1ae491df34b128b">More...</a><br /></td></tr>
+<tr class="separator:a8fda8522f33b95a2e1ae491df34b128b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b24bbe12bdb7449c130a9500a573bc3"><td class="memItemLeft" align="right" valign="top">plt.Figure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4b24bbe12bdb7449c130a9500a573bc3">_plot_histograms</a> (str family, str src, str peer, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec.html">_MetricSpec</a> metric, dict[str, <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>] bags_by_day, float|None ks_value)</td></tr>
+<tr class="memdesc:a4b24bbe12bdb7449c130a9500a573bc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render one normalised histogram overlay per day for a (family, link, metric) triple.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4b24bbe12bdb7449c130a9500a573bc3">More...</a><br /></td></tr>
+<tr class="separator:a4b24bbe12bdb7449c130a9500a573bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a28845bd619766b2ba15b21c3e74776"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a6a28845bd619766b2ba15b21c3e74776">_fmt_day</a> (str day)</td></tr>
 <tr class="memdesc:a6a28845bd619766b2ba15b21c3e74776"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format an 8-digit date string as <code>MM/DD/YYYY</code> for display.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a6a28845bd619766b2ba15b21c3e74776">More...</a><br /></td></tr>
 <tr class="separator:a6a28845bd619766b2ba15b21c3e74776"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a609a778db51740e3f382851719215734"><td class="memItemLeft" align="right" valign="top">tuple[list[dict], list[dict]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734">run_multi_day</a> (Path per_day_root, Path multi_day_root)</td></tr>
-<tr class="memdesc:a609a778db51740e3f382851719215734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the full multi-day analysis and write all output files.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734">More...</a><br /></td></tr>
-<tr class="separator:a609a778db51740e3f382851719215734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3f446623d746d7e4fcffb2c289647d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ab3f446623d746d7e4fcffb2c289647d7">multi_day</a> ()</td></tr>
-<tr class="memdesc:ab3f446623d746d7e4fcffb2c289647d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLI entry point for the <code>multi-day</code> subcommand.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ab3f446623d746d7e4fcffb2c289647d7">More...</a><br /></td></tr>
-<tr class="separator:ab3f446623d746d7e4fcffb2c289647d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31926625bb262339bb40eeab5f57660b"><td class="memItemLeft" align="right" valign="top">tuple[list[dict], list[dict]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a31926625bb262339bb40eeab5f57660b">run_multi_day</a> (Path per_day_root, Path multi_day_root, *bool audit=False, str|None family_filter=None)</td></tr>
+<tr class="memdesc:a31926625bb262339bb40eeab5f57660b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the full multi-day analysis and write all output files.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a31926625bb262339bb40eeab5f57660b">More...</a><br /></td></tr>
+<tr class="separator:a31926625bb262339bb40eeab5f57660b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae82ce69ec5a743e50062d8d33c547fd8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae82ce69ec5a743e50062d8d33c547fd8">multi_day</a> (bool audit=False, str|None family_filter=None)</td></tr>
+<tr class="memdesc:ae82ce69ec5a743e50062d8d33c547fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLI entry point for the <code>multi-day</code> subcommand.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae82ce69ec5a743e50062d8d33c547fd8">More...</a><br /></td></tr>
+<tr class="separator:ae82ce69ec5a743e50062d8d33c547fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -158,10 +164,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a2e78952a1e299dc124d2e122076f4bf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6">_MIN_SAMPLES_PER_DAY</a> = 100</td></tr>
 <tr class="memdesc:a2e78952a1e299dc124d2e122076f4bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum samples per day for a bag to be included in ECDF/K-S analysis.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6">More...</a><br /></td></tr>
 <tr class="separator:a2e78952a1e299dc124d2e122076f4bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f981dce8ca10ae330d59c4b9b6908c4"><td class="memItemLeft" align="right" valign="top">dictionary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a5f981dce8ca10ae330d59c4b9b6908c4">_UNIT_BY_SHORT</a> = {&quot;snr&quot;: &quot;dB&quot;, &quot;rcpi&quot;: &quot;dB&quot;, &quot;mcs&quot;: &quot;&quot;, &quot;per&quot;: &quot;&quot;, &quot;throughput&quot;: &quot;Mbps&quot;}</td></tr>
+<tr class="separator:a5f981dce8ca10ae330d59c4b9b6908c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ae63443213ea5f0428b601243f1c683ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae63443213ea5f0428b601243f1c683ed">&#9670;&nbsp;</a></span>_ecdf()</h2>
+<a id="ae6a497e2e7589c297e83ba22680be063"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6a497e2e7589c297e83ba22680be063">&#9670;&nbsp;</a></span>_audit_csv()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,11 +178,51 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[np.ndarray, np.ndarray] scratch.mesh-sim.scripts.arpo_data.multi_day._ecdf </td>
+          <td class="memname"> None scratch.mesh-sim.scripts.arpo_data.multi_day._audit_csv </td>
           <td>(</td>
-          <td class="paramtype">np.ndarray&#160;</td>
-          <td class="paramname"><em>values</em></td><td>)</td>
+          <td class="paramtype">Path&#160;</td>
+          <td class="paramname"><em>csv_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">pd.Series&#160;</td>
+          <td class="paramname"><em>raw_col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">pd.Series&#160;</td>
+          <td class="paramname"><em>parsed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>day</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>peer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>metric</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -184,15 +232,81 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute the empirical CDF of a sample array. </p>
-<p>Uses a step ECDF: x is the sorted data; y(i) = (i+1)/n.</p>
+<p>Print a diagnostic comparison between raw and parsed CSV columns. </p>
+<p>Compares row counts and maximum values before and after <code>pd.to_numeric</code> coercion. Flags two conditions:</p><ul>
+<li><code>DROPPED</code>: rows lost to NaN coercion.</li>
+<li><code>MAX_MISMATCH</code>: the raw column contains a value larger than anything that survived parsing, indicating tail-loss from coercion or a scope mismatch between the raw CSV and the parsed bag.</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">values</td><td>1-D numeric array. </td></tr>
+    <tr><td class="paramname">csv_path</td><td>Path to the source CSV file (used in the printed label). </td></tr>
+    <tr><td class="paramname">raw_col</td><td>The raw string column before numeric coercion. </td></tr>
+    <tr><td class="paramname">parsed</td><td>The column after <code>pd.to_numeric</code> with NaNs dropped. </td></tr>
+    <tr><td class="paramname">day</td><td>Date string for the log prefix. </td></tr>
+    <tr><td class="paramname">src</td><td>Source rab hostname for the log prefix. </td></tr>
+    <tr><td class="paramname">peer</td><td>Peer rab hostname for the log prefix. </td></tr>
+    <tr><td class="paramname">metric</td><td>Metric short name for the log prefix. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Tuple <code>(x, y)</code> of sorted values and their cumulative probabilities. </dd></dl>
+
+</div>
+</div>
+<a id="a8fda8522f33b95a2e1ae491df34b128b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fda8522f33b95a2e1ae491df34b128b">&#9670;&nbsp;</a></span>_fd_bins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> np.ndarray scratch.mesh-sim.scripts.arpo_data.multi_day._fd_bins </td>
+          <td>(</td>
+          <td class="paramtype">np.ndarray&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>max_bins</em> = <code>80</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>min_bins</em> = <code>20</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute Freedman-Diaconis histogram bin edges for pooled values. </p>
+<p>The Freedman-Diaconis rule selects bin width as: </p><p class="formulaDsp">
+<img class="formulaDsp" alt="\[ w = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3} \]" src="form_3.png"/>
+</p>
+<p> Bin width is proportional to the inter-quartile range, making it robust to outliers compared to Sturges or Scott's rule.</p>
+<p>The resulting bin count is clamped to [<code>min_bins</code>, <code>max_bins</code>]. Falls back to a linear grid of <code>min_bins</code> bins when the IQR is zero or all values are identical.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>1-D array of all pooled values across all days for one (link, metric) combination. </td></tr>
+    <tr><td class="paramname">max_bins</td><td>Maximum number of bins. Defaults to 80. </td></tr>
+    <tr><td class="paramname">min_bins</td><td>Minimum number of bins. Defaults to 20. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1-D array of <code>n_bins</code> + 1 bin edge values. </dd></dl>
 
 </div>
 </div>
@@ -229,6 +343,64 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Formatted string such as <code>"04/16/2026"</code>. </dd></dl>
+
+</div>
+</div>
+<a id="a8ecc23bae2f12675d17748eb9667f187"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ecc23bae2f12675d17748eb9667f187">&#9670;&nbsp;</a></span>_kde_gaussian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> np.ndarray scratch.mesh-sim.scripts.arpo_data.multi_day._kde_gaussian </td>
+          <td>(</td>
+          <td class="paramtype">np.ndarray&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">np.ndarray&#160;</td>
+          <td class="paramname"><em>x_grid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>max_samples</em> = <code>20000</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule. </p>
+<p>Pure numpy implementation — no scipy dependency. Subsamples <code>values</code> to at most <code>max_samples</code> points using a fixed RNG seed (0) for reproducibility when the sample count would make the O(n × m) kernel evaluation slow.</p>
+<p>Bandwidth uses Silverman's rule of thumb: </p><p class="formulaDsp">
+<img class="formulaDsp" alt="\[ h = 1.06 \hat\sigma n^{-1/5} \]" src="form_0.png"/>
+</p>
+<p> where <img class="formulaInl" alt="$ \hat\sigma $" src="form_1.png"/> is the sample standard deviation. When the standard deviation is zero (all identical values), <img class="formulaInl" alt="$ \sigma $" src="form_2.png"/> is clamped to 1.0 to prevent a degenerate zero bandwidth.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>1-D array of observed values to estimate the density of. </td></tr>
+    <tr><td class="paramname">x_grid</td><td>1-D array of evaluation points. </td></tr>
+    <tr><td class="paramname">max_samples</td><td>Maximum samples to use; larger inputs are randomly subsampled. Defaults to 20,000. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1-D array of density estimates at each point in <code>x_grid</code>. Returns an array of NaN if either input is empty. </dd></dl>
 
 </div>
 </div>
@@ -279,8 +451,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a8b9997a6932d0af1888918e7f2945af3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b9997a6932d0af1888918e7f2945af3">&#9670;&nbsp;</a></span>_load_traces_for_family()</h2>
+<a id="a4081f2cd81545692fb7bf904b3776112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4081f2cd81545692fb7bf904b3776112">&#9670;&nbsp;</a></span>_load_traces_for_family()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -292,8 +464,18 @@ Variables</h2></td></tr>
           <td class="memname"> dict[tuple[str, str, str, str], <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>] scratch.mesh-sim.scripts.arpo_data.multi_day._load_traces_for_family </td>
           <td>(</td>
           <td class="paramtype">dict[str, list[Path]]&#160;</td>
-          <td class="paramname"><em>days</em></td><td>)</td>
+          <td class="paramname"><em>days</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">*bool &#160;</td>
+          <td class="paramname"><em>audit</em> = <code>False</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -350,8 +532,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="adf099d960ce8144a7a415317959fd03d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf099d960ce8144a7a415317959fd03d">&#9670;&nbsp;</a></span>_plot_ecdfs()</h2>
+<a id="a4b24bbe12bdb7449c130a9500a573bc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b24bbe12bdb7449c130a9500a573bc3">&#9670;&nbsp;</a></span>_plot_histograms()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,7 +542,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> plt.Figure scratch.mesh-sim.scripts.arpo_data.multi_day._plot_ecdfs </td>
+          <td class="memname"> plt.Figure scratch.mesh-sim.scripts.arpo_data.multi_day._plot_histograms </td>
           <td>(</td>
           <td class="paramtype">str&#160;</td>
           <td class="paramname"><em>family</em>, </td>
@@ -408,21 +590,25 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Metric unit strings for axis and legend annotation. </p>
-<p>Render an ECDF overlay figure for one (family, link, metric) combination.</p>
-<p>One step-curve is drawn per day, with a vertical dotted line at the median. A subtitle line shows the median delta and, for two-day comparisons, the K-S statistic.</p>
+<p>Render one normalised histogram overlay per day for a (family, link, metric) triple. </p>
+<p>Produces one figure with one histogram bar chart and KDE curve per day, all normalised so each area integrates to 1. Days with different sample counts overlay directly. A dotted vertical line marks each day's median.</p>
+<p>Bin edges are computed from all days' pooled values via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8fda8522f33b95a2e1ae491df34b128b">_fd_bins</a> so every day uses the same bin boundaries and bar heights are directly comparable. The KDE curve is evaluated on a 400-point grid via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8ecc23bae2f12675d17748eb9667f187">_kde_gaussian</a>.</p>
+<p>The subtitle reports:</p><ul>
+<li>With exactly two days: the median delta and the K-S statistic (<code>ks_value</code>).</li>
+<li>With more than two days: the largest <img class="formulaInl" alt="$ |\Delta\mathrm{med}| $" src="form_4.png"/> across all day pairs and the corresponding day pair.</li>
+</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">family</td><td>Scenario family name (used in the title). </td></tr>
+    <tr><td class="paramname">family</td><td>Scenario family name for the figure title. </td></tr>
     <tr><td class="paramname">src</td><td>Source rab hostname. </td></tr>
     <tr><td class="paramname">peer</td><td>Peer rab hostname. </td></tr>
     <tr><td class="paramname">metric</td><td><a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec.html">_MetricSpec</a> describing the metric being plotted. </td></tr>
-    <tr><td class="paramname">bags_by_day</td><td>Mapping from date string to <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a>. </td></tr>
-    <tr><td class="paramname">ks_value</td><td>Pre-computed K-S statistic to annotate, or <code>None</code>. </td></tr>
+    <tr><td class="paramname">bags_by_day</td><td>Mapping from date string to <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a> containing pooled values for that day. </td></tr>
+    <tr><td class="paramname">ks_value</td><td>Pre-computed K-S statistic to annotate in the subtitle, or <code>None</code> when there are more than two days. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Matplotlib Figure object (caller is responsible for saving/closing). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Completed matplotlib Figure ready to be saved. </dd></dl>
 
 </div>
 </div>
@@ -497,8 +683,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ab3f446623d746d7e4fcffb2c289647d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3f446623d746d7e4fcffb2c289647d7">&#9670;&nbsp;</a></span>multi_day()</h2>
+<a id="ae82ce69ec5a743e50062d8d33c547fd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae82ce69ec5a743e50062d8d33c547fd8">&#9670;&nbsp;</a></span>multi_day()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -506,20 +692,31 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"> int scratch.mesh-sim.scripts.arpo_data.multi_day.multi_day </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool &#160;</td>
+          <td class="paramname"><em>audit</em> = <code>False</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">str | None &#160;</td>
+          <td class="paramname"><em>family_filter</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>CLI entry point for the <code>multi-day</code> subcommand. </p>
-<p>Delegates to <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734">run_multi_day</a> using the default PER_DAY_DIR and MULTI_DAY_DIR paths.</p>
+<p>Delegates to <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a31926625bb262339bb40eeab5f57660b">run_multi_day</a> using the default PER_DAY_DIR and MULTI_DAY_DIR paths.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
-<a id="a609a778db51740e3f382851719215734"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a609a778db51740e3f382851719215734">&#9670;&nbsp;</a></span>run_multi_day()</h2>
+<a id="a31926625bb262339bb40eeab5f57660b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31926625bb262339bb40eeab5f57660b">&#9670;&nbsp;</a></span>run_multi_day()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,7 +731,19 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Path&#160;</td>
-          <td class="paramname"><em>multi_day_root</em>&#160;</td>
+          <td class="paramname"><em>multi_day_root</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">*bool &#160;</td>
+          <td class="paramname"><em>audit</em> = <code>False</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str | None &#160;</td>
+          <td class="paramname"><em>family_filter</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -546,7 +755,7 @@ Variables</h2></td></tr>
 
 <p>Run the full multi-day analysis and write all output files. </p>
 <p>For each scenario family that has at least two days of data:</p><ol type="1">
-<li>Pool trace CSVs into <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a> objects via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3">_load_traces_for_family</a>.</li>
+<li>Pool trace CSVs into <a class="el" href="classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html">_DayBag</a> objects via <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4081f2cd81545692fb7bf904b3776112">_load_traces_for_family</a>.</li>
 <li>Compute quantile summaries for <code>_per_day_stats.csv</code>.</li>
 <li>Compute K-S statistics for every day pair for <code>_pairwise_ks.csv</code>.</li>
 <li>Render and save an ECDF overlay PNG per (link, metric).</li>
@@ -690,6 +899,28 @@ Variables</h2></td></tr>
 
 <p>Regex matching a per-source trace CSV filename. </p>
 <p>Expected form: <code>bh2_&lt;metric&gt;__&lt;src&gt;_to_&lt;peer&gt;_trace.csv</code> </p>
+
+</div>
+</div>
+<a id="a5f981dce8ca10ae330d59c4b9b6908c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f981dce8ca10ae330d59c4b9b6908c4">&#9670;&nbsp;</a></span>_UNIT_BY_SHORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">dictionary scratch.mesh-sim.scripts.arpo_data.multi_day._UNIT_BY_SHORT = {&quot;snr&quot;: &quot;dB&quot;, &quot;rcpi&quot;: &quot;dB&quot;, &quot;mcs&quot;: &quot;&quot;, &quot;per&quot;: &quot;&quot;, &quot;throughput&quot;: &quot;Mbps&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

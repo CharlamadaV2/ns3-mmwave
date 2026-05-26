@@ -1,5 +1,6 @@
 <map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/node&#45;spec.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/domain/node&#45;spec.h">
-<area shape="rect" id="node1" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="5,5,213,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="37,109,96,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="121,109,183,136"/>
+<area shape="rect" id="node1" title="Topology and geometry POD types: nodes, buildings, and spatial properties." alt="" coords="29,5,237,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,80,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="104,109,163,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="187,109,250,136"/>
 </map>

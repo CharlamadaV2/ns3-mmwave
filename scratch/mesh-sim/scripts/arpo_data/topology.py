@@ -175,8 +175,15 @@ _MAC_DEVICE_CACHE: dict[Path, dict[str, str]] = {}
 _DEVICE_NETDEVS_CACHE: dict[Path, dict[str, list[str]]] = {}
 
 
+## @brief Build the global {mac: tag_device_name} map across all scenarios, with caching.
+#
+# ``tag_device_name`` is the full chassis identifier (e.g. ``"sky01-mw"``),
+# which is distinct from the node directory name used as the rab hostname.
+# The first device name seen for a MAC wins (setdefault).
+#
+# @param csv_root Root of the per-scenario CSV tree.
+# @return Mapping from MAC address string to chassis device name.
 def _global_mac_devices(csv_root: Path) -> dict[str, str]:
-    """{mac: tag_device_name} -- full chassis identifier like ``sky01-mw``."""
     if csv_root in _MAC_DEVICE_CACHE:
         return _MAC_DEVICE_CACHE[csv_root]
     out: dict[str, str] = {}
@@ -203,8 +210,15 @@ def _global_mac_devices(csv_root: Path) -> dict[str, str]:
     return out
 
 
+## @brief Build the global {device_name: sorted_netdevs} map, with caching.
+#
+# Derives netdev lists per device by joining @ref _global_mac_devices and
+# @ref _global_mac_netdevs. Used to compute the 1-based radio index for
+# @ref mac_radio_label without knowing the rab hostname.
+#
+# @param csv_root Root of the per-scenario CSV tree.
+# @return Mapping from chassis device name to its sorted list of observed netdev names.
 def _device_netdevs(csv_root: Path) -> dict[str, list[str]]:
-    """{device_name: sorted netdevs} -- per-device index source for ``<device>.<idx>``."""
     if csv_root in _DEVICE_NETDEVS_CACHE:
         return _DEVICE_NETDEVS_CACHE[csv_root]
     out: dict[str, set[str]] = {}
@@ -219,8 +233,16 @@ def _device_netdevs(csv_root: Path) -> dict[str, list[str]]:
     return ordered
 
 
+## @brief Resolve a MAC address to a ``<device_name>.<radio_index>`` label.
+#
+# Uses @ref _global_mac_devices for the chassis name and @ref _device_netdevs
+# for the 1-based radio index. Returns ``None`` when the MAC has no known
+# device, and ``"<device>.?"`` when the netdev index cannot be determined.
+#
+# @param mac      MAC address string to resolve (may be ``None``).
+# @param csv_root CSV root to scan; defaults to @ref CSV_ROOT when ``None``.
+# @return Label string such as ``"sky01-mw.1"``, or ``None`` if unresolvable.
 def mac_radio_label(mac: str, csv_root: Path | None = None) -> str | None:
-    """MAC -> ``<device_name>.<idx>`` (e.g. ``sky01-mw.1``); None if the MAC has no known device."""
     if mac is None:
         return None
     if csv_root is None:

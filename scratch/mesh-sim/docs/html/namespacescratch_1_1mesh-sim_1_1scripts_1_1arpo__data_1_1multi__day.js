@@ -2,19 +2,22 @@ var namespacescratch_1_1mesh_sim_1_1scripts_1_1arpo__data_1_1multi__day =
 [
     [ "_MetricSpec", "classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__MetricSpec.html", null ],
     [ "_DayBag", "classscratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day_1_1__DayBag.html", null ],
-    [ "_ecdf", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae63443213ea5f0428b601243f1c683ed", null ],
+    [ "_audit_csv", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae6a497e2e7589c297e83ba22680be063", null ],
+    [ "_fd_bins", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8fda8522f33b95a2e1ae491df34b128b", null ],
     [ "_fmt_day", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a6a28845bd619766b2ba15b21c3e74776", null ],
+    [ "_kde_gaussian", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8ecc23bae2f12675d17748eb9667f187", null ],
     [ "_ks_2samp", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#aaa0d2c89085334d215e55d0367ffea5c", null ],
-    [ "_load_traces_for_family", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8b9997a6932d0af1888918e7f2945af3", null ],
+    [ "_load_traces_for_family", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4081f2cd81545692fb7bf904b3776112", null ],
     [ "_parse_scenario", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a985c7bbe01a9ed8da783b8fcb7e9abdb", null ],
-    [ "_plot_ecdfs", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#adf099d960ce8144a7a415317959fd03d", null ],
+    [ "_plot_histograms", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a4b24bbe12bdb7449c130a9500a573bc3", null ],
     [ "_scenarios_by_family", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a9cbbb5fe41095ba630ce514887532ff1", null ],
     [ "_summary", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2d96dd6eaaf290eb6bbb48df6347b6c3", null ],
-    [ "multi_day", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ab3f446623d746d7e4fcffb2c289647d7", null ],
-    [ "run_multi_day", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a609a778db51740e3f382851719215734", null ],
+    [ "multi_day", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#ae82ce69ec5a743e50062d8d33c547fd8", null ],
+    [ "run_multi_day", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a31926625bb262339bb40eeab5f57660b", null ],
     [ "_METRICS_BY_PREFIX", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a13e82ee148c957026abdb35016736a9c", null ],
     [ "_METRICS_BY_SHORT", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a3dd3c2c3de5adcf743a2db329e0b17c7", null ],
     [ "_MIN_SAMPLES_PER_DAY", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a2e78952a1e299dc124d2e122076f4bf6", null ],
     [ "_SUFFIX_RE", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#af01dcd89eb4732822bb63fc405cf2861", null ],
-    [ "_TRACE_RE", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8db72746083c42f969ebdabf0f888792", null ]
+    [ "_TRACE_RE", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a8db72746083c42f969ebdabf0f888792", null ],
+    [ "_UNIT_BY_SHORT", "namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1multi__day.html#a5f981dce8ca10ae330d59c4b9b6908c4", null ]
 ];

@@ -1,4 +1,4 @@
-Field data processing and simulation validation pipelines.\hypertarget{scripts_autotoc_md54}{}\doxysubsection{Packages}\label{scripts_autotoc_md54}
+Field data processing and simulation validation pipelines.\hypertarget{scripts_autotoc_md56}{}\doxysubsection{Packages}\label{scripts_autotoc_md56}
 
 \begin{DoxyItemize}
 \item \mbox{\hyperlink{scripts_arpo_data}{scripts/arpo\+\_\+data}}
@@ -24,13 +24,17 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{python -\/m scripts.arpo\_data.cli extract                       \# unzip}
 \DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/scenario <name>        \# one scenario}
 \DoxyCodeLine{python -\/m scripts.arpo\_data.cli plot -\/-\/all                    \# every scenario}
-\DoxyCodeLine{python -\/m scripts.arpo\_data.cli multi-\/day                     \# day-\/vs-\/day ECDFs + K-\/S}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli multi-\/day                     \# day-\/vs-\/day histogram overlays + K-\/S}
+\DoxyCodeLine{python -\/m scripts.arpo\_data.cli multi-\/day -\/-\/family <fam> -\/-\/audit   \# row/max diagnostics per CSV}
 \DoxyCodeLine{python -\/m scripts.arpo\_data.multiday\_variance                 \# variance table from \_pairwise\_ks.csv}
 
 \end{DoxyCode}
 
 
-{\ttfamily multiday\+\_\+variance} is a read-\/only summary over the CSV produced by {\ttfamily multi-\/day}. It prints three views — per-\/family rollup, per-\/link rollup, and the detail table sorted by {\ttfamily $\vert$Δmed$\vert$} descending — so unstable day-\/to-\/day links surface at the top without opening any PNGs. Flags\+: {\ttfamily -\/-\/metric \{snr,rcpi,mcs,per,throughput\}}, {\ttfamily -\/-\/family $<$name$>$}, {\ttfamily -\/-\/top N}, {\ttfamily -\/-\/csv $<$out$>$}.\hypertarget{scripts_arpo_data_autotoc_md2}{}\doxysubsubsection{Output}\label{scripts_arpo_data_autotoc_md2}
+{\ttfamily multiday\+\_\+variance} is a read-\/only summary over the CSV produced by {\ttfamily multi-\/day}. It prints three views — per-\/family rollup, per-\/link rollup, and the detail table sorted by {\ttfamily $\vert$Δmed$\vert$} descending — so unstable day-\/to-\/day links surface at the top without opening any PNGs. Flags\+: {\ttfamily -\/-\/metric \{snr,rcpi,mcs,per,throughput\}}, {\ttfamily -\/-\/family $<$name$>$}, {\ttfamily -\/-\/top N}, {\ttfamily -\/-\/csv $<$out$>$}.\hypertarget{scripts_arpo_data_autotoc_md2}{}\doxysubsubsection{How to read the multi-\/day chart}\label{scripts_arpo_data_autotoc_md2}
+One overlay per (family, link, metric)\+: one normalized histogram per day, all areas integrate to 1 so days with different sample counts overlay directly. Each curve has a dotted vertical line at its median; the legend reports n, median, and mean per day.
+
+Subtitle annotates the day-\/pair with the largest $\vert$Δmed$\vert$ plus the K-\/S D-\/ statistic. Use {\ttfamily -\/-\/audit} on the CLI to print raw-\/\+CSV row count vs parsed-\/bag row count and raw-\/column max vs parsed-\/bag max — surfaces Na\+N-\/coerce drops and helps confirm whether a \char`\"{}value $>$ plot max\char`\"{} you spotted in a raw CSV is a genuine pipeline drop or a scope mismatch (different slice).\hypertarget{scripts_arpo_data_autotoc_md3}{}\doxysubsubsection{Output}\label{scripts_arpo_data_autotoc_md3}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -47,7 +51,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \end{longtabu}
 
 
-{\ttfamily plot} emits per-\/radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. {\ttfamily multi-\/day} pools those traces by scenario family and writes ECDF overlays + {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv} and {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}.\hypertarget{scripts_arpo_data_autotoc_md3}{}\doxysubsubsection{Module layout}\label{scripts_arpo_data_autotoc_md3}
+{\ttfamily plot} emits per-\/radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. {\ttfamily multi-\/day} pools those traces by scenario family and writes histogram overlays plus {\ttfamily \+\_\+per\+\_\+day\+\_\+stats.\+csv} and {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv} (the latter holds K-\/S plus median/mean deltas per day-\/pair).\hypertarget{scripts_arpo_data_autotoc_md4}{}\doxysubsubsection{Module layout}\label{scripts_arpo_data_autotoc_md4}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -62,25 +66,28 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \mbox{\hyperlink{paths_8py}{paths}}   &Filesystem constants    \\\cline{1-2}
 \mbox{\hyperlink{extract_8py}{extract}}   &{\ttfamily extract} subcommand    \\\cline{1-2}
 \mbox{\hyperlink{topology_8py}{topology}}   &MAC -\/$>$ rab label resolution + plot colors    \\\cline{1-2}
+\mbox{\hyperlink{topology__audit_8py}{topology\+\_\+audit}}   &Surface label collisions in the (rab, netdev) -\/$>$ rab\+N.\+M scheme    \\\cline{1-2}
 \mbox{\hyperlink{plotting_2loaders_8py}{loaders}}   &Per-\/scenario {\ttfamily bh2} / {\ttfamily gps} / {\ttfamily mcm} loaders    \\\cline{1-2}
-plots/   &Per-\/scenario plot functions (bh2 metrics, GPS)    \\\cline{1-2}
 \mbox{\hyperlink{multi__day_8py}{multi\+\_\+day}}   &{\ttfamily multi-\/day} subcommand    \\\cline{1-2}
-\mbox{\hyperlink{multiday__variance_8py}{multiday\+\_\+variance}}   &Variance table over {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}   \\\cline{1-2}
+\mbox{\hyperlink{multiday__variance_8py}{multiday\+\_\+variance}}   &Variance table over {\ttfamily \+\_\+pairwise\+\_\+ks.\+csv}    \\\cline{1-2}
+\mbox{\hyperlink{bh2_8py}{plots/bh2}}   &Per-\/radio bh2 plots\+: one figure per (src\+\_\+rab, peer\+\_\+rab), one subplot per local MAC.    \\\cline{1-2}
+\mbox{\hyperlink{common_8py}{plots/common}}   &Tools for bh2 and gps plots    \\\cline{1-2}
+\mbox{\hyperlink{gps_8py}{plots/gps}}   &GPS track plot for one scenario.   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{scripts_arpo_data_autotoc_md4}{}\doxysubsubsection{Conventions}\label{scripts_arpo_data_autotoc_md4}
+\hypertarget{scripts_arpo_data_autotoc_md5}{}\doxysubsubsection{Conventions}\label{scripts_arpo_data_autotoc_md5}
 
 \begin{DoxyItemize}
 \item Plot fns return a {\ttfamily matplotlib.\+Figure}; only {\ttfamily cli.\+py} calls {\ttfamily savefig}.
 \item Loaders return {\ttfamily pd.\+Data\+Frame $\vert$ None}.
 \item Node clocks are skewed -- comparisons use {\ttfamily \+\_\+\+\_\+sec\+\_\+\+\_\+} (session-\/relative), not raw UTC.
 \item Comments will be using Doxygen style (\#\# or \#\#$<$) to enable special commands (@).
-\end{DoxyItemize}\hypertarget{scripts_arpo_data_autotoc_md5}{}\doxysubsubsection{Dependencies}\label{scripts_arpo_data_autotoc_md5}
+\end{DoxyItemize}\hypertarget{scripts_arpo_data_autotoc_md6}{}\doxysubsubsection{Dependencies}\label{scripts_arpo_data_autotoc_md6}
 {\ttfamily pandas}, {\ttfamily numpy}, and {\ttfamily matplotlib} \hypertarget{scripts_validation}{}\doxysection{scripts/validation}\label{scripts_validation}
 Module for comparing simulation results to arpo\+\_\+data
 
-Sim-\/vs-\/field comparison pipeline. Runs mesh-\/sim across a directory of scenarios (multi-\/seed), then overlays the pooled sim distribution against ARPO field traces as an ECDF with a bootstrap 90\% CI band and a two-\/sample K-\/S statistic.
+Sim-\/vs-\/field comparison\+: runs mesh-\/sim across a directory of scenarios (multi-\/seed), then overlays the pooled sim distribution against the ARPO field traces as normalized histograms with a bootstrap CI band on the sim curve, plus a two-\/sample K-\/S statistic and $\vert$Δmedian$\vert$/$\vert$Δmean$\vert$ in the chart subtitle and CSV.
 
-{\bfseries{Scenario inputs}} come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} — one subdirectory per scenario, each containing {\ttfamily run.\+ini} and {\ttfamily nodes.\+json}. {\bfseries{Field traces}} come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{scripts_validation_autotoc_md6}{}\doxysubsubsection{Run}\label{scripts_validation_autotoc_md6}
+{\bfseries{Scenario inputs}} come from {\ttfamily inputs/custom/sherpa/spring\+\_\+lake/} — one subdirectory per scenario, each containing {\ttfamily run.\+ini} and {\ttfamily nodes.\+json}. {\bfseries{Field traces}} come from {\ttfamily data/arpo\+\_\+extracted/\+\_\+plots/per\+\_\+day/$<$scenario$>$/csvs/$<$src$>$/} and must be generated up-\/front via {\ttfamily scripts.\+arpo\+\_\+data.\+cli plot}.\hypertarget{scripts_validation_autotoc_md7}{}\doxysubsubsection{Run}\label{scripts_validation_autotoc_md7}
 From {\ttfamily scratch/mesh-\/sim/}\+:
 
 
@@ -94,8 +101,8 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{\# 3. Convert per-\/seed sim outputs to arpo\_data-\/style trace CSVs}
 \DoxyCodeLine{python -\/m scripts.validation.sim\_to\_traces outputs/<batch>}
 \DoxyCodeLine{}
-\DoxyCodeLine{\# 4. ECDF + bootstrap CI + K-\/S vs field}
-\DoxyCodeLine{python -\/m scripts.validation.compare outputs/<batch>}
+\DoxyCodeLine{\# 4. histogram overlay + bootstrap CI + K-\/S vs field}
+\DoxyCodeLine{python -\/m scripts.validation.compare      outputs/<YYYY-\/MM>/<DD>/<HH-\/MM-\/SS>-\/validation}
 \DoxyCodeLine{}
 \DoxyCodeLine{\# 5. Cross-\/batch summary (overall + per-\/scenario)}
 \DoxyCodeLine{python -\/m scripts.validation.compare\_runs}
@@ -104,7 +111,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{python -\/m scripts.validation.scenario\_fidelity outputs/<batch>}
 
 \end{DoxyCode}
-\hypertarget{scripts_validation_autotoc_md7}{}\doxyparagraph{Flags}\label{scripts_validation_autotoc_md7}
+\hypertarget{scripts_validation_autotoc_md8}{}\doxyparagraph{Flags}\label{scripts_validation_autotoc_md8}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\# Run with more seeds}
@@ -143,22 +150,37 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \DoxyCodeLine{python -\/m scripts.validation.run\_batch -\/-\/auto-\/waypoints}
 
 \end{DoxyCode}
-\hypertarget{scripts_validation_autotoc_md8}{}\doxysubsubsection{Output}\label{scripts_validation_autotoc_md8}
+
+
+{\ttfamily -\/-\/auto-\/waypoints} on {\ttfamily run\+\_\+batch} patches each scenario\textquotesingle{}s {\ttfamily nodes.\+json} in-\/place from its field GPS trace before invoking the sim (skips static-\/rab2 scenarios automatically). The patch is permanent — {\ttfamily git diff inputs/} to see what changed, {\ttfamily git checkout inputs/} to revert.
+
+{\ttfamily build\+\_\+waypoints} reads the field {\ttfamily gps\+\_\+track\+\_\+trace.\+csv} for a scenario, translates to the sim frame using a stationary anchor node (default {\ttfamily rab1}), downsamples the moving node\textquotesingle{}s track to N waypoints, and patches them into the scenario\textquotesingle{}s {\ttfamily nodes.\+json} with {\ttfamily mobility = \char`\"{}waypoint\char`\"{}}. Time modes\+: {\ttfamily raw} (use field clock as-\/is), {\ttfamily clip} (cap at {\ttfamily -\/-\/duration}), {\ttfamily scale} (stretch/compress to {\ttfamily -\/-\/duration}). After patching, rebuild the sim and re-\/run.
+
+{\ttfamily scenario\+\_\+fidelity} reads each scenario\textquotesingle{}s snapshotted {\ttfamily nodes.\+json} + {\ttfamily seed-\/1/positions.\+csv} and the field\textquotesingle{}s {\ttfamily gps\+\_\+track\+\_\+trace.\+csv} (produced by {\ttfamily arpo\+\_\+data.\+cli plot}), then for each rab reports field-\/vs-\/sim bounding box, path length, and mobility class (static / mobile), plus pairwise t=0 distances between rabs. It surfaces mismatches like \char`\"{}rab2 drives a 1.\+7 km loop in the field but the sim has it pinned \`{}fixed\`{}.\char`\"{} The mobility classifier is bbox-\/based (threshold 20 m max-\/dim) so cumulative GPS jitter doesn\textquotesingle{}t trip it.
+
+{\ttfamily compare\+\_\+runs} auto-\/discovers every batch under {\ttfamily outputs/} with a {\ttfamily validation\+\_\+summary.\+csv} (or takes explicit batch dirs) and writes cross-\/batch heatmap PNGs to {\ttfamily outputs/cross\+\_\+batch\+\_\+summary/}. One PNG per (metric, score) — rows = scenarios with date, cols = batches with timestamp, cells = mean across rab links. For multi-\/day variance in the {\bfseries{field}} data itself (independent of any sim run), see {\ttfamily python -\/m scripts.\+arpo\+\_\+data.\+multiday\+\_\+variance}.\hypertarget{scripts_validation_autotoc_md9}{}\doxysubsubsection{How to read the chart}\label{scripts_validation_autotoc_md9}
+One axis\+: normalized histograms (densities) of sim and field samples, overlaid. Density normalization (∫=1) lets the curves compare directly even though sim N (tens of thousands) is much larger than field N. The shaded band on the sim curve is a pointwise bootstrap CI (default 90\%, B=1000).
+
+Subtitle annotates the K-\/S D-\/statistic and $\vert$Δmedian$\vert$/$\vert$Δmean$\vert$ in the metric\textquotesingle{}s units. K-\/S is unitless (0–1) — useful for ranking similarity across runs; $\vert$Δmed$\vert$ / $\vert$Δmean$\vert$ are in the metric\textquotesingle{}s own units. Median is the robust central-\/tendency (skewed wireless metrics + bursty fades drag the mean around); mean is reported alongside it so you can see when they diverge.
+
+The K-\/S p-\/value is intentionally not reported\+: with N in the tens of thousands per pool, p ≈ 0 even for operationally trivial differences.\hypertarget{scripts_validation_autotoc_md10}{}\doxysubsubsection{Output}\label{scripts_validation_autotoc_md10}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Location    }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
 \endfirsthead
 \hline
 \endfoot
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Location    }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Step   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Where    }\\\cline{1-2}
 \endhead
-{\ttfamily run\+\_\+batch}   &{\ttfamily outputs/.../$<$scenario$>$/seed-\/\+N/\{links,mcs,rx-\/power\}.csv} + {\ttfamily batch\+\_\+manifest.\+json}    \\\cline{1-2}
+{\ttfamily run\+\_\+batch}   &{\ttfamily outputs/.../$<$HH-\/\+MM-\/\+SS$>$-\/validation/$<$scenario$>$/seed-\/\+N/\{links,mcs,rx-\/power\}.csv} + {\ttfamily batch\+\_\+manifest.\+json}    \\\cline{1-2}
 {\ttfamily sim\+\_\+to\+\_\+traces}   &{\ttfamily outputs/.../$<$scenario$>$/sim\+\_\+traces/seed-\/\+N/csvs/$<$src$>$/bh2\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$\+\_\+trace.\+csv}    \\\cline{1-2}
-{\ttfamily compare}   &{\ttfamily outputs/.../$<$scenario$>$/validation/pngs/$<$src$>$/ecdf\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$.png} + per-\/scenario {\ttfamily metrics.\+csv} + top-\/level {\ttfamily validation\+\_\+summary.\+csv}   \\\cline{1-2}
+{\ttfamily compare}   &{\ttfamily outputs/.../$<$scenario$>$/validation/pngs/$<$src$>$/hist\+\_\+$<$metric$>$\+\_\+\+\_\+$<$src$>$\+\_\+to\+\_\+$<$peer$>$.png} + per-\/scenario {\ttfamily metrics.\+csv} + top-\/level {\ttfamily validation\+\_\+summary.\+csv}   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{scripts_validation_autotoc_md9}{}\doxysubsubsection{Module layout}\label{scripts_validation_autotoc_md9}
+
+
+Each figure plots sim density with a shaded pointwise bootstrap CI band (default 90\%, B=1000) and field density as a line; subtitle annotates K-\/S, $\vert$Δmed$\vert$, and $\vert$Δmean$\vert$. The summary CSV has one row per (scenario, link, metric) with means, medians, IQRs, sample counts, $\vert$Δmedians$\vert$, $\vert$Δmeans$\vert$, and K-\/S.\hypertarget{scripts_validation_autotoc_md11}{}\doxysubsubsection{Module layout}\label{scripts_validation_autotoc_md11}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
@@ -176,7 +198,7 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \mbox{\hyperlink{scenario__fidelity_8py}{scenario\+\_\+fidelity}}   &Per-\/scenario sim-\/vs-\/field layout/mobility audit    \\\cline{1-2}
 \mbox{\hyperlink{build__waypoints_8py}{build\+\_\+waypoints}}   &Generate waypoint mobility for a node from its field GPS trace   \\\cline{1-2}
 \end{longtabu}
-\hypertarget{scripts_validation_autotoc_md10}{}\doxysubsubsection{Conventions}\label{scripts_validation_autotoc_md10}
+\hypertarget{scripts_validation_autotoc_md12}{}\doxysubsubsection{Conventions}\label{scripts_validation_autotoc_md12}
 
 \begin{DoxyItemize}
 \item {\bfseries{Distributional comparison, not temporal.}} Sim and field samples are pooled raw (no smoothing, no time alignment). The comparison is over the marginal distribution of each metric.
@@ -186,5 +208,5 @@ From {\ttfamily scratch/mesh-\/sim/}\+:
 \item {\bfseries{NaN rows in {\ttfamily validation\+\_\+summary.\+csv}}} mean the field collect did not capture telemetry for that link (e.\+g. rab2 and rab3 were not beam-\/paired during the scenario). This is expected for some scenarios and is not a pipeline error.
 \item $\ast$$\ast${\ttfamily -\/-\/auto-\/waypoints} mutates {\ttfamily inputs/}.$\ast$$\ast$ The patch is permanent for the duration of the run. Use {\ttfamily git diff inputs/} to review and {\ttfamily git checkout inputs/} to revert.
 \item $\ast$$\ast${\ttfamily build\+\_\+waypoints} mobility classifier is bbox-\/based$\ast$$\ast$ (threshold\+: 20 m max bounding-\/box dimension). Path length alone is GPS-\/noise-\/prone and would misclassify jittery static nodes as mobile.
-\end{DoxyItemize}\hypertarget{scripts_validation_autotoc_md11}{}\doxysubsubsection{Dependencies}\label{scripts_validation_autotoc_md11}
+\end{DoxyItemize}\hypertarget{scripts_validation_autotoc_md13}{}\doxysubsubsection{Dependencies}\label{scripts_validation_autotoc_md13}
 {\ttfamily pandas}, {\ttfamily numpy}, and {\ttfamily matplotlib} 

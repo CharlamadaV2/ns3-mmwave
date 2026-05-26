@@ -1,7 +1,9 @@
 var topology_8py =
 [
     [ "_cluster_macs", "topology_8py.html#a02318f6ffe20795b3e33af2065784e84", null ],
+    [ "_device_netdevs", "topology_8py.html#a8515a234afef1b3698ad79b5640114e7", null ],
     [ "_global_local_macs", "topology_8py.html#a694532db90264b9c6e4fe35b6ca66111", null ],
+    [ "_global_mac_devices", "topology_8py.html#aa86417bd1e01059d73e1ae0c3741b017", null ],
     [ "_global_mac_netdevs", "topology_8py.html#aece051d73b5792f6912be3bc860823d1", null ],
     [ "_last_byte", "topology_8py.html#ac5087423b8b1cac1044ac6404e44c617", null ],
     [ "_rab_netdevs", "topology_8py.html#ad7fafb07da0a03705ddc4cfea47566b9", null ],

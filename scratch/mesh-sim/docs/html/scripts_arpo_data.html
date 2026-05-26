@@ -108,10 +108,15 @@ Run</h2>
 <div class="fragment"><div class="line">python -m scripts.arpo_data.cli extract                       # unzip</div>
 <div class="line">python -m scripts.arpo_data.cli plot --scenario &lt;name&gt;        # one scenario</div>
 <div class="line">python -m scripts.arpo_data.cli plot --all                    # every scenario</div>
-<div class="line">python -m scripts.arpo_data.cli multi-day                     # day-vs-day ECDFs + K-S</div>
+<div class="line">python -m scripts.arpo_data.cli multi-day                     # day-vs-day histogram overlays + K-S</div>
+<div class="line">python -m scripts.arpo_data.cli multi-day --family &lt;fam&gt; --audit   # row/max diagnostics per CSV</div>
 <div class="line">python -m scripts.arpo_data.multiday_variance                 # variance table from _pairwise_ks.csv</div>
 </div><!-- fragment --><p><code>multiday_variance</code> is a read-only summary over the CSV produced by <code>multi-day</code>. It prints three views — per-family rollup, per-link rollup, and the detail table sorted by <code>|Δmed|</code> descending — so unstable day-to-day links surface at the top without opening any PNGs. Flags: <code>--metric {snr,rcpi,mcs,per,throughput}</code>, <code>--family &lt;name&gt;</code>, <code>--top N</code>, <code>--csv &lt;out&gt;</code>.</p>
 <h2><a class="anchor" id="autotoc_md2"></a>
+How to read the multi-day chart</h2>
+<p>One overlay per (family, link, metric): one normalized histogram per day, all areas integrate to 1 so days with different sample counts overlay directly. Each curve has a dotted vertical line at its median; the legend reports n, median, and mean per day.</p>
+<p>Subtitle annotates the day-pair with the largest |Δmed| plus the K-S D- statistic. Use <code>--audit</code> on the CLI to print raw-CSV row count vs parsed-bag row count and raw-column max vs parsed-bag max — surfaces NaN-coerce drops and helps confirm whether a "value &gt; plot max" you spotted in a raw CSV is a genuine pipeline drop or a scope mismatch (different slice).</p>
+<h2><a class="anchor" id="autotoc_md3"></a>
 Output</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -123,8 +128,8 @@ Output</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>multi-day</code>   </td><td class="markdownTableBodyNone"><code>data/arpo_extracted/_plots/multi_day/&lt;family&gt;/</code> + two CSVs   </td></tr>
 </table>
-<p><code>plot</code> emits per-radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. <code>multi-day</code> pools those traces by scenario family and writes ECDF overlays + <code>_per_day_stats.csv</code> and <code>_pairwise_ks.csv</code>.</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<p><code>plot</code> emits per-radio bh2 metric figures (SNR, RCPI, MCS, PER, throughput) plus GPS tracks; each figure has a matching trace CSV. <code>multi-day</code> pools those traces by scenario family and writes histogram overlays plus <code>_per_day_stats.csv</code> and <code>_pairwise_ks.csv</code> (the latter holds K-S plus median/mean deltas per day-pair).</p>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Module layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -138,15 +143,21 @@ Module layout</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="topology_8py.html">topology</a>   </td><td class="markdownTableBodyNone">MAC -&gt; rab label resolution + plot colors    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="plotting_2loaders_8py.html">loaders</a>   </td><td class="markdownTableBodyNone">Per-scenario <code>bh2</code> / <code>gps</code> / <code>mcm</code> loaders    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="topology__audit_8py.html">topology_audit</a>   </td><td class="markdownTableBodyNone">Surface label collisions in the (rab, netdev) -&gt; rabN.M scheme    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">plots/   </td><td class="markdownTableBodyNone">Per-scenario plot functions (bh2 metrics, GPS)    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="plotting_2loaders_8py.html">loaders</a>   </td><td class="markdownTableBodyNone">Per-scenario <code>bh2</code> / <code>gps</code> / <code>mcm</code> loaders    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="multi__day_8py.html">multi_day</a>   </td><td class="markdownTableBodyNone"><code>multi-day</code> subcommand    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="multiday__variance_8py.html">multiday_variance</a>   </td><td class="markdownTableBodyNone">Variance table over <code>_pairwise_ks.csv</code>   </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="multiday__variance_8py.html">multiday_variance</a>   </td><td class="markdownTableBodyNone">Variance table over <code>_pairwise_ks.csv</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="bh2_8py.html">plots/bh2</a>   </td><td class="markdownTableBodyNone">Per-radio bh2 plots: one figure per (src_rab, peer_rab), one subplot per local MAC.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="common_8py.html">plots/common</a>   </td><td class="markdownTableBodyNone">Tools for bh2 and gps plots    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="gps_8py.html">plots/gps</a>   </td><td class="markdownTableBodyNone">GPS track plot for one scenario.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Conventions</h2>
 <ul>
 <li>Plot fns return a <code>matplotlib.Figure</code>; only <code>cli.py</code> calls <code>savefig</code>.</li>
@@ -154,7 +165,7 @@ Conventions</h2>
 <li>Node clocks are skewed &ndash; comparisons use <code>__sec__</code> (session-relative), not raw UTC.</li>
 <li>Comments will be using Doxygen style (## or ##&lt;) to enable special commands (@).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Dependencies</h2>
 <p><code>pandas</code>, <code>numpy</code>, and <code>matplotlib</code> </p>
 </div></div><!-- contents -->

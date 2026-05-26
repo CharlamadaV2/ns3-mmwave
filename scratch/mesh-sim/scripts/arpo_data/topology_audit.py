@@ -1,4 +1,7 @@
-"""Surface label collisions in the (rab, netdev) -> rabN.M scheme."""
+## @file topology_audit.py
+# @brief Surface label collisions in the (rab, netdev) -> rabN.M scheme.
+#
+
 
 from __future__ import annotations
 
@@ -9,8 +12,16 @@ import pandas as pd
 from .paths import CSV_ROOT
 
 
+## @brief Scan all bh2.csv files and return one row per unique (rab, mac, netdev, device_name, host).
+#
+# Iterates every scenario and node directory under @ref CSV_ROOT, reads
+# ``tag_local_mac``, ``tag_interface``, ``tag_device_name``, and ``tag_host``
+# from each ``bh2.csv``, and deduplicates the result. Files missing any of
+# the required columns are silently skipped.
+#
+# @return DataFrame with columns ``["rab", "mac", "netdev", "device_name", "host"]``,
+#         deduplicated across all scenarios. Empty if no bh2.csv files are found.
 def _scan() -> pd.DataFrame:
-    """One row per unique (rab, mac, netdev, device_name, host)."""
     rows = []
     if not CSV_ROOT.is_dir():
         return pd.DataFrame(rows)
@@ -43,8 +54,15 @@ def _scan() -> pd.DataFrame:
     return pd.DataFrame(rows).drop_duplicates()
 
 
+## @brief Count the total number of peer-MAC bh2 rows seen for each local MAC.
+#
+# Aggregates row counts from ``tag_sta_mac`` across every scenario, grouped by
+# ``tag_local_mac``. Used by @ref main to annotate which MACs in a collision
+# group were actively communicating and which were passive.
+#
+# @return Mapping from local MAC address string to total number of peer-facing
+#         bh2 rows observed across all scenarios.
 def _peer_counts() -> dict[str, int]:
-    """{local_mac: number of peer-MAC bh2 rows} across all scenarios."""
     out: dict[str, int] = defaultdict(int)
     for scen in sorted(CSV_ROOT.iterdir()):
         if not scen.is_dir():
@@ -66,6 +84,16 @@ def _peer_counts() -> dict[str, int]:
     return dict(out)
 
 
+## @brief Report (rab, netdev) keys whose MAC address is claimed by more than one device.
+#
+# Calls @ref _scan to build the full (rab, mac, netdev, device_name, host)
+# inventory and @ref _peer_counts to annotate activity levels. For each
+# collision it prints whether the duplicate MACs share the same chassis
+# (same-chassis card swap) or represent two physically distinct boxes merged
+# under one hostname.
+#
+# @return 0 if no collisions are found or all collisions are reported
+#         successfully; 1 if no bh2.csv files exist under @ref CSV_ROOT.
 def main() -> int:
     df = _scan()
     if df.empty:

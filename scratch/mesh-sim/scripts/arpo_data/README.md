@@ -72,10 +72,13 @@ median/mean deltas per day-pair).
 | @ref paths.py "paths"     | Filesystem constants                                          |
 | @ref extract.py "extract"  | `extract` subcommand                                          |
 | @ref topology.py "topology"  | MAC -> rab label resolution + plot colors                     |
+| @ref topology_audit.py "topology_audit"      | Surface label collisions in the (rab, netdev) -> rabN.M scheme |
 | @ref loaders.py "loaders"   | Per-scenario `bh2` / `gps` / `mcm` loaders                    |
-| @ref scripts.arpo_data.plots "plots/"     | Per-scenario plot functions (bh2 metrics, GPS)                |
 | @ref multi_day.py "multi_day" | `multi-day` subcommand                                        |
 | @ref multiday_variance.py "multiday_variance" | Variance table over `_pairwise_ks.csv`                |
+| @ref bh2.py "plots/bh2"         |  Per-radio bh2 plots: one figure per (src_rab, peer_rab), one subplot per local MAC. |
+| @ref common.py "plots/common"       | Tools for bh2 and gps plots |
+| @ref gps.py "plots/gps"         | GPS track plot for one scenario. |
 
 ## Conventions
 

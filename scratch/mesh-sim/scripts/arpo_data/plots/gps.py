@@ -1,6 +1,7 @@
-##@package docstring
-# GPS track plot for one scenario.
-
+##@file gps.py
+# @brief GPS track plot for one scenario.
+#
+#
 ##
 
 from __future__ import annotations
@@ -13,11 +14,23 @@ from matplotlib.lines import Line2D
 
 from .common import crashed_suffix, scenario_caption
 
-## Documentation for a function.
+## @brief Plot GPS tracks for all nodes in a scenario as XY scatter coloured by time.
 #
-#  More details.
+# Converts latitude/longitude to local East-North metres relative to the
+# centroid of all fixes. Each node is drawn with a distinct marker shape;
+# point colour encodes seconds elapsed since the earliest fix in the scenario.
+# A scale bar is added via @ref _add_scale_bar and a colour bar shows the
+# time axis.
+#
+# @param df             GPS DataFrame produced by @ref load_gps_scenario.
+#                       Must contain ``__lat__``, ``__lon__``, ``__t__``,
+#                       ``__node__``, and ``__label__`` columns.
+# @param scenario_name  Human-readable scenario identifier used in the title
+#                       and caption. Pass an empty string to omit.
+# @return               A ``(Figure, trace_df)`` tuple where ``trace_df`` holds
+#                       per-fix ENU coordinates and metadata for downstream use,
+#                       or ``None`` if @p df is empty.
 def plot_gps_tracks(df: pd.DataFrame, scenario_name: str = "") -> tuple[plt.Figure, pd.DataFrame] | None:
-    ##Node positions in metres from the centroid; color = time since start.##
     if df.empty:
         return None
 
@@ -86,9 +99,16 @@ def plot_gps_tracks(df: pd.DataFrame, scenario_name: str = "") -> tuple[plt.Figu
     })
     return fig, trace
 
-## @brief
+## @brief Add a horizontal scale bar to the lower-left of a plot axes.
+#
+# Computes a "nice" bar length — 1, 2, or 5 times a power of ten — that is
+# approximately 20 % of the current X axis span. Draws the bar as a thick
+# black line and labels it in metres (or centimetres for sub-metre spans).
+# The bar is positioned at 5 % of the axis span from the lower-left corner.
+#
+# @param ax   Matplotlib ``Axes`` to annotate. Must already have data plotted
+#             so that ``get_xlim`` and ``get_ylim`` return meaningful ranges.
 def _add_scale_bar(ax: plt.Axes) -> None:
-    ##Horizontal scale bar in the lower-left, length rounded to a tidy value.##
     x0, x1 = ax.get_xlim()
     y0, y1 = ax.get_ylim()
     span = x1 - x0

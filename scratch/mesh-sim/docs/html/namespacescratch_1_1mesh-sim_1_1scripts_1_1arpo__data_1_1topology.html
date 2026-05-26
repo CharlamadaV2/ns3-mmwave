@@ -115,8 +115,14 @@ Functions</h2></td></tr>
 <tr class="memitem:aece051d73b5792f6912be3bc860823d1"><td class="memItemLeft" align="right" valign="top">dict[str, str]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aece051d73b5792f6912be3bc860823d1">_global_mac_netdevs</a> (Path csv_root)</td></tr>
 <tr class="memdesc:aece051d73b5792f6912be3bc860823d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the global {mac: netdev} map across all scenarios, with caching.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aece051d73b5792f6912be3bc860823d1">More...</a><br /></td></tr>
 <tr class="separator:aece051d73b5792f6912be3bc860823d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa86417bd1e01059d73e1ae0c3741b017"><td class="memItemLeft" align="right" valign="top">dict[str, str]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aa86417bd1e01059d73e1ae0c3741b017">_global_mac_devices</a> (Path csv_root)</td></tr>
+<tr class="memdesc:aa86417bd1e01059d73e1ae0c3741b017"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the global {mac: tag_device_name} map across all scenarios, with caching.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aa86417bd1e01059d73e1ae0c3741b017">More...</a><br /></td></tr>
+<tr class="separator:aa86417bd1e01059d73e1ae0c3741b017"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8515a234afef1b3698ad79b5640114e7"><td class="memItemLeft" align="right" valign="top">dict[str, list[str]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a8515a234afef1b3698ad79b5640114e7">_device_netdevs</a> (Path csv_root)</td></tr>
+<tr class="memdesc:a8515a234afef1b3698ad79b5640114e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the global {device_name: sorted_netdevs} map, with caching.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a8515a234afef1b3698ad79b5640114e7">More...</a><br /></td></tr>
+<tr class="separator:a8515a234afef1b3698ad79b5640114e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba3402870cc86790151c3c942ca62f12"><td class="memItemLeft" align="right" valign="top">str|None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aba3402870cc86790151c3c942ca62f12">mac_radio_label</a> (str mac, Path|None csv_root=None)</td></tr>
-<tr class="memdesc:aba3402870cc86790151c3c942ca62f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve a MAC address to its <code>rabN.M</code> radio label.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aba3402870cc86790151c3c942ca62f12">More...</a><br /></td></tr>
+<tr class="memdesc:aba3402870cc86790151c3c942ca62f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve a MAC address to a <code>&lt;device_name&gt;. </code> <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aba3402870cc86790151c3c942ca62f12">More...</a><br /></td></tr>
 <tr class="separator:aba3402870cc86790151c3c942ca62f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7d2239c00dbf42758b5692bf2b3cc4"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a0e7d2239c00dbf42758b5692bf2b3cc4">node_color</a> (str label)</td></tr>
 <tr class="memdesc:a0e7d2239c00dbf42758b5692bf2b3cc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the matplotlib colour string for a node label.  <a href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a0e7d2239c00dbf42758b5692bf2b3cc4">More...</a><br /></td></tr>
@@ -174,6 +180,42 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a8515a234afef1b3698ad79b5640114e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8515a234afef1b3698ad79b5640114e7">&#9670;&nbsp;</a></span>_device_netdevs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> dict[str, list[str]] scratch.mesh-sim.scripts.arpo_data.topology._device_netdevs </td>
+          <td>(</td>
+          <td class="paramtype">Path&#160;</td>
+          <td class="paramname"><em>csv_root</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Build the global {device_name: sorted_netdevs} map, with caching. </p>
+<p>Derives netdev lists per device by joining <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aa86417bd1e01059d73e1ae0c3741b017">_global_mac_devices</a> and <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aece051d73b5792f6912be3bc860823d1">_global_mac_netdevs</a>. Used to compute the 1-based radio index for <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aba3402870cc86790151c3c942ca62f12">mac_radio_label</a> without knowing the rab hostname.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">csv_root</td><td>Root of the per-scenario CSV tree. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mapping from chassis device name to its sorted list of observed netdev names. </dd></dl>
+
+</div>
+</div>
 <a id="a694532db90264b9c6e4fe35b6ca66111"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a694532db90264b9c6e4fe35b6ca66111">&#9670;&nbsp;</a></span>_global_local_macs()</h2>
 
@@ -207,6 +249,42 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mapping from MAC address string to chassis hostname. </dd></dl>
+
+</div>
+</div>
+<a id="aa86417bd1e01059d73e1ae0c3741b017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa86417bd1e01059d73e1ae0c3741b017">&#9670;&nbsp;</a></span>_global_mac_devices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"> dict[str, str] scratch.mesh-sim.scripts.arpo_data.topology._global_mac_devices </td>
+          <td>(</td>
+          <td class="paramtype">Path&#160;</td>
+          <td class="paramname"><em>csv_root</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Build the global {mac: tag_device_name} map across all scenarios, with caching. </p>
+<p><code>tag_device_name</code> is the full chassis identifier (e.g. <code>"sky01-mw"</code>), which is distinct from the node directory name used as the rab hostname. The first device name seen for a MAC wins (setdefault).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">csv_root</td><td>Root of the per-scenario CSV tree. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mapping from MAC address string to chassis device name. </dd></dl>
 
 </div>
 </div>
@@ -370,16 +448,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Resolve a MAC address to its <code>rabN.M</code> radio label. </p>
-<p>Returns <code>None</code> if no rab ever claimed this MAC as a local MAC, meaning it is a peer-only address that cannot be tied to a specific radio.</p>
+<p>Resolve a MAC address to a <code>&lt;device_name&gt;. </code></p>
+<p>&lt;radio_index&gt; label.</p>
+<p>Uses <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#aa86417bd1e01059d73e1ae0c3741b017">_global_mac_devices</a> for the chassis name and <a class="el" href="namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1topology.html#a8515a234afef1b3698ad79b5640114e7">_device_netdevs</a> for the 1-based radio index. Returns <code>None</code> when the MAC has no known device, and <code>"&lt;device&gt;.?"</code> when the netdev index cannot be determined.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mac</td><td>MAC address string (colon-separated hex). </td></tr>
+    <tr><td class="paramname">mac</td><td>MAC address string to resolve (may be <code>None</code>). </td></tr>
     <tr><td class="paramname">csv_root</td><td>CSV root to scan; defaults to CSV_ROOT when <code>None</code>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><code>"rabN.M"</code> label or <code>None</code>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Label string such as <code>"sky01-mw.1"</code>, or <code>None</code> if unresolvable. </dd></dl>
 
 </div>
 </div>

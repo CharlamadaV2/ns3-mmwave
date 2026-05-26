@@ -69,9 +69,6 @@ var annotated_dup =
             [ "compare", "namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare.html", [
               [ "_MetricSpec", "classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare_1_1__MetricSpec.html", null ]
             ] ],
-            [ "compare_runs", "namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs.html", [
-              [ "BatchRow", "classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1compare__runs_1_1BatchRow.html", null ]
-            ] ],
             [ "scenario_fidelity", "namespacescratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity.html", [
               [ "NodeMotion", "classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion.html", "classscratch_1_1mesh-sim_1_1scripts_1_1validation_1_1scenario__fidelity_1_1NodeMotion" ]
             ] ]

@@ -87,8 +87,16 @@ def sim_to_field_scenario(sim_name: str) -> str | None:
     return f"{major}-{minor.upper()}_{mid_joined}_{day}"
 
 
+## @brief Format a sim scenario name as a compact two-line plot label.
+#
+# Converts the sim naming convention to a human-readable form suitable
+# for axis tick labels in heatmap figures. The date portion is reformatted
+# from ``MMDDYYYY`` to ``MM/DD/YYYY``.
+#
+# @param name Sim scenario directory name (e.g. ``"arpo-1-1-static-04172026"``).
+# @return Two-line string such as ``"1-1 static\n04/17/2026"``, or @p name
+#         unchanged if it does not match the expected pattern.
 def _scenario_label(name: str) -> str:
-    """`arpo-1-1-static-04172026` -> `1-1 static\n04/17/2026`."""
     m = _SIM_NAME_RE.match(name)
     if not m:
         return name
@@ -188,9 +196,20 @@ def _pool_field(field_scen_dir: Path, src: str, peer: str,
     return np.concatenate(arrs) if arrs else np.array([])
 
 
+## @brief Compute the two-sample Kolmogorov-Smirnov D-statistic without scipy.
+#
+# Evaluates ``max |F_a(x) − F_b(x)|`` over the joint support by merging
+# both sorted arrays and using binary search to evaluate each empirical CDF.
+# Returns NaN when either input is empty.
+#
+# The p-value is intentionally not returned: with sample sizes in the tens
+# of thousands, p ≈ 0 even for operationally trivial distributional differences,
+# making it uninformative for this use case.
+#
+# @param a First sample array (sim or field).
+# @param b Second sample array (sim or field).
+# @return K-S D statistic in [0, 1]; NaN if either array is empty.
 def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
-    """Two-sample K-S D-statistic. P-value intentionally dropped: with N in the
-    tens of thousands, p ≈ 0 for operationally-trivial differences."""
     if a.size == 0 or b.size == 0:
         return float("nan")
     a_s = np.sort(a)
@@ -201,8 +220,20 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
+## @brief Compute Freedman-Diaconis bin edges for pooled sim and field values.
+#
+# The Freedman-Diaconis rule selects bin width as:
+# @f[ w = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3} @f]
+# Making bin width proportional to the IQR produces robust binning when one
+# distribution has heavy tails or outliers. The bin count is clamped to
+# [@p min_bins, @p max_bins]. Falls back to a linear grid of @p min_bins bins
+# when the IQR is zero or all values are identical.
+#
+# @param values   1-D array of all pooled values (both sim and field combined).
+# @param max_bins Maximum number of bins. Defaults to 80.
+# @param min_bins Minimum number of bins. Defaults to 20.
+# @return         1-D array of @p n_bins + 1 bin edge values.
 def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.ndarray:
-    """Freedman-Diaconis bin edges across pooled values."""
     if values.size < 2:
         lo = float(np.min(values)) if values.size else 0.0
         return np.linspace(lo, lo + 1.0, min_bins + 1)
@@ -216,9 +247,25 @@ def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.n
     return np.linspace(lo, hi, n_bins + 1)
 
 
+## @brief Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule.
+#
+# Pure numpy implementation — no scipy dependency. Subsamples @p values to at
+# most @p max_samples points using a fixed RNG seed (0) for reproducibility
+# when the O(n × m) kernel evaluation would be too slow.
+#
+# Bandwidth uses Silverman's rule of thumb:
+# @f[ h = 1.06 \hat\sigma n^{-1/5} @f]
+# When the standard deviation is zero (all identical values), @f$ \sigma @f$
+# is clamped to 1.0 and the bandwidth floor is 1e-3 to prevent division by zero.
+#
+# @param values      1-D array of observed values to estimate the density of.
+# @param x_grid      1-D array of evaluation points.
+# @param max_samples Maximum samples to use; larger inputs are randomly
+#                    subsampled. Defaults to 20,000.
+# @return            1-D array of density estimates at each point in @p x_grid.
+#                    Returns an array of NaN if either input is empty.
 def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
                   max_samples: int = 20000) -> np.ndarray:
-    """Gaussian KDE on ``x_grid``, Silverman bandwidth, numpy-only."""
     n = values.size
     if n == 0 or x_grid.size == 0:
         return np.full_like(x_grid, np.nan, dtype=np.float64)
@@ -236,8 +283,14 @@ def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
     return np.sum(np.exp(-0.5 * diff * diff), axis=1) / (n * h * np.sqrt(2.0 * np.pi))
 
 
+## @brief Compute median, mean, and IQR for one distribution.
+#
+# Returns NaN for all statistics when @p values is empty, allowing callers
+# to check ``np.isfinite(s["median"])`` rather than testing array size.
+#
+# @param values 1-D float64 array of samples.
+# @return Dict with keys ``"median"``, ``"mean"``, and ``"iqr"``.
 def _summary(values: np.ndarray) -> dict[str, float]:
-    """Median, mean, IQR for one distribution."""
     if values.size == 0:
         nan = float("nan")
         return {"median": nan, "mean": nan, "iqr": nan}
@@ -275,7 +328,6 @@ _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput":
 def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
               spec: _MetricSpec, scenario: str, src: str, peer: str,
               ks_d: float) -> plt.Figure:
-    """Normalized-histogram (filled bars + KDE overlay) sim vs field."""
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
     sim_s = _summary(sim_vals)
@@ -351,10 +403,21 @@ def _apply_mcs_cap(values: np.ndarray, cap: int | None) -> np.ndarray:
     return np.clip(values, None, cap)
 
 
+## @brief Render a heatmap PNG for one (metric, score) combination across all scenarios and links.
+#
+# Rows are scenario names, columns are unordered (src, peer) link pairs.
+# Each cell shows the value of @p value_col for that (scenario, link) combination.
+# Text colour flips from white to black at 50 % of the colour scale maximum
+# for legibility on the viridis palette.
+#
+# @param rows       List of result dicts produced by @ref _process_scenario.
+# @param spec       Metric specification used to filter rows and label the colour bar.
+# @param value_col  Column key to read from each row (e.g. ``"abs_diff_medians"``).
+# @param value_label Human-readable label for the colour bar (e.g. ``"|Δmedian|"``).
+# @param out_path   Destination path for the PNG file.
+# @return           ``True`` if the figure was written, ``False`` if no matching rows exist.
 def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
                  value_label: str, out_path: Path) -> bool:
-    """One heatmap: rows = scenarios (with dates), cols = rab links,
-    cells = ``value_col`` for ``spec.short``."""
     rel = [r for r in rows
            if r["metric"] == spec.short and np.isfinite(r.get(value_col, np.nan))]
     if not rel:
@@ -402,9 +465,17 @@ def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
     return True
 
 
+## @brief Write one heatmap PNG per (metric, score) for a completed batch.
+#
+# Creates a ``summary/`` subdirectory under @p batch_root and calls
+# @ref _heatmap_png for each combination of metric and score type
+# (``|Δmedian|``, ``|Δmean|``, K-S). Skips combinations with no matching rows.
+#
+# @param rows       All result dicts from the batch (combined across scenarios).
+# @param metrics    List of @ref _MetricSpec instances to iterate over.
+# @param batch_root Root directory of the batch; ``summary/`` is created here.
 def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
                           batch_root: Path) -> None:
-    """One PNG per (metric, score) for the batch."""
     out_dir = batch_root / "summary"
     out_dir.mkdir(parents=True, exist_ok=True)
     scores = [("abs_diff_medians", "|Δmedian|"),
@@ -418,6 +489,19 @@ def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
                 print(f"  wrote {out.relative_to(batch_root)}")
 
 
+## @brief Run the full sim-vs-field comparison for one scenario directory.
+#
+# -# Resolves the field scenario name via @ref sim_to_field_scenario.
+# -# Discovers link pairs from the first seed's trace directory.
+# -# For each (link, metric) pair: pools sim and field samples, computes
+#    K-S and summary stats, renders a histogram PNG, and appends a result row.
+# -# Returns an empty list if the field directory is not found or no seeds exist.
+#
+# @param scenario_dir Scenario directory containing a ``sim_traces/`` subdirectory.
+# @param field_root   Root of the field trace tree (see @ref FIELD_TRACES_ROOT).
+# @param metrics      List of @ref _MetricSpec instances to evaluate.
+# @param out_dir      Output directory for per-link PNGs (``validation/`` subdir).
+# @return             List of result dicts, one per (link, metric) combination.
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
                       out_dir: Path) -> list[dict]:
     field_name = sim_to_field_scenario(scenario_dir.name)

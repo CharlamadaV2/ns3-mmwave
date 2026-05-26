@@ -7,5 +7,6 @@ var dir_58facad265c499a84ab2586367b0f0d1 =
     [ "multi_day.py", "multi__day_8py.html", "multi__day_8py" ],
     [ "multiday_variance.py", "multiday__variance_8py.html", "multiday__variance_8py" ],
     [ "paths.py", "paths_8py.html", "paths_8py" ],
-    [ "topology.py", "topology_8py.html", "topology_8py" ]
+    [ "topology.py", "topology_8py.html", "topology_8py" ],
+    [ "topology_audit.py", "topology__audit_8py.html", "topology__audit_8py" ]
 ];

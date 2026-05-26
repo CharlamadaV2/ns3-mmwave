@@ -22,21 +22,25 @@ Collaboration diagram for mesh\+\_\+sim\+::Node\+Spec\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a950262852492aff9f300ec5ed3a40704}{id}}
-\begin{DoxyCompactList}\small\item\em Unique node identifier (e.\+g. {\ttfamily \char`\"{}rab1\char`\"{}}). \end{DoxyCompactList}\item 
+\item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_add21485f98c3ad53223264b68bb2d537}{role}}
-\begin{DoxyCompactList}\small\item\em Node role; always {\ttfamily \char`\"{}peer\char`\"{}} in mesh-\/sim. \end{DoxyCompactList}\item 
+\item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_ac7060365aa52deaefc03cf6865beee7f}{mobility}}
 \item 
 std\+::string \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}{node\+\_\+type}}
 \item 
 \mbox{\hyperlink{structmesh__sim_1_1Position}{Position}} \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_abbdb0e3af176cbb0aeb06710b9d41637}{position}}
-\begin{DoxyCompactList}\small\item\em Initial position (and fixed position for {\ttfamily \char`\"{}fixed\char`\"{}} nodes). \end{DoxyCompactList}\item 
+\item 
 \mbox{\hyperlink{structmesh__sim_1_1Velocity}{Velocity}} \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a1b12dcff6f2970af61495782f68dc77a}{velocity}}
-\begin{DoxyCompactList}\small\item\em Constant velocity (used only when {\ttfamily mobility} == \char`\"{}constant\+\_\+velocity\char`\"{}). \end{DoxyCompactList}\item 
+\item 
 \mbox{\hyperlink{structmesh__sim_1_1RandomWalkParams}{Random\+Walk\+Params}} \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a3650f7ffcfefc98d1cbb807bdb2b62bb}{random\+\_\+walk}}
-\begin{DoxyCompactList}\small\item\em Walk parameters (used only when {\ttfamily mobility} == \char`\"{}random\+\_\+walk\char`\"{}). \end{DoxyCompactList}\item 
+\item 
 std\+::vector$<$ \mbox{\hyperlink{structmesh__sim_1_1Waypoint}{Waypoint}} $>$ \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a80786d2b403d20b06661059d28341476}{waypoints}}
-\begin{DoxyCompactList}\small\item\em Ordered waypoint list (used only when {\ttfamily mobility} == \char`\"{}waypoint\char`\"{}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\item 
+std\+::optional$<$ double $>$ \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a1c5ce997eac2c7cec3eeac3b8456a21b}{tx\+\_\+array\+\_\+gain\+\_\+dbi}}
+\item 
+std\+::optional$<$ double $>$ \mbox{\hyperlink{structmesh__sim_1_1NodeSpec_a8868cdb6c5f9a9700883c01e463a3025}{rx\+\_\+array\+\_\+gain\+\_\+dbi}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -51,31 +55,23 @@ Loaded from the {\ttfamily nodes} array in {\ttfamily nodes.\+json}. The active 
 \doxysubsubsection{\texorpdfstring{id}{id}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Node\+Spec\+::id}
 
-
-
-Unique node identifier (e.\+g. {\ttfamily \char`\"{}rab1\char`\"{}}). 
-
 \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_ac7060365aa52deaefc03cf6865beee7f}\label{structmesh__sim_1_1NodeSpec_ac7060365aa52deaefc03cf6865beee7f}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!mobility@{mobility}}
 \index{mobility@{mobility}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
 \doxysubsubsection{\texorpdfstring{mobility}{mobility}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Node\+Spec\+::mobility}
 
-Mobility model\+: {\ttfamily \char`\"{}fixed\char`\"{}}, {\ttfamily \char`\"{}constant\+\_\+velocity\char`\"{}}, {\ttfamily \char`\"{}random\+\_\+walk\char`\"{}}, or {\ttfamily \char`\"{}waypoint\char`\"{}}. \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}\label{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}} 
+\mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}\label{structmesh__sim_1_1NodeSpec_a4e780fb1fb9e62a927f571a591342dd0}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!node\_type@{node\_type}}
 \index{node\_type@{node\_type}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
 \doxysubsubsection{\texorpdfstring{node\_type}{node\_type}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Node\+Spec\+::node\+\_\+type}
 
-Physical category\+: {\ttfamily \char`\"{}drone\char`\"{}}, {\ttfamily \char`\"{}vehicle\char`\"{}}, or {\ttfamily \char`\"{}pedestrian\char`\"{}}. Determines the RL speed cap. \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_abbdb0e3af176cbb0aeb06710b9d41637}\label{structmesh__sim_1_1NodeSpec_abbdb0e3af176cbb0aeb06710b9d41637}} 
+\mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_abbdb0e3af176cbb0aeb06710b9d41637}\label{structmesh__sim_1_1NodeSpec_abbdb0e3af176cbb0aeb06710b9d41637}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!position@{position}}
 \index{position@{position}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
 \doxysubsubsection{\texorpdfstring{position}{position}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1Position}{Position}} mesh\+\_\+sim\+::\+Node\+Spec\+::position}
-
-
-
-Initial position (and fixed position for {\ttfamily \char`\"{}fixed\char`\"{}} nodes). 
 
 \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a3650f7ffcfefc98d1cbb807bdb2b62bb}\label{structmesh__sim_1_1NodeSpec_a3650f7ffcfefc98d1cbb807bdb2b62bb}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!random\_walk@{random\_walk}}
@@ -83,19 +79,23 @@ Initial position (and fixed position for {\ttfamily \char`\"{}fixed\char`\"{}} n
 \doxysubsubsection{\texorpdfstring{random\_walk}{random\_walk}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1RandomWalkParams}{Random\+Walk\+Params}} mesh\+\_\+sim\+::\+Node\+Spec\+::random\+\_\+walk}
 
-
-
-Walk parameters (used only when {\ttfamily mobility} == \char`\"{}random\+\_\+walk\char`\"{}). 
-
 \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_add21485f98c3ad53223264b68bb2d537}\label{structmesh__sim_1_1NodeSpec_add21485f98c3ad53223264b68bb2d537}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!role@{role}}
 \index{role@{role}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
 \doxysubsubsection{\texorpdfstring{role}{role}}
 {\footnotesize\ttfamily std\+::string mesh\+\_\+sim\+::\+Node\+Spec\+::role}
 
+\mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a8868cdb6c5f9a9700883c01e463a3025}\label{structmesh__sim_1_1NodeSpec_a8868cdb6c5f9a9700883c01e463a3025}} 
+\index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!rx\_array\_gain\_dbi@{rx\_array\_gain\_dbi}}
+\index{rx\_array\_gain\_dbi@{rx\_array\_gain\_dbi}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
+\doxysubsubsection{\texorpdfstring{rx\_array\_gain\_dbi}{rx\_array\_gain\_dbi}}
+{\footnotesize\ttfamily std\+::optional$<$double$>$ mesh\+\_\+sim\+::\+Node\+Spec\+::rx\+\_\+array\+\_\+gain\+\_\+dbi}
 
-
-Node role; always {\ttfamily \char`\"{}peer\char`\"{}} in mesh-\/sim. 
+\mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a1c5ce997eac2c7cec3eeac3b8456a21b}\label{structmesh__sim_1_1NodeSpec_a1c5ce997eac2c7cec3eeac3b8456a21b}} 
+\index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!tx\_array\_gain\_dbi@{tx\_array\_gain\_dbi}}
+\index{tx\_array\_gain\_dbi@{tx\_array\_gain\_dbi}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
+\doxysubsubsection{\texorpdfstring{tx\_array\_gain\_dbi}{tx\_array\_gain\_dbi}}
+{\footnotesize\ttfamily std\+::optional$<$double$>$ mesh\+\_\+sim\+::\+Node\+Spec\+::tx\+\_\+array\+\_\+gain\+\_\+dbi}
 
 \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a1b12dcff6f2970af61495782f68dc77a}\label{structmesh__sim_1_1NodeSpec_a1b12dcff6f2970af61495782f68dc77a}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!velocity@{velocity}}
@@ -103,19 +103,11 @@ Node role; always {\ttfamily \char`\"{}peer\char`\"{}} in mesh-\/sim.
 \doxysubsubsection{\texorpdfstring{velocity}{velocity}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structmesh__sim_1_1Velocity}{Velocity}} mesh\+\_\+sim\+::\+Node\+Spec\+::velocity}
 
-
-
-Constant velocity (used only when {\ttfamily mobility} == \char`\"{}constant\+\_\+velocity\char`\"{}). 
-
 \mbox{\Hypertarget{structmesh__sim_1_1NodeSpec_a80786d2b403d20b06661059d28341476}\label{structmesh__sim_1_1NodeSpec_a80786d2b403d20b06661059d28341476}} 
 \index{mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}!waypoints@{waypoints}}
 \index{waypoints@{waypoints}!mesh\_sim::NodeSpec@{mesh\_sim::NodeSpec}}
 \doxysubsubsection{\texorpdfstring{waypoints}{waypoints}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structmesh__sim_1_1Waypoint}{Waypoint}}$>$ mesh\+\_\+sim\+::\+Node\+Spec\+::waypoints}
-
-
-
-Ordered waypoint list (used only when {\ttfamily mobility} == \char`\"{}waypoint\char`\"{}). 
 
 
 

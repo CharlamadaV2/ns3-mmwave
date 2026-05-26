@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('src_cli.html',''); initResizable(); })
 <div class="textblock"><p>Command-line parsing and pre-simulation setup for mesh-sim. <br  />
 </p>
 <p>This module contains <code>sim.cc</code> argument handling, seed resolution, and input archiving into standalone functions with no ns-3 types in their public signatures (except <code>ns3::CommandLine</code>inside the <code>.cc</code>).</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Flags</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -120,7 +120,7 @@ Flags</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>--rl-mode</code>   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable RL mode — the sim exchanges observations and actions via stdin/stdout JSON.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Output</h2>
 <p>Each seed produces its own subdirectory under the batch root:</p>
 <div class="fragment"><div class="line">&lt;output-dir&gt;/</div>
@@ -133,7 +133,7 @@ Output</h2>
 <div class="line">    run.log</div>
 <div class="line">  seed-2/</div>
 </div><!-- fragment --><p>The <code>inputs/</code> directory is written by <code>ArchiveScenarioInputs</code> before any seed runs, so re-running with the archived files reproduces the original results exactly.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Module Layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -143,13 +143,13 @@ Module Layout</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="cli-parser_8cc.html">cli-parser.cc</a>   </td><td class="markdownTableBodyNone">implementations; the only file in src/ that includes ns3/command-line.h   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Conventions</h2>
 <ul>
 <li><b>Hard exits on bad input.</b> <code>ParseCommandLine</code> and <code>ResolveSeeds</code> call <code>std::exit(1)</code> with a message to <code>stderr</code> rather than throwing. This matches ns-3 convention for fatal startup errors and means <code>sim.cc</code> never needs to handle missing-flag cases.</li>
 <li><b>Overwrite-safe archiving.</b> <code>ArchiveScenarioInputs</code> uses <code>copy_options::overwrite_existing</code> so re-running into the same output directory is safe.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Dependencies</h2>
 <p>Depends on ns3 framework </p>
 </div></div><!-- contents -->

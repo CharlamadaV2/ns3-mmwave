@@ -128,14 +128,15 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a47d61ccd593bbb9e05a8cdba3fb463a1">m_bandwidthHz</a> = 400e6</td></tr>
 <tr class="memdesc:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">System bandwidth in Hz.  <a href="classmesh__sim_1_1LinkEvaluator.html#a47d61ccd593bbb9e05a8cdba3fb463a1">More...</a><br /></td></tr>
 <tr class="separator:a47d61ccd593bbb9e05a8cdba3fb463a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a9a74eb8092db9bb9e0584662e9e35fa0">m_bfGainDb</a> = 0.0</td></tr>
-<tr class="memdesc:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combined TX + RX array gain in dB.  <a href="classmesh__sim_1_1LinkEvaluator.html#a9a74eb8092db9bb9e0584662e9e35fa0">More...</a><br /></td></tr>
-<tr class="separator:a9a74eb8092db9bb9e0584662e9e35fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af22886f54c0d8c68bf25fda02afc9779"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#af22886f54c0d8c68bf25fda02afc9779">m_amcModel</a> = &quot;shannon&quot;</td></tr>
 <tr class="memdesc:af22886f54c0d8c68bf25fda02afc9779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Capacity model: <code>"shannon"</code> or <code>"table"</code>.  <a href="classmesh__sim_1_1LinkEvaluator.html#af22886f54c0d8c68bf25fda02afc9779">More...</a><br /></td></tr>
 <tr class="separator:af22886f54c0d8c68bf25fda02afc9779"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac03e529739a2b1cf085f32ad510e9e43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#ac03e529739a2b1cf085f32ad510e9e43">m_buildingsEnabled</a> = false</td></tr>
 <tr class="separator:ac03e529739a2b1cf085f32ad510e9e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecf435ab502eb2c16b11caa640b1bed8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#aecf435ab502eb2c16b11caa640b1bed8">m_txGainDbi</a></td></tr>
+<tr class="separator:aecf435ab502eb2c16b11caa640b1bed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87c65f470f71e251fb592cc091d89e3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#af87c65f470f71e251fb592cc091d89e3">m_rxGainDbi</a></td></tr>
+<tr class="separator:af87c65f470f71e251fb592cc091d89e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a550e2c385872ea43e701f8cd13e44185"><td class="memItemLeft" align="right" valign="top">ns3::Ptr&lt; ns3::PropagationLossModel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a550e2c385872ea43e701f8cd13e44185">m_plModel</a></td></tr>
 <tr class="memdesc:a550e2c385872ea43e701f8cd13e44185"><td class="mdescLeft">&#160;</td><td class="mdescRight">ns-3 path-loss model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>).  <a href="classmesh__sim_1_1LinkEvaluator.html#a550e2c385872ea43e701f8cd13e44185">More...</a><br /></td></tr>
 <tr class="separator:a550e2c385872ea43e701f8cd13e44185"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,30 +340,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9a74eb8092db9bb9e0584662e9e35fa0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a74eb8092db9bb9e0584662e9e35fa0">&#9670;&nbsp;</a></span>m_bfGainDb</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double mesh_sim::LinkEvaluator::m_bfGainDb = 0.0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Combined TX + RX array gain in dB. </p>
-
-</div>
-</div>
 <a id="ac03e529739a2b1cf085f32ad510e9e43"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac03e529739a2b1cf085f32ad510e9e43">&#9670;&nbsp;</a></span>m_buildingsEnabled</h2>
 
@@ -456,6 +433,50 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>ns-3 path-loss model (set by <a class="el" href="classmesh__sim_1_1LinkEvaluator.html#a5e0af315989e135767eb4878d08ac61c">Configure</a>). </p>
+
+</div>
+</div>
+<a id="af87c65f470f71e251fb592cc091d89e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af87c65f470f71e251fb592cc091d89e3">&#9670;&nbsp;</a></span>m_rxGainDbi</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; mesh_sim::LinkEvaluator::m_rxGainDbi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aecf435ab502eb2c16b11caa640b1bed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecf435ab502eb2c16b11caa640b1bed8">&#9670;&nbsp;</a></span>m_txGainDbi</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; mesh_sim::LinkEvaluator::m_txGainDbi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

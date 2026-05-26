@@ -163,9 +163,24 @@ def _load_traces_for_family(
     return bags
 
 
+## @brief Print a diagnostic comparison between raw and parsed CSV columns.
+#
+# Compares row counts and maximum values before and after ``pd.to_numeric``
+# coercion. Flags two conditions:
+# - ``DROPPED``: rows lost to NaN coercion.
+# - ``MAX_MISMATCH``: the raw column contains a value larger than anything
+#   that survived parsing, indicating tail-loss from coercion or a scope
+#   mismatch between the raw CSV and the parsed bag.
+#
+# @param csv_path  Path to the source CSV file (used in the printed label).
+# @param raw_col   The raw string column before numeric coercion.
+# @param parsed    The column after ``pd.to_numeric`` with NaNs dropped.
+# @param day       Date string for the log prefix.
+# @param src       Source rab hostname for the log prefix.
+# @param peer      Peer rab hostname for the log prefix.
+# @param metric    Metric short name for the log prefix.
 def _audit_csv(csv_path: Path, raw_col: pd.Series, parsed: pd.Series,
                day: str, src: str, peer: str, metric: str) -> None:
-    """Compare raw vs parsed counts/max — surfaces NaN-coerce drops + tail-loss."""
     raw_n = int(raw_col.size)
     parsed_n = int(parsed.size)
     raw_max = pd.to_numeric(raw_col, errors="coerce").max()
@@ -220,9 +235,26 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
+## @brief Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule.
+#
+# Pure numpy implementation — no scipy dependency. Subsamples @p values to at
+# most @p max_samples points using a fixed RNG seed (0) for reproducibility
+# when the sample count would make the O(n × m) kernel evaluation slow.
+#
+# Bandwidth uses Silverman's rule of thumb:
+# @f[ h = 1.06 \hat\sigma n^{-1/5} @f]
+# where @f$ \hat\sigma @f$ is the sample standard deviation. When the standard
+# deviation is zero (all identical values), @f$ \sigma @f$ is clamped to 1.0
+# to prevent a degenerate zero bandwidth.
+#
+# @param values      1-D array of observed values to estimate the density of.
+# @param x_grid      1-D array of evaluation points.
+# @param max_samples Maximum samples to use; larger inputs are randomly
+#                    subsampled. Defaults to 20,000.
+# @return            1-D array of density estimates at each point in @p x_grid.
+#                    Returns an array of NaN if either input is empty.
 def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
                   max_samples: int = 20000) -> np.ndarray:
-    """Gaussian KDE on ``x_grid``, Silverman bandwidth, numpy-only."""
     n = values.size
     if n == 0 or x_grid.size == 0:
         return np.full_like(x_grid, np.nan, dtype=np.float64)
@@ -243,8 +275,23 @@ def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
 _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
 
+## @brief Compute Freedman-Diaconis histogram bin edges for pooled values.
+#
+# The Freedman-Diaconis rule selects bin width as:
+# @f[ w = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3} @f]
+# Bin width is proportional to the inter-quartile range, making it robust
+# to outliers compared to Sturges or Scott's rule.
+#
+# The resulting bin count is clamped to [@p min_bins, @p max_bins]. Falls
+# back to a linear grid of @p min_bins bins when the IQR is zero or all
+# values are identical.
+#
+# @param values   1-D array of all pooled values across all days for one
+#                 (link, metric) combination.
+# @param max_bins Maximum number of bins. Defaults to 80.
+# @param min_bins Minimum number of bins. Defaults to 20.
+# @return         1-D array of @p n_bins + 1 bin edge values.
 def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.ndarray:
-    """Freedman-Diaconis bin edges across pooled values."""
     if values.size < 2:
         lo = float(np.min(values)) if values.size else 0.0
         return np.linspace(lo, lo + 1.0, min_bins + 1)
@@ -258,6 +305,31 @@ def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.n
     return np.linspace(lo, hi, n_bins + 1)
 
 
+## @brief Render one normalised histogram overlay per day for a (family, link, metric) triple.
+#
+# Produces one figure with one histogram bar chart and KDE curve per day,
+# all normalised so each area integrates to 1. Days with different sample
+# counts overlay directly. A dotted vertical line marks each day's median.
+#
+# Bin edges are computed from all days' pooled values via @ref _fd_bins so
+# every day uses the same bin boundaries and bar heights are directly
+# comparable. The KDE curve is evaluated on a 400-point grid via
+# @ref _kde_gaussian.
+#
+# The subtitle reports:
+# - With exactly two days: the median delta and the K-S statistic (@p ks_value).
+# - With more than two days: the largest @f$ |\Delta\mathrm{med}| @f$ across
+#   all day pairs and the corresponding day pair.
+#
+# @param family      Scenario family name for the figure title.
+# @param src         Source rab hostname.
+# @param peer        Peer rab hostname.
+# @param metric      @ref _MetricSpec describing the metric being plotted.
+# @param bags_by_day Mapping from date string to @ref _DayBag containing
+#                    pooled values for that day.
+# @param ks_value    Pre-computed K-S statistic to annotate in the subtitle,
+#                    or ``None`` when there are more than two days.
+# @return            Completed matplotlib Figure ready to be saved.
 def _plot_histograms(
     family: str,
     src: str,
@@ -266,7 +338,6 @@ def _plot_histograms(
     bags_by_day: dict[str, _DayBag],
     ks_value:    float | None,
 ) -> plt.Figure:
-    """One normalized histogram per day, overlaid."""
     fig, ax = plt.subplots(figsize=(9, 5.5))
 
     days = sorted(bags_by_day.keys())

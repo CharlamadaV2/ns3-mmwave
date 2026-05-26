@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('src_eval.html',''); initResizable(); }
 <div class="textblock"><p>Computes radio link quality for every node pair each simulation tick. <br  />
 </p>
 <p>Given the current node positions and ns-3 propagation models, this module produces path loss, SINR, capacity, and MCS for each link, then stores the results in a symmetric matrix for O(1) lookup by the routing and metrics layers.</p>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 Output</h2>
 <p>The eval module produces no files. It outputs two in-memory data structures each tick:</p>
 <p>**<code>std::vector&lt;LinkResult&gt;</code>** — returned by <code>LinkEvaluator::EvaluateAll</code>. One entry per unordered node pair (N·(N−1)/2 total), in (i &lt; j) index order.</p>
@@ -125,7 +125,7 @@ Output</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>condition_from_buildings</code>   </td><td class="markdownTableBodyNone"><code>true</code> if LOS/NLOS was determined deterministically by buildings.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 Module Layout</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -141,7 +141,7 @@ Module Layout</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="link-table_8cc.html">link-table.cc</a></code>   </td><td class="markdownTableBodyNone"><code>Update</code>, <code>Get</code>, <code>MaxCapacity</code>, <code>ConnectedLinkCount</code>, <code>IsConnected</code> implementations.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 Conventions</h2>
 <ul>
 <li><b>No inter-node interference.</b> mmWave beams are assumed orthogonal so SINR is computed as received signal power vs thermal noise floor only — no ICI term. The noise floor is: <code>−174 + 10·log₂(bandwidth_Hz) + noise_figure_dB</code>.</li>
@@ -152,7 +152,7 @@ Conventions</h2>
 <li><b>Connectivity threshold is −6.7 dB.</b> This matches <code>SINR_MIN_DB</code> in <code><a class="el" href="sinr-capacity_8h.html" title="SINR-to-capacity and SINR-to-MCS mapping functions.">sinr-capacity.h</a></code> — the minimum SINR for any MCS entry. Links below this have zero capacity and are treated as disconnected by the routing layer.</li>
 <li>**<code>LinkEvaluator::Configure</code> must be called before any evaluation.** It caches the noise floor and beamforming gain derived from <code>SimConfig</code> and stores the propagation model pointers. Calling <code>Evaluate</code> or <code>EvaluateAll</code> without configuring first is a null pointer dereference.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md29"></a>
 Dependencies</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">

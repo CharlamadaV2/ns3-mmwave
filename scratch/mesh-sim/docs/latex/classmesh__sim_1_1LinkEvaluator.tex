@@ -27,11 +27,13 @@ double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_ab35396e23c25c45ee042b45
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}} from bandwidth and noise figure. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a47d61ccd593bbb9e05a8cdba3fb463a1}{m\+\_\+bandwidth\+Hz}} = 400e6
 \begin{DoxyCompactList}\small\item\em System bandwidth in Hz. \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}{m\+\_\+bf\+Gain\+Db}} = 0.\+0
-\begin{DoxyCompactList}\small\item\em Combined TX + RX array gain in dB. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_af22886f54c0d8c68bf25fda02afc9779}{m\+\_\+amc\+Model}} = \char`\"{}shannon\char`\"{}
 \begin{DoxyCompactList}\small\item\em Capacity model\+: {\ttfamily \char`\"{}shannon\char`\"{}} or {\ttfamily \char`\"{}table\char`\"{}}. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}{m\+\_\+buildings\+Enabled}} = false
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_aecf435ab502eb2c16b11caa640b1bed8}{m\+\_\+tx\+Gain\+Dbi}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_af87c65f470f71e251fb592cc091d89e3}{m\+\_\+rx\+Gain\+Dbi}}
 \item 
 ns3\+::\+Ptr$<$ ns3\+::\+Propagation\+Loss\+Model $>$ \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a550e2c385872ea43e701f8cd13e44185}{m\+\_\+pl\+Model}}
 \begin{DoxyCompactList}\small\item\em ns-\/3 path-\/loss model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). \end{DoxyCompactList}\item 
@@ -155,16 +157,6 @@ Capacity model\+: {\ttfamily \char`\"{}shannon\char`\"{}} or {\ttfamily \char`\"
 
 System bandwidth in Hz. 
 
-\mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}\label{classmesh__sim_1_1LinkEvaluator_a9a74eb8092db9bb9e0584662e9e35fa0}} 
-\index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_bfGainDb@{m\_bfGainDb}}
-\index{m\_bfGainDb@{m\_bfGainDb}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
-\doxysubsubsection{\texorpdfstring{m\_bfGainDb}{m\_bfGainDb}}
-{\footnotesize\ttfamily double mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+bf\+Gain\+Db = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-Combined TX + RX array gain in dB. 
-
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}\label{classmesh__sim_1_1LinkEvaluator_ac03e529739a2b1cf085f32ad510e9e43}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_buildingsEnabled@{m\_buildingsEnabled}}
 \index{m\_buildingsEnabled@{m\_buildingsEnabled}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
@@ -200,6 +192,18 @@ Thermal noise floor in d\+Bm; computed by \mbox{\Hypertarget{classmesh__sim_1_1L
 
 
 ns-\/3 path-\/loss model (set by \mbox{\hyperlink{classmesh__sim_1_1LinkEvaluator_a5e0af315989e135767eb4878d08ac61c}{Configure}}). 
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_af87c65f470f71e251fb592cc091d89e3}\label{classmesh__sim_1_1LinkEvaluator_af87c65f470f71e251fb592cc091d89e3}} 
+\index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_rxGainDbi@{m\_rxGainDbi}}
+\index{m\_rxGainDbi@{m\_rxGainDbi}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
+\doxysubsubsection{\texorpdfstring{m\_rxGainDbi}{m\_rxGainDbi}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+rx\+Gain\+Dbi\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_aecf435ab502eb2c16b11caa640b1bed8}\label{classmesh__sim_1_1LinkEvaluator_aecf435ab502eb2c16b11caa640b1bed8}} 
+\index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_txGainDbi@{m\_txGainDbi}}
+\index{m\_txGainDbi@{m\_txGainDbi}!mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}}
+\doxysubsubsection{\texorpdfstring{m\_txGainDbi}{m\_txGainDbi}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ mesh\+\_\+sim\+::\+Link\+Evaluator\+::m\+\_\+tx\+Gain\+Dbi\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{classmesh__sim_1_1LinkEvaluator_a45a25562108d717b3d8ba595edce96cb}\label{classmesh__sim_1_1LinkEvaluator_a45a25562108d717b3d8ba595edce96cb}} 
 \index{mesh\_sim::LinkEvaluator@{mesh\_sim::LinkEvaluator}!m\_txPowerDbm@{m\_txPowerDbm}}

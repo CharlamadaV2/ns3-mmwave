@@ -4,9 +4,9 @@
 \begin{DoxyCompactItemize}
 \item 
 tuple\mbox{[}plt.\+Figure, pd.\+Data\+Frame\mbox{]}$\vert$None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1gps_abbfbaedf9034d4fd08e46469fe728ade}{plot\+\_\+gps\+\_\+tracks}} (pd.\+Data\+Frame df, str scenario\+\_\+name=\char`\"{}\char`\"{})
-\begin{DoxyCompactList}\small\item\em Documentation for a function. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Plot GPS tracks for all nodes in a scenario as XY scatter coloured by time. \end{DoxyCompactList}\item 
 None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1gps_a1446321d04e0b893b557c706d022c6fa}{\+\_\+add\+\_\+scale\+\_\+bar}} (plt.\+Axes ax)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Add a horizontal scale bar to the lower-\/left of a plot axes. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
@@ -16,6 +16,17 @@ None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1p
 \doxysubsubsection{\texorpdfstring{\_add\_scale\_bar()}{\_add\_scale\_bar()}}
 {\footnotesize\ttfamily  None scratch.\+mesh-\/sim.\+scripts.\+arpo\+\_\+data.\+plots.\+gps.\+\_\+add\+\_\+scale\+\_\+bar (\begin{DoxyParamCaption}\item[{plt.\+Axes}]{ax }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+
+
+Add a horizontal scale bar to the lower-\/left of a plot axes. 
+
+Computes a \char`\"{}nice\char`\"{} bar length — 1, 2, or 5 times a power of ten — that is approximately 20 \% of the current X axis span. Draws the bar as a thick black line and labels it in metres (or centimetres for sub-\/metre spans). The bar is positioned at 5 \% of the axis span from the lower-\/left corner.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ax} & Matplotlib {\ttfamily Axes} to annotate. Must already have data plotted so that {\ttfamily get\+\_\+xlim} and {\ttfamily get\+\_\+ylim} return meaningful ranges. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1gps_abbfbaedf9034d4fd08e46469fe728ade}\label{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1gps_abbfbaedf9034d4fd08e46469fe728ade}} 
 \index{scratch.mesh-\/sim.scripts.arpo\_data.plots.gps@{scratch.mesh-\/sim.scripts.arpo\_data.plots.gps}!plot\_gps\_tracks@{plot\_gps\_tracks}}
 \index{plot\_gps\_tracks@{plot\_gps\_tracks}!scratch.mesh-\/sim.scripts.arpo\_data.plots.gps@{scratch.mesh-\/sim.scripts.arpo\_data.plots.gps}}
@@ -24,6 +35,17 @@ None \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1p
 
 
 
-Documentation for a function. 
+Plot GPS tracks for all nodes in a scenario as XY scatter coloured by time. 
 
-More details. 
+Converts latitude/longitude to local East-\/\+North metres relative to the centroid of all fixes. Each node is drawn with a distinct marker shape; point colour encodes seconds elapsed since the earliest fix in the scenario. A scale bar is added via \mbox{\hyperlink{namespacescratch_1_1mesh-sim_1_1scripts_1_1arpo__data_1_1plots_1_1gps_a1446321d04e0b893b557c706d022c6fa}{\+\_\+add\+\_\+scale\+\_\+bar}} and a colour bar shows the time axis.
+
+
+\begin{DoxyParams}{Parameters}
+{\em df} & GPS Data\+Frame produced by load\+\_\+gps\+\_\+scenario. Must contain {\ttfamily \+\_\+\+\_\+lat\+\_\+\+\_\+}, {\ttfamily \+\_\+\+\_\+lon\+\_\+\+\_\+}, {\ttfamily \+\_\+\+\_\+t\+\_\+\+\_\+}, {\ttfamily \+\_\+\+\_\+node\+\_\+\+\_\+}, and {\ttfamily \+\_\+\+\_\+label\+\_\+\+\_\+} columns. \\
+\hline
+{\em scenario\+\_\+name} & Human-\/readable scenario identifier used in the title and caption. Pass an empty string to omit. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily (Figure, trace\+\_\+df)} tuple where {\ttfamily trace\+\_\+df} holds per-\/fix ENU coordinates and metadata for downstream use, or {\ttfamily None} if {\ttfamily df} is empty. 
+\end{DoxyReturn}
