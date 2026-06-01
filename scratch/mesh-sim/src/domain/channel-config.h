@@ -84,27 +84,6 @@ struct ChannelConfig
     double      tx_array_gain_dbi = 12.0;     // peak directional gain per side
     double      rx_array_gain_dbi = 12.0;
 
-    double      frequency_ghz     = 28.0;    ///< Carrier frequency in GHz.
-    double      tx_power_dbm      = 30.0;    ///< Per-node transmit power in dBm.
-    std::string scenario          = "UMi";   ///< Propagation scenario: @c "UMi",
-                                              ///<   @c "UMa", @c "RMa", @c "InH", or @c "InF".
-    std::string channel_model     = "3gpp";  ///< Model selection: @c "3gpp" or @c "nyu".
-    bool        blockage_enabled  = true;    ///< Enable human-body / dynamic blockage.
-                                              ///<   3GPP: ThreeGppChannelModel::Blockage.
-                                              ///<   NYU:  NYUChannelModel::Blockage.
-    std::string beamforming_model = "svd";   ///< Beamforming scheme label (for reference;
-                                              ///<   mesh-sim uses a simplified SVD implementation).
-    std::string amc_model         = "shannon"; ///< Capacity estimation: @c "shannon"
-                                               ///<   (continuous bound) or @c "table"
-                                               ///<   (discrete MCS lookup).
-    double noise_figure_db    = 5.0;   ///< Receiver noise figure in dB.
-    double bandwidth_mhz      = 400.0; ///< System bandwidth in MHz, used for noise-floor
-                                        ///<   and Shannon-capacity calculations.
-    double tx_array_gain_dbi  = 12.0;  ///< Peak TX array gain in dBi (per side).
-    double rx_array_gain_dbi  = 12.0;  ///< Peak RX array gain in dBi (per side).
-
-    // ---- NYU-specific parameters -------------------------------------------
-
     NyuChannelConfig nyu;  ///< NYU model parameters; ignored when @c channel_model is @c "3gpp".
 };
 

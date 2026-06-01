@@ -6,6 +6,7 @@
 #include "ns3/double.h"
 
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 
 namespace mesh_sim

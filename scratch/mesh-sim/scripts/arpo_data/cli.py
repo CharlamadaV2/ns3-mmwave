@@ -1,3 +1,5 @@
+""" cli script"""
+
 ## @file cli.py
 # @brief Main script to be ran for manipulating ARPO data as desired
 #
@@ -13,6 +15,8 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+from .paths import DatasetPaths
 
 from .extract import extract
 from .loaders import (
@@ -135,8 +139,9 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    sub.add_parser("extract", help="Unzip the ARPO data bundle")
-
+    e = sub.add_parser("extract", help="Unzip the ARPO data bundle")
+    e.add_argument("-i", "--input", help="Filepath for zip file")
+    
     pp = sub.add_parser("plot", help="Generate per-scenario figures")
     g = pp.add_mutually_exclusive_group(required=True)
     g.add_argument("--scenario", help="Scenario directory name under csv/")
@@ -153,7 +158,7 @@ def main() -> int:
 
     args = p.parse_args()
     if args.cmd == "extract":
-        return extract()
+        return extract(paths=DatasetPaths(zip_path=Path(args.input))) if args.input else extract()
     if args.cmd == "plot":
         return _cmd_plot(args)
     if args.cmd == "multi-day":
