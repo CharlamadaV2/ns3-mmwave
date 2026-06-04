@@ -1,8 +1,0 @@
-<map id="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/routing/mesh&#45;router.h" name="/home/kimson/ns3&#45;mmwave/scratch/mesh&#45;sim/src/routing/mesh&#45;router.h">
-<area shape="rect" id="node1" title="Flow&#45;level routing over the mesh link graph." alt="" coords="237,5,445,61"/>
-<area shape="rect" id="node2" href="$metrics-writer_8h.html" title="Accumulates per&#45;tick simulation metrics and writes summary.json." alt="" coords="5,109,213,165"/>
-<area shape="rect" id="node4" href="$viz-writer_8h.html" title="Writes per&#45;tick CSV snapshots for GUI and offline plotting." alt="" coords="237,109,445,165"/>
-<area shape="rect" id="node6" href="$mesh-router_8cc.html" title=" " alt="" coords="469,109,677,165"/>
-<area shape="rect" id="node3" href="$metrics-writer_8cc.html" title=" " alt="" coords="5,213,213,269"/>
-<area shape="rect" id="node5" href="$viz-writer_8cc.html" title=" " alt="" coords="237,213,445,269"/>
-</map>

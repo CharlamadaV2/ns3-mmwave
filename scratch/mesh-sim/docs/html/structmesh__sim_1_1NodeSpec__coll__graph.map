@@ -1,6 +1,0 @@
-<map id="mesh_sim::NodeSpec" name="mesh_sim::NodeSpec">
-<area shape="rect" id="node1" title="Full specification for one simulation node." alt="" coords="254,95,417,121"/>
-<area shape="rect" id="node2" href="$structmesh__sim_1_1RandomWalkParams.html" title="Bounding box and speed parameters for the random&#45;walk mobility model." alt="" coords="5,5,236,32"/>
-<area shape="rect" id="node3" href="$structmesh__sim_1_1Position.html" title="Cartesian position in metres." alt="" coords="261,5,410,32"/>
-<area shape="rect" id="node4" href="$structmesh__sim_1_1Velocity.html" title="Constant velocity vector in metres per second." alt="" coords="434,5,583,32"/>
-</map>

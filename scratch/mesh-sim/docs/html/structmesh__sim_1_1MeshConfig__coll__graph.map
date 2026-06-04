@@ -1,5 +1,0 @@
-<map id="mesh_sim::MeshConfig" name="mesh_sim::MeshConfig">
-<area shape="rect" id="node1" title="Aggregates all mesh&#45;layer configuration." alt="" coords="115,95,289,121"/>
-<area shape="rect" id="node2" href="$structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
-<area shape="rect" id="node3" href="$structmesh__sim_1_1TrafficConfig.html" title="Flow&#45;level traffic demand configuration." alt="" coords="217,5,395,32"/>
-</map>

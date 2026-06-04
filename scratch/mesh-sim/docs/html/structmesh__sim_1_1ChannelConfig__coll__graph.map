@@ -1,4 +1,0 @@
-<map id="mesh_sim::ChannelConfig" name="mesh_sim::ChannelConfig">
-<area shape="rect" id="node1" title="Complete radio and channel configuration for simulation run." alt="" coords="19,95,209,121"/>
-<area shape="rect" id="node2" href="$structmesh__sim_1_1NyuChannelConfig.html" title="Parameters specific to the NYU mmWave channel model." alt="" coords="5,5,223,32"/>
-</map>

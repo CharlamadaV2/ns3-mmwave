@@ -1,4 +1,0 @@
-<map id="mesh_sim::MeshRouter" name="mesh_sim::MeshRouter">
-<area shape="rect" id="node1" title="Routes flows over the mesh link graph and applies congestion scaling." alt="" coords="12,95,187,121"/>
-<area shape="rect" id="node2" href="$structmesh__sim_1_1RoutingConfig.html" title="Routing algorithm configuration." alt="" coords="5,5,193,32"/>
-</map>
