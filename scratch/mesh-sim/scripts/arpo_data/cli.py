@@ -21,8 +21,9 @@ from .extract import extract
 from .loaders import (
     load_bh2_scenario,
     load_gps_scenario,
-    load_gps_flat,
+    load_gps_all,
     load_config,
+    load_rf_scenario,
 )
 from .multi_day import multi_day
 from .paths import CSV_ROOT, PER_DAY_DIR
@@ -95,36 +96,84 @@ def _plot_one(scen_dir: Path, output_path: Path) -> None:
     print(f"  [{scen_dir.name}]")
 
     name = scen_dir.name
-    bh2  = load_bh2_scenario(scen_dir)
-    if bh2 is not None:
-        _save_pairs(plot_bh2_snr(bh2, name),        out, "bh2_snr")
-        _save_pairs(plot_bh2_rcpi(bh2, name),       out, "bh2_rcpi")
-        _save_pairs(plot_bh2_mcs(bh2, name),        out, "bh2_mcs")
-        _save_pairs(plot_bh2_throughput(bh2, name), out, "bh2_throughput")
-        _save_pairs(plot_bh2_per(bh2, name),        out, "bh2_per")
+    # ------- OLD FORMAT ----------
+    # bh2  = load_bh2_scenario(scen_dir)
+    # if bh2 is not None:
+    #     _save_pairs(plot_bh2_snr(bh2, name),        out, "bh2_snr")
+    #     _save_pairs(plot_bh2_rcpi(bh2, name),       out, "bh2_rcpi")
+    #     _save_pairs(plot_bh2_mcs(bh2, name),        out, "bh2_mcs")
+    #     _save_pairs(plot_bh2_throughput(bh2, name), out, "bh2_throughput")
+    #     _save_pairs(plot_bh2_per(bh2, name),        out, "bh2_per")
 
     gps = load_gps_scenario(scen_dir)
     if gps is not None:
         _save(plot_gps_tracks(gps, name),
               pngs / "gps_track.png", csvs / "gps_track_trace.csv")
+        
+    rf_data = load_rf_scenario(scen_dir)
+    if rf_data is not None:
+        _save_pairs(plot_bh2_snr(rf_data, name),        out, "IH_snr")
+        _save_pairs(plot_bh2_rcpi(rf_data, name),       out, "IH_rcpi")
+        _save_pairs(plot_bh2_mcs(rf_data, name),        out, "IH_mcs")
+        _save_pairs(plot_bh2_throughput(rf_data, name), out, "IH_throughput")
+        _save_pairs(plot_bh2_per(rf_data, name),        out, "IH_per")
 
 
-## @brief Plot all nodes GPS tracks onto one graph.
+## @brief Plot individual node GPS tracks and all nodes combined on one graph.
 #
-# Loads GPS data from all node subdirectories via @ref load_gps_flat
-# (silvus GPS excluded, static nodes filtered) and plots them together
-# via @ref plot_gps_tracks.
+# For each node subdirectory, plots its GPS track individually. Then plots
+# all nodes together on one combined graph. Silvus GPS is excluded and
+# static nodes are filtered out automatically by @ref load_gps_all.
 #
 # @param csv_dir     Directory containing per-node subdirs.
-# @param output_path Directory to write the PNG and trace CSV into.
-# @return 0 on success, 1 if no GPS data is found.
-def _plot_all(csv_dir: Path, output_path: Path) -> int:
-    df = load_gps_flat(csv_dir)
+# @param output_path Directory to write PNGs and trace CSVs into.
+# @return 0 on success, 1 if no GPS data is found in any node.
+def _plot_nodes(csv_dir: Path, output_path: Path) -> int:
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Plot each node individually.
+    for node_dir in sorted(csv_dir.iterdir()):
+        # Check if directory exists
+        if not node_dir.is_dir() or node_dir.name == "sdwan":
+            continue
+        # Check if node contains both gps and silvus directories
+        if not (node_dir / "gps").is_dir() or not (node_dir / "silvus").is_dir():
+            print(f"  WARNING: {node_dir.name} missing gps or silvus directory, skipping",
+                file=sys.stderr)
+            continue
+        
+        # GPS Plotting
+        gps = load_gps_scenario(node_dir)
+        if gps is None:
+            print(f"  WARNING: no GPS data for {node_dir.name}, skipping",
+                  file=sys.stderr)
+            continue
+        _save(
+            plot_gps_tracks(gps, node_dir.name),
+            output_path / node_dir.name / "gps_track.png",
+            output_path / node_dir.name / "gps_track_trace.csv",
+        )
+        
+        # RF Quality Plotting
+        out = output_path / node_dir.name
+        rf_data = load_rf_scenario(node_dir)
+        if rf_data is None:
+            print(f"  WARNING: no rf data for {node_dir.name}, skipping",
+                file=sys.stderr)
+            continue
+        _save_pairs(plot_bh2_snr(rf_data, node_dir.name),        out, "IH_snr")
+        _save_pairs(plot_bh2_rcpi(rf_data, node_dir.name),       out, "IH_rcpi")
+        _save_pairs(plot_bh2_mcs(rf_data, node_dir.name),        out, "IH_mcs")
+        _save_pairs(plot_bh2_throughput(rf_data, node_dir.name), out, "IH_throughput")
+        _save_pairs(plot_bh2_per(rf_data, node_dir.name),        out, "IH_per")
+
+
+    # Plot all nodes combined.
+    df = load_gps_all(csv_dir)
     if df is None:
         print(f"ERROR: no GPS data found in {csv_dir}", file=sys.stderr)
         return 1
 
-    output_path.mkdir(parents=True, exist_ok=True)
     _save(
         plot_gps_tracks(df, csv_dir.name),
         output_path / "gps_all_nodes.png",
@@ -148,11 +197,13 @@ def _cmd_plot(args: argparse.Namespace) -> int:
         print(f"ERROR: no directories found in {args.input}", file=sys.stderr)
         return 1
 
+    #Plot all scenarios
     if args.all:
         scenarios = sorted(p for p in args.input.iterdir() if p.is_dir())
     elif args.nodes:
-        return _plot_all(args.input, args.output)
+        return _plot_nodes(args.input, args.output)
     else:
+        #Plot specific scenario
         if args.scenario not in available:
             print(f"ERROR: scenario '{args.scenario}' not found", file=sys.stderr)
             print(f"available: {', '.join(available)}", file=sys.stderr)

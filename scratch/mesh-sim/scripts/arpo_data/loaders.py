@@ -131,37 +131,25 @@ def load_mcm_scenario(scen_dir: Path) -> pd.DataFrame | None:
     return out if not out.empty else None
 
 
-## @brief Load and concatenate GPS fixes for every node in a scenario.
+## @brief Load GPS fixes for a single node directory.
 #
-# Supported source formats in priority order:
-# -# ``gps/gps_position.csv`` or ``gps_position.csv`` — GeoTAK dedicated receiver.
-# -# ``geotak_gps.csv`` — legacy GeoTAK format.
-# -# ``gps.csv`` (legacy) — columns ``field_lat``, ``field_lon``, ``timestamp``.
+# Wraps @ref _load_node_gps and applies the standard post-processing:
+# drops NaN coordinates, drops zero-coordinate no-fix sentinels, and
+# adds the ``__sec__`` session-relative seconds column.
 #
-# Silvus radio GPS (``silvus/gps.csv``) is intentionally excluded — it reports
-# stale coordinates and contaminates the position data.
-#
-# Rows with latitude=0 **and** longitude=0 are dropped as "no fix" sentinels.
-#
-# @param scen_dir Path to the scenario directory.
-# @return Concatenated DataFrame with ``__lat__``, ``__lon__``, ``__sec__``
-#         columns, or ``None`` if no GPS data is available.
-def load_gps_scenario(scen_dir: Path) -> pd.DataFrame | None:
-    frames = []
-    for node in sorted(scen_dir.iterdir()):
-        if not node.is_dir() or node.name == "sdwan":
-            continue
-        frame = _load_node_gps(node)
-        if frame is not None:
-            frames.append(frame)
-    if not frames:
+# @param node_dir Path to one node subdirectory (e.g. ``calfex_csv/IH01``).
+# @return DataFrame with ``__lat__``, ``__lon__``, ``__sec__`` columns,
+#         or ``None`` if no GPS data is available or all fixes are invalid.
+def load_gps_scenario(node_dir: Path) -> pd.DataFrame | None:
+    df = _load_node_gps(node_dir)
+    if df is None:
         return None
 
-    df = pd.concat(frames, ignore_index=True).dropna(
-        subset=["__lat__", "__lon__", "__t__"])
+    df = df.dropna(subset=["__lat__", "__lon__", "__t__"])
     df = df[(df["__lat__"] != 0) | (df["__lon__"] != 0)]
     if df.empty:
         return None
+
     df["__sec__"] = session_relative_seconds(df)
     return df
 
@@ -169,14 +157,7 @@ def load_gps_scenario(scen_dir: Path) -> pd.DataFrame | None:
 ## @brief Load GPS data for a single node directory, trying all known source formats.
 #
 # Tries GPS source formats in priority order. Silvus radio GPS
-# (``silvus/gps.csv``) is intentionally skipped — it reports stale
-# coordinates that contaminate the position data.
-#
-# Priority order:
-# -# ``<node>/gps/gps_position.csv`` or ``<node>/gps_position.csv``
-#    — dedicated GPS receiver, ``latitude``/``longitude``/``time`` (ns).
-# -# ``<node>/geotak_gps.csv`` — legacy GeoTAK, ``lat``/``lon``/``time`` (ISO-8601).
-# -# ``<node>/gps.csv`` (legacy) — ``field_lat``/``field_lon``/``timestamp`` (ns).
+# (``silvus/gps.csv``) is skipped.
 #
 # @param node Path to one node subdirectory.
 # @return Normalised DataFrame with columns
@@ -184,7 +165,7 @@ def load_gps_scenario(scen_dir: Path) -> pd.DataFrame | None:
 #         or ``None`` if no GPS file is present or usable.
 def _load_node_gps(node: Path) -> pd.DataFrame | None:
 
-    # Priority 1: gps_position.csv — check gps/ subfolder first, then flat.
+    # Reads data from gps_position
     for candidate in [node / "gps" / "gps_position.csv",
                       node / "gps_position.csv"]:
         if candidate.exists():
@@ -202,31 +183,31 @@ def _load_node_gps(node: Path) -> pd.DataFrame | None:
                     df["__label__"] = node.name
                 return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
 
-    # Priority 2: geotak_gps.csv — legacy GeoTAK format.
-    geotak = node / "geotak_gps.csv"
-    if geotak.exists():
-        df = pd.read_csv(geotak, low_memory=False)
-        if {"lat", "lon", "time"}.issubset(df.columns):
-            df = df.rename(columns={"lat": "__lat__", "lon": "__lon__"})
-            df["__t__"]     = pd.to_datetime(df["time"], errors="coerce", utc=True)
-            df["__node__"]  = node.name
-            df["__label__"] = df["uid"].astype(str) if "uid" in df.columns else node.name
-            return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
+    # # Priority 2: geotak_gps.csv — legacy GeoTAK format.
+    # geotak = node / "geotak_gps.csv"
+    # if geotak.exists():
+    #     df = pd.read_csv(geotak, low_memory=False)
+    #     if {"lat", "lon", "time"}.issubset(df.columns):
+    #         df = df.rename(columns={"lat": "__lat__", "lon": "__lon__"})
+    #         df["__t__"]     = pd.to_datetime(df["time"], errors="coerce", utc=True)
+    #         df["__node__"]  = node.name
+    #         df["__label__"] = df["uid"].astype(str) if "uid" in df.columns else node.name
+    #         return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
 
-    # Priority 3: legacy gps.csv — field_lat/field_lon/timestamp format only.
-    # NOTE: silvus/gps.csv (lat/long/time format) is intentionally NOT loaded here.
-    gpsd = node / "gps.csv"
-    if gpsd.exists():
-        df = pd.read_csv(gpsd, low_memory=False)
-        if {"field_lat", "field_lon", "timestamp"}.issubset(df.columns):
-            df = df.assign(
-                __lat__   = pd.to_numeric(df["field_lat"],  errors="coerce"),
-                __lon__   = pd.to_numeric(df["field_lon"],  errors="coerce"),
-                __t__     = to_datetime(df),
-                __node__  = node.name,
-                __label__ = node.name,
-            )
-            return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
+    # # Priority 3: legacy gps.csv — field_lat/field_lon/timestamp format only.
+    # # NOTE: silvus/gps.csv (lat/long/time format) is intentionally NOT loaded here.
+    # gpsd = node / "gps.csv"
+    # if gpsd.exists():
+    #     df = pd.read_csv(gpsd, low_memory=False)
+    #     if {"field_lat", "field_lon", "timestamp"}.issubset(df.columns):
+    #         df = df.assign(
+    #             __lat__   = pd.to_numeric(df["field_lat"],  errors="coerce"),
+    #             __lon__   = pd.to_numeric(df["field_lon"],  errors="coerce"),
+    #             __t__     = to_datetime(df),
+    #             __node__  = node.name,
+    #             __label__ = node.name,
+    #         )
+    #         return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
 
     return None
 
@@ -243,11 +224,15 @@ def _load_node_gps(node: Path) -> pd.DataFrame | None:
 #                   (``__node__``, ``__label__``, ``__t__``, ``__lat__``,
 #                   ``__lon__``, ``__sec__``), or ``None`` if no usable
 #                   GPS data is found in any subdirectory.
-def load_gps_flat(directory: Path) -> pd.DataFrame | None:
+def load_gps_all(directory: Path) -> pd.DataFrame | None:
     frames: list[pd.DataFrame] = []
 
     for node_dir in sorted(directory.iterdir()):
+        # Check if directory exists
         if not node_dir.is_dir() or node_dir.name == "sdwan":
+            continue
+        # Check if node contains both gps and silvus directories
+        if not (node_dir / "gps").is_dir() or not (node_dir / "silvus").is_dir():
             continue
         frame = _load_node_gps(node_dir)
         if frame is not None:
@@ -271,6 +256,10 @@ def load_gps_flat(directory: Path) -> pd.DataFrame | None:
 
     out["__sec__"] = session_relative_seconds(out)
     return out
+
+## @brief Parse through silvus data and 
+def load_rf_scenario(config_path: Path) -> pd.DataFrame | None:
+    return None
 
 
 ## @brief Parse through node CSV files and format data for the simulator.
