@@ -63,8 +63,8 @@ scratch/mesh-sim/inputs/custom/
 scratch/mesh-sim/inputs/sweeps/*
 !scratch/mesh-sim/inputs/sweeps/example.ini
 scratch/mesh-sim/data/*
-scratch/mesh-sim/docs/html
-scratch/mesh-sim/docs/latex
+scratch/mesh-sim/docs/html/*
+scratch/mesh-sim/docs/latex/*
 
 # Legacy output location (outputs now live in scratch/mmwave-sim/outputs/)
 outputs/

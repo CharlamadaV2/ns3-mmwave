@@ -1,9 +1,9 @@
-""" cli script"""
+"""cli script"""
 
 ## @file cli.py
 # @brief Main script to be ran for manipulating ARPO data as desired
 #
-# Provides a command line interface that can do one of the following commands: 
+# Provides a command line interface that can do one of the following commands:
 # - Extract unzips data folder into extraction target direction
 # - Multi-day compares day vs day data for multi day scenarios
 # - Plot generates figures for specific scenario or all scenarios per individual day
@@ -17,11 +17,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from .paths import DatasetPaths
-
 from .extract import extract
 from .loaders import (
     load_bh2_scenario,
     load_gps_scenario,
+    load_gps_flat,
+    load_config,
 )
 from .multi_day import multi_day
 from .paths import CSV_ROOT, PER_DAY_DIR
@@ -34,14 +35,16 @@ from .plots import (
     plot_gps_tracks,
 )
 
+
 ## @brief Save a figure (and an optional trace CSV) returned from a plot fn.
-# @param result contains figure and trace of specific scenario
-# @param png_path path to store the resultant figure
-# @param csv_path path to store the resultant trace
 #
 # Plot fns may return either ``Figure`` or ``(Figure, trace_df)``. The PNG
 # lands at ``png_path``; if a trace is present it goes to ``csv_path`` when
 # supplied, otherwise next to the PNG as ``<stem>_trace.csv``.
+#
+# @param result    Figure or ``(Figure, trace_df)`` tuple returned by a plot fn.
+# @param png_path  Destination path for the PNG file.
+# @param csv_path  Destination path for the trace CSV; auto-derived if ``None``.
 def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
     if result is None:
         return
@@ -52,7 +55,6 @@ def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
     if fig is None:
         return
     png_path.parent.mkdir(parents=True, exist_ok=True)
-    # DPI is maxed at 200
     fig.savefig(png_path, dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"    wrote {png_path}")
@@ -63,15 +65,16 @@ def _save(result, png_path: Path, csv_path: Path | None = None) -> None:
         trace.to_csv(target, index=False)
         print(f"    wrote {target}")
 
-## @brief Saves the (src, peer, fig, trace) tuples emitted by per-radio plot fns.
-# @param results contains src, peer, fig, and trace tuples produced by per-radio plot
-# @param scen_dir directory path where scenario is stored
-# @param base_name name of the bh2 metric 
+
+## @brief Save ``(src, peer, fig, trace)`` tuples emitted by per-radio plot fns.
 #
 # PNGs land under ``pngs/<src>/`` and traces under ``csvs/<src>/`` so the
 # outputs for each source rab live together.
+#
+# @param results   List of ``(src, peer, fig, trace_df)`` tuples.
+# @param scen_dir  Output root directory for this scenario.
+# @param base_name Metric prefix used in the output filename (e.g. ``"bh2_snr"``).
 def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
-
     if not results:
         return
     for src, peer, fig, trace in results:
@@ -79,16 +82,20 @@ def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
         csv = scen_dir / "csvs" / src / f"{base_name}__{src}_to_{peer}_trace.csv"
         _save((fig, trace), png, csv)
 
-## @brief plots different metrics for specific scenario of given day
-# @param scen_dir directory path where scenario is stored
-def _plot_one(scen_dir: Path) -> None:
-    out = PER_DAY_DIR / scen_dir.name
+
+## @brief Plot all bh2 metrics and GPS tracks for one scenario directory.
+#
+# @param scen_dir    Path to the scenario directory.
+# @param output_path Root output directory; a subdirectory named after the
+#                    scenario is created inside it.
+def _plot_one(scen_dir: Path, output_path: Path) -> None:
+    out  = output_path / scen_dir.name
     pngs = out / "pngs"
     csvs = out / "csvs"
     print(f"  [{scen_dir.name}]")
 
     name = scen_dir.name
-    bh2 = load_bh2_scenario(scen_dir)
+    bh2  = load_bh2_scenario(scen_dir)
     if bh2 is not None:
         _save_pairs(plot_bh2_snr(bh2, name),        out, "bh2_snr")
         _save_pairs(plot_bh2_rcpi(bh2, name),       out, "bh2_rcpi")
@@ -101,66 +108,112 @@ def _plot_one(scen_dir: Path) -> None:
         _save(plot_gps_tracks(gps, name),
               pngs / "gps_track.png", csvs / "gps_track_trace.csv")
 
-## @brief manages command line argument for multi or single plot generator
-# @param args contains argument for which scenario to plot or all scenarios.
-# @return On success returns 0, while 1 for errors
+
+## @brief Plot all nodes GPS tracks onto one graph.
+#
+# Loads GPS data from all node subdirectories via @ref load_gps_flat
+# (silvus GPS excluded, static nodes filtered) and plots them together
+# via @ref plot_gps_tracks.
+#
+# @param csv_dir     Directory containing per-node subdirs.
+# @param output_path Directory to write the PNG and trace CSV into.
+# @return 0 on success, 1 if no GPS data is found.
+def _plot_all(csv_dir: Path, output_path: Path) -> int:
+    df = load_gps_flat(csv_dir)
+    if df is None:
+        print(f"ERROR: no GPS data found in {csv_dir}", file=sys.stderr)
+        return 1
+
+    output_path.mkdir(parents=True, exist_ok=True)
+    _save(
+        plot_gps_tracks(df, csv_dir.name),
+        output_path / "gps_all_nodes.png",
+        output_path / "gps_all_nodes_trace.csv",
+    )
+    return 0
+
+
+## @brief Dispatch the plot subcommand.
+#
+# @param args  Parsed argument namespace from argparse.
+# @return 0 on success, 1 on error.
 def _cmd_plot(args: argparse.Namespace) -> int:
-    if not CSV_ROOT.exists():
-        print(f"ERROR: {CSV_ROOT} not found -- run `extract` first", file=sys.stderr)
+    if not args.input.exists():
+        print(f"ERROR: {args.input} not found -- run `extract` first",
+              file=sys.stderr)
+        return 1
+
+    available = sorted(p.name for p in args.input.iterdir() if p.is_dir())
+    if not available:
+        print(f"ERROR: no directories found in {args.input}", file=sys.stderr)
         return 1
 
     if args.all:
-        scenarios = sorted(p for p in CSV_ROOT.iterdir() if p.is_dir())
+        scenarios = sorted(p for p in args.input.iterdir() if p.is_dir())
+    elif args.nodes:
+        return _plot_all(args.input, args.output)
     else:
-        scen = CSV_ROOT / args.scenario
-        if not scen.is_dir():
-            available = sorted(p.name for p in CSV_ROOT.iterdir() if p.is_dir())
+        if args.scenario not in available:
             print(f"ERROR: scenario '{args.scenario}' not found", file=sys.stderr)
             print(f"available: {', '.join(available)}", file=sys.stderr)
             return 1
-        scenarios = [scen]
+        scenarios = [args.input / args.scenario]
 
-    PER_DAY_DIR.mkdir(parents=True, exist_ok=True)
+    args.output.mkdir(parents=True, exist_ok=True)
     for s in scenarios:
-        _plot_one(s)
-    print(f"\nDone. Figures in {PER_DAY_DIR}/")
+        _plot_one(s, args.output)
+    print(f"\nDone. Figures in {args.output}/")
     return 0
 
-## @brief Takes command line arguements to interact with ARPO data
+
+## @brief CLI entry point.
 #
-# There are three arguments to be taken: "extract", "plot", or "multi-day"
-# The extract arg will execute the extraction script
-# The plot arg will execute the _com_plot function passing args for all or specific scenario
-# The multi-day will execute the multi_day script
-#  
-# @return result of "extract", "_cmd_plot", or "multi_day" on success, 
-#       returns 1 if the argument does not exist
+# Subcommands: ``extract``, ``plot``, ``load-config``, ``multi-day``.
+#
+# @return Exit code: 0 on success, 1 on error.
 def main() -> int:
-    p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    p = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
 
     e = sub.add_parser("extract", help="Unzip the ARPO data bundle")
     e.add_argument("-i", "--input", help="Filepath for zip file")
-    
+
     pp = sub.add_parser("plot", help="Generate per-scenario figures")
+    pp.add_argument("-i", "--input",  type=Path,
+                    help="Filepath for csv folder", default=CSV_ROOT)
+    pp.add_argument("-o", "--output", type=Path,
+                    help="Filepath for output folder", default=PER_DAY_DIR)
     g = pp.add_mutually_exclusive_group(required=True)
     g.add_argument("--scenario", help="Scenario directory name under csv/")
-    g.add_argument("--all", action="store_true", help="Plot every scenario")
+    g.add_argument("--nodes",    action="store_true",
+                   help="Plot all nodes GPS on one graph")
+    g.add_argument("--all",      action="store_true",
+                   help="Plot every scenario")
+
+    lc = sub.add_parser("load-config",
+                         help="Load extracted node data into simulator config format")
+    lc.add_argument("-i", "--input",  type=Path, required=True,
+                    help="Filepath for node csv folder")
+    lc.add_argument("-o", "--output", type=Path,
+                    help="Filepath for output folder", default=Path("../../inputs"))
 
     md = sub.add_parser(
         "multi-day",
         help="Day-vs-day distribution overlays + similarity table per scenario family",
     )
-    md.add_argument("--family",
-                    help="Only process this scenario family")
-    md.add_argument("--audit", action="store_true",
+    md.add_argument("--family", help="Only process this scenario family")
+    md.add_argument("--audit",  action="store_true",
                     help="Print raw-CSV vs parsed-bag row count + max diagnostics")
 
     args = p.parse_args()
     if args.cmd == "extract":
-        return extract(paths=DatasetPaths(zip_path=Path(args.input))) if args.input else extract()
+        return extract(
+            paths=DatasetPaths(zip_path=Path(args.input))
+        ) if args.input else extract()
     if args.cmd == "plot":
         return _cmd_plot(args)
+    if args.cmd == "load-config":
+        return load_config(args.input)
     if args.cmd == "multi-day":
         return multi_day(audit=args.audit, family_filter=args.family)
     return 1

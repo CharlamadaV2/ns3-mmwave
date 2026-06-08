@@ -1,3 +1,4 @@
+"""extract script"""
 ## @file extract.py
 # @brief Unzips ARPO data bundle into the configured extraction directory.
 #
@@ -49,28 +50,24 @@ def _is_junk(name: str, patterns: tuple[str, ...]) -> bool:
 # @param junk_patterns Glob patterns for entries to skip; defaults to
 #                      @ref DEFAULT_JUNK_PATTERNS.
 # @return 0 on success, 1 if the zip file is not found.
-
 def extract(
         paths: DatasetPaths = DEFAULT,
         junk_patterns: tuple[str, ...] = DEFAULT_JUNK_PATTERNS,
-    ) -> int:
-    
+) -> int:
     if not paths.zip_path.exists():
         print(f"ERROR: {paths.zip_path} not found", file=sys.stderr)
         return 1
 
-    # SKIP: if already extracted and the zip hasn't been updated since.
+    # Skip if already extracted and the zip hasn't been updated since.
     if (
             paths.extract_dir.exists()
             and paths.extract_dir.stat().st_mtime >= paths.zip_path.stat().st_mtime
             and (paths.extract_dir / paths.zip_path.stem).exists()
-        ):
-        
+    ):
         n_csv = sum(1 for _ in paths.extract_dir.rglob("*.csv"))
         print(f"Already extracted ({n_csv} CSVs in {paths.extract_dir})")
         return 0
 
-    # Main Logic: Extracts files into extract directory
     paths.extract_dir.mkdir(parents=True, exist_ok=True)
     n_files = 0
     total_bytes = 0
@@ -83,7 +80,6 @@ def extract(
             zf.extract(info, paths.extract_dir)
             n_files += 1
             total_bytes += info.file_size
-            print(f"Created {info.filename}")
 
     # Touch the directory so the mtime check above works on the next call.
     paths.extract_dir.touch()
