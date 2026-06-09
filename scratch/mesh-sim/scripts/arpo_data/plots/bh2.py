@@ -174,6 +174,139 @@ def plot_bh2_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_
             results.append(result)
     return results
 
+## @brief Adapt a silvus RF DataFrame to the column layout expected by the bh2 plot functions.
+#
+# The bh2 plot pipeline expects ``__session__``, ``__peer__``, ``tag_local_mac``,
+# and ``tag_sta_mac`` for grouping, plus ``field_*`` metric columns. This adapter
+# maps the silvus column names to those conventions so the shared plot machinery
+# can be reused without modification.
+#
+# @param df  DataFrame produced by @ref load_rf_scenario.
+# @return    Copy of @p df with bh2-compatible columns added.
+## @brief Adapt a silvus RF DataFrame to the column layout expected by the bh2 plot functions.
+#
+# Sets ``__peer__`` to a constant so all neighbors are plotted as coloured
+# series within one figure per metric rather than one figure per neighbor.
+# Each unique ``neighbor`` value becomes a separate series via ``tag_sta_mac``.
+#
+# @param df  DataFrame produced by @ref load_rf_scenario.
+# @return    Copy of @p df with bh2-compatible columns added.
+def _silvus_to_bh2_format(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    out["__session__"]   = out["__node__"]
+    out["__peer__"]      = "neighbors"       # constant — one figure per node
+    out["tag_local_mac"] = out["node_id"].astype(str)
+    out["tag_sta_mac"]   = out["neighbor"].astype(str)
+    col_map = {
+        "snr":             "field_snr",
+        "rcpi":            "field_rcpi",
+        "mcs":             "field_mcs_tx",
+        "per":             "field_per",
+        "throughput_mbps": "field_throughput_mbps",
+    }
+    for src_col, dst_col in col_map.items():
+        if src_col in out.columns:
+            out[dst_col] = out[src_col]
+    return out
+ 
+ 
+## @brief Plot SNR per (node, neighbor) pair from silvus RF data.
+#
+# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param scenario_name  Human-readable scenario identifier for figure titles.
+# @return               List of ``(src, peer, Figure, trace_df)`` tuples.
+def plot_silvus_snr(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
+    return _per_radio_metric(
+        df=_silvus_to_bh2_format(df),
+        scenario_name=scenario_name,
+        value_col="field_snr",
+        metric_label="SNR (dB)",
+        title_metric="SNR",
+        trace_col="snr_db",
+        file_prefix="IH_snr",
+        add_mcs_reference_lines=True,
+        use_antenna_legend=True,
+    )
+ 
+## @brief Plot RCPI per (node, neighbor) pair from silvus RF data.
+#
+# RCPI is the mean RSSI across active antennas computed by @ref load_rf_scenario.
+#
+# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param scenario_name  Human-readable scenario identifier for figure titles.
+# @return               List of ``(src, peer, Figure, trace_df)`` tuples.
+def plot_silvus_rcpi(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
+    return _per_radio_metric(
+        df=_silvus_to_bh2_format(df),
+        scenario_name=scenario_name,
+        value_col="field_rcpi",
+        metric_label="RCPI (dBm)",
+        title_metric="RCPI",
+        trace_col="rcpi_dbm",
+        file_prefix="IH_rcpi",
+        use_antenna_legend=True,
+    )
+ 
+ 
+## @brief Plot MCS index per (node, neighbor) pair from silvus RF data.
+#
+# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param scenario_name  Human-readable scenario identifier for figure titles.
+# @return               List of ``(src, peer, Figure, trace_df)`` tuples.
+def plot_silvus_mcs(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
+    return _per_radio_metric(
+        df=_silvus_to_bh2_format(df),
+        scenario_name=scenario_name,
+        value_col="field_mcs_tx",
+        metric_label="MCS",
+        title_metric="MCS",
+        trace_col="mcs_tx",
+        file_prefix="IH_mcs",
+        integer_yaxis=True,
+        use_antenna_legend=True,
+        connect_lines=True,
+    )
+ 
+ 
+## @brief Plot throughput per (node, neighbor) pair from silvus RF data.
+#
+# Unlike @ref plot_bh2_throughput which derives rate from byte counter deltas,
+# this function uses the pre-computed ``throughput_mbps`` column from
+# @ref load_rf_scenario directly.
+#
+# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param scenario_name  Human-readable scenario identifier for figure titles.
+# @return               List of ``(src, peer, Figure, trace_df)`` tuples.
+def plot_silvus_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
+    return _per_radio_metric(
+        df=_silvus_to_bh2_format(df),
+        scenario_name=scenario_name,
+        value_col="field_throughput_mbps",
+        metric_label="Throughput (Mbps)",
+        title_metric="Throughput",
+        trace_col="throughput_mbps",
+        file_prefix="IH_throughput",
+        use_antenna_legend=True,
+    )
+ 
+ 
+## @brief Plot PER per (node, neighbor) pair from silvus RF data.
+#
+# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param scenario_name  Human-readable scenario identifier for figure titles.
+# @return               List of ``(src, peer, Figure, trace_df)`` tuples.
+def plot_silvus_per(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
+    return _per_radio_metric(
+        df=_silvus_to_bh2_format(df),
+        scenario_name=scenario_name,
+        value_col="field_per",
+        metric_label="PER",
+        title_metric="PER",
+        trace_col="per",
+        file_prefix="IH_per",
+        use_antenna_legend=True,
+    )
+
 ## @brief Shared plot body for SNR, RCPI, MCS, and PER metrics.
 #
 # Groups @p df by ``(__session__, __peer__)`` and calls

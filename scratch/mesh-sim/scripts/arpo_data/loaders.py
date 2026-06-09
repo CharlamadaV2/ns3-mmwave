@@ -183,32 +183,6 @@ def _load_node_gps(node: Path) -> pd.DataFrame | None:
                     df["__label__"] = node.name
                 return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
 
-    # # Priority 2: geotak_gps.csv — legacy GeoTAK format.
-    # geotak = node / "geotak_gps.csv"
-    # if geotak.exists():
-    #     df = pd.read_csv(geotak, low_memory=False)
-    #     if {"lat", "lon", "time"}.issubset(df.columns):
-    #         df = df.rename(columns={"lat": "__lat__", "lon": "__lon__"})
-    #         df["__t__"]     = pd.to_datetime(df["time"], errors="coerce", utc=True)
-    #         df["__node__"]  = node.name
-    #         df["__label__"] = df["uid"].astype(str) if "uid" in df.columns else node.name
-    #         return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
-
-    # # Priority 3: legacy gps.csv — field_lat/field_lon/timestamp format only.
-    # # NOTE: silvus/gps.csv (lat/long/time format) is intentionally NOT loaded here.
-    # gpsd = node / "gps.csv"
-    # if gpsd.exists():
-    #     df = pd.read_csv(gpsd, low_memory=False)
-    #     if {"field_lat", "field_lon", "timestamp"}.issubset(df.columns):
-    #         df = df.assign(
-    #             __lat__   = pd.to_numeric(df["field_lat"],  errors="coerce"),
-    #             __lon__   = pd.to_numeric(df["field_lon"],  errors="coerce"),
-    #             __t__     = to_datetime(df),
-    #             __node__  = node.name,
-    #             __label__ = node.name,
-    #         )
-    #         return df[["__node__", "__label__", "__t__", "__lat__", "__lon__"]]
-
     return None
 
 
@@ -216,8 +190,7 @@ def _load_node_gps(node: Path) -> pd.DataFrame | None:
 #  all nodes in one DataFrame ready for @ref plot_gps_tracks.
 #
 # Iterates every subdirectory under @p directory (skipping ``sdwan``) and
-# calls @ref _load_node_gps on each. Silvus GPS is excluded. Static nodes
-# (all coordinates identical — stale GPS fix) are also filtered out.
+# calls @ref _load_node_gps on each. Silvus GPS is excluded.
 #
 # @param directory  Path to the parent directory containing per-node subdirs.
 # @return           Concatenated DataFrame with canonical GPS columns
@@ -257,10 +230,210 @@ def load_gps_all(directory: Path) -> pd.DataFrame | None:
     out["__sec__"] = session_relative_seconds(out)
     return out
 
-## @brief Parse through silvus data and 
-def load_rf_scenario(config_path: Path) -> pd.DataFrame | None:
-    return None
+## @brief Reads the node ID and name from a node's silvus config file.
+#
+# @param node_dir  Path to one node subdirectory.
+# @return          Tuple of ``(node_name, node_id)`` or ``None`` if
+#                  ``config.csv`` is missing or has no ``node_id`` column.
+def load_node_id(node_dir: Path) -> dict[str, str] | None:
+    cfg_fp = node_dir / "silvus" / "config.csv"
+    if not cfg_fp.exists():
+        return None
+    cfg = pd.read_csv(cfg_fp, usecols=["node_id"], nrows=1, low_memory=False)
+    if cfg.empty:
+        return None
+    return {str(cfg["node_id"].iloc[0]): node_dir.name}
 
+## @brief Parses through the network status file for IH Node
+#
+# Reads ``network_status.csv`` from @p net_stat_dir and returns a normalised
+# DataFrame with per-link RF quality columns. Computes ``rcpi`` as the mean
+# RSSI across active antennas (antennas at −110 dBm sentinel are excluded).
+# Rows whose ``neighbor`` is not in @p valid_nodes are dropped.
+#
+# @param net_stat_dir  Path to the ``silvus/`` directory containing ``network_status.csv``.
+# @param valid_nodes   List of node ID strings to keep in the ``neighbor`` column.
+# @return              DataFrame with columns ``__t__``, ``node_id``, ``virtual_ip``,
+#                      ``neighbor``, ``snr``, ``mcs``, ``mcs_rx``,
+#                      ``rssi_ant1..4``, ``rcpi``, or ``None`` if the file is
+#                      absent or empty.
+def _load_net_stat(net_stat_dir: Path, valid_nodes: list[str]) -> pd.DataFrame | None:
+    fp = net_stat_dir / "network_status.csv"
+    if not fp.exists():
+        return None
+
+    df = pd.read_csv(fp, low_memory=False)
+    if df.empty:
+        return None
+
+    df["__t__"] = pd.to_datetime(
+        pd.to_numeric(df["time"], errors="coerce"), unit="ns", utc=True)
+
+    for col in ("mcs", "mcs_rx", "snr",
+                "rssi_ant1", "rssi_ant2", "rssi_ant3", "rssi_ant4"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Keep only rows where neighbor is a valid IH node.
+    if valid_nodes and "neighbor" in df.columns:
+        df = df[df["neighbor"].astype(str).isin(valid_nodes)]
+
+    if df.empty:
+        return None
+
+    rssi_cols = [c for c in ("rssi_ant1", "rssi_ant2", "rssi_ant3", "rssi_ant4")
+                 if c in df.columns]
+    if rssi_cols:
+        rssi = df[rssi_cols].copy()
+        rssi[rssi <= -110] = float("nan")
+        df["rcpi"] = rssi.mean(axis=1)
+
+    return df.dropna(subset=["__t__"]).reset_index(drop=True)
+
+
+## @brief Parses through local stats file for IH Node
+#
+# Reads ``local_stats.csv`` from @p local_stat_dir and returns a normalised
+# DataFrame with per-node noise, interference, throughput, and PER columns.
+# Rows whose ``node_id`` is not in @p valid_nodes are dropped.
+#
+# @param local_stat_dir  Path to the ``silvus/`` directory containing ``local_stats.csv``.
+# @param valid_nodes     List of node ID strings to keep.
+# @return                DataFrame with columns ``__t__``, ``node_id``, ``virtual_ip``,
+#                        ``noise_level``, ``interference``, ``throughput_mbps``,
+#                        ``per``, or ``None`` if the file is absent or empty.
+def _load_local_stat(local_stat_dir: Path, valid_nodes: list[str]) -> pd.DataFrame | None:
+    fp = local_stat_dir / "local_stats.csv"
+    if not fp.exists():
+        return None
+
+    df = pd.read_csv(fp, low_memory=False)
+    if df.empty:
+        return None
+
+    df["__t__"] = pd.to_datetime(
+        pd.to_numeric(df["time"], errors="coerce"), unit="ns", utc=True)
+
+    for col in ("noise_level", "interference"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    if "fw_uc" in df.columns:
+        df["throughput_mbps"] = pd.to_numeric(
+            df["fw_uc"].astype(str).str.strip('"'), errors="coerce")
+
+    if {"input_dropped", "input_uc"}.issubset(df.columns):
+        dropped = pd.to_numeric(
+            df["input_dropped"].astype(str).str.strip('"'), errors="coerce")
+        total   = pd.to_numeric(
+            df["input_uc"].astype(str).str.strip('"'), errors="coerce")
+        df["per"] = (dropped / total.replace(0, float("nan"))).clip(0, 1)
+
+    # Keep only rows belonging to valid IH nodes.
+    if valid_nodes and "node_id" in df.columns:
+        df = df[df["node_id"].astype(str).isin(valid_nodes)]
+
+    if df.empty:
+        return None
+
+    keep = ["__t__", "node_id", "virtual_ip", "noise_level", "interference",
+            "throughput_mbps", "per"]
+    return df[[c for c in keep if c in df.columns]].dropna(
+        subset=["__t__"]).reset_index(drop=True)
+
+
+## @brief Parses through config file for IH Node
+#
+# Reads ``config.csv`` from @p config_dir and returns a normalised DataFrame
+# with per-node radio configuration columns. Rows whose ``node_id`` is not
+# in @p valid_nodes are dropped.
+#
+# @param config_dir   Path to the ``silvus/`` directory containing ``config.csv``.
+# @param valid_nodes  List of node ID strings to keep.
+# @return             DataFrame with columns ``__t__``, ``node_id``, ``virtual_ip``,
+#                     ``freq``, ``bw``, ``power_dBm``, or ``None`` if the file
+#                     is absent or empty.
+def _load_config_stat(config_dir: Path, valid_nodes: list[str]) -> pd.DataFrame | None:
+    fp = config_dir / "config.csv"
+    if not fp.exists():
+        return None
+
+    df = pd.read_csv(fp, low_memory=False)
+    if df.empty:
+        return None
+
+    df["__t__"] = pd.to_datetime(
+        pd.to_numeric(df["time"], errors="coerce"), unit="ns", utc=True)
+
+    for col in ("freq", "bw", "power_dBm"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Keep only rows belonging to valid IH nodes.
+    if valid_nodes and "node_id" in df.columns:
+        df = df[df["node_id"].astype(str).isin(valid_nodes)]
+
+    if df.empty:
+        return None
+
+    keep = ["__t__", "node_id", "virtual_ip", "freq", "bw", "power_dBm"]
+    return df[[c for c in keep if c in df.columns]].dropna(
+        subset=["__t__"]).reset_index(drop=True)
+
+
+## @brief Parse through silvus data from each node and produce an RF quality DataFrame.
+#
+# Merges network status, local stats, and config data for one node. Only
+# rows belonging to valid IH nodes are kept throughout.
+#
+# @param node_dir     Path to the directory that contains the node's data.
+# @param valid_nodes  List of node ID strings to keep across all three sources.
+# @return             Concatenated DataFrame with RF Signal Quality columns,
+#                     or ``None`` if no network status data is found.
+def load_rf_scenario(node_dir: Path, valid_nodes: list[str], 
+                    node_id_to_name: dict[str, str]) -> pd.DataFrame | None:
+    silvus = node_dir / "silvus"
+
+    if not silvus.is_dir() or not any(silvus.iterdir()):
+        return None
+
+    #Network Status Parser
+    net = _load_net_stat(silvus, valid_nodes)
+    if net is None:
+        return None
+
+    #Local Status + Network Status
+    local = _load_local_stat(silvus, valid_nodes)
+    if local is not None:
+        net = net.merge(local, on=["__t__", "node_id"], how="left",
+                        suffixes=("", "_local"))
+
+    #Config Status + Local Status + Network Status
+    cfg = _load_config_stat(silvus, valid_nodes)
+    if cfg is not None:
+        net = net.merge(cfg, on=["__t__", "node_id"], how="left",
+                        suffixes=("", "_cfg"))
+
+    # Replace node_id and neighbor with IH names.
+    if "node_id" in net.columns:
+        net["node_id"] = net["node_id"].astype(str).map(
+            lambda nid: node_id_to_name.get(nid, nid))
+    if "neighbor" in net.columns:
+        net["neighbor"] = net["neighbor"].astype(str).map(
+            lambda nid: node_id_to_name.get(nid, nid))
+
+    net["__node__"] = node_dir.name
+    net["__sec__"]  = (net["__t__"] - net["__t__"].min()).dt.total_seconds()
+
+    front = ["__node__", "__t__", "__sec__", "node_id", "virtual_ip", "neighbor",
+             "snr", "rcpi", "mcs", "mcs_rx",
+             "rssi_ant1", "rssi_ant2", "rssi_ant3", "rssi_ant4",
+             "throughput_mbps", "per",
+             "noise_level", "interference",
+             "freq", "bw", "power_dBm"]
+    ordered = [c for c in front if c in net.columns]
+    rest    = [c for c in net.columns if c not in ordered]
+    return net[ordered + rest].reset_index(drop=True)
 
 ## @brief Parse through node CSV files and format data for the simulator.
 #

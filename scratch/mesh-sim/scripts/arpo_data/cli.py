@@ -19,21 +19,28 @@ import matplotlib.pyplot as plt
 from .paths import DatasetPaths
 from .extract import extract
 from .loaders import (
-    load_bh2_scenario,
+    # load_bh2_scenario, #< Uncomment to enable if data contains bh2_scenarios
     load_gps_scenario,
     load_gps_all,
     load_config,
     load_rf_scenario,
+    load_node_id,
 )
 from .multi_day import multi_day
 from .paths import CSV_ROOT, PER_DAY_DIR
 from .plots import (
-    plot_bh2_mcs,
-    plot_bh2_per,
-    plot_bh2_rcpi,
-    plot_bh2_snr,
-    plot_bh2_throughput,
+    # __Uncomment to enable if data contains bh2_scenarios__
+    # plot_bh2_mcs, 
+    # plot_bh2_per,
+    # plot_bh2_rcpi,
+    # plot_bh2_snr,
+    # plot_bh2_throughput,
     plot_gps_tracks,
+    plot_silvus_snr,
+    plot_silvus_rcpi,
+    plot_silvus_mcs,
+    plot_silvus_throughput,
+    plot_silvus_per,
 )
 
 
@@ -89,13 +96,13 @@ def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
 # @param scen_dir    Path to the scenario directory.
 # @param output_path Root output directory; a subdirectory named after the
 #                    scenario is created inside it.
-def _plot_one(scen_dir: Path, output_path: Path) -> None:
-    out  = output_path / scen_dir.name
+def _plot_one(node_dir: Path, output_path: Path) -> None:
+    out  = output_path / node_dir.name
     pngs = out / "pngs"
     csvs = out / "csvs"
-    print(f"  [{scen_dir.name}]")
+    print(f"  [{node_dir.name}]")
 
-    name = scen_dir.name
+    name = node_dir.name
     # ------- OLD FORMAT ----------
     # bh2  = load_bh2_scenario(scen_dir)
     # if bh2 is not None:
@@ -105,18 +112,18 @@ def _plot_one(scen_dir: Path, output_path: Path) -> None:
     #     _save_pairs(plot_bh2_throughput(bh2, name), out, "bh2_throughput")
     #     _save_pairs(plot_bh2_per(bh2, name),        out, "bh2_per")
 
-    gps = load_gps_scenario(scen_dir)
+    gps = load_gps_scenario(node_dir)
     if gps is not None:
         _save(plot_gps_tracks(gps, name),
               pngs / "gps_track.png", csvs / "gps_track_trace.csv")
         
-    rf_data = load_rf_scenario(scen_dir)
+    rf_data = load_rf_scenario(node_dir)
     if rf_data is not None:
-        _save_pairs(plot_bh2_snr(rf_data, name),        out, "IH_snr")
-        _save_pairs(plot_bh2_rcpi(rf_data, name),       out, "IH_rcpi")
-        _save_pairs(plot_bh2_mcs(rf_data, name),        out, "IH_mcs")
-        _save_pairs(plot_bh2_throughput(rf_data, name), out, "IH_throughput")
-        _save_pairs(plot_bh2_per(rf_data, name),        out, "IH_per")
+        _save_pairs(plot_silvus_snr(rf_data, node_dir.name),        out, "IH_snr")
+        _save_pairs(plot_silvus_rcpi(rf_data, node_dir.name),       out, "IH_rcpi")
+        _save_pairs(plot_silvus_mcs(rf_data, node_dir.name),        out, "IH_mcs")
+        _save_pairs(plot_silvus_throughput(rf_data, node_dir.name), out, "IH_throughput")
+        _save_pairs(plot_silvus_per(rf_data, node_dir.name),        out, "IH_per")
 
 
 ## @brief Plot individual node GPS tracks and all nodes combined on one graph.
@@ -131,7 +138,11 @@ def _plot_one(scen_dir: Path, output_path: Path) -> None:
 def _plot_nodes(csv_dir: Path, output_path: Path) -> int:
     output_path.mkdir(parents=True, exist_ok=True)
 
-    # Plot each node individually.
+    nodes: list[Path] = []  #< List of directories to parse through
+    node_ids : list[str] = [] #< List of ids to keep
+    node_id_to_name: dict[str, str] = {} #< List of node ids to keep for each dataset
+    
+    # Create a list of nodes with valid data sets
     for node_dir in sorted(csv_dir.iterdir()):
         # Check if directory exists
         if not node_dir.is_dir() or node_dir.name == "sdwan":
@@ -142,6 +153,18 @@ def _plot_nodes(csv_dir: Path, output_path: Path) -> int:
                 file=sys.stderr)
             continue
         
+        # Create a list of nodes to parse through with their id
+        result = load_node_id(node_dir)
+        if result is None:
+            print(f"  WARNING: could not read node_id for {node_dir.name}, skipping",
+                  file=sys.stderr)
+            continue
+        node_id_to_name.update(result)
+        nodes.append(node_dir)
+        node_ids.append(list(result.keys())[0])
+        
+    # Parses through valid nodes and plots their data
+    for node_dir in nodes:
         # GPS Plotting
         gps = load_gps_scenario(node_dir)
         if gps is None:
@@ -156,16 +179,17 @@ def _plot_nodes(csv_dir: Path, output_path: Path) -> int:
         
         # RF Quality Plotting
         out = output_path / node_dir.name
-        rf_data = load_rf_scenario(node_dir)
+        rf_data = load_rf_scenario(node_dir, node_ids, node_id_to_name)
         if rf_data is None:
             print(f"  WARNING: no rf data for {node_dir.name}, skipping",
                 file=sys.stderr)
             continue
-        _save_pairs(plot_bh2_snr(rf_data, node_dir.name),        out, "IH_snr")
-        _save_pairs(plot_bh2_rcpi(rf_data, node_dir.name),       out, "IH_rcpi")
-        _save_pairs(plot_bh2_mcs(rf_data, node_dir.name),        out, "IH_mcs")
-        _save_pairs(plot_bh2_throughput(rf_data, node_dir.name), out, "IH_throughput")
-        _save_pairs(plot_bh2_per(rf_data, node_dir.name),        out, "IH_per")
+        
+        _save_pairs(plot_silvus_snr(rf_data, node_dir.name),        out, "IH_snr")
+        _save_pairs(plot_silvus_rcpi(rf_data, node_dir.name),       out, "IH_rcpi")
+        _save_pairs(plot_silvus_mcs(rf_data, node_dir.name),        out, "IH_mcs")
+        _save_pairs(plot_silvus_throughput(rf_data, node_dir.name), out, "IH_throughput")
+        _save_pairs(plot_silvus_per(rf_data, node_dir.name),        out, "IH_per")
 
 
     # Plot all nodes combined.
