@@ -266,9 +266,11 @@ def _load_net_stat(net_stat_dir: Path, valid_nodes: list[str]) -> pd.DataFrame |
     if df.empty:
         return None
 
+    #Converts time to ns
     df["__t__"] = pd.to_datetime(
         pd.to_numeric(df["time"], errors="coerce"), unit="ns", utc=True)
 
+    #Changes data type to int
     for col in ("mcs", "mcs_rx", "snr",
                 "rssi_ant1", "rssi_ant2", "rssi_ant3", "rssi_ant4"):
         if col in df.columns:
@@ -314,14 +316,17 @@ def _load_local_stat(local_stat_dir: Path, valid_nodes: list[str]) -> pd.DataFra
     df["__t__"] = pd.to_datetime(
         pd.to_numeric(df["time"], errors="coerce"), unit="ns", utc=True)
 
+    #Converts data type to int
     for col in ("noise_level", "interference"):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
+    #Converts data type to string
     if "fw_uc" in df.columns:
         df["throughput_mbps"] = pd.to_numeric(
             df["fw_uc"].astype(str).str.strip('"'), errors="coerce")
 
+    #Converts data type to string and calculates PER
     if {"input_dropped", "input_uc"}.issubset(df.columns):
         dropped = pd.to_numeric(
             df["input_dropped"].astype(str).str.strip('"'), errors="coerce")
