@@ -1,3 +1,4 @@
+'''compare_runs.py'''
 ## @file compare_runs.py
 # @brief Cross-batch summary table: one row per validation batch.
 #

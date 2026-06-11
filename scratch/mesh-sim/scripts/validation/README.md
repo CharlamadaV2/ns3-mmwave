@@ -23,87 +23,41 @@ From `scratch/mesh-sim/`:
 # 1. Produce field trace CSVs (one-time per dataset; skip if already done)
 python -m scripts.arpo_data.cli plot --all
 
-# 2. Run the sim across all scenarios (default: 5 seeds each)
+# 2. Generate sim config files from calfex field data
+python scripts/validation/build_config_files.py \
+    -i data/arpo_extracted \
+    -o inputs/calfex \
+    -b sub-6 \
+    -m node
+
+# 3. Patch waypoints from GPS tracks into nodes.json
+python -m scripts.validation.build_waypoints --all --time-mode scale --duration 60
+
+# 4. Run the sim across all scenarios (default: 5 seeds each)
 python -m scripts.validation.run_batch
 
-# 3. Convert per-seed sim outputs to arpo_data-style trace CSVs
+# 5. Convert per-seed sim outputs to arpo_data-style trace CSVs
 python -m scripts.validation.sim_to_traces outputs/<batch>
 
-# 4. histogram overlay + bootstrap CI + K-S vs field
+# 6. histogram overlay + bootstrap CI + K-S vs field
 python -m scripts.validation.compare      outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation
 
-# 5. Cross-batch summary (overall + per-scenario)
+# 7. Cross-batch summary (overall + per-scenario)
 python -m scripts.validation.compare_runs
 
-# 6. Scenario fidelity audit (sim vs field layout / mobility)
+# 8. Scenario fidelity audit (sim vs field layout / mobility)
 python -m scripts.validation.scenario_fidelity outputs/<batch>
 ```
 
-
-### Flags
-
-```bash
-# Run with more seeds
-python -m scripts.validation.run_batch --seeds 1,2,3,4,5,6,7,8,9,10
-
-# Dry-run a single scenario
-python -m scripts.validation.run_batch --only arpo-1-1-static-04172026 --dry-run
-
-# Compare only SNR and RCPI with a tighter CI
-python -m scripts.validation.compare <batch> --metrics snr,rcpi --ci 95
-
-# Compare two specific batches
-python -m scripts.validation.compare_runs <batch1> <batch2> --metric snr
-
-# Overall tables only (suppress per-scenario matrix)
-python -m scripts.validation.compare_runs --no-per-scenario
-
-# Export comparison results to CSV
-python -m scripts.validation.compare_runs \
-    --csv outputs/cmp.csv \
-    --per-scenario-csv outputs/cmp_long.csv
-
-# Fidelity check for a single scenario with a looser tolerance
-python -m scripts.validation.scenario_fidelity <batch> \
-    --only arpo-2-2-los-obstruction-04172026 --tol-m 10
-
-# Preview waypoint patch without writing
-python -m scripts.validation.build_waypoints \
-    arpo-2-2-los-obstruction-04172026 --dry-run
-
-# Patch waypoints scaled to a 120 s sim window, then run
-python -m scripts.validation.build_waypoints --all --time-mode scale --duration 120
-python -m scripts.validation.run_batch
-
-# Same thing in one step
-python -m scripts.validation.run_batch --auto-waypoints
-```
-
-`--auto-waypoints` on `run_batch` patches each scenario's `nodes.json` in-place
-from its field GPS trace before invoking the sim (skips static-rab2 scenarios
-automatically). The patch is permanent — `git diff inputs/` to see what
-changed, `git checkout inputs/` to revert.
-
-`build_waypoints` reads the field `gps_track_trace.csv` for a scenario, translates
-to the sim frame using a stationary anchor node (default `rab1`), downsamples the
-moving node's track to N waypoints, and patches them into the scenario's
-`nodes.json` with `mobility = "waypoint"`. Time modes: `raw` (use field clock as-is),
-`clip` (cap at `--duration`), `scale` (stretch/compress to `--duration`). After
-patching, rebuild the sim and re-run.
-
-`scenario_fidelity` reads each scenario's snapshotted `nodes.json` + `seed-1/positions.csv`
-and the field's `gps_track_trace.csv` (produced by `arpo_data.cli plot`), then for each rab
-reports field-vs-sim bounding box, path length, and mobility class (static / mobile), plus
-pairwise t=0 distances between rabs. It surfaces mismatches like "rab2 drives a 1.7 km loop
-in the field but the sim has it pinned `fixed`." The mobility classifier is bbox-based
-(threshold 20 m max-dim) so cumulative GPS jitter doesn't trip it.
-
-`compare_runs` auto-discovers every batch under `outputs/` with a
-`validation_summary.csv` (or takes explicit batch dirs) and writes cross-batch
-heatmap PNGs to `outputs/cross_batch_summary/`. One PNG per (metric, score) —
-rows = scenarios with date, cols = batches with timestamp, cells = mean across
-rab links. For multi-day variance in the **field** data itself (independent of
-any sim run), see `python -m scripts.arpo_data.multiday_variance`.
+`build_config_files` reads the calfex GPS and silvus CSVs and writes
+`nodes.json` and `run.ini` directly from field measurements. Channel
+parameters come from `silvus/config.csv` on each IH node. Node starting
+positions are the first GPS fix per node converted to local ENU metres
+relative to the centroid of all nodes. Gateway name and traffic demand are
+read from the sibling `calfex_sdwan/` directory; if not found both default
+to safe placeholders. All IH nodes are written with `"mobility": "waypoint"`
+and empty waypoints — always run `build_waypoints.py` afterwards before
+invoking the sim.
 
 ## How to read the chart
 
@@ -123,11 +77,12 @@ thousands per pool, p ≈ 0 even for operationally trivial differences.
 
 ## Output
 
-| Step           | Where                                                              |
-|----------------|--------------------------------------------------------------------|
-| `run_batch`    | `outputs/.../<HH-MM-SS>-validation/<scenario>/seed-N/{links,mcs,rx-power}.csv` + `batch_manifest.json` |
-| `sim_to_traces`| `outputs/.../<scenario>/sim_traces/seed-N/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv` |
-| `compare`      | `outputs/.../<scenario>/validation/pngs/<src>/hist_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
+| Step                 | Where                                                              |
+|----------------------|--------------------------------------------------------------------|
+| `build_config_files` | `inputs/calfex/nodes.json` + `inputs/calfex/run.ini`              |
+| `run_batch`          | `outputs/.../<HH-MM-SS>-validation/<scenario>/seed-N/{links,mcs,rx-power}.csv` + `batch_manifest.json` |
+| `sim_to_traces`      | `outputs/.../<scenario>/sim_traces/seed-N/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv` |
+| `compare`            | `outputs/.../<scenario>/validation/pngs/<src>/hist_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
 
 Each figure plots sim density with a shaded pointwise bootstrap CI band
 (default 90%, B=1000) and field density as a line; subtitle annotates K-S,
@@ -138,6 +93,7 @@ with means, medians, IQRs, sample counts, |Δmedians|, |Δmeans|, and K-S.
 
 | File               | Role                                                              |
 |--------------------|-------------------------------------------------------------------|
+| @ref build_config_files.py "build_config_files" | Generates `nodes.json` and `run.ini` from calfex GPS and silvus field data. |
 | @ref run_batch.py "run_batch"     | One sim binary call per scenario, fanning out seeds via `--seeds=` |
 | @ref sim_to_traces.py "sim_to_traces" | Rewrites per-seed sim CSVs into arpo_data-compatible trace CSVs   |
 | @ref compare.py "compare"       | Pools sim seeds + field directions, renders ECDF overlays + K-S   |
@@ -170,6 +126,8 @@ with means, medians, IQRs, sample counts, |Δmedians|, |Δmeans|, and K-S.
 - **`build_waypoints` mobility classifier is bbox-based** (threshold: 20 m
   max bounding-box dimension). Path length alone is GPS-noise-prone and
   would misclassify jittery static nodes as mobile.
+- **`build_config_files` writes empty waypoints.** Always run
+  `build_waypoints.py` after `build_config_files.py` before running the sim.
 
 
 ## Dependencies

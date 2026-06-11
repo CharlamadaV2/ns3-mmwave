@@ -22,7 +22,6 @@ from .loaders import (
     # load_bh2_scenario, #< Uncomment to enable if data contains bh2_scenarios
     load_gps_scenario,
     load_gps_all,
-    load_config,
     load_rf_scenario,
     load_node_id,
 )
@@ -265,13 +264,6 @@ def main() -> int:
     g.add_argument("--all",      action="store_true",
                    help="Plot every scenario")
 
-    lc = sub.add_parser("load-config",
-                         help="Load extracted node data into simulator config format")
-    lc.add_argument("-i", "--input",  type=Path, required=True,
-                    help="Filepath for node csv folder")
-    lc.add_argument("-o", "--output", type=Path,
-                    help="Filepath for output folder", default=Path("../../inputs"))
-
     md = sub.add_parser(
         "multi-day",
         help="Day-vs-day distribution overlays + similarity table per scenario family",
@@ -287,8 +279,6 @@ def main() -> int:
         ) if args.input else extract()
     if args.cmd == "plot":
         return _cmd_plot(args)
-    if args.cmd == "load-config":
-        return load_config(args.input)
     if args.cmd == "multi-day":
         return multi_day(audit=args.audit, family_filter=args.family)
     return 1

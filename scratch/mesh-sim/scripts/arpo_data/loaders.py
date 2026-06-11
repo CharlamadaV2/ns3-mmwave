@@ -439,21 +439,3 @@ def load_rf_scenario(node_dir: Path, valid_nodes: list[str],
     ordered = [c for c in front if c in net.columns]
     rest    = [c for c in net.columns if c not in ordered]
     return net[ordered + rest].reset_index(drop=True)
-
-## @brief Parse through node CSV files and format data for the simulator.
-#
-# Reads CSV files from per-node subdirectories under @p config_path and
-# produces ``run.ini`` and ``nodes.json`` files for use by the ns-3 simulator.
-#
-# @param config_path  Path to the directory containing per-node subdirs.
-# @return             ``None``; output files are written to disk as a side effect.
-def load_config(config_path: Path) -> None:
-    if not config_path.exists():
-        print(f"ERROR: {config_path} not found")
-        return None
-
-    # TODO: iterate node subdirectories and read config.csv
-    # TODO: write run.ini
-    # TODO: write nodes.json
-
-    return None

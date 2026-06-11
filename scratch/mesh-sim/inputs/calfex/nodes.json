@@ -1,0 +1,112 @@
+[
+  {
+    "id": "gateway",
+    "role": "peer",
+    "mobility": "fixed",
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 30.0
+    },
+    "_sdwan_device": "SpringLakeLab-sdwan"
+  },
+  {
+    "id": "IH01",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": -148.89,
+      "y": -1308.09,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH04",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": 851.53,
+      "y": -681.73,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH05",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": 572.65,
+      "y": -1476.55,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH06",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": 881.65,
+      "y": -347.96,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH10",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": -4094.6,
+      "y": 1174.52,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH11",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": -4071.29,
+      "y": 1681.58,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH12",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": 993.27,
+      "y": 1879.73,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH13",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": -1499.69,
+      "y": 1254.49,
+      "z": 1.5
+    },
+    "waypoints": []
+  },
+  {
+    "id": "IH14",
+    "role": "peer",
+    "mobility": "waypoint",
+    "position": {
+      "x": 6515.39,
+      "y": -2176.01,
+      "z": 1.5
+    },
+    "waypoints": []
+  }
+]

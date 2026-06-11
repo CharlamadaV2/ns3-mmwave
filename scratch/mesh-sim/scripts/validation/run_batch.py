@@ -1,3 +1,4 @@
+'''run_batch.py'''
 ## @file run_batch.py
 # @brief Run mesh-sim across a directory of scenarios, multi-seed.
 #

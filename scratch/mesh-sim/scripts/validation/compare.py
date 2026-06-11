@@ -1,3 +1,4 @@
+'''compare.py'''
 ## @file compare.py
 # @brief ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces.
 #

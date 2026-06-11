@@ -1,3 +1,4 @@
+'''sim_to_traces.py'''
 ## @file sim_to_traces.py
 # @brief Convert sim seed CSVs into arpo_data-style per-link trace CSVs.
 #

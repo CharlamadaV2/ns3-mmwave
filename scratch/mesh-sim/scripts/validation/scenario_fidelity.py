@@ -1,3 +1,4 @@
+'''scenario_fidelity.py'''
 ## @file scenario_fidelity.py
 # @brief Compare each scenario's sim layout and motion against the field collect.
 #

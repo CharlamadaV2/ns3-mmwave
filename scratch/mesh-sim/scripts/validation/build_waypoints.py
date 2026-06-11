@@ -1,3 +1,4 @@
+''''''
 ## @file build_waypoints.py
 # @brief Generate waypoint mobility for a sim node from its field GPS trace.
 #
