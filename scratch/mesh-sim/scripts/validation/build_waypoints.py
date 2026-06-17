@@ -36,18 +36,20 @@ FIELD_PER_DAY_ROOT = REPO_ROOT / "data" / "arpo_extracted" / "_plots" / "per_day
 _MOBILE_BBOX_M = 20.0
 
 
-## @brief Load the GPS track trace CSV for a field scenario.
+## @brief Load a GPS track trace CSV.
 #
-# The trace is produced by ``arpo_data.cli plot`` and contains ENU coordinates
-# relative to the session centroid.
+# Accepts either a directory (looks for ``csvs/gps_track_trace.csv`` inside
+# it) or a direct path to a trace CSV file (e.g. ``gps_all_nodes_trace.csv``).
 #
-# @param scenario_field_dir Per-day output directory for the field scenario
-#                           (e.g. ``data/arpo_extracted/_plots/per_day/<name>``).
-# @return DataFrame with columns ``node``, ``sec_since_origin``,
-#         ``east_m``, ``north_m``.
-# @throws FileNotFoundError if ``csvs/gps_track_trace.csv`` is absent.
-def _load_field_trace(scenario_field_dir: Path) -> pd.DataFrame:
-    csv = scenario_field_dir / "csvs" / "gps_track_trace.csv"
+# @param trace_path  Path to a field directory or a direct trace CSV file.
+# @return            DataFrame with columns ``node``, ``sec_since_origin``,
+#                    ``east_m``, ``north_m``.
+# @throws FileNotFoundError if no trace CSV is found.
+def _load_field_trace(trace_path: Path) -> pd.DataFrame:
+    if trace_path.is_file():
+        csv = trace_path
+    else:
+        csv = trace_path / "csvs" / "gps_track_trace.csv"
     if not csv.is_file():
         raise FileNotFoundError(f"no field GPS trace at {csv}")
     df = pd.read_csv(csv, usecols=["node", "sec_since_origin", "east_m", "north_m"])
@@ -170,23 +172,24 @@ def _patch_node(nodes: list[dict], target_id: str,
     raise KeyError(f"node id '{target_id}' not in nodes.json")
 
 
-## @brief Resolve a scenario name to its directory under @ref SCENARIOS_ROOT.
+## @brief Resolve a scenario name to its directory under @p scenarios_root.
 #
 # Accepts both the sim-form name (``arpo-1-1-static-04172026``) and the
 # field-form name (``1-1_static_04172026``), so callers don't need to know
 # which convention was used.
 #
-# @param name Scenario name in either sim or field form.
+# @param name           Scenario name in either sim or field form.
+# @param scenarios_root Root directory to search under.
 # @return Absolute path to the scenario directory.
 # @throws FileNotFoundError if no matching directory is found.
-def _resolve_scenario_dir(name: str) -> Path:
-    direct = SCENARIOS_ROOT / name
+def _resolve_scenario_dir(name: str, scenarios_root: Path) -> Path:
+    direct = scenarios_root / name
     if direct.is_dir():
         return direct
-    for sim_dir in SCENARIOS_ROOT.iterdir():
+    for sim_dir in scenarios_root.iterdir():
         if sim_to_field_scenario(sim_dir.name) == name:
             return sim_dir
-    raise FileNotFoundError(f"scenario dir not found for '{name}' under {SCENARIOS_ROOT}")
+    raise FileNotFoundError(f"scenario dir not found for '{name}' under {scenarios_root}")
 
 
 ## @brief Return the maximum bounding-box dimension of a node's field track (metres).
@@ -208,27 +211,31 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
 ## @brief Patch one scenario's ``nodes.json`` with field-derived waypoints.
 #
 # Full pipeline in one call:
-# -# Load the field GPS trace for the corresponding field scenario.
-# -# Skip the scenario if the target node's bbox is below @ref _MOBILE_BBOX_M
-#    (the node was stationary in the field).
+# -# Load the field GPS trace from @p field_path (file or directory) or
+#    derive it from the scenario name when @p field_path is ``None``.
+# -# Skip when the target node's bbox is below @p mobile_bbox_m (static).
 # -# Compute the frame-alignment offset from the anchor node.
 # -# Apply the offset and optionally rescale/clip the time axis.
 # -# Downsample to ``n_waypoints`` uniformly-spaced-in-time points.
 # -# Write the waypoints into ``nodes.json`` (unless ``dry_run`` is set).
 #
 # @param sim_dir        Scenario directory containing ``nodes.json``.
+# @param field_path     Direct path to a trace CSV or directory; when ``None``
+#                       the path is derived from the scenario name and
+#                       @ref FIELD_PER_DAY_ROOT.
 # @param node           ID of the node to author waypoints for (default: ``"rab2"``).
 # @param anchor         ID of the stationary alignment anchor (default: ``"rab1"``).
 # @param n_waypoints    Target waypoint count after downsampling (default: 20).
 # @param time_mode      One of ``"raw"``, ``"scale"``, ``"clip"`` (default: ``"raw"``).
 # @param duration       Target duration in seconds for ``clip``/``scale`` modes.
-# @param field_z        Override z-value for all waypoints; default keeps existing node z.
+# @param field_z        Override z-value for all waypoints; default keeps node z.
 # @param field_scenario Override the field scenario name (else derived from sim name).
-# @param dry_run        If True, report what would be done without writing ``nodes.json``.
+# @param dry_run        If True, report what would be done without writing.
 # @param mobile_bbox_m  Bbox threshold below which the node is treated as static.
-# @return One-line status string starting with ``"patched"``, ``"skipped: ..."``,
-#         or ``"error: ..."``.
-def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str = "rab1",
+# @return One-line status string starting with ``"patched"``, ``"skipped"``,
+#         or ``"error"``.
+def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
+                             node: str = "rab2", anchor: str = "rab1",
                              n_waypoints: int = 20, time_mode: str = "raw",
                              duration: float | None = None, field_z: float | None = None,
                              field_scenario: str | None = None,
@@ -239,12 +246,17 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
         return f"error: nodes.json not found at {nodes_json}"
     nodes = _load_nodes_json(nodes_json)
 
-    field_name = field_scenario or sim_to_field_scenario(sim_dir.name)
-    if field_name is None:
-        return f"error: cannot derive field scenario from '{sim_dir.name}'"
-    field_dir = FIELD_PER_DAY_ROOT / field_name
+    # Use explicit field_path if provided, otherwise derive from scenario name.
+    if field_path is not None:
+        resolved_field = field_path
+    else:
+        field_name = field_scenario or sim_to_field_scenario(sim_dir.name)
+        if field_name is None:
+            return f"error: cannot derive field scenario from '{sim_dir.name}'"
+        resolved_field = FIELD_PER_DAY_ROOT / field_name
+
     try:
-        df = _load_field_trace(field_dir)
+        df = _load_field_trace(resolved_field)
     except FileNotFoundError as e:
         return f"error: {e}"
 
@@ -257,7 +269,13 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
         return f"error: anchor '{anchor}' not in nodes.json"
     sim_anchor_xy = (float(sim_anchor["position"]["x"]),
                      float(sim_anchor["position"]["y"]))
-    dx, dy = _anchor_offset(df, anchor, sim_anchor_xy)
+
+    # Skip anchor alignment if the anchor has no field trace rows.
+    anchor_in_trace = not df[df["node"] == anchor].empty
+    if anchor_in_trace:
+        dx, dy = _anchor_offset(df, anchor, sim_anchor_xy)
+    else:
+        dx, dy = 0.0, 0.0
 
     g = df[df["node"] == node].sort_values("sec_since_origin")
     if g.empty:
@@ -266,7 +284,7 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
     x = g["east_m"].to_numpy(dtype=np.float64) + dx
     y = g["north_m"].to_numpy(dtype=np.float64) + dy
 
-    t_sim          = _scale_time(t, time_mode, duration)
+    t_sim            = _scale_time(t, time_mode, duration)
     t_ds, x_ds, y_ds = _downsample_uniform_time(t_sim, x, y, n_waypoints)
 
     target_node = next((n for n in nodes if n.get("id") == node), None)
@@ -290,68 +308,143 @@ def patch_scenario_waypoints(sim_dir: Path, *, node: str = "rab2", anchor: str =
 
 ## @brief CLI entry point for the build-waypoints tool.
 #
-# Accepts either a single scenario name or ``--all`` to iterate every scenario
-# under @ref SCENARIOS_ROOT. Prints a per-scenario status line and a final
-# summary count of patched / skipped / errored scenarios.
+# Two subcommands select the data format:
+# - ``scenario`` — spring_lake style, named scenario subdirs under a root.
+# - ``node``     — calfex style, one scenario dir with a combined trace CSV.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
 # @return 0 if no errors occurred, 1 otherwise.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        description="Generate waypoint mobility from field GPS for a sim node.")
-    p.add_argument("scenario", nargs="?", default=None,
-                   help="scenario name (sim or field form). Omit with --all to "
-                        "patch every scenario under inputs/custom/sherpa/spring_lake/.")
-    p.add_argument("--all", dest="all_scenarios", action="store_true",
-                   help="iterate every scenario, skipping those where the field "
-                        "node is static")
-    p.add_argument("--node", default="rab2",
-                   help="moving node id to author waypoints for (default: rab2)")
-    p.add_argument("--anchor", default="rab1",
-                   help="stationary node used for field-to-sim frame alignment "
-                        "(default: rab1)")
-    p.add_argument("--n-waypoints", type=int, default=20,
-                   help="downsample target (default: 20)")
-    p.add_argument("--time-mode", choices=("raw", "clip", "scale"), default="raw",
-                   help="raw=field clock, clip=clip to --duration, "
-                        "scale=stretch/compress to --duration (default: raw)")
-    p.add_argument("--duration", type=float, default=None,
-                   help="target duration in seconds for clip/scale modes")
-    p.add_argument("--field-z", type=float, default=None,
-                   help="z (m) for each waypoint; default: keep existing node z")
-    p.add_argument("--field-scenario", default=None,
-                   help="override the field scenario name (else derived from sim name)")
-    p.add_argument("--dry-run", action="store_true",
-                   help="show what would be patched without writing nodes.json")
+        description="Generate waypoint mobility from field GPS for sim nodes.")
+    sub = p.add_subparsers(dest="mode", required=True,
+                           metavar="{scenario, node}")
+
+    # --- scenario subcommand ---
+    sp_scen = sub.add_parser("scenario",
+                             help="spring_lake style dataset")
+    sp_scen.add_argument("-i", "--input", type=Path, default=SCENARIOS_ROOT,
+                         help="root directory containing scenario subdirs "
+                              "(default: inputs/custom/sherpa/spring_lake)")
+    g = sp_scen.add_mutually_exclusive_group(required=True)
+    g.add_argument("--name",
+                   help="scenario name (sim or field form)")
+    g.add_argument("--all", dest="all_scenarios", action="store_true",
+                   help="iterate every scenario, skipping static nodes")
+    sp_scen.add_argument("--node", default="rab2",
+                         help="moving node id (default: rab2)")
+    sp_scen.add_argument("--anchor", default="rab1",
+                         help="stationary alignment anchor (default: rab1)")
+    sp_scen.add_argument("--n-waypoints", type=int, default=20,
+                         help="downsample target (default: 20)")
+    sp_scen.add_argument("--time-mode", choices=("raw", "clip", "scale"), default="raw",
+                         help="raw=field clock, clip/scale to --duration (default: raw)")
+    sp_scen.add_argument("--duration", type=float, default=None,
+                         help="target duration in seconds for clip/scale modes")
+    sp_scen.add_argument("--field-z", type=float, default=None,
+                         help="z (m) for each waypoint; default: keep existing node z")
+    sp_scen.add_argument("--field-scenario", default=None,
+                         help="override the derived field scenario name")
+    sp_scen.add_argument("--dry-run", action="store_true",
+                         help="show what would be patched without writing nodes.json")
+
+    # --- node subcommand ---
+    sp_node = sub.add_parser("node",
+                             help="calfex style dataset")
+    sp_node.add_argument("-i", "--input", type=Path, required=True,
+                         help="scenario directory containing nodes.json")
+    sp_node.add_argument("-f", "--field", type=Path, required=True,
+                         help="field directory or direct path to trace CSV")
+    g_node = sp_node.add_mutually_exclusive_group(required=True)
+    g_node.add_argument("--node",
+                        help="moving node id to author waypoints for")
+    g_node.add_argument("--all-nodes", dest="all_nodes", action="store_true",
+                        help="author waypoints for every non-anchor node in nodes.json")
+    sp_node.add_argument("--anchor", default="gateway",
+                         help="fixed node for frame alignment (default: gateway)")
+    sp_node.add_argument("--n-waypoints", type=int, default=20,
+                         help="downsample target (default: 20)")
+    sp_node.add_argument("--time-mode", choices=("raw", "clip", "scale"), default="raw",
+                         help="raw=field clock, clip/scale to --duration (default: raw)")
+    sp_node.add_argument("--duration", type=float, default=None,
+                         help="target duration in seconds for clip/scale modes")
+    sp_node.add_argument("--field-z", type=float, default=None,
+                         help="z (m) for each waypoint; default: keep existing node z")
+    sp_node.add_argument("--dry-run", action="store_true",
+                         help="show what would be patched without writing nodes.json")
+
     args = p.parse_args(argv)
 
-    if not args.all_scenarios and not args.scenario:
-        p.error("provide a scenario name or pass --all")
-    if args.all_scenarios and args.scenario:
-        p.error("use either a scenario name OR --all, not both")
+    # --- scenario mode ---
+    if args.mode == "scenario":
+        if not args.input.is_dir():
+            print(f"Error: input directory does not exist: {args.input}",
+                  file=sys.stderr)
+            return 1
 
-    if args.all_scenarios:
-        sim_dirs = sorted(d for d in SCENARIOS_ROOT.iterdir()
-                          if d.is_dir() and (d / "nodes.json").is_file())
+        if args.all_scenarios:
+            sim_dirs = sorted(d for d in args.input.iterdir()
+                              if d.is_dir() and (d / "nodes.json").is_file())
+            if not sim_dirs:
+                print(f"Error: no scenario dirs with nodes.json under {args.input}",
+                      file=sys.stderr)
+                return 1
+        else:
+            try:
+                sim_dirs = [_resolve_scenario_dir(args.name, args.input)]
+            except FileNotFoundError as e:
+                print(f"Error: {e}", file=sys.stderr)
+                return 1
+
+        n_patched = n_skipped = n_error = 0
+        for sim_dir in sim_dirs:
+            status = patch_scenario_waypoints(
+                sim_dir,
+                node=args.node, anchor=args.anchor, n_waypoints=args.n_waypoints,
+                time_mode=args.time_mode, duration=args.duration,
+                field_z=args.field_z, field_scenario=args.field_scenario,
+                dry_run=args.dry_run,
+            )
+            print(f"  {sim_dir.name}: {status}")
+            if status.startswith("patched"):   n_patched += 1
+            elif status.startswith("skipped"): n_skipped += 1
+            else:                              n_error   += 1
+
+        print(f"\nsummary: {n_patched} patched, {n_skipped} skipped, {n_error} errors")
+        return 0 if n_error == 0 else 1
+
+    # --- node mode ---
+    if not args.input.is_dir():
+        print(f"Error: input directory does not exist: {args.input}", file=sys.stderr)
+        return 1
+    if not (args.input / "nodes.json").is_file():
+        print(f"Error: no nodes.json found in: {args.input}", file=sys.stderr)
+        return 1
+    if not args.field.exists():
+        print(f"Error: field path does not exist: {args.field}", file=sys.stderr)
+        return 1
+
+    # Build list of nodes to patch.
+    if args.all_nodes:
+        all_node_specs = _load_nodes_json(args.input / "nodes.json")
+        nodes_to_patch = [n["id"] for n in all_node_specs
+                          if n.get("id") and n.get("id") != args.anchor]
     else:
-        sim_dirs = [_resolve_scenario_dir(args.scenario)]
+        nodes_to_patch = [args.node]
 
     n_patched = n_skipped = n_error = 0
-    for sim_dir in sim_dirs:
+    for node_id in nodes_to_patch:
         status = patch_scenario_waypoints(
-            sim_dir,
-            node=args.node, anchor=args.anchor, n_waypoints=args.n_waypoints,
-            time_mode=args.time_mode, duration=args.duration,
-            field_z=args.field_z, field_scenario=args.field_scenario,
-            dry_run=args.dry_run,
+            args.input,
+            field_path=args.field,
+            node=node_id, anchor=args.anchor,
+            n_waypoints=args.n_waypoints, time_mode=args.time_mode,
+            duration=args.duration, field_z=args.field_z, dry_run=args.dry_run,
         )
-        print(f"  {sim_dir.name}: {status}")
-        if status.startswith("patched"):
-            n_patched += 1
-        elif status.startswith("skipped"):
-            n_skipped += 1
-        else:
-            n_error += 1
+        print(f"  {node_id}: {status}")
+        if status.startswith("patched"):   n_patched += 1
+        elif status.startswith("skipped"): n_skipped += 1
+        else:                              n_error   += 1
 
     print(f"\nsummary: {n_patched} patched, {n_skipped} skipped, {n_error} errors")
     return 0 if n_error == 0 else 1

@@ -1,4 +1,3 @@
-'''compare.py'''
 ## @file compare.py
 # @brief ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces.
 #
@@ -36,6 +35,9 @@ _TRACE_FILE_RE = re.compile(
     r"^bh2_(?P<metric>[a-z]+)__(?P<src>[a-z0-9]+)_to_(?P<peer>[a-z0-9]+)_trace\.csv$"
 )
 
+## @brief Regex for matching IH node directory names (e.g. ``"IH01"``, ``"IH14"``).
+_IH_DIR_RE = re.compile(r"^IH\d+$")
+
 ## @brief Regex for parsing a sim scenario directory name.
 #
 # Expected form: ``arpo-<major>-<minor>-<description>-<MMDDYYYY>``
@@ -69,16 +71,12 @@ _METRICS_BY_SHORT = {m.short: m for m in _METRICS}  ##< Lookup by short name.
 
 ## @brief Convert a sim scenario name to its corresponding field scenario name.
 #
-# The two naming conventions differ in separator style and case:
-# - Sim:   ``arpo-1-1-static-04172026``
-# - Field: ``1-1_static_04172026``
+# Sim names follow ``arpo-1-1-static-04172026``.
+# Field names follow ``1-1_static_04172026``.
 #
-# This function is the single source of truth for that translation and is
-# imported by @ref build_waypoints and @ref scenario_fidelity.
-#
-# @param sim_name Sim-form scenario directory name.
-# @return Field-form scenario name, or ``None`` if the name does not match
-#         the expected pattern.
+# @param sim_name  Sim-form scenario directory name.
+# @return          Field-form scenario name, or ``None`` if the name does not
+#                  match the expected pattern.
 def sim_to_field_scenario(sim_name: str) -> str | None:
     m = _SIM_NAME_RE.match(sim_name)
     if not m:
@@ -88,32 +86,32 @@ def sim_to_field_scenario(sim_name: str) -> str | None:
     return f"{major}-{minor.upper()}_{mid_joined}_{day}"
 
 
-## @brief Format a sim scenario name as a compact two-line plot label.
+## @brief Format a sim scenario name as a two-line plot label.
 #
-# Converts the sim naming convention to a human-readable form suitable
-# for axis tick labels in heatmap figures. The date portion is reformatted
-# from ``MMDDYYYY`` to ``MM/DD/YYYY``.
+# Converts ``arpo-1-1-static-04172026`` to ``1-1 static\n04/17/2026``.
+# Returns the name unchanged if it does not match the expected pattern.
 #
-# @param name Sim scenario directory name (e.g. ``"arpo-1-1-static-04172026"``).
-# @return Two-line string such as ``"1-1 static\n04/17/2026"``, or @p name
-#         unchanged if it does not match the expected pattern.
+# @param name  Sim scenario directory name.
+# @return      Two-line label string.
 def _scenario_label(name: str) -> str:
     m = _SIM_NAME_RE.match(name)
     if not m:
         return name
     major, minor, mid, day = m.groups()
-    mid = mid.replace("-", " ")
+    mid  = mid.replace("-", " ")
     date = f"{day[0:2]}/{day[2:4]}/{day[4:8]}"
     return f"{major}-{minor.upper()} {mid}\n{date}"
 
-## @brief Read one column from a trace CSV, coercing non-numeric values to NaN.
+
+## @brief Read one numeric column from a trace CSV.
 #
 # Returns an empty float64 array if the file is absent, unreadable, or does
-# not contain the requested column.
+# not contain the requested column. Non-numeric values are coerced to NaN
+# and dropped before returning.
 #
-# @param csv_path Path to the trace CSV.
-# @param column   Column name to extract.
-# @return 1-D float64 array of valid (non-NaN) values.
+# @param csv_path  Path to the trace CSV file.
+# @param column    Column name to extract.
+# @return          1-D float64 array of valid (non-NaN) values.
 def _read_metric_column(csv_path: Path, column: str) -> np.ndarray:
     if not csv_path.is_file():
         return np.array([], dtype=np.float64)
@@ -127,41 +125,60 @@ def _read_metric_column(csv_path: Path, column: str) -> np.ndarray:
     return vals.to_numpy(dtype=np.float64)
 
 
-## @brief Discover all unique unordered (src, peer) pairs present in a seed's traces.
+## @brief Discover all (src, peer) pairs present in a seed's trace directory.
 #
-# Pairs are sorted so that ``("rab1", "rab2")`` and ``("rab2", "rab1")`` map
-# to the same key, matching the bidirectional pooling done downstream.
+# In scenario mode, parses bh2 trace filenames to find ``(rab_a, rab_b)``
+# pairs. In node mode, returns ``(IH_node, "neighbors")`` for every IH
+# directory that also exists in the field traces. Gateway and non-IH
+# directories are skipped.
 #
-# @param seed_traces_root Root directory of one seed's trace output
-#                         (contains ``csvs/<src>/`` subdirectories).
-# @return Set of sorted ``(rab_a, rab_b)`` tuples.
-def _discover_pairs(seed_traces_root: Path) -> set[tuple[str, str]]:
+# @param seed_traces_root  Root directory of one seed's trace output.
+# @param mode              ``"scenario"`` or ``"node"``.
+# @param field_dir         Field traces directory used to filter node mode
+#                          results to nodes present in both sim and field.
+# @return                  Set of ``(src, peer)`` string tuples.
+def _discover_pairs(seed_traces_root: Path, mode: str,
+                    field_dir: Path | None = None) -> set[tuple[str, str]]:
     out: set[tuple[str, str]] = set()
     csvs = seed_traces_root / "csvs"
     if not csvs.is_dir():
         return out
-    for src_dir in csvs.iterdir():
-        if not src_dir.is_dir():
-            continue
-        for f in src_dir.iterdir():
-            m = _TRACE_FILE_RE.match(f.name)
-            if not m:
+
+    if mode == "scenario":
+        for src_dir in csvs.iterdir():
+            if not src_dir.is_dir():
                 continue
-            a, b = m.group("src"), m.group("peer")
-            out.add(tuple(sorted([a, b])))
+            for f in src_dir.iterdir():
+                m = _TRACE_FILE_RE.match(f.name)
+                if not m:
+                    continue
+                a, b = m.group("src"), m.group("peer")
+                out.add(tuple(sorted([a, b])))
+
+    elif mode == "node":
+        for node_dir in csvs.iterdir():
+            if not node_dir.is_dir():
+                continue
+            if not _IH_DIR_RE.match(node_dir.name):
+                continue
+            if field_dir is None or (field_dir / node_dir.name / "csvs" / node_dir.name).is_dir():
+                out.add((node_dir.name, "neighbors"))
+
     return out
 
 
-## @brief Pool metric samples for a (src, peer) link across all sim seeds.
+## @brief Pool metric samples for one link across all sim seeds.
 #
-# Both directions (src→peer and peer→src) are included, as the hardware
-# measures the link bidirectionally.
+# In scenario mode reads both directions (src→peer and peer→src) using the
+# ``bh2_<metric>__<src>_to_<peer>_trace.csv`` filename pattern.
+# In node mode (``peer == "neighbors"``) reads the combined IH trace file:
+# ``IH_<metric>__<src>_to_neighbors_trace.csv``.
 #
-# @param scenario_dir Scenario directory containing a ``sim_traces/`` subdirectory.
-# @param src          Source rab hostname.
-# @param peer         Peer rab hostname.
-# @param spec         Metric specification.
-# @return Concatenated float64 array of all valid samples, or empty if none found.
+# @param scenario_dir  Scenario directory containing ``sim_traces/``.
+# @param src           Source node label.
+# @param peer          Peer node label, or ``"neighbors"`` for node mode.
+# @param spec          Metric specification.
+# @return              Concatenated float64 array of all valid samples.
 def _pool_sim(scenario_dir: Path, src: str, peer: str,
               spec: _MetricSpec) -> np.ndarray:
     sim_traces = scenario_dir / "sim_traces"
@@ -171,45 +188,52 @@ def _pool_sim(scenario_dir: Path, src: str, peer: str,
     for seed_dir in sorted(sim_traces.iterdir()):
         if not seed_dir.is_dir():
             continue
-        for a, b in [(src, peer), (peer, src)]:
-            p = seed_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
+        if peer == "neighbors":
+            p = seed_dir / "csvs" / src / f"IH_{spec.short}__{src}_to_neighbors_trace.csv"
             arrs.append(_read_metric_column(p, spec.column))
+        else:
+            for a, b in [(src, peer), (peer, src)]:
+                p = seed_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
+                arrs.append(_read_metric_column(p, spec.column))
     return np.concatenate(arrs) if arrs else np.array([])
 
 
-## @brief Pool metric samples for a (src, peer) link from the field trace.
+## @brief Pool metric samples for one link from the field traces.
 #
-# Both directions are pooled, matching the treatment of sim data.
+# In scenario mode reads both directions using the bh2 filename pattern.
+# In node mode (``peer == "neighbors"``) reads the IH trace file using the
+# field layout:
+# ``per_day/<node>/csvs/<node>/IH_<metric>__<node>_to_neighbors_trace.csv``
 #
-# @param field_scen_dir Per-day field output directory for the scenario.
-# @param src            Source rab hostname.
-# @param peer           Peer rab hostname.
-# @param spec           Metric specification.
-# @return Concatenated float64 array of all valid samples, or empty if not found.
+# @param field_scen_dir  Field traces root directory.
+# @param src             Source node label.
+# @param peer            Peer node label, or ``"neighbors"`` for node mode.
+# @param spec            Metric specification.
+# @return                Concatenated float64 array of all valid samples.
 def _pool_field(field_scen_dir: Path, src: str, peer: str,
                 spec: _MetricSpec) -> np.ndarray:
     if not field_scen_dir.is_dir():
         return np.array([])
     arrs: list[np.ndarray] = []
-    for a, b in [(src, peer), (peer, src)]:
-        p = field_scen_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
+    if peer == "neighbors":
+        p = field_scen_dir / src / "csvs" / src / f"IH_{spec.short}__{src}_to_neighbors_trace.csv"
         arrs.append(_read_metric_column(p, spec.column))
+    else:
+        for a, b in [(src, peer), (peer, src)]:
+            p = field_scen_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
+            arrs.append(_read_metric_column(p, spec.column))
     return np.concatenate(arrs) if arrs else np.array([])
 
 
-## @brief Compute the two-sample Kolmogorov-Smirnov D-statistic without scipy.
+## @brief Compute the two-sample K-S D-statistic between two distributions.
 #
-# Evaluates ``max |F_a(x) − F_b(x)|`` over the joint support by merging
-# both sorted arrays and using binary search to evaluate each empirical CDF.
-# Returns NaN when either input is empty.
+# Returns the maximum absolute difference between the two empirical CDFs.
+# The p-value is intentionally not returned — with N in the tens of thousands
+# it is always near zero even for operationally trivial differences.
 #
-# The p-value is intentionally not returned: with sample sizes in the tens
-# of thousands, p ≈ 0 even for operationally trivial distributional differences,
-# making it uninformative for this use case.
-#
-# @param a First sample array (sim or field).
-# @param b Second sample array (sim or field).
-# @return K-S D statistic in [0, 1]; NaN if either array is empty.
+# @param a  First sample array.
+# @param b  Second sample array.
+# @return   K-S D statistic in [0, 1], or NaN if either array is empty.
 def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     if a.size == 0 or b.size == 0:
         return float("nan")
@@ -221,19 +245,16 @@ def _ks_2samp(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
-## @brief Compute Freedman-Diaconis bin edges for pooled sim and field values.
+## @brief Compute Freedman-Diaconis bin edges for a pooled value array.
 #
-# The Freedman-Diaconis rule selects bin width as:
-# @f[ w = 2 \cdot \mathrm{IQR}(x) \cdot n^{-1/3} @f]
-# Making bin width proportional to the IQR produces robust binning when one
-# distribution has heavy tails or outliers. The bin count is clamped to
-# [@p min_bins, @p max_bins]. Falls back to a linear grid of @p min_bins bins
-# when the IQR is zero or all values are identical.
+# Bin width is ``2 * IQR * n^(-1/3)``. Falls back to a linear grid when
+# the IQR is zero or all values are identical. Bin count is clamped to
+# [@p min_bins, @p max_bins].
 #
-# @param values   1-D array of all pooled values (both sim and field combined).
-# @param max_bins Maximum number of bins. Defaults to 80.
-# @param min_bins Minimum number of bins. Defaults to 20.
-# @return         1-D array of @p n_bins + 1 bin edge values.
+# @param values    1-D array of pooled sim and field values.
+# @param max_bins  Maximum number of bins (default: 80).
+# @param min_bins  Minimum number of bins (default: 20).
+# @return          1-D array of bin edge values.
 def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.ndarray:
     if values.size < 2:
         lo = float(np.min(values)) if values.size else 0.0
@@ -243,37 +264,29 @@ def _fd_bins(values: np.ndarray, max_bins: int = 80, min_bins: int = 20) -> np.n
     lo, hi = float(np.min(values)), float(np.max(values))
     if iqr <= 0 or hi <= lo:
         return np.linspace(lo, hi + 1e-9, min_bins + 1)
-    width = 2.0 * iqr / (values.size ** (1.0 / 3.0))
+    width  = 2.0 * iqr / (values.size ** (1.0 / 3.0))
     n_bins = int(np.clip(round((hi - lo) / width), min_bins, max_bins))
     return np.linspace(lo, hi, n_bins + 1)
 
 
-## @brief Evaluate a Gaussian KDE on a grid using Silverman's bandwidth rule.
+## @brief Evaluate a Gaussian KDE on @p x_grid using Silverman's bandwidth rule.
 #
-# Pure numpy implementation — no scipy dependency. Subsamples @p values to at
-# most @p max_samples points using a fixed RNG seed (0) for reproducibility
-# when the O(n × m) kernel evaluation would be too slow.
+# Subsamples to @p max_samples with a fixed RNG seed (0) for reproducibility
+# when the input is large. Returns an array of NaN when either input is empty.
 #
-# Bandwidth uses Silverman's rule of thumb:
-# @f[ h = 1.06 \hat\sigma n^{-1/5} @f]
-# When the standard deviation is zero (all identical values), @f$ \sigma @f$
-# is clamped to 1.0 and the bandwidth floor is 1e-3 to prevent division by zero.
-#
-# @param values      1-D array of observed values to estimate the density of.
-# @param x_grid      1-D array of evaluation points.
-# @param max_samples Maximum samples to use; larger inputs are randomly
-#                    subsampled. Defaults to 20,000.
-# @return            1-D array of density estimates at each point in @p x_grid.
-#                    Returns an array of NaN if either input is empty.
+# @param values       1-D array of observed values.
+# @param x_grid       1-D array of evaluation points.
+# @param max_samples  Maximum samples before subsampling (default: 20000).
+# @return             1-D array of density estimates at each point in @p x_grid.
 def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
                   max_samples: int = 20000) -> np.ndarray:
     n = values.size
     if n == 0 or x_grid.size == 0:
         return np.full_like(x_grid, np.nan, dtype=np.float64)
     if n > max_samples:
-        idx = np.random.default_rng(0).choice(n, size=max_samples, replace=False)
+        idx    = np.random.default_rng(0).choice(n, size=max_samples, replace=False)
         values = values[idx]
-        n = max_samples
+        n      = max_samples
     sigma = float(np.std(values))
     if sigma <= 0:
         sigma = 1.0
@@ -284,13 +297,12 @@ def _kde_gaussian(values: np.ndarray, x_grid: np.ndarray,
     return np.sum(np.exp(-0.5 * diff * diff), axis=1) / (n * h * np.sqrt(2.0 * np.pi))
 
 
-## @brief Compute median, mean, and IQR for one distribution.
+## @brief Return median, mean, and IQR for a sample array.
 #
-# Returns NaN for all statistics when @p values is empty, allowing callers
-# to check ``np.isfinite(s["median"])`` rather than testing array size.
+# Returns NaN for all three statistics when @p values is empty.
 #
-# @param values 1-D float64 array of samples.
-# @return Dict with keys ``"median"``, ``"mean"``, and ``"iqr"``.
+# @param values  1-D float64 array of samples.
+# @return        Dict with keys ``"median"``, ``"mean"``, and ``"iqr"``.
 def _summary(values: np.ndarray) -> dict[str, float]:
     if values.size == 0:
         nan = float("nan")
@@ -303,35 +315,30 @@ def _summary(values: np.ndarray) -> dict[str, float]:
     }
 
 
-_SIM_COLOR = "#ff7f0e"
+_SIM_COLOR   = "#ff7f0e"
 _FIELD_COLOR = "#1f77b4"
 _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
 
-## @brief Render the sim-vs-field ECDF comparison figure for one (link, metric).
+## @brief Render a normalized histogram overlay of sim vs field for one (link, metric).
 #
-# The sim curve is shown in orange with a shaded bootstrap CI band. The field
-# curve is shown in blue. Vertical dotted lines mark each median. The subtitle
-# reports K-S distance, median delta, and any applied MCS cap.
+# Sim is shown in orange, field in blue. Vertical dotted lines mark each
+# median. The subtitle reports K-S distance, |Δmedian|, and |Δmean|.
+# The caller is responsible for saving and closing the returned figure.
 #
-# @param sim_vals   Pooled sim samples.
-# @param field_vals Field samples.
-# @param spec       Metric specification.
-# @param scenario   Scenario name for the plot title.
-# @param src        Source rab label.
-# @param peer       Peer rab label.
-# @param ks_d       Pre-computed K-S D statistic.
-# @param ks_p       Pre-computed K-S p-value.
-# @param n_boot     Bootstrap iteration count.
-# @param ci_pct     Confidence level (percent) for the CI band.
-# @param rng        NumPy random generator.
-# @return Matplotlib Figure (caller saves and closes).
+# @param sim_vals    Pooled sim samples.
+# @param field_vals  Field samples.
+# @param spec        Metric specification.
+# @param scenario    Scenario name for the figure title.
+# @param src         Source node label.
+# @param peer        Peer node label.
+# @param ks_d        Pre-computed K-S D statistic.
+# @return            Matplotlib Figure.
 def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
               spec: _MetricSpec, scenario: str, src: str, peer: str,
               ks_d: float) -> plt.Figure:
     fig, ax = plt.subplots(figsize=(9, 5.5))
-
-    sim_s = _summary(sim_vals)
+    sim_s   = _summary(sim_vals)
     field_s = _summary(field_vals)
 
     if sim_vals.size == 0 and field_vals.size == 0:
@@ -339,12 +346,12 @@ def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
                 transform=ax.transAxes, color="0.5")
         return fig
 
-    pooled = np.concatenate([v for v in (sim_vals, field_vals) if v.size])
-    bins = _fd_bins(pooled)
-    lo, hi = float(bins[0]), float(bins[-1])
-    pad = max(0.05 * (hi - lo), 1e-6)
-    x_grid = np.linspace(lo - pad, hi + pad, 400)
-    unit = _UNIT_BY_SHORT.get(spec.short, "")
+    pooled      = np.concatenate([v for v in (sim_vals, field_vals) if v.size])
+    bins        = _fd_bins(pooled)
+    lo, hi      = float(bins[0]), float(bins[-1])
+    pad         = max(0.05 * (hi - lo), 1e-6)
+    x_grid      = np.linspace(lo - pad, hi + pad, 400)
+    unit        = _UNIT_BY_SHORT.get(spec.short, "")
     unit_suffix = f" {unit}" if unit else ""
 
     if sim_vals.size:
@@ -353,8 +360,8 @@ def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
                   color=_SIM_COLOR, alpha=0.18, edgecolor=_SIM_COLOR, linewidth=1.2,
                   label=f"sim  n={sim_vals.size:,}  "
                         f"med={sim_s['median']:.2f}  mean={sim_s['mean']:.2f}{unit_suffix}")
-        sim_kde = _kde_gaussian(sim_vals, x_grid)
-        ax.plot(x_grid, sim_kde, color=_SIM_COLOR, linewidth=2.0, alpha=0.95)
+        ax.plot(x_grid, _kde_gaussian(sim_vals, x_grid),
+                color=_SIM_COLOR, linewidth=2.0, alpha=0.95)
         ax.axvline(sim_s["median"], color=_SIM_COLOR,
                    linestyle=":", linewidth=0.8, alpha=0.6)
     if field_vals.size:
@@ -363,8 +370,8 @@ def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
                   color=_FIELD_COLOR, alpha=0.18, edgecolor=_FIELD_COLOR, linewidth=1.2,
                   label=f"field  n={field_vals.size:,}  "
                         f"med={field_s['median']:.2f}  mean={field_s['mean']:.2f}{unit_suffix}")
-        field_kde = _kde_gaussian(field_vals, x_grid)
-        ax.plot(x_grid, field_kde, color=_FIELD_COLOR, linewidth=2.0, alpha=0.95)
+        ax.plot(x_grid, _kde_gaussian(field_vals, x_grid),
+                color=_FIELD_COLOR, linewidth=2.0, alpha=0.95)
         ax.axvline(field_s["median"], color=_FIELD_COLOR,
                    linestyle=":", linewidth=0.8, alpha=0.6)
 
@@ -391,32 +398,31 @@ def _plot_one(sim_vals: np.ndarray, field_vals: np.ndarray,
     return fig
 
 
-## @brief Clip values to the metric's integer cap (if any).
+## @brief Clip values to the metric's integer cap.
 #
-# A no-op for metrics with ``integer_cap=None`` or empty arrays.
+# A no-op when @p cap is ``None`` or @p values is empty.
 #
-# @param values Sample array to clip.
-# @param cap    Upper bound, or ``None`` to skip.
-# @return Clipped array (or the original array if no cap applies).
+# @param values  Sample array to clip.
+# @param cap     Upper bound, or ``None`` to skip.
+# @return        Clipped array, or the original array if no cap applies.
 def _apply_mcs_cap(values: np.ndarray, cap: int | None) -> np.ndarray:
     if cap is None or values.size == 0:
         return values
     return np.clip(values, None, cap)
 
 
-## @brief Render a heatmap PNG for one (metric, score) combination across all scenarios and links.
+## @brief Write one heatmap PNG for a single (metric, score) combination.
 #
-# Rows are scenario names, columns are unordered (src, peer) link pairs.
-# Each cell shows the value of @p value_col for that (scenario, link) combination.
-# Text colour flips from white to black at 50 % of the colour scale maximum
-# for legibility on the viridis palette.
+# Rows are scenarios, columns are (src, peer) links. Each cell shows
+# @p value_col for @p spec.short. Color scale is viridis from 0 to the
+# maximum finite value. Returns ``False`` if no matching rows are found.
 #
-# @param rows       List of result dicts produced by @ref _process_scenario.
-# @param spec       Metric specification used to filter rows and label the colour bar.
-# @param value_col  Column key to read from each row (e.g. ``"abs_diff_medians"``).
-# @param value_label Human-readable label for the colour bar (e.g. ``"|Δmedian|"``).
-# @param out_path   Destination path for the PNG file.
-# @return           ``True`` if the figure was written, ``False`` if no matching rows exist.
+# @param rows         All result dicts from the batch.
+# @param spec         Metric specification to filter rows by.
+# @param value_col    Column key to read from each row (e.g. ``"ks_statistic"``).
+# @param value_label  Human-readable label for the color bar.
+# @param out_path     Destination path for the PNG file.
+# @return             ``True`` if the figure was written, ``False`` otherwise.
 def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
                  value_label: str, out_path: Path) -> bool:
     rel = [r for r in rows
@@ -438,7 +444,7 @@ def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
     fig_h = max(3.0, 1.2 + 0.55 * len(scenarios))
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
     vmax = float(np.nanmax(grid)) or 1.0
-    im = ax.imshow(grid, aspect="auto", cmap="viridis", vmin=0.0, vmax=vmax)
+    im   = ax.imshow(grid, aspect="auto", cmap="viridis", vmin=0.0, vmax=vmax)
 
     for si in range(len(scenarios)):
         for li in range(len(links)):
@@ -454,11 +460,10 @@ def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
     ax.set_yticklabels([_scenario_label(s) for s in scenarios], fontsize=9)
     ax.set_xlabel("link", fontweight="bold")
 
-    unit = _UNIT_BY_SHORT.get(spec.short, "") if value_col != "ks_statistic" else ""
+    unit        = _UNIT_BY_SHORT.get(spec.short, "") if value_col != "ks_statistic" else ""
     unit_suffix = f" [{unit}]" if unit else ""
     cbar = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
     cbar.set_label(f"{value_label}{unit_suffix}")
-
     ax.set_title(f"{value_label}  —  {spec.label}", fontweight="bold")
     fig.tight_layout()
     fig.savefig(out_path, dpi=180, bbox_inches="tight")
@@ -466,15 +471,14 @@ def _heatmap_png(rows: list[dict], spec: _MetricSpec, value_col: str,
     return True
 
 
-## @brief Write one heatmap PNG per (metric, score) for a completed batch.
+## @brief Write one heatmap PNG per (metric, score) combination for the batch.
 #
-# Creates a ``summary/`` subdirectory under @p batch_root and calls
-# @ref _heatmap_png for each combination of metric and score type
-# (``|Δmedian|``, ``|Δmean|``, K-S). Skips combinations with no matching rows.
+# Writes to ``<batch_root>/summary/``. Score types are ``|Δmedian|``,
+# ``|Δmean|``, and K-S. Skips combinations with no finite data.
 #
-# @param rows       All result dicts from the batch (combined across scenarios).
-# @param metrics    List of @ref _MetricSpec instances to iterate over.
-# @param batch_root Root directory of the batch; ``summary/`` is created here.
+# @param rows        All result dicts from the batch.
+# @param metrics     List of @ref _MetricSpec instances to iterate over.
+# @param batch_root  Root directory of the batch; ``summary/`` is created here.
 def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
                           batch_root: Path) -> None:
     out_dir = batch_root / "summary"
@@ -490,47 +494,62 @@ def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
                 print(f"  wrote {out.relative_to(batch_root)}")
 
 
-## @brief Run the full sim-vs-field comparison for one scenario directory.
+## @brief Run the sim-vs-field comparison for one scenario directory.
 #
-# -# Resolves the field scenario name via @ref sim_to_field_scenario.
-# -# Discovers link pairs from the first seed's trace directory.
-# -# For each (link, metric) pair: pools sim and field samples, computes
-#    K-S and summary stats, renders a histogram PNG, and appends a result row.
-# -# Returns an empty list if the field directory is not found or no seeds exist.
+# In scenario mode derives the field directory from the scenario name via
+# @ref sim_to_field_scenario. In node mode uses @p field_dir directly.
+# Discovers (src, peer) pairs, pools sim and field samples, computes K-S
+# and summary statistics, writes one histogram PNG per (pair, metric), and
+# returns a list of result dicts for the summary CSV.
 #
-# @param scenario_dir Scenario directory containing a ``sim_traces/`` subdirectory.
-# @param field_root   Root of the field trace tree (see @ref FIELD_TRACES_ROOT).
-# @param metrics      List of @ref _MetricSpec instances to evaluate.
-# @param out_dir      Output directory for per-link PNGs (``validation/`` subdir).
-# @return             List of result dicts, one per (link, metric) combination.
+# @param scenario_dir  Scenario directory containing ``sim_traces/``.
+# @param field_root    Field traces root (used in scenario mode only).
+# @param metrics       List of @ref _MetricSpec instances to evaluate.
+# @param out_dir       Output directory for PNGs and per-scenario metrics CSV.
+# @param field_dir     Explicit field traces directory; when provided bypasses
+#                      name derivation (node mode).
+# @return              List of result dicts, one per (pair, metric) combination.
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
-                      out_dir: Path) -> list[dict]:
-    field_name = sim_to_field_scenario(scenario_dir.name)
-    field_dir  = (field_root / field_name) if field_name else None
-    if field_dir is None or not field_dir.is_dir():
-        print(f"  field traces not found (expected {field_dir}); skipping")
+                      out_dir: Path, field_dir: Path | None = None) -> list[dict]:
+    if field_dir is None:
+        field_name     = sim_to_field_scenario(scenario_dir.name)
+        resolved_field = (field_root / field_name) if field_name else None
+        print(f"Processing {field_name}")
+        mode = "scenario"
+    else:
+        field_name     = field_dir.name
+        resolved_field = field_dir
+        print("Processing node scenario...")
+        mode = "node"
+
+    if resolved_field is None or not resolved_field.is_dir():
+        print(f"Error: field traces not found (expected {resolved_field}); skipping")
         return []
 
     sim_traces_root = scenario_dir / "sim_traces"
+    if not sim_traces_root.is_dir():
+        print(f"Error: no sim_traces/ under {scenario_dir}; skipping")
+        return []
+
     seed_dirs = sorted(d for d in sim_traces_root.iterdir()
                        if d.is_dir() and d.name.startswith("seed-"))
     if not seed_dirs:
-        print(f"  no seed-* under {sim_traces_root}; skipping")
+        print(f"Error: no seed-* under {sim_traces_root}; skipping")
         return []
 
-    pairs     = sorted(_discover_pairs(seed_dirs[0]))
+    pairs = sorted(_discover_pairs(seed_dirs[0], mode, resolved_field))
     rows: list[dict] = []
     for src, peer in pairs:
         for spec in metrics:
             sim_vals   = _apply_mcs_cap(_pool_sim(scenario_dir, src, peer, spec),
                                         spec.integer_cap)
-            field_vals = _apply_mcs_cap(_pool_field(field_dir, src, peer, spec),
+            field_vals = _apply_mcs_cap(_pool_field(resolved_field, src, peer, spec),
                                         spec.integer_cap)
             if sim_vals.size == 0 and field_vals.size == 0:
                 continue
-            ks_d = _ks_2samp(sim_vals, field_vals)
-            sim_s = _summary(sim_vals)
-            field_s = _summary(field_vals)
+            ks_d      = _ks_2samp(sim_vals, field_vals)
+            sim_s     = _summary(sim_vals)
+            field_s   = _summary(field_vals)
             both_med  = np.isfinite(sim_s["median"]) and np.isfinite(field_s["median"])
             both_mean = np.isfinite(sim_s["mean"])   and np.isfinite(field_s["mean"])
             rows.append({
@@ -547,75 +566,100 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
                 "field_median":     field_s["median"],
                 "field_mean":       field_s["mean"],
                 "field_iqr":        field_s["iqr"],
-                "abs_diff_medians": (abs(field_s["median"] - sim_s["median"]) if both_med  else float("nan")),
-                "abs_diff_means":   (abs(field_s["mean"]   - sim_s["mean"])   if both_mean else float("nan")),
+                "abs_diff_medians": abs(field_s["median"] - sim_s["median"]) if both_med  else float("nan"),
+                "abs_diff_means":   abs(field_s["mean"]   - sim_s["mean"])   if both_mean else float("nan"),
                 "ks_statistic":     ks_d,
             })
-            fig = _plot_one(sim_vals, field_vals, spec, scenario_dir.name,
-                            src, peer, ks_d)
-            png_dir = out_dir / "pngs" / src
+            fig      = _plot_one(sim_vals, field_vals, spec, scenario_dir.name,
+                                 src, peer, ks_d)
+            png_dir  = out_dir / "pngs" / src
             png_dir.mkdir(parents=True, exist_ok=True)
             png_path = png_dir / f"hist_{spec.short}__{src}_to_{peer}.png"
             fig.savefig(png_path, dpi=180, bbox_inches="tight")
             plt.close(fig)
-            print(f"    wrote {png_path.relative_to(scenario_dir)}")
+            print(f"  wrote {png_path.relative_to(scenario_dir)}")
     return rows
 
 
 ## @brief CLI entry point for the sim-vs-field comparison tool.
 #
-# Iterates all scenario directories under ``batch_root`` that contain a
-# ``sim_traces/`` subdirectory, runs @ref _process_scenario for each, and
-# writes ``validation/metrics.csv`` per scenario and
-# ``validation_summary.csv`` at the batch root.
+# In node mode @p batch_root is the scenario directory itself and
+# ``--field-root`` points at the per-day field traces root.
+# In scenario mode @p batch_root contains named scenario subdirectories
+# each with their own ``sim_traces/``.
 #
-# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 on success, 1 on argument or I/O error.
+# @param argv  Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return      0 on success, 1 on error.
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Histogram + KDE comparison of sim vs ARPO field.")
-    p.add_argument("batch_root", help="batch output dir (parent of per-scenario dirs)")
+    p = argparse.ArgumentParser(
+        description="Histogram + KDE comparison of sim vs ARPO field.")
+    p.add_argument("--batch_root", required=True,
+                   help="output root directory of simulation")
+    p.add_argument("--mode", "-m", choices=["scenario", "node"], required=True,
+                   help="format of the provided dataset")
     p.add_argument("--field-root", default=str(FIELD_TRACES_ROOT),
-                   help="root holding <field_scenario>/csvs/<src>/*.csv trace files")
+                   help="file path root directory of arpo_data field traces")
     p.add_argument("--only", default=None,
-                   help="restrict to one scenario name (basename of a dir in batch_root)")
+                   help="restrict to one scenario name (scenario mode only)")
     p.add_argument("--metrics", default="snr,rcpi,mcs",
                    help="comma-separated metric shorts to compare")
     args = p.parse_args(argv)
 
     batch_root = Path(args.batch_root).resolve()
-    field_root = Path(args.field_root).resolve()
     if not batch_root.is_dir():
-        print(f"batch root not found: {batch_root}", file=sys.stderr)
+        print(f"Error: batch root not found: {batch_root}", file=sys.stderr)
         return 1
 
     metrics: list[_MetricSpec] = []
     for short in [s.strip() for s in args.metrics.split(",") if s.strip()]:
         spec = _METRICS_BY_SHORT.get(short)
         if spec is None:
-            print(f"unknown metric: {short} (known: {list(_METRICS_BY_SHORT)})",
+            print(f"Error: unknown metric: {short} (known: {list(_METRICS_BY_SHORT)})",
                   file=sys.stderr)
             return 1
         metrics.append(spec)
 
-    scenarios = sorted(p for p in batch_root.iterdir()
-                       if p.is_dir() and (p / "sim_traces").is_dir())
-    if args.only:
-        scenarios = [s for s in scenarios if s.name == args.only]
-    if not scenarios:
-        print(f"no scenarios with sim_traces/ under {batch_root}", file=sys.stderr)
-        return 1
-
     all_rows: list[dict] = []
-    for scen in scenarios:
-        print(f"[{scen.name}]")
-        out_dir = scen / "validation"
+
+    if args.mode == "node":
+        field_dir = Path(args.field_root).resolve()
+        if not field_dir.is_dir():
+            print(f"Error: field-root not found: {field_dir}", file=sys.stderr)
+            return 1
+        print(f"[{batch_root.name}]")
+        out_dir = batch_root / "validation"
         out_dir.mkdir(parents=True, exist_ok=True)
-        rows = _process_scenario(scen, field_root, metrics, out_dir)
+        rows = _process_scenario(batch_root, Path(), metrics, out_dir,
+                                 field_dir=field_dir)
         if rows:
             scen_csv = out_dir / "metrics.csv"
             pd.DataFrame(rows).to_csv(scen_csv, index=False)
-            print(f"    wrote {scen_csv.relative_to(scen)}")
+            print(f"    wrote {scen_csv.relative_to(batch_root)}")
         all_rows.extend(rows)
+
+    elif args.mode == "scenario":
+        field_root = Path(args.field_root).resolve()
+        if not field_root.is_dir():
+            print(f"Error: field root not found: {field_root}", file=sys.stderr)
+            return 1
+        scenarios = sorted(s for s in batch_root.iterdir()
+                           if s.is_dir() and (s / "sim_traces").is_dir())
+        if args.only:
+            scenarios = [s for s in scenarios if s.name == args.only]
+        if not scenarios:
+            print(f"Error: no scenarios with sim_traces/ under {batch_root}",
+                  file=sys.stderr)
+            return 1
+        for scen in scenarios:
+            print(f"[{scen.name}]")
+            out_dir = scen / "validation"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            rows = _process_scenario(scen, field_root, metrics, out_dir)
+            if rows:
+                scen_csv = out_dir / "metrics.csv"
+                pd.DataFrame(rows).to_csv(scen_csv, index=False)
+                print(f"    wrote {scen_csv.relative_to(scen)}")
+            all_rows.extend(rows)
 
     if all_rows:
         summary_csv = batch_root / "validation_summary.csv"
