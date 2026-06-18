@@ -298,6 +298,69 @@ def _create_json(output_path: Path, node_data: list[dict],
 # @param output_path Directory to write output files into.
 # @param band        Radio band string (``"sub-6"`` or ``"mmwave"``).
 # @return            0 on success, 1 on error.
+## @brief Discover available calendar days from a by-day GPS trace directory.
+#
+# Looks for files named ``<prefix>_<YYYY-MM-DD>.csv`` (the output of
+# ``arpo_data.cli split-day``) and returns the sorted list of date strings.
+#
+# @param by_day_dir  Directory containing per-day split GPS trace CSVs.
+# @return            Sorted list of ``"YYYY-MM-DD"`` strings, or an empty
+#                    list if @p by_day_dir does not exist or has no matches.
+def _discover_days(by_day_dir: Path) -> list[str]:
+    if not by_day_dir.is_dir():
+        return []
+    days = []
+    for f in by_day_dir.glob("*.csv"):
+        stem = f.stem
+        # Expect a trailing "_YYYY-MM-DD" suffix.
+        if len(stem) >= 10 and stem[-10] == "_":
+            candidate = stem[-10:]
+        else:
+            continue
+        date_part = candidate[1:]
+        parts = date_part.split("-")
+        if len(parts) == 3 and all(p.isdigit() for p in parts):
+            days.append(date_part)
+    return sorted(set(days))
+
+
+## @brief Load calfex field data and write per-day ``nodes.json``/``run.ini`` copies.
+#
+# Builds the base config once via @ref load_calfex_data, then for each day
+# in @p days copies the result into ``output_path/<day>/`` so waypoints can
+# be patched into each day's copy independently without disturbing the
+# others.
+#
+# @param extracted_dir Path to the extracted calfex dataset root.
+# @param output_path   Root output directory; one subdirectory per day is
+#                      created inside it.
+# @param band          Radio band string (``"sub-6"`` or ``"mmwave"``).
+# @param days          List of ``"YYYY-MM-DD"`` strings to produce configs for.
+# @return              0 on success, 1 on error.
+def load_calfex_data_per_day(extracted_dir: Path, output_path: Path,
+                             band: str, days: list[str]) -> int:
+    if not days:
+        print("ERROR: no days to process", file=sys.stderr)
+        return 1
+
+    # Build the base config once into a scratch location, then copy per day.
+    base_dir = output_path / "_base"
+    rc = load_calfex_data(extracted_dir, base_dir, band)
+    if rc != 0:
+        return rc
+
+    import shutil
+    for day in days:
+        day_dir = output_path / day
+        day_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(base_dir / "nodes.json", day_dir / "nodes.json")
+        shutil.copy2(base_dir / "run.ini",    day_dir / "run.ini")
+        print(f"  wrote {day_dir}/nodes.json and run.ini")
+
+    shutil.rmtree(base_dir)
+    return 0
+
+
 def load_calfex_data(extracted_dir: Path, output_path: Path, band: str) -> int:
     print(f"Loading calfex node data from {extracted_dir} ...")
     csv_dir = extracted_dir / "calfex_csv"
@@ -347,11 +410,43 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", "-m",
                    type=str, choices=["node", "scenario"], required=True,
                    help="The format of the dataset")
+    p.add_argument("--by-day-dir", type=Path, default=None,
+                help="Directory of per-day split GPS traces (output of "
+                    "`arpo_data.cli split-day`); required with --day/--all-days. "
+                    "Only used to discover which days exist.")
+    g = p.add_mutually_exclusive_group()
+    g.add_argument("--day", default=None,
+                   help="Generate config for this single day (YYYY-MM-DD), "
+                        "written to <output>/<day>/")
+    g.add_argument("--all-days", action="store_true",
+                   help="Generate config for every day found in --by-day-dir, "
+                        "each written to its own <output>/<day>/ subdirectory")
     args = p.parse_args(argv)
 
     if not args.input.exists():
         print(f"ERROR: input path not found: {args.input}", file=sys.stderr)
         return 1
+
+    if args.day or args.all_days:
+        if args.by_day_dir is None:
+            print("ERROR: --by-day-dir is required with --day or --all-days",
+                  file=sys.stderr)
+            return 1
+        if args.day:
+            days = [args.day]
+        else:
+            days = _discover_days(args.by_day_dir)
+            if not days:
+                print(f"ERROR: no per-day trace files found under {args.by_day_dir}",
+                      file=sys.stderr)
+                return 1
+        match args.mode, args.band:
+            case "node", "sub-6":
+                return load_calfex_data_per_day(args.input, args.output, args.band, days)
+            case _:
+                print("per-day generation only supports node mode + sub-6 band",
+                      file=sys.stderr)
+                return 1
 
     match args.mode:
         case "node":

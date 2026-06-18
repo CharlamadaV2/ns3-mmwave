@@ -53,6 +53,37 @@ def session_relative_seconds(df: pd.DataFrame) -> pd.Series:
     return (df["__t__"] - t0).dt.total_seconds()
 
 
+## @brief Filter a loaded DataFrame down to rows from a single calendar day.
+#
+# Works on any DataFrame produced by the loaders in this module, since they
+# all add a ``__t__`` UTC datetime column. Returns ``None`` instead of an
+# empty DataFrame so callers can use the same "skip if None" pattern they
+# already use for missing data.
+#
+# @param df    DataFrame containing a ``__t__`` UTC datetime column.
+# @param day   Calendar date to keep, e.g. ``date(2026, 5, 14)``.
+# @return      Filtered DataFrame with the original index reset, or ``None``
+#             if @p df is ``None``, lacks ``__t__``, or has no rows on @p day.
+def filter_by_day(df: pd.DataFrame | None, day) -> pd.DataFrame | None:
+    if df is None or "__t__" not in df.columns:
+        return None
+    out = df[df["__t__"].dt.date == day]
+    if out.empty:
+        return None
+    return out.reset_index(drop=True)
+
+
+## @brief List all calendar days present in a loaded DataFrame's ``__t__`` column.
+#
+# @param df  DataFrame containing a ``__t__`` UTC datetime column.
+# @return    Sorted list of ``date`` objects, or an empty list if @p df is
+#           ``None`` or lacks ``__t__``.
+def days_present(df: pd.DataFrame | None) -> list:
+    if df is None or "__t__" not in df.columns:
+        return []
+    return sorted(df["__t__"].dt.date.dropna().unique())
+
+
 ## @brief Load and concatenate every node's ``bh2.csv`` for a scenario.
 #
 # Backhaul-2 (bh2) logs contain per-link radio metrics sampled at the
