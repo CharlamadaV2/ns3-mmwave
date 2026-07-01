@@ -264,18 +264,22 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
     if bbox <= mobile_bbox_m:
         return f"skipped: field {node} bbox {bbox:.1f} m <= {mobile_bbox_m:g} m (static)"
 
-    sim_anchor = next((n for n in nodes if n.get("id") == anchor), None)
-    if sim_anchor is None:
-        return f"error: anchor '{anchor}' not in nodes.json"
-    sim_anchor_xy = (float(sim_anchor["position"]["x"]),
-                     float(sim_anchor["position"]["y"]))
-
-    # Skip anchor alignment if the anchor has no field trace rows.
-    anchor_in_trace = not df[df["node"] == anchor].empty
-    if anchor_in_trace:
-        dx, dy = _anchor_offset(df, anchor, sim_anchor_xy)
-    else:
+    # Frame alignment is optional. With no anchor (anchor=None), the field trace
+    # and nodes.json are assumed to already share a coordinate frame (e.g. calfex
+    # east_m/north_m), so no translation is applied.
+    if anchor is None:
         dx, dy = 0.0, 0.0
+    else:
+        sim_anchor = next((n for n in nodes if n.get("id") == anchor), None)
+        if sim_anchor is None:
+            return f"error: anchor '{anchor}' not in nodes.json"
+        sim_anchor_xy = (float(sim_anchor["position"]["x"]),
+                         float(sim_anchor["position"]["y"]))
+        # Skip translation if the anchor has no field trace rows.
+        if not df[df["node"] == anchor].empty:
+            dx, dy = _anchor_offset(df, anchor, sim_anchor_xy)
+        else:
+            dx, dy = 0.0, 0.0
 
     g = df[df["node"] == node].sort_values("sec_since_origin")
     if g.empty:
@@ -332,8 +336,8 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--all", dest="all_scenarios", action="store_true",
                    help="iterate every scenario, skipping static nodes")
     sp_scen.add_argument("--node", default="rab2",
-                         help="moving node id (default: rab2)")
-    sp_scen.add_argument("--anchor", default="rab1",
+                         help="moving node id")
+    sp_scen.add_argument("--anchor", default=None,
                          help="stationary alignment anchor (default: rab1)")
     sp_scen.add_argument("--n-waypoints", type=int, default=20,
                          help="downsample target (default: 20)")
@@ -360,7 +364,7 @@ def main(argv: list[str] | None = None) -> int:
                         help="moving node id to author waypoints for")
     g_node.add_argument("--all-nodes", dest="all_nodes", action="store_true",
                         help="author waypoints for every non-anchor node in nodes.json")
-    sp_node.add_argument("--anchor", default="gateway",
+    sp_node.add_argument("--anchor", default=None,
                          help="fixed node for frame alignment (default: gateway)")
     sp_node.add_argument("--n-waypoints", type=int, default=20,
                          help="downsample target (default: 20)")
@@ -424,11 +428,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: field path does not exist: {args.field}", file=sys.stderr)
         return 1
 
+    # Anchor is optional in node mode; None / "" / "none" disables alignment.
+    anchor = args.anchor
+    if anchor is not None and anchor.strip().lower() in ("", "none"):
+        anchor = None
+
     # Build list of nodes to patch.
     if args.all_nodes:
         all_node_specs = _load_nodes_json(args.input / "nodes.json")
         nodes_to_patch = [n["id"] for n in all_node_specs
-                          if n.get("id") and n.get("id") != args.anchor]
+                          if n.get("id") and n.get("id") != anchor]
     else:
         nodes_to_patch = [args.node]
 
@@ -437,7 +446,7 @@ def main(argv: list[str] | None = None) -> int:
         status = patch_scenario_waypoints(
             args.input,
             field_path=args.field,
-            node=node_id, anchor=args.anchor,
+            node=node_id, anchor=anchor,
             n_waypoints=args.n_waypoints, time_mode=args.time_mode,
             duration=args.duration, field_z=args.field_z, dry_run=args.dry_run,
         )
