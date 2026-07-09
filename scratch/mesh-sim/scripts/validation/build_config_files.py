@@ -21,11 +21,10 @@ import pandas as pd
 
 _NODE_HEIGHT_M  = 1.5    ##< Default z height for ground-level IH nodes (metres).
 _GATEWAY_HEIGHT = 30.0   ##< Default z height for the elevated gateway node (metres).
-_DURATION_S     = 60.0   ##< Default simulation duration in seconds.
 _WARMUP_S       = 0.0    ##< Default warmup period in seconds.
-_TICK_S         = 0.1    ##< Default simulation tick interval in seconds.
+_TICK_S         = 1.0    ##< Default simulation tick interval in seconds.
 _NOISE_FIGURE   = 5.0    ##< Default receiver noise figure in dB.
-_DEMAND_MBPS    = 0.25   ##< Constant offered load written to [traffic] demand_mbps.
+_DEMAND_MBPS    = 1.25   ##< Constant offered load written to [traffic] demand_mbps.
 
 # Column-name candidates for gps_all_nodes_trace.csv. If auto-detection fails,
 # the loader prints the actual columns — adjust these tuples to match.
@@ -173,18 +172,18 @@ def _load_day_gps(trace_fp: Path) -> list[dict] | None:
 
 
 ## @brief Write ``run.ini`` to @p output_path using the provided parameters.
-def _create_ini(output_path: Path, scenario_name: str,
-                freq_ghz: float, bw_mhz: float, power_dbm: float,
-                demand_mbps: float, gateway_id: str | None) -> None:
+def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
+                freq_ghz: float, amc_model: str, bw_mhz: float, power_dbm: float,
+                ticks: float, demand_mbps: float, gateway_id: str | None) -> None:
     cfg = configparser.ConfigParser()
 
     cfg["scenario"] = {
         "name":           scenario_name,
         "seed":           "1",
         "run_id":         "1",
-        "duration_s":     str(_DURATION_S),
+        "duration_s":     str(sim_duration),
         "warmup_s":       str(_WARMUP_S),
-        "tick_s":         str(_TICK_S),
+        "tick_s":         str(ticks),
         "nodes_file":     "nodes.json",
         "buildings_file": "",
     }
@@ -197,7 +196,7 @@ def _create_ini(output_path: Path, scenario_name: str,
         "bandwidth_mhz":     str(bw_mhz),
         "noise_figure_db":   str(_NOISE_FIGURE),
         "condition_model":   "static_los",
-        "amc_model":         "silvus",
+        "amc_model":         amc_model,
         "beamforming_model": "table",
         "tx_array_gain_dbi": "6",
         "rx_array_gain_dbi": "6",
@@ -255,6 +254,7 @@ def _create_json(output_path: Path, node_data: list[dict],
             "id":       node["name"],
             "role":     "peer",
             "mobility": "waypoint",
+            #TODO: Enable Node_type parameter, instead of fixed defaulting 
             "position": {"x": node["x"], "y": node["y"], "z": _NODE_HEIGHT_M},
             "waypoints": [],
         })
@@ -309,8 +309,9 @@ def _discover_days(per_day_dir: Path) -> list[str]:
 # @param days           List of ``"YYYY-MM-DD"`` strings to produce configs for.
 # @param gateway_enable Whether to add a gateway node + gateway traffic topology.
 # @return               0 on success, 1 on error.
-def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path,
-                             band: str, days: list[str], gateway_enable: bool) -> int:
+def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path, time: float, 
+                             amc_model: str, band: str, days: list[str], ticks: float,
+                             gateway_enable: bool) -> int:
     if not days:
         print("ERROR: no days to process", file=sys.stderr)
         return 1
@@ -335,15 +336,25 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
         if not node_data:
             print(f"  WARNING: no GPS fixes for {day}, skipping")
             continue
-
+        if time is None: #< Set simulation time to whole day
+            df_t = pd.read_csv(trace_fp, usecols=lambda c: c in _TRACE_TIME_COLS)
+            tcol = _first_col(df_t, _TRACE_TIME_COLS)
+            if tcol:
+                t = pd.to_numeric(df_t[tcol], errors="coerce").dropna()
+                sim_duration = int(t.max() - t.min()) if t.size > 1 else None
+        else:
+            sim_duration = time
         day_dir = output_path / day
         day_dir.mkdir(parents=True, exist_ok=True)
         _create_json(day_dir, node_data, gateway_name)
         _create_ini(day_dir,
                     scenario_name="calfex",
                     freq_ghz=freq_ghz,
+                    sim_duration=sim_duration,
+                    amc_model=amc_model,
                     bw_mhz=bw_mhz,
                     power_dbm=power_dbm,
+                    ticks=ticks,
                     demand_mbps=_DEMAND_MBPS,
                     gateway_id=gateway_name)
         print(f"  {day}: {len(node_data)} nodes")
@@ -370,11 +381,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--band", "-b",
                    type=str, choices=["mmwave", "sub-6"], required=True,
                    help="Radio frequency spectrum used by the node")
+    p.add_argument("--time", type = float,
+                   help = "Duration of simulation time in secs. Default: Max of field dataset")
+    p.add_argument("--tick", type = float, default=_TICK_S,
+                   help = "Increments simulation is updated by in secs. Default: 1 second")
+    p.add_argument("--amc-model", "-am", default="silvus", type=str,
+                    dest="model", choices=["silvus", "shannon", "table"],
+                   help="")
     p.add_argument("--mode", "-m",
                    type=str, choices=["node", "scenario"], required=True,
                    help="The format of the dataset")
     p.add_argument("--gateway", "-g", action="store_true",
                    help="Enables gateway node + gateway traffic topology")
+    #Create config for day vs days
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--day", default=None,
                    help="Generate config for this single day (YYYY-MM-DD), "
@@ -408,7 +427,8 @@ def main(argv: list[str] | None = None) -> int:
     match args.mode, args.band:
         case "node", "sub-6":
             return load_calfex_data_per_day(
-                csv_dir, args.input, args.output, args.band, days, args.gateway)
+                csv_dir, args.input, args.output, args.time, args.model, 
+                args.band, days, args.tick, args.gateway)
         case _:
             print("per-day generation only supports node mode + sub-6 band",
                   file=sys.stderr)

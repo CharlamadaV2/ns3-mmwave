@@ -29,6 +29,7 @@
 from __future__ import annotations
 
 import argparse
+import configparser
 import sys
 from pathlib import Path
 
@@ -93,9 +94,10 @@ def _resolve_field_gps(field_root: Path, day: str) -> Path | None:
 # @param skip_fidelity Skip the scenario_fidelity step if ``True``.
 # @return           0 on success, 1 if any step reported a hard error.
 def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
-            metrics: str, tol_m: float, skip_fidelity: bool) -> int:
+            metrics: str, tol_m: float, skip_fidelity: bool,
+            window_s: float) -> int:
     print(f"\n{'=' * 60}")
-    print(f"  day: {day_dir.name}")
+    print(f"  day: {day_dir.name}  (window: first {window_s:g} s)")
     print(f"{'=' * 60}")
 
     print("\n-- sim_to_traces --")
@@ -107,6 +109,7 @@ def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
         "--mode", "node",
         "--field-root", str(field_dir),
         "--metrics", metrics,
+        "--window", str(window_s),
     ])
     if rc != 0:
         print(f"  compare reported an error for {day_dir.name}", file=sys.stderr)
@@ -122,6 +125,7 @@ def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
                 "--mode", "node",
                 "--field-gps", str(field_gps),
                 "--tol-m", str(tol_m),
+                "--window", str(window_s),
             ])
             if fid_rc != 0:
                 print(f"  scenario_fidelity flagged mismatches for {day_dir.name}",
@@ -147,6 +151,10 @@ def main(argv: list[str] | None = None) -> int:
                    help="validate a single day (YYYY-MM-DD)")
     g.add_argument("--all-days", action="store_true",
                    help="validate every day found under --out-root")
+    p.add_argument("--time", "-t", type=float,
+                   help="comparison window in seconds: compare only the first N "
+                        "seconds of sim AND field. Default will compare entire day between sim and field")
+    #Add-on commands
     p.add_argument("--metrics", default="snr,rcpi,mcs",
                    help="comma-separated metric shorts to compare (default: snr,rcpi,mcs)")
     p.add_argument("--tol-m", type=float, default=5.0,
@@ -180,36 +188,45 @@ def main(argv: list[str] | None = None) -> int:
     n_errors = 0
     for day in days:
         day_dir   = args.out_root / day
-        if not day_dir.is_dir():
+        if not day_dir.is_dir(): #< Check for day in sim directory
             print(f"Error: no sim output for {day} at {day_dir}", file=sys.stderr)
             n_errors += 1
             continue
 
         field_dir = args.field_root / day
-        if not field_dir.is_dir():
+        if not field_dir.is_dir(): #< Check for day in field directory
             print(f"Error: no field traces for {day} at {field_dir}", file=sys.stderr)
             n_errors += 1
             continue
 
-        if args.field_gps is not None:
+        if args.field_gps is not None: #< Specific gps trace
             field_gps = args.field_gps
-            if not field_gps.is_file():
+            if not field_gps.is_file(): #< Check for field gps
                 print(f"Error: --field-gps not found: {field_gps}", file=sys.stderr)
                 n_errors += 1
                 continue
-        else:
+        else: #< All gps traces (Default)
             field_gps = _resolve_field_gps(args.field_root, day)
             if field_gps is None and not args.skip_fidelity:
                 print(f"  WARNING: no GPS trace found for {day} — checked "
                       f"{args.field_root / day / 'gps_all_nodes_trace.csv'} and "
                       f"{args.field_root / 'by_day' / f'gps_all_nodes_trace_{day}.csv'}",
                       file=sys.stderr)
-        rc = _run_day(day_dir, field_dir, field_gps,
-                     args.metrics, args.tol_m, args.skip_fidelity)
+                
+        #If args.time is empty, compare max sim time to field data.
+        if args.time is None:
+            config_directory = day_dir / inputs / 'run.ini'
+            cfg.read(config_directory)
+            compare_window = cfg.getfloat("scenario", "duration_s") 
+            
+        # Main logic        
+        rc = _run_day(day_dir, field_dir, field_gps, 
+                     args.metrics, args.tol_m, args.skip_fidelity, compare_window)
         if rc != 0:
             n_errors += 1
 
-    if len(days) > 1 and not args.skip_cross_day:
+    #TODO: Update logic to use comparison window
+    if len(days) > 1 and not args.skip_cross_day: #< Crossday comparison logic
         print(f"\n{'=' * 60}")
         print("  cross-day comparison (compare_runs)")
         print(f"{'=' * 60}\n")

@@ -27,6 +27,7 @@ import pandas as pd
 from .compare import sim_to_field_scenario
 
 REPO_ROOT          = Path(__file__).resolve().parents[2]
+#NOTE: This might be a problem in the future (fixed scenario root)
 SCENARIOS_ROOT     = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
 FIELD_PER_DAY_ROOT = REPO_ROOT / "data" / "arpo_extracted" / "_plots" / "per_day"
 
@@ -158,7 +159,7 @@ def _save_nodes_json(path: Path, nodes: list[dict]) -> None:
 # @throws KeyError if no node with ``target_id`` is found.
 def _patch_node(nodes: list[dict], target_id: str,
                 waypoints: list[dict]) -> dict:
-    for n in nodes:
+    for n in nodes: #< Loops until node is found
         if n.get("id") == target_id:
             n["mobility"]  = "waypoint"
             n["waypoints"] = waypoints
@@ -235,14 +236,14 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
 # @return One-line status string starting with ``"patched"``, ``"skipped"``,
 #         or ``"error"``.
 def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
-                             node: str = "rab2", anchor: str = "rab1",
+                             node: str, anchor: str,
                              n_waypoints: int = 20, time_mode: str = "raw",
                              duration: float | None = None, field_z: float | None = None,
                              field_scenario: str | None = None,
                              dry_run: bool = False,
                              mobile_bbox_m: float = _MOBILE_BBOX_M) -> str:
     nodes_json = sim_dir / "nodes.json"
-    if not nodes_json.is_file():
+    if not nodes_json.is_file(): #< Check for nodes.json
         return f"error: nodes.json not found at {nodes_json}"
     nodes = _load_nodes_json(nodes_json)
 
@@ -261,7 +262,7 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
         return f"error: {e}"
 
     bbox = _field_bbox_max_m(df, node)
-    if bbox <= mobile_bbox_m:
+    if bbox <= mobile_bbox_m: #< Checks if node is moving
         return f"skipped: field {node} bbox {bbox:.1f} m <= {mobile_bbox_m:g} m (static)"
 
     # Frame alignment is optional. With no anchor (anchor=None), the field trace
@@ -288,7 +289,7 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
     x = g["east_m"].to_numpy(dtype=np.float64) + dx
     y = g["north_m"].to_numpy(dtype=np.float64) + dy
 
-    t_sim            = _scale_time(t, time_mode, duration)
+    t_sim            = _scale_time(t, time_mode, duration) #< Logic for time scaling
     t_ds, x_ds, y_ds = _downsample_uniform_time(t_sim, x, y, n_waypoints)
 
     target_node = next((n for n in nodes if n.get("id") == node), None)
@@ -302,7 +303,7 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
     summary = (f"patched: {len(waypoints)} waypoints, "
                f"bbox {x_ds.max() - x_ds.min():.0f}x{y_ds.max() - y_ds.min():.0f} m, "
                f"path {path_m:.0f} m, t {t_ds[0]:.0f}..{t_ds[-1]:.0f} s")
-    if dry_run:
+    if dry_run: #< Dry run does not update waypoints in nodes.json
         return summary + " (dry-run)"
 
     _patch_node(nodes, node, waypoints)
@@ -356,13 +357,13 @@ def main(argv: list[str] | None = None) -> int:
     sp_node = sub.add_parser("node",
                              help="calfex style dataset")
     sp_node.add_argument("-i", "--input", type=Path, required=True,
-                         help="scenario directory containing nodes.json")
+                         help="sim input directory containing nodes.json")
     sp_node.add_argument("-f", "--field", type=Path, required=True,
                          help="field directory or direct path to trace CSV")
     g_node = sp_node.add_mutually_exclusive_group(required=True)
-    g_node.add_argument("--node",
+    g_node.add_argument("--node", #< Updating specific node movement
                         help="moving node id to author waypoints for")
-    g_node.add_argument("--all-nodes", dest="all_nodes", action="store_true",
+    g_node.add_argument("--all-nodes", dest="all_nodes", action="store_true", #< Updating all nodes
                         help="author waypoints for every non-anchor node in nodes.json")
     sp_node.add_argument("--anchor", default=None,
                          help="fixed node for frame alignment (default: gateway)")
@@ -370,7 +371,7 @@ def main(argv: list[str] | None = None) -> int:
                          help="downsample target (default: 20)")
     sp_node.add_argument("--time-mode", choices=("raw", "clip", "scale"), default="raw",
                          help="raw=field clock, clip/scale to --duration (default: raw)")
-    sp_node.add_argument("--duration", type=float, default=None,
+    sp_node.add_argument("--duration", type=float, default=None, 
                          help="target duration in seconds for clip/scale modes")
     sp_node.add_argument("--field-z", type=float, default=None,
                          help="z (m) for each waypoint; default: keep existing node z")
@@ -418,45 +419,46 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if n_error == 0 else 1
 
     # --- node mode ---
-    if not args.input.is_dir():
-        print(f"Error: input directory does not exist: {args.input}", file=sys.stderr)
-        return 1
-    if not (args.input / "nodes.json").is_file():
-        print(f"Error: no nodes.json found in: {args.input}", file=sys.stderr)
-        return 1
-    if not args.field.exists():
-        print(f"Error: field path does not exist: {args.field}", file=sys.stderr)
-        return 1
+    elif args.mode == "node": 
+        if not args.input.is_dir(): 
+            print(f"Error: input directory does not exist: {args.input}", file=sys.stderr)
+            return 1
+        if not (args.input / "nodes.json").is_file():
+            print(f"Error: no nodes.json found in: {args.input}", file=sys.stderr)
+            return 1
+        if not args.field.exists():
+            print(f"Error: field path does not exist: {args.field}", file=sys.stderr)
+            return 1
 
-    # Anchor is optional in node mode; None / "" / "none" disables alignment.
-    anchor = args.anchor
-    if anchor is not None and anchor.strip().lower() in ("", "none"):
-        anchor = None
+        # Anchor is optional in node mode; None / "" / "none" disables alignment.
+        anchor = args.anchor
+        if anchor is not None and anchor.strip().lower() in ("", "none"):
+            anchor = None
 
-    # Build list of nodes to patch.
-    if args.all_nodes:
-        all_node_specs = _load_nodes_json(args.input / "nodes.json")
-        nodes_to_patch = [n["id"] for n in all_node_specs
-                          if n.get("id") and n.get("id") != anchor]
-    else:
-        nodes_to_patch = [args.node]
+        # Build list of nodes to patch.
+        if args.all_nodes:
+            all_node_specs = _load_nodes_json(args.input / "nodes.json")
+            nodes_to_patch = [n["id"] for n in all_node_specs
+                            if n.get("id") and n.get("id") != anchor]
+        else:
+            nodes_to_patch = [args.node]
 
-    n_patched = n_skipped = n_error = 0
-    for node_id in nodes_to_patch:
-        status = patch_scenario_waypoints(
-            args.input,
-            field_path=args.field,
-            node=node_id, anchor=anchor,
-            n_waypoints=args.n_waypoints, time_mode=args.time_mode,
-            duration=args.duration, field_z=args.field_z, dry_run=args.dry_run,
-        )
-        print(f"  {node_id}: {status}")
-        if status.startswith("patched"):   n_patched += 1
-        elif status.startswith("skipped"): n_skipped += 1
-        else:                              n_error   += 1
+        n_patched = n_skipped = n_error = 0
+        for node_id in nodes_to_patch: #< Patch waypoints for nodes in nodes.json
+            status = patch_scenario_waypoints(
+                args.input,
+                field_path=args.field,
+                node=node_id, anchor=anchor,
+                n_waypoints=args.n_waypoints, time_mode=args.time_mode,
+                duration=args.duration, field_z=args.field_z, dry_run=args.dry_run,
+            )
+            print(f"  {node_id}: {status}")
+            if status.startswith("patched"):   n_patched += 1
+            elif status.startswith("skipped"): n_skipped += 1
+            else:                              n_error   += 1
 
-    print(f"\nsummary: {n_patched} patched, {n_skipped} skipped, {n_error} errors")
-    return 0 if n_error == 0 else 1
+        print(f"\nsummary: {n_patched} patched, {n_skipped} skipped, {n_error} errors")
+        return 0 if n_error == 0 else 1
 
 
 if __name__ == "__main__":

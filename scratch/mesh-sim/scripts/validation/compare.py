@@ -103,24 +103,46 @@ def _scenario_label(name: str) -> str:
     return f"{major}-{minor.upper()} {mid}\n{date}"
 
 
-## @brief Read one numeric column from a trace CSV.
+## @brief Candidate time-column names used for the comparison window.
+#
+# The first one present in a trace is used to filter rows to the requested
+# window. Sim traces use ``sec``; field IH traces also use ``sec``.
+_TIME_CANDIDATES = ("sec", "time_s", "sec_since_origin", "t")
+
+
+## @brief Read one numeric column from a trace CSV, optionally time-windowed.
 #
 # Returns an empty float64 array if the file is absent, unreadable, or does
 # not contain the requested column. Non-numeric values are coerced to NaN
-# and dropped before returning.
+# and dropped before returning. When @p window_s is given, only rows whose
+# time column (see @ref _TIME_CANDIDATES) is ``<= window_s`` are kept, so the
+# same [0, window_s] period is used for both sim and field.
 #
 # @param csv_path  Path to the trace CSV file.
 # @param column    Column name to extract.
+# @param window_s  If set, keep only rows with time ``<= window_s`` seconds.
 # @return          1-D float64 array of valid (non-NaN) values.
-def _read_metric_column(csv_path: Path, column: str) -> np.ndarray:
+def _read_metric_column(csv_path: Path, column: str,
+                        window_s: float | None = None) -> np.ndarray:
     if not csv_path.is_file():
         return np.array([], dtype=np.float64)
     try:
-        df = pd.read_csv(csv_path, usecols=lambda c: c == column)
+        if window_s is None:
+            usecols = lambda c: c == column
+        else:
+            usecols = lambda c: c == column or c in _TIME_CANDIDATES
+        df = pd.read_csv(csv_path, usecols=usecols)
     except (ValueError, pd.errors.EmptyDataError):
         return np.array([], dtype=np.float64)
     if column not in df.columns:
         return np.array([], dtype=np.float64)
+    if window_s is not None:
+        tcol = next((c for c in _TIME_CANDIDATES if c in df.columns), None)
+        if tcol is not None:
+            t  = pd.to_numeric(df[tcol], errors="coerce")
+            t0 = t.min()                       
+            if pd.notna(t0):                  
+                df = df[t <= t0 + window_s] #< Keeps any data within window max
     vals = pd.to_numeric(df[column], errors="coerce").dropna()
     return vals.to_numpy(dtype=np.float64)
 
@@ -180,22 +202,32 @@ def _discover_pairs(seed_traces_root: Path, mode: str,
 # @param spec          Metric specification.
 # @return              Concatenated float64 array of all valid samples.
 def _pool_sim(scenario_dir: Path, src: str, peer: str,
-              spec: _MetricSpec) -> np.ndarray:
+              spec: _MetricSpec, window_s: float | None = None) -> np.ndarray:
     sim_traces = scenario_dir / "sim_traces"
     if not sim_traces.is_dir():
         return np.array([])
+    
     arrs: list[np.ndarray] = []
     for seed_dir in sorted(sim_traces.iterdir()):
         if not seed_dir.is_dir():
             continue
         if peer == "neighbors":
             p = seed_dir / "csvs" / src / f"IH_{spec.short}__{src}_to_neighbors_trace.csv"
-            arrs.append(_read_metric_column(p, spec.column))
+            arrs.append(_read_metric_column(p, spec.column, window_s))
         else:
             for a, b in [(src, peer), (peer, src)]:
                 p = seed_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
-                arrs.append(_read_metric_column(p, spec.column))
-    return np.concatenate(arrs) if arrs else np.array([])
+                arrs.append(_read_metric_column(p, spec.column, window_s))
+
+    if not arrs:
+        return np.array([])
+    
+    lengths = [a.size for a in arrs]
+    if len(set(lengths)) == 1 and lengths[0] > 0:
+        stacked = np.stack(arrs, axis=0)  # shape: (n_seeds, n_ticks)
+        return np.mean(stacked, axis=0)   # shape: (n_ticks,) — per-tick mean across seeds
+    else:
+        return np.concatenate(arrs)  
 
 
 ## @brief Pool metric samples for one link from the field traces.
@@ -211,17 +243,18 @@ def _pool_sim(scenario_dir: Path, src: str, peer: str,
 # @param spec            Metric specification.
 # @return                Concatenated float64 array of all valid samples.
 def _pool_field(field_scen_dir: Path, src: str, peer: str,
-                spec: _MetricSpec) -> np.ndarray:
+                spec: _MetricSpec, window_s: float | None = None) -> np.ndarray:
     if not field_scen_dir.is_dir():
         return np.array([])
+
     arrs: list[np.ndarray] = []
     if peer == "neighbors":
         p = field_scen_dir / src / "csvs" / src / f"IH_{spec.short}__{src}_to_neighbors_trace.csv"
-        arrs.append(_read_metric_column(p, spec.column))
+        arrs.append(_read_metric_column(p, spec.column, window_s))
     else:
         for a, b in [(src, peer), (peer, src)]:
             p = field_scen_dir / "csvs" / a / f"bh2_{spec.short}__{a}_to_{b}_trace.csv"
-            arrs.append(_read_metric_column(p, spec.column))
+            arrs.append(_read_metric_column(p, spec.column, window_s))
     return np.concatenate(arrs) if arrs else np.array([])
 
 
@@ -510,7 +543,8 @@ def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
 #                      name derivation (node mode).
 # @return              List of result dicts, one per (pair, metric) combination.
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
-                      out_dir: Path, field_dir: Path | None = None) -> list[dict]:
+                      out_dir: Path, field_dir: Path | None = None,
+                      window_s: float | None = None) -> list[dict]:
     if field_dir is None:
         field_name     = sim_to_field_scenario(scenario_dir.name)
         resolved_field = (field_root / field_name) if field_name else None
@@ -541,9 +575,9 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
     rows: list[dict] = []
     for src, peer in pairs:
         for spec in metrics:
-            sim_vals   = _apply_mcs_cap(_pool_sim(scenario_dir, src, peer, spec),
+            sim_vals   = _apply_mcs_cap(_pool_sim(scenario_dir, src, peer, spec, window_s),
                                         spec.integer_cap)
-            field_vals = _apply_mcs_cap(_pool_field(resolved_field, src, peer, spec),
+            field_vals = _apply_mcs_cap(_pool_field(resolved_field, src, peer, spec, window_s),
                                         spec.integer_cap)
             if sim_vals.size == 0 and field_vals.size == 0:
                 continue
@@ -603,7 +637,14 @@ def main(argv: list[str] | None = None) -> int:
                    help="restrict to one scenario name (scenario mode only)")
     p.add_argument("--metrics", default="snr,rcpi,mcs",
                    help="comma-separated metric shorts to compare")
+    p.add_argument("--window", type=float, default=None,
+                   help="compare only the first N seconds of sim AND field "
+                        "(by the trace 'sec' column); default: use all rows")
     args = p.parse_args(argv)
+
+    window_s = args.window
+    if window_s is not None:
+        print(f"comparison window: first {window_s:g} s")
 
     batch_root = Path(args.batch_root).resolve()
     if not batch_root.is_dir():
@@ -621,7 +662,7 @@ def main(argv: list[str] | None = None) -> int:
 
     all_rows: list[dict] = []
 
-    if args.mode == "node":
+    if args.mode == "node": #< Used for current datasets
         field_dir = Path(args.field_root).resolve()
         if not field_dir.is_dir():
             print(f"Error: field-root not found: {field_dir}", file=sys.stderr)
@@ -630,14 +671,14 @@ def main(argv: list[str] | None = None) -> int:
         out_dir = batch_root / "validation"
         out_dir.mkdir(parents=True, exist_ok=True)
         rows = _process_scenario(batch_root, Path(), metrics, out_dir,
-                                 field_dir=field_dir)
+                                 field_dir=field_dir, window_s=window_s)
         if rows:
             scen_csv = out_dir / "metrics.csv"
             pd.DataFrame(rows).to_csv(scen_csv, index=False)
             print(f"    wrote {scen_csv.relative_to(batch_root)}")
         all_rows.extend(rows)
 
-    elif args.mode == "scenario":
+    elif args.mode == "scenario": #< Used for scenario based datasets
         field_root = Path(args.field_root).resolve()
         if not field_root.is_dir():
             print(f"Error: field root not found: {field_root}", file=sys.stderr)
@@ -654,7 +695,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[{scen.name}]")
             out_dir = scen / "validation"
             out_dir.mkdir(parents=True, exist_ok=True)
-            rows = _process_scenario(scen, field_root, metrics, out_dir)
+            rows = _process_scenario(scen, field_root, metrics, out_dir,
+                                     window_s=window_s)
             if rows:
                 scen_csv = out_dir / "metrics.csv"
                 pd.DataFrame(rows).to_csv(scen_csv, index=False)

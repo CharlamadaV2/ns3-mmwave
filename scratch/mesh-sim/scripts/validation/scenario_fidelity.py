@@ -84,15 +84,16 @@ def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
 
 ## @brief Load per-node motion from a field scenario's GPS track trace (scenario mode).
 #
-# Reads ``csvs/gps_track_trace.csv`` from @p field_scenario_dir.
+# Reads ``csvs/gps  track_trace.csv`` from @p field_scenario_dir.
 #
 # @param field_scenario_dir Per-day output directory for the field scenario.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
-def _load_field_motion(field_scenario_dir: Path) -> dict[str, NodeMotion]:
+def _load_field_motion(field_scenario_dir: Path,
+                       window_s: float | None = None) -> dict[str, NodeMotion]:
     trace = field_scenario_dir / "csvs" / "gps_track_trace.csv"
     if not trace.is_file():
         return {}
-    return _load_field_motion_from_file(trace)
+    return _load_field_motion_from_file(trace, window_s)
 
 
 ## @brief Load per-node motion directly from a GPS trace CSV file (node mode).
@@ -102,11 +103,17 @@ def _load_field_motion(field_scenario_dir: Path) -> dict[str, NodeMotion]:
 #
 # @param trace_path Direct path to the GPS trace CSV.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
-def _load_field_motion_from_file(trace_path: Path) -> dict[str, NodeMotion]:
+def _load_field_motion_from_file(trace_path: Path,
+                                 window_s: float | None = None) -> dict[str, NodeMotion]:
     if not trace_path.is_file():
         return {}
     df  = pd.read_csv(trace_path,
                       usecols=["node", "sec_since_origin", "east_m", "north_m"])
+    if window_s is not None: 
+        t  = pd.to_numeric(df["sec_since_origin"], errors="coerce")
+        t0 = t.min()                           # relative to trace start
+        if pd.notna(t0):
+            df = df[t <= t0 + window_s]
     out: dict[str, NodeMotion] = {}
     for node, g in df.groupby("node"):
         g = g.sort_values("sec_since_origin")
@@ -158,11 +165,17 @@ def _sim_mobility_modes(scenario_out_dir: Path) -> dict[str, str]:
 # @param seed_name        Seed subdirectory to read (default: ``"seed-1"``).
 # @return Tuple ``(motion_dict, label_map)``.
 def _load_sim_motion(scenario_out_dir: Path,
-                     seed_name: str = "seed-1") -> tuple[dict[str, NodeMotion], dict[int, str]]:
+                     seed_name: str = "seed-1",
+                     window_s: float | None = None) -> tuple[dict[str, NodeMotion], dict[int, str]]:
     pos = scenario_out_dir / seed_name / "positions.csv"
     if not pos.is_file():
         return {}, {}
     df        = pd.read_csv(pos, comment="#")
+    if window_s is not None and "time_s" in df.columns:
+        t  = pd.to_numeric(df["time_s"], errors="coerce")
+        t0 = t.min()
+        if pd.notna(t0):
+            df = df[t <= t0 + window_s]
     label_map = _node_id_to_label(scenario_out_dir)
     out: dict[str, NodeMotion] = {}
     for node_id, g in df.groupby("node_id"):
@@ -282,14 +295,15 @@ def _render_pairwise(field: dict[str, NodeMotion],
 # @param scenario_out_dir Scenario output directory.
 # @param tol_m            Pairwise distance tolerance in metres.
 # @return Tuple ``(had_mismatch, report_text)``.
-def _process_scenario(scenario_out_dir: Path, tol_m: float) -> tuple[bool, str]:
+def _process_scenario(scenario_out_dir: Path, tol_m: float,
+                      window_s: float | None = None) -> tuple[bool, str]:
     sim_name   = scenario_out_dir.name
     field_name = sim_to_field_scenario(sim_name)
     if field_name is None:
         return False, f"[{sim_name}] could not map to field scenario; skipping"
 
-    field_motion   = _load_field_motion(FIELD_PER_DAY_ROOT / field_name)
-    sim_motion, _  = _load_sim_motion(scenario_out_dir)
+    field_motion   = _load_field_motion(FIELD_PER_DAY_ROOT / field_name, window_s)
+    sim_motion, _  = _load_sim_motion(scenario_out_dir, window_s=window_s)
     sim_modes      = _sim_mobility_modes(scenario_out_dir)
     return _build_report(sim_name, field_name, field_motion, sim_motion,
                          sim_modes, tol_m)
@@ -305,10 +319,11 @@ def _process_scenario(scenario_out_dir: Path, tol_m: float) -> tuple[bool, str]:
 # @param tol_m         Pairwise distance tolerance in metres.
 # @return Tuple ``(had_mismatch, report_text)``.
 def _process_scenario_node(batch_root: Path, field_gps_path: Path,
-                           tol_m: float) -> tuple[bool, str]:
+                           tol_m: float,
+                           window_s: float | None = None) -> tuple[bool, str]:
     #Loading Variables
-    field_motion  = _load_field_motion_from_file(field_gps_path)
-    sim_motion, _ = _load_sim_motion(batch_root)
+    field_motion  = _load_field_motion_from_file(field_gps_path, window_s)
+    sim_motion, _ = _load_sim_motion(batch_root, window_s=window_s)
     sim_modes     = _sim_mobility_modes(batch_root)
     
     #Main Logic
@@ -390,7 +405,12 @@ def main(argv: list[str] | None = None) -> int:
                    help="restrict to one scenario name (scenario mode only)")
     p.add_argument("--tol-m", type=float, default=5.0,
                    help="pairwise initial-distance tolerance in metres (default: 5)")
+    p.add_argument("--window", type=float, default=None,
+                   help="use only the first N seconds of sim AND field GPS "
+                        "(default: use the whole trace)")
     args = p.parse_args(argv)
+
+    window_s = args.window
 
     batch_dir = Path(args.batch_root).resolve()
     if not batch_dir.is_dir():
@@ -406,7 +426,8 @@ def main(argv: list[str] | None = None) -> int:
         if not field_gps.is_file(): #< Check for field_gps existence
             print(f"Error: field GPS file not found: {field_gps}", file=sys.stderr)
             return 1
-        had_mismatch, report = _process_scenario_node(batch_dir, field_gps, args.tol_m) #< Main Logic
+        had_mismatch, report = _process_scenario_node(batch_dir, field_gps, args.tol_m,
+                                                      window_s) #< Main Logic
         print(report)
         return 1 if had_mismatch else 0
 
@@ -423,7 +444,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"== scenario fidelity  (batch = {batch_dir.name}) ==\n")
         flagged: list[str] = []
         for scen in scenarios:
-            had_mismatch, report = _process_scenario(scen, args.tol_m)
+            had_mismatch, report = _process_scenario(scen, args.tol_m, window_s)
             print(report)
             print()
             if had_mismatch:

@@ -1,110 +1,88 @@
 [
   {
-    "id": "gateway",
-    "role": "peer",
-    "mobility": "fixed",
-    "position": {
-      "x": 0.0,
-      "y": 0.0,
-      "z": 30.0
-    },
-    "_sdwan_device": "SpringLakeLab-sdwan"
-  },
-  {
-    "id": "IH01",
+    "id": "BD1",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": -148.89,
-      "y": -1308.09,
+      "x": -65.91,
+      "y": 125.24,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH04",
+    "id": "I17",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": 851.53,
-      "y": -681.73,
+      "x": -63.64,
+      "y": 126.35,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH05",
+    "id": "I22",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": 572.65,
-      "y": -1476.55,
+      "x": -63.03,
+      "y": 122.83,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH06",
+    "id": "I23",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": 881.65,
-      "y": -347.96,
+      "x": -63.64,
+      "y": 124.13,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH10",
+    "id": "I24",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": -4094.6,
-      "y": 1174.52,
+      "x": -59.56,
+      "y": 121.9,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH11",
+    "id": "I25",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": -4071.29,
-      "y": 1681.58,
+      "x": -56.23,
+      "y": 123.94,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH12",
+    "id": "I30",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": 993.27,
-      "y": 1879.73,
+      "x": -62.43,
+      "y": 126.72,
       "z": 1.5
     },
     "waypoints": []
   },
   {
-    "id": "IH13",
+    "id": "I31",
     "role": "peer",
     "mobility": "waypoint",
     "position": {
-      "x": -1499.69,
-      "y": 1254.49,
-      "z": 1.5
-    },
-    "waypoints": []
-  },
-  {
-    "id": "IH14",
-    "role": "peer",
-    "mobility": "waypoint",
-    "position": {
-      "x": 6515.39,
-      "y": -2176.01,
+      "x": -37.94,
+      "y": 104.28,
       "z": 1.5
     },
     "waypoints": []
