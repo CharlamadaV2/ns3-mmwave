@@ -54,7 +54,8 @@ class LinkEvaluator
      */
     void Configure(const SimConfig& cfg,
                    ns3::Ptr<ns3::PropagationLossModel> plModel,
-                   ns3::Ptr<ns3::ChannelConditionModel> condModel);
+                   ns3::Ptr<ns3::ChannelConditionModel> condModel,
+                   const std::string& band = "mmwave");
 
     /**
      * @brief Evaluate one directed (tx → rx) link at the current node positions.
@@ -106,6 +107,8 @@ class LinkEvaluator
     std::string m_amcModel         = "shannon"; ///< Capacity model: @c "shannon" or @c "table".
     bool        m_buildingsEnabled = false;    ///< @c true when buildings are present;
                                                ///<   written to @ref LinkResult::condition_from_buildings.
+    bool        m_computeInterference = false;  ///< true when band == "sub-6";
+                                                ///<   sums co-channel interference into SINR.                 
     // Per-node array gains, indexed parallel to cfg.nodes (and to mobs in
     // EvaluateAll). Resolved at Configure() from each NodeSpec's override
     // or the channel default.

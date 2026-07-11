@@ -47,6 +47,10 @@ ParseCommandLine(int argc, char* argv[])
     cmd.AddValue("rl-mode",
                  "Enable RL mode: exchange observations and actions via stdin/stdout JSON.",
                  args.rl_mode);
+    cmd.AddValue("band",
+                 "Radio band: 'mmwave' (orthogonal beams, no interference) or "
+                 "'sub-6' (omnidirectional, co-channel interference computed).",
+                 args.band);
     cmd.Parse(argc, argv);
 
     //Makes config path required
@@ -60,6 +64,13 @@ ParseCommandLine(int argc, char* argv[])
     {
         std::cerr << "Error: run-config file not found: "
                   << args.run_config_path << "\n";
+        std::exit(1);
+    }
+    
+    if (args.band != "mmwave" && args.band != "sub-6")
+    {
+        std::cerr << "Error: --band must be 'mmwave' or 'sub-6', got '"
+                  << args.band << "'.\n";
         std::exit(1);
     }
 

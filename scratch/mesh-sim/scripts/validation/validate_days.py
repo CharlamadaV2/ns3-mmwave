@@ -109,7 +109,7 @@ def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
         "--mode", "node",
         "--field-root", str(field_dir),
         "--metrics", metrics,
-        "--window", str(window_s),
+        "--window", str(window_s,)
     ])
     if rc != 0:
         print(f"  compare reported an error for {day_dir.name}", file=sys.stderr)
@@ -169,6 +169,7 @@ def main(argv: list[str] | None = None) -> int:
                    help="skip the final compare_runs cross-day heatmap step "
                         "(only relevant with --all-days)")
     args = p.parse_args(argv)
+    cfg = configparser.ConfigParser()
 
     if not args.out_root.is_dir():
         print(f"Error: out-root not found: {args.out_root}", file=sys.stderr)
@@ -213,11 +214,13 @@ def main(argv: list[str] | None = None) -> int:
                       f"{args.field_root / 'by_day' / f'gps_all_nodes_trace_{day}.csv'}",
                       file=sys.stderr)
                 
-        #If args.time is empty, compare max sim time to field data.
+        #If args.time is empty, read duration_s from run.ini for this day.
         if args.time is None:
-            config_directory = day_dir / inputs / 'run.ini'
+            config_directory = day_dir / 'inputs' / 'run.ini'
             cfg.read(config_directory)
-            compare_window = cfg.getfloat("scenario", "duration_s") 
+            compare_window = cfg.getfloat("scenario", "duration_s", fallback=60.0)
+        else:
+            compare_window = float(args.time)
             
         # Main logic        
         rc = _run_day(day_dir, field_dir, field_gps, 

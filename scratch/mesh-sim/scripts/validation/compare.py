@@ -35,9 +35,6 @@ _TRACE_FILE_RE = re.compile(
     r"^bh2_(?P<metric>[a-z]+)__(?P<src>[a-z0-9]+)_to_(?P<peer>[a-z0-9]+)_trace\.csv$"
 )
 
-## @brief Regex for matching IH node directory names (e.g. ``"IH01"``, ``"IH14"``).
-_IH_DIR_RE = re.compile(r"^IH\d+$")
-
 ## @brief Regex for parsing a sim scenario directory name.
 #
 # Expected form: ``arpo-<major>-<minor>-<description>-<MMDDYYYY>``
@@ -181,11 +178,8 @@ def _discover_pairs(seed_traces_root: Path, mode: str,
         for node_dir in csvs.iterdir():
             if not node_dir.is_dir():
                 continue
-            if not _IH_DIR_RE.match(node_dir.name):
-                continue
             if field_dir is None or (field_dir / node_dir.name / "csvs" / node_dir.name).is_dir():
                 out.add((node_dir.name, "neighbors"))
-
     return out
 
 
@@ -572,6 +566,10 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
         return []
 
     pairs = sorted(_discover_pairs(seed_dirs[0], mode, resolved_field))
+    if not pairs:
+        print("Error: Pairs not found, validation cannot be made")
+        return []
+    
     rows: list[dict] = []
     for src, peer in pairs:
         for spec in metrics:
@@ -664,7 +662,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.mode == "node": #< Used for current datasets
         field_dir = Path(args.field_root).resolve()
-        if not field_dir.is_dir():
+        if not field_dir.is_dir():  
             print(f"Error: field-root not found: {field_dir}", file=sys.stderr)
             return 1
         print(f"[{batch_root.name}]")

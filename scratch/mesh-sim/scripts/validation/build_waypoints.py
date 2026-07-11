@@ -159,16 +159,20 @@ def _save_nodes_json(path: Path, nodes: list[dict]) -> None:
 # @throws KeyError if no node with ``target_id`` is found.
 def _patch_node(nodes: list[dict], target_id: str,
                 waypoints: list[dict]) -> dict:
-    for n in nodes: #< Loops until node is found
+    for n in nodes:
         if n.get("id") == target_id:
-            n["mobility"]  = "waypoint"
-            n["waypoints"] = waypoints
-            wp0 = waypoints[0]
-            n.setdefault("position", {})
-            n["position"]["x"] = wp0["x"]
-            n["position"]["y"] = wp0["y"]
-            n["position"].setdefault("z", 0.0)
-            n["position"]["z"] = wp0["z"]
+            if not waypoints:
+                n["mobility"]  = "fixed"
+                n["waypoints"] = []
+            else:
+                n["mobility"]  = "waypoint"
+                n["waypoints"] = waypoints
+                wp0 = waypoints[0]
+                n.setdefault("position", {})
+                n["position"]["x"] = wp0["x"]
+                n["position"]["y"] = wp0["y"]
+                n["position"].setdefault("z", 0.0)
+                n["position"]["z"] = wp0["z"]
             return n
     raise KeyError(f"node id '{target_id}' not in nodes.json")
 
@@ -262,7 +266,9 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
         return f"error: {e}"
 
     bbox = _field_bbox_max_m(df, node)
-    if bbox <= mobile_bbox_m: #< Checks if node is moving
+    if bbox <= mobile_bbox_m: #< Checks if node is static
+        _patch_node(nodes, node, [])
+        _save_nodes_json(nodes_json, nodes)
         return f"skipped: field {node} bbox {bbox:.1f} m <= {mobile_bbox_m:g} m (static)"
 
     # Frame alignment is optional. With no anchor (anchor=None), the field trace

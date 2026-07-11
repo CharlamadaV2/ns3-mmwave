@@ -29,11 +29,15 @@ namespace fs = std::filesystem;
 
 NS_LOG_COMPONENT_DEFINE("MeshSim");
 
-
+/// @brief Entry point: loads config, builds topology, runs the per-tick
+///        simulation loop for each seed, and writes metrics/run logs.
+/// @param argc CLI argument count.
+/// @param argv CLI argument values.
+/// @return 0 on success, 1 on config/load/output error.
 int
 main(int argc, char* argv[]) ///< Takes params for cli at start
 {
-    auto args = mesh_sim::ParseCommandLine(argc, argv);
+    auto args = mesh_sim::ParseCommandLine(argc, argv); //< Passes params to cli
     ns3::LogComponentEnable("MeshSim", ns3::LOG_LEVEL_INFO);
 
     // Enable with: NS_LOG="LinkEvaluator=debug:LinkTable=debug" or --debug-links
@@ -43,7 +47,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         ns3::LogComponentEnable("LinkTable", ns3::LOG_LEVEL_ALL);
     }
 
-    // Load configuration + apply CLI overrides
+    /// @brief Load run.ini + nodes.json/buildings.json into a SimConfig.
     NS_LOG_INFO("Loading config: " << args.run_config_path);
     mesh_sim::SimConfig cfg;
     try
@@ -57,6 +61,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         return 1;
     }
 
+    /// @brief Apply CLI overrides on top of the loaded config.
     if (args.run_id_override >= 0)
     {
         cfg.run_id = static_cast<uint32_t>(args.run_id_override);
@@ -72,6 +77,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         cfg.rl.enabled = true;
     }
 
+    /// @brief Validate the fully-resolved config before running.
     auto vr = mesh_sim::ValidateConfig(cfg);
     if (!vr.ok())
     {
@@ -82,7 +88,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         return 1;
     }
 
-    auto seeds = mesh_sim::ResolveSeeds(args, cfg);
+    auto seeds = mesh_sim::ResolveSeeds(args, cfg); //< From cli-parser, manages seeds
     NS_LOG_INFO("Scenario '" << cfg.scenario_name << "'"
                              << " seeds=" << seeds.size()
                              << " duration=" << cfg.duration_s << "s"
@@ -92,6 +98,8 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
 
     const std::string baseOutputDir = cfg.output_dir;
 
+    /// @brief Snapshot the run.ini/nodes.json inputs into the output dir
+    ///        for reproducibility, then write the run.log summary.
     try
     {
         mesh_sim::ArchiveScenarioInputs(baseOutputDir, args.run_config_path);
@@ -104,7 +112,8 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
 
     mesh_sim::WriteRunLog(baseOutputDir, args, cfg, seeds);
 
-    // Per-seed simulation loop
+    /// @brief Per-seed simulation loop — each seed gets its own RNG stream
+    ///        and output subdirectory (seed-<N>/).
     for (size_t si = 0; si < seeds.size(); ++si)
     {
         uint32_t seed = seeds[si];
@@ -127,32 +136,35 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         ns3::RngSeedManager::SetSeed(seed);
         ns3::RngSeedManager::SetRun(cfg.run_id);
 
-        auto wallStart = std::chrono::system_clock::now();
+        auto wallStart = std::chrono::system_clock::now(); //<Start time
 
-        // Build topology (ns-3 nodes, mobility, propagation models)
+        /// @brief Build ns-3 nodes, mobility models, buildings, and the
+        ///        propagation/condition models for this seed's topology.
         mesh_sim::TopologyBuilder topo(cfg);
         topo.Build();
         auto mobs = topo.GetMobilityModels();
         uint32_t N = static_cast<uint32_t>(mobs.size());
 
-        // Configure link evaluator
+        /// @brief Bind the propagation/condition models to a LinkEvaluator
+        ///        that will compute per-tick SINR/capacity/MCS.
         mesh_sim::LinkEvaluator linkEval;
-        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel());
+        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel(), args.band);
 
-        // Create per-tick components
+        /// @brief Per-tick components: link table, traffic generator, router.
         mesh_sim::LinkTable      linkTable;
         mesh_sim::TrafficMatrix  trafficMatrix(cfg);
         mesh_sim::MeshRouter     router(cfg.mesh.routing);
 
         trafficMatrix.Initialize(N, 0.0);
 
-        // Output components
+        /// @brief Output writers: live viz stream and accumulated metrics.
         mesh_sim::VizWriter vizWriter(cfg);
         vizWriter.Open();
 
         mesh_sim::MetricsWriter metricsWriter(cfg);
 
-        // RL bridge (optional)
+        /// @brief Optional RL bridge — picks the controlled node and steps
+        ///        the obs/action loop alongside the main tick loop.
         std::unique_ptr<mesh_sim::RlBridge> rlBridge;
         uint32_t rlControlledIdx = N - 1; // default: last node
         if (cfg.rl.enabled)
@@ -171,7 +183,8 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             rlBridge = std::make_unique<mesh_sim::RlBridge>(cfg, rlControlledIdx);
         }
 
-        // Step loop
+        /// @brief Main per-tick loop: advance sim time, evaluate links,
+        ///        route flows, log progress, write metrics/viz.
         uint32_t numTicks = static_cast<uint32_t>(cfg.duration_s / cfg.tick_s);
 
         uint32_t progressInterval = std::max(1u, numTicks / 20);
@@ -191,18 +204,18 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
                 ns3::Simulator::Run();
             }
 
-            // Evaluate all links
+            /// @brief Evaluate all N*(N-1)/2 links at the current positions.
             linkTable.Update(N, linkEval.EvaluateAll(mobs));
 
-            // Advance traffic state
+            /// @brief Advance traffic state and route active flows over
+            ///        the freshly-evaluated link table.
             trafficMatrix.Tick(t);
 
-            // Route flows over the mesh
             auto flowResults = router.Route(linkTable,
                                             trafficMatrix.GetActiveFlows(),
                                             N);
 
-            // Per-tick summary
+            /// @brief Aggregate per-tick summary stats for the progress log.
             uint32_t routableCount = 0;
             double totalDemand     = 0.0;
             double totalDelivered  = 0.0;
@@ -225,7 +238,8 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             metricsWriter.AccumulateTick(t, linkTable, flowResults, N);
             progress.Tick(ti);
 
-            // RL interaction: send obs+reward, receive action, set velocity
+            /// @brief RL interaction: send obs+reward, receive action,
+            ///        apply velocity to the controlled node.
             if (rlBridge)
             {
                 bool done = (ti == numTicks);
@@ -239,6 +253,8 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
 
         vizWriter.Close();
 
+        /// @brief Record wall-clock timing and flush accumulated metrics
+        ///        for this seed before moving to the next.
         auto wallEnd = std::chrono::system_clock::now();
         double wallElapsed = std::chrono::duration<double>(wallEnd - wallStart).count();
 

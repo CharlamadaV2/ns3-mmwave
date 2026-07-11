@@ -7,13 +7,13 @@
  *
  * | Section        | Key fields loaded                                                    |
  * |----------------|----------------------------------------------------------------------|
- * | @c [scenario]  | @c name, @c seed, @c run_id, @c duration_s, @c warmup_s, @c tick_s, @c nodes_file, @c buildings_file |
- * | @c [output]    | @c dir, @c viz_tick_ms                                               |
- * | @c [channel]   | @c frequency_ghz, @c tx_power_dbm, @c scenario, @c channel_model, @c blockage_enabled, @c beamforming_model, @c amc_model, @c noise_figure_db, @c bandwidth_mhz, @c tx_array_gain_dbi, @c rx_array_gain_dbi |
- * | @c [nyu_channel] | All @ref NyuChannelConfig fields; only applied when @c channel_model is @c "nyu" |
- * | @c [traffic]   | @c model, @c demand_mbps, @c arrival_rate_hz, @c on_time_s, @c off_time_s, @c holding_time_s, @c flow_topology, @c random_pair_count, @c gateway_node_id |
- * | @c [routing]   | @c algorithm, @c max_hops                                            |
- * | @c [rl]        | @c enabled, @c controlled_node_id, @c action_type, @c reward_type, @c step_size_m, @c arrival_threshold_m, @c x_min/x_max/y_min/y_max |
+ * | @c scenario  | @c name, @c seed, @c run_id, @c duration_s, @c warmup_s, @c tick_s, @c nodes_file, @c buildings_file |
+ * | @c output   | @c dir, @c viz_tick_ms                                               |
+ * | @c channel   | @c frequency_ghz, @c tx_power_dbm, @c scenario, @c channel_model, @c blockage_enabled, @c beamforming_model, @c amc_model, @c noise_figure_db, @c bandwidth_mhz, @c tx_array_gain_dbi, @c rx_array_gain_dbi |
+ * | @c nyu_channel | All @ref NyuChannelConfig fields; only applied when @c channel_model is @c "nyu" |
+ * | @c traffic   | @c model, @c demand_mbps, @c arrival_rate_hz, @c on_time_s, @c off_time_s, @c holding_time_s, @c flow_topology, @c random_pair_count, @c gateway_node_id |
+ * | @c routing   | @c algorithm, @c max_hops                                            |
+ * | @c rl        | @c enabled, @c controlled_node_id, @c action_type, @c reward_type, @c step_size_m, @c arrival_threshold_m, @c x_min/x_max/y_min/y_max |
  */
 #pragma once
 

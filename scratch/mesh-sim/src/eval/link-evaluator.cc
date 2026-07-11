@@ -12,6 +12,19 @@
 
 NS_LOG_COMPONENT_DEFINE("LinkEvaluator");
 
+namespace {
+
+    inline uint32_t McsIndexForModel(double sinrDb, const std::string& amcModel)
+    {
+        if (amcModel == "silvus")
+        {
+            return mesh_sim::SinrToSilvusMcsIndex(sinrDb);
+        }
+        return mesh_sim::SinrToMcsIndex(sinrDb);
+    }
+
+}
+
 namespace mesh_sim
 {
 
@@ -22,14 +35,17 @@ namespace mesh_sim
 void
 LinkEvaluator::Configure(const SimConfig& cfg,
                          ns3::Ptr<ns3::PropagationLossModel> plModel,
-                         ns3::Ptr<ns3::ChannelConditionModel> condModel)
+                         ns3::Ptr<ns3::ChannelConditionModel> condModel,
+                         const std::string& band)
 {
+    //Model Checks
     if (!plModel || !condModel)
     {
         throw std::runtime_error(
             "[LinkEvaluator] PropagationLossModel and ChannelConditionModel must not be null");
     }
 
+    //Loading Config Params
     m_plModel   = plModel;
     m_condModel = condModel;
 
@@ -40,6 +56,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
 
     m_noiseFloorDbm = -174.0 + 10.0 * std::log10(m_bandwidthHz) + cfg.channel.noise_figure_db;
 
+    //Clears and loads tx/rx gain values
     m_txGainDbi.clear();
     m_rxGainDbi.clear();
     m_txGainDbi.reserve(cfg.nodes.size());
@@ -65,7 +82,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
 }
 
 // ---------------------------------------------------------------------------
-// Evaluate (single link)
+// Evaluate (single link) — noise-limited; unchanged.
 // ---------------------------------------------------------------------------
 
 LinkResult
@@ -90,9 +107,9 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
         r.is_los                   = true;
         r.path_loss_db             = 0.0;
         r.rx_power_dbm             = m_txPowerDbm + bfGainDb;
-        r.sinr_db                  = r.rx_power_dbm - m_noiseFloorDbm;
+        r.sinr_db                   = r.rx_power_dbm - m_noiseFloorDbm;
         r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
-        r.mcs_index                = SinrToMcsIndex(r.sinr_db);
+        r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);
         r.condition_from_buildings = m_buildingsEnabled;
         NS_LOG_DEBUG("Link " << txIdx << "->" << rxIdx
                      << ": co-located (d<1m), SINR=" << r.sinr_db << " dB");
@@ -106,20 +123,22 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
     double rxPowerDbm = m_plModel->CalcRxPower(m_txPowerDbm, txMob, rxMob);
     r.path_loss_db = m_txPowerDbm - rxPowerDbm;
     r.rx_power_dbm = rxPowerDbm + bfGainDb;
-    // SINR with no inter-node interference (mmWave beams assumed orthogonal).
+
+    // SNR based calculations, refered to as SINR colloquially
     r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
 
     r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
-    r.mcs_index                = SinrToMcsIndex(r.sinr_db);
+    r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);
     r.condition_from_buildings = m_buildingsEnabled;
 
     NS_LOG_DEBUG("Link " << txIdx << "->" << rxIdx
-                 << ": d=" << r.distance_m << "m"
-                 << " LOS=" << r.is_los
-                 << " PL=" << r.path_loss_db << "dB"
-                 << " rxPow=" << r.rx_power_dbm << "dBm"
-                 << " SINR=" << r.sinr_db << "dB"
-                 << " cap=" << r.capacity_mbps << "Mbps");
+    << ": d=" << r.distance_m << "m"
+    << " LOS=" << r.is_los
+    << " PL=" << r.path_loss_db << "dB"
+    << " rxPow=" << r.rx_power_dbm << "dBm"
+    << " SINR=" << r.sinr_db << "dB"
+    << " cap=" << r.capacity_mbps << "Mbps");
+
 
     return r;
 }
@@ -127,15 +146,15 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 // ---------------------------------------------------------------------------
 // EvaluateAll (N*(N-1)/2 undirected pairs)
 // ---------------------------------------------------------------------------
-
 std::vector<LinkResult>
 LinkEvaluator::EvaluateAll(
     const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs) const
 {
     const auto n = static_cast<uint32_t>(mobs.size());
+
+    // mmWave: no interference — each pair is independent (original behaviour).
     std::vector<LinkResult> results;
     results.reserve(n * (n - 1) / 2);
-
     for (uint32_t i = 0; i < n; ++i)
     {
         for (uint32_t j = i + 1; j < n; ++j)
@@ -143,10 +162,6 @@ LinkEvaluator::EvaluateAll(
             results.push_back(Evaluate(mobs[i], mobs[j], i, j));
         }
     }
-
-    NS_LOG_DEBUG("EvaluateAll: " << n << " nodes, " << results.size() << " links evaluated");
-
     return results;
 }
-
 }  // namespace mesh_sim

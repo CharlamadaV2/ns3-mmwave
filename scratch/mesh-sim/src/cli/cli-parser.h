@@ -50,6 +50,8 @@ struct CliArgs
                                           ///<   Negative means not set.
     bool        debug_links     = false;  ///< Enable verbose per-link debug logging when @c true.
     bool        rl_mode         = false;  ///< Enable RL mode (stdin/stdout JSON exchange) when @c true.
+    std::string band            = "mmwave"; ///< Radio band: "mmwave" (no interference, default)
+                                            ///<   or "sub-6" (co-channel interference summed).
 };
 
 
