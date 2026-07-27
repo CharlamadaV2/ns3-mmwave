@@ -89,9 +89,25 @@ def _read_warmup_s(seed_dir: Path) -> float:
 # @param trace_col Column name to use in the output trace DataFrame.
 # @param node_map  Dict mapping integer node IDs to node labels.
 # @param warmup_s  Seconds to discard from the start.
+# @param mirror    If ``True``, also emit the reverse direction of every link
+#                  (see note below). Used by node mode.
 # @return Normalised DataFrame or empty DataFrame.
+#
+# @note The sim evaluates each undirected pair once — ``LinkEvaluator::
+#       EvaluateAll`` walks only the upper triangle (``j = i + 1``), so
+#       ``node_a`` is always the lower-indexed node. Downstream, node mode
+#       groups traces by ``source``, so without mirroring a node only appears
+#       as a source for links to *higher*-indexed nodes: the per-node sample
+#       counts form a staircase and the highest-indexed node vanishes
+#       entirely. Setting @p mirror duplicates each row with source/peer (and
+#       the matching MAC tags) swapped, so every node carries all its
+#       neighbours. This is valid only because links are symmetric under equal
+#       per-node tx/rx gains (``tx[i]+rx[j] == tx[j]+rx[i]``); if ``nodes.json``
+#       sets per-node gain overrides, the reverse direction would differ and
+#       would need its own evaluation rather than a mirror.
 def _convert_one(csv_path: Path, value_col: str, trace_col: str,
-                 node_map: dict[int, str], warmup_s: float) -> pd.DataFrame:
+                 node_map: dict[int, str], warmup_s: float,
+                 mirror: bool = False) -> pd.DataFrame:
     if not csv_path.is_file():
         return pd.DataFrame()
     df = pd.read_csv(csv_path)
@@ -111,7 +127,7 @@ def _convert_one(csv_path: Path, value_col: str, trace_col: str,
     if df.empty:
         return pd.DataFrame()
 
-    return pd.DataFrame({
+    fwd = pd.DataFrame({
         "sec":           df["time_s"].to_numpy() - warmup_s,
         "source":        src[keep].to_numpy(),
         "peer":          peer[keep].to_numpy(),
@@ -120,6 +136,17 @@ def _convert_one(csv_path: Path, value_col: str, trace_col: str,
         "tag_interface": "",
         trace_col:       df[value_col].to_numpy(),
     })
+    if not mirror:
+        return fwd
+
+    # Reverse direction: swap the endpoint columns; the metric value is
+    # unchanged because the link is symmetric (see @note above).
+    rev = fwd.copy()
+    rev["source"]        = fwd["peer"]
+    rev["peer"]          = fwd["source"]
+    rev["tag_local_mac"] = fwd["tag_sta_mac"]
+    rev["tag_sta_mac"]   = fwd["tag_local_mac"]
+    return pd.concat([fwd, rev], ignore_index=True)
 
 
 ## @brief Convert all metric CSVs for one seed (scenario mode).
@@ -166,7 +193,8 @@ def convert_seed_node(seed_dir: Path, out_root: Path) -> int:
     n_written = 0
     for stem, value_col, metric_short, trace_col in _METRIC_SPECS_NODE:
         df = _convert_one(seed_dir / f"{stem}.csv",
-                          value_col, trace_col, node_map, warmup_s)
+                          value_col, trace_col, node_map, warmup_s,
+                          mirror=True)
         if df.empty:
             continue
 

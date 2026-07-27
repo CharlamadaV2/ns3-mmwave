@@ -8,6 +8,7 @@
 #include "ns3/channel-condition-model.h"
 #include "ns3/log.h"
 
+#include <algorithm>
 #include <cmath>
 
 NS_LOG_COMPONENT_DEFINE("LinkEvaluator");
@@ -51,6 +52,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
 
     m_txPowerDbm       = cfg.channel.tx_power_dbm;
     m_bandwidthHz      = cfg.channel.bandwidth_mhz * 1e6;
+    m_frequencyHz      = cfg.channel.frequency_ghz * 1e9;
     m_amcModel         = cfg.channel.amc_model;
     m_buildingsEnabled = !cfg.buildings.empty();
 
@@ -101,30 +103,44 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
     // may be a per-node override from nodes.json; otherwise the channel default.
     const double bfGainDb = m_txGainDbi[txIdx] + m_rxGainDbi[rxIdx];
 
-    // Guard against log10(0) for co-located nodes.
-    if (r.distance_m < 1.0)
-    {
-        r.is_los                   = true;
-        r.path_loss_db             = 0.0;
-        r.rx_power_dbm             = m_txPowerDbm + bfGainDb;
-        r.sinr_db                   = r.rx_power_dbm - m_noiseFloorDbm;
-        r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
-        r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);
-        r.condition_from_buildings = m_buildingsEnabled;
-        NS_LOG_DEBUG("Link " << txIdx << "->" << rxIdx
-                     << ": co-located (d<1m), SINR=" << r.sinr_db << " dB");
-        return r;
-    }
-
-    // LOS / NLOS determination
+    // LOS / NLOS determination.
     auto cond = m_condModel->GetChannelCondition(txMob, rxMob);
     r.is_los = (cond->GetLosCondition() == ns3::ChannelCondition::LosConditionValue::LOS);
 
-    double rxPowerDbm = m_plModel->CalcRxPower(m_txPowerDbm, txMob, rxMob);
-    r.path_loss_db = m_txPowerDbm - rxPowerDbm;
-    r.rx_power_dbm = rxPowerDbm + bfGainDb;
+    // Distance floor. Below ~1 m the 3GPP/NYU models are evaluated far outside
+    // their calibrated range and return implausibly small — even negative —
+    // path loss. The old co-located branch made this worse by forcing
+    // path_loss = 0 (SINR ~= EIRP - N0, i.e. 130-140 dB). Instead we bound the
+    // loss from below by free-space, using a floored distance so that d = 0 is
+    // numerically safe.
+    static constexpr double kMinDistanceM = 1.0;
+    const double dLoss = std::max(r.distance_m, kMinDistanceM);
 
-    // SNR based calculations, refered to as SINR colloquially
+    // Propagation-model path loss...
+    const double rxPowerDbm = m_plModel->CalcRxPower(m_txPowerDbm, txMob, rxMob);
+    double modelPlDb = m_txPowerDbm - rxPowerDbm;
+
+    // ...bounded below by free-space path loss (FSPL) — the hard physical
+    // minimum loss between two isotropic antennas. You cannot receive more
+    // power than free-space propagation delivers, so this both removes the
+    // co-located spike and clips the below-FSPL values the model extrapolates
+    // at short range. Equivalently, it caps each link's SINR at its free-space
+    // SINR.
+    //   FSPL(dB) = 20*log10(d) + 20*log10(f_Hz) + 20*log10(4*pi/c)
+    //   20*log10(4*pi / 3e8) = -147.55221677811664
+    const double fsplDb = 20.0 * std::log10(dLoss)
+                        + 20.0 * std::log10(m_frequencyHz)
+                        - 147.55221677811664;
+    if (!std::isfinite(modelPlDb))   // d == 0 → CalcRxPower diverges
+    {
+        modelPlDb = fsplDb;
+    }
+    r.path_loss_db = std::max(modelPlDb, fsplDb);
+
+    r.rx_power_dbm = m_txPowerDbm - r.path_loss_db + bfGainDb;
+
+    // SNR-based calculation, referred to as SINR colloquially (there is no
+    // interference term in this band — see EvaluateAll).
     r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
 
     r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);

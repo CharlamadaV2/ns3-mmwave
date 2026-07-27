@@ -506,12 +506,13 @@ def _plot_one_subplot(
         plotted_peer_macs.add(str(pmac))
         trace = pd.DataFrame({
             "sec": g["__sec__"].values,
+            "t_utc": g["__t__"].values,          # <-- add: preserve UTC wall-clock
             "source": src,
             "peer": peer,
             "tag_local_mac": g["tag_local_mac"].values,
             "tag_sta_mac": g["tag_sta_mac"].values,
             "tag_interface": (g["tag_interface"].values
-                              if "tag_interface" in g.columns else netdev),
+                            if "tag_interface" in g.columns else netdev),
             trace_col: g[value_col].values,
         })
         if extra_trace_cols:

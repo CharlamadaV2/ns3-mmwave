@@ -31,6 +31,7 @@ from .loaders import (
 )
 from .multi_day import multi_day
 from .split_trace_by_day import split_trace_by_day, print_day_node_summary
+from .split_trace_by_scenario import split_trace_by_scenario, _parse_clock
 from .paths import CSV_ROOT, PER_DAY_DIR
 from .plots import (
     # __Uncomment to enable if data contains bh2_scenarios__
@@ -361,10 +362,46 @@ def _cmd_split_day(args: argparse.Namespace) -> int:
         print(f"  {date_str}: {path}  ({n_rows} rows)")
     return 0
 
+def _cmd_split_scenario(args: argparse.Namespace) -> int:
+    if not args.input.is_dir():
+        print(f"ERROR: input directory not found: {args.input}", file=sys.stderr)
+        return 1
+
+    try:
+        start_s = _parse_clock(args.start)
+        end_s   = _parse_clock(args.end)
+    except ValueError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+
+    if start_s >= end_s:
+        print(f"ERROR: start ({args.start}) must be before end ({args.end})",
+              file=sys.stderr)
+        return 1
+
+    out_dir = args.output if args.output else args.input / "scenarios"
+
+    try:
+        n_rows = split_trace_by_scenario(start_s, end_s, args.input, out_dir, args.prefix)
+    except ValueError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        return 1
+
+    if n_rows == 0:
+        print(f"ERROR: no samples in window {args.start}-{args.end} under {args.input}",
+              file=sys.stderr)
+        return 1
+
+    print(f"Scenario generated ({n_rows} rows across sliced files)")
+    return 0
+    
+    
+        
+    
 
 ## @brief CLI entry point.
 #
-# Subcommands: ``extract``, ``plot``, ``load-config``, ``multi-day``, ``split-day``.
+# Subcommands: ``extract``, ``plot``, ``multi-day``, ``split-day``, ``split-scenario``.
 #
 # @return Exit code: 0 on success, 1 on error.
 def main() -> int:
@@ -393,6 +430,7 @@ def main() -> int:
                          "each into its own output subdirectory.")
 
     #Multi-day
+    #NOTE: Might be archived in the future
     md = sub.add_parser(
         "multi-day",
         help="Day-vs-day distribution overlays + similarity table per scenario family",
@@ -401,19 +439,37 @@ def main() -> int:
     md.add_argument("--audit",  action="store_true",
                     help="Print raw-CSV vs parsed-bag row count + max diagnostics")
 
+    #Split Days
     sd = sub.add_parser(
         "split-day",
         help="Split a combined multi-day GPS trace CSV into one file per day",
     )
     sd.add_argument("-i", "--input", type=Path, required=True,
                      help="Path to the combined trace CSV (e.g. gps_all_nodes_trace.csv)")
-    sd.add_argument("-o", "--output", type=Path,
+    osd = sd.add_mutually_exclusive_group(required=True)
+    osd.add_argument("-o", "--output", type=Path,
                      help="Output directory for the per-day CSVs (required unless --summary)")
-    sd.add_argument("--prefix", default=None,
-                     help="Filename prefix for outputs (default: derived from input filename)")
-    sd.add_argument("--summary", action="store_true",
+    osd.add_argument("--summary", action="store_true",
                      help="Print a per-day, per-node row-count table and exit "
                           "without writing any files")
+    sd.add_argument("--prefix", default=None,
+                     help="Filename prefix for outputs (default: derived from input filename)")
+    
+    #Split Scenarios
+    ss = sub.add_parser(
+        "split-scenario",
+        help="Slice one day's trace directory to a scenario's time window",
+    )
+    ss.add_argument("-i", "--input", type=Path, required=True,
+                    help="Path to the day trace DIRECTORY (node folders inside)")
+    ss.add_argument("-o", "--output", type=Path, default="data/arpo_extracted/_plots/per_scenario/",
+                    help="Output root for the per-scenario dirs (Default:data/arpo_extracted/_plots/per_scenario/)")
+    ss.add_argument("--start", type=float, required=True,
+                    help="Scenario start time as Hour.Minute, e.g. 9.05 (= 09:05)")
+    ss.add_argument("--end", type=float, required=True,
+                    help="Scenario end time as Hour.Minute, e.g. 10.15")
+    ss.add_argument("--prefix", default=None,
+                    help="Optional name prefix for the scenario sub-directory")
 
     args = p.parse_args()
     if args.cmd == "extract":
@@ -425,11 +481,9 @@ def main() -> int:
     if args.cmd == "multi-day":
         return multi_day(audit=args.audit, family_filter=args.family)
     if args.cmd == "split-day":
-        if not args.summary and args.output is None:
-            print("ERROR: --output is required unless --summary is given",
-                  file=sys.stderr)
-            return 1
         return _cmd_split_day(args)
+    if args.cmd == "split-scenario":
+        return _cmd_split_scenario(args)
     return 1
 
 

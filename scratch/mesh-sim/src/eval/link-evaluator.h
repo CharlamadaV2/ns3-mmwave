@@ -60,15 +60,17 @@ class LinkEvaluator
     /**
      * @brief Evaluate one directed (tx → rx) link at the current node positions.
      *
-     * **Co-location guard**: if the 3-D distance between @c txMob and @c rxMob
-     * is less than 1 m, path loss is set to 0 dB and the full TX power plus
-     * beamforming gain is returned directly, bypassing the propagation model.
-     * This prevents undefined behaviour from @c log10(0) in distance-dependent
-     * models.
+     * **Short-range / co-location bound**: path loss is never allowed below
+     * free-space path loss (FSPL) at the link distance, with the distance
+     * floored at 1 m so that @c d = 0 is numerically safe. Below their
+     * calibrated range the 3GPP/NYU models return implausibly small (even
+     * negative) path loss; clamping to FSPL — the hard physical minimum loss
+     * between two isotropic antennas — removes the resulting SINR spikes
+     * without special-casing @c path_loss to 0.
      *
-     * For all other distances:
+     * For all distances:
      * -# The channel condition model determines LOS vs. NLOS.
-     * -# The propagation loss model computes @c rx_power_dBm.
+     * -# The propagation loss model computes @c rx_power_dBm, bounded by FSPL.
      * -# Beamforming gain is added: @c rx_power += bf_gain_dB.
      * -# SINR is computed against the thermal noise floor only (no ICI).
      * -# @ref SinrToCapacity and @ref SinrToMcsIndex translate SINR to capacity
@@ -104,6 +106,8 @@ class LinkEvaluator
     double      m_noiseFloorDbm    = -174.0;  ///< Thermal noise floor in dBm; computed by
                                                ///<   @ref Configure from bandwidth and noise figure.
     double      m_bandwidthHz      = 400e6;   ///< System bandwidth in Hz.
+    double      m_frequencyHz      = 2.4e9;   ///< Carrier frequency in Hz (from @ref ChannelConfig);
+                                               ///<   used for the free-space path-loss lower bound.
     std::string m_amcModel         = "shannon"; ///< Capacity model: @c "shannon" or @c "table".
     bool        m_buildingsEnabled = false;    ///< @c true when buildings are present;
                                                ///<   written to @ref LinkResult::condition_from_buildings.
