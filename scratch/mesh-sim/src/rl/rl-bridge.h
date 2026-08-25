@@ -55,7 +55,8 @@ class RlBridge
     int    m_lastDiscreteAction = 0;
     double m_lastTargetX = 0.0;
     double m_lastTargetY = 0.0;
-
+    double m_lastTargetZ = 0.0;
+    
     double ComputeReward(const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs,
                          const LinkTable& linkTable,
                          const std::vector<FlowResult>& flows) const;

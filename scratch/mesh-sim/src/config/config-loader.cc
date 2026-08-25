@@ -232,6 +232,9 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.rl.x_max                = std::stod(iniGet(ini, "rl", "x_max", "2000.0"));
     cfg.rl.y_min                = std::stod(iniGet(ini, "rl", "y_min", "-1000.0"));
     cfg.rl.y_max                = std::stod(iniGet(ini, "rl", "y_max", "1000.0"));
+    cfg.rl.z_min		= std::stod(iniGet(ini, "rl", "z_min", "0.0"));
+    cfg.rl.z_max		= std::stod(iniGet(ini, "rl", "z_max", "100.0"));
+
 
     // --- Load nodes.json ---
     std::string nodes_file = iniGet(ini, "scenario", "nodes_file", "nodes.json");

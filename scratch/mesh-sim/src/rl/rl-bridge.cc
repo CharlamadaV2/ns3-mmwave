@@ -23,10 +23,8 @@ RlBridge::RlBridge(const SimConfig& cfg, uint32_t controlledIdx)
 {
 }
 
-// ---------------------------------------------------------------------------
-// Reward computation
-// ---------------------------------------------------------------------------
-
+// @brief Logic for computing score/reward for current sim tick
+// TODO: Calculate score based on distance from ideal values
 double
 RlBridge::ComputeReward(const std::vector<ns3::Ptr<ns3::MobilityModel>>& /* mobs */,
                         const LinkTable& linkTable,
@@ -85,7 +83,8 @@ RlBridge::WriteObs(uint32_t tick, double time_s,
     }
 
     json obs;
-    obs["controlled_pos"]    = {ctrlPos.x, ctrlPos.y};
+    // Send full 3-D position so the Python action mask can range-check z.
+    obs["controlled_pos"]    = {ctrlPos.x, ctrlPos.y, ctrlPos.z};
     obs["link_sinrs"]        = linkSinrs;
     obs["link_capacities"]   = linkCaps;
 
@@ -128,6 +127,8 @@ RlBridge::ReadAction()
         const auto& a = j["action"];
         m_lastTargetX = a[0].get<double>();
         m_lastTargetY = a[1].get<double>();
+        // Optional third component for 3-D continuous control; keep current z if absent.
+        m_lastTargetZ = (a.size() > 2) ? a[2].get<double>() : m_lastTargetZ;
     }
     else
     {
@@ -159,69 +160,87 @@ RlBridge::Step(uint32_t tick, double time_s,
 // ApplyAction: compute desired position, derive velocity, SetVelocity()
 // ---------------------------------------------------------------------------
 
+// @brief Environment action moves the controlled node in x, y, or z.
+//
+// Discrete action indices MUST match the Python env's action_masks():
+//   0:-X  1:+X  2:-Y  3:+Y  4:-Z  5:+Z  6:Stay
 void
 RlBridge::ApplyAction(ns3::Ptr<ns3::MobilityModel> mob)
 {
     auto pos = mob->GetPosition();
     double desiredX = pos.x;
     double desiredY = pos.y;
+    double desiredZ = pos.z;
 
     if (m_rl.action_type == "continuous")
     {
         desiredX = m_lastTargetX;
         desiredY = m_lastTargetY;
+        desiredZ = m_lastTargetZ;
     }
     else
     {
-        // Discrete: 0=stay, 1=-x, 2=+x, 3=-y, 4=+y
+        // Discrete 7-action set (must match Python action_masks ordering).
         switch (m_lastDiscreteAction)
         {
+        case 0:
+            desiredX = pos.x - m_rl.step_size_m;  // -X
+            break;
         case 1:
-            desiredX = pos.x - m_rl.step_size_m;
+            desiredX = pos.x + m_rl.step_size_m;  // +X
             break;
         case 2:
-            desiredX = pos.x + m_rl.step_size_m;
+            desiredY = pos.y - m_rl.step_size_m;  // -Y
             break;
         case 3:
-            desiredY = pos.y - m_rl.step_size_m;
+            desiredY = pos.y + m_rl.step_size_m;  // +Y
             break;
         case 4:
-            desiredY = pos.y + m_rl.step_size_m;
+            desiredZ = pos.z - m_rl.step_size_m;  // -Z
             break;
+        case 5:
+            desiredZ = pos.z + m_rl.step_size_m;  // +Z
+            break;
+        case 6:
         default:
-            break;
+            break;                                // Stay
         }
     }
 
-    // Clamp desired position to bounds
+    // Clamp desired position to the arena bounds (x/y/z).
     desiredX = std::clamp(desiredX, m_rl.x_min, m_rl.x_max);
     desiredY = std::clamp(desiredY, m_rl.y_min, m_rl.y_max);
+    desiredZ = std::clamp(desiredZ, m_rl.z_min, m_rl.z_max);
 
     double dx = desiredX - pos.x;
     double dy = desiredY - pos.y;
-    double dist = std::sqrt(dx * dx + dy * dy);
+    double dz = desiredZ - pos.z;
+    double dist = std::sqrt(dx * dx + dy * dy + dz * dz);
 
     double vx = 0.0;
     double vy = 0.0;
+    double vz = 0.0;
 
     if (m_rl.action_type == "continuous" && dist < m_rl.arrival_threshold_m)
     {
         // Arrived — stop
         vx = 0.0;
         vy = 0.0;
+        vz = 0.0;
     }
     else if (dist > 1e-9)
     {
-        // Compute velocity toward desired, capped at max speed
+        // Velocity toward desired, capped at max speed (now in 3-D).
         double speed = std::min(dist / m_tickS, m_maxSpeed);
         vx = (dx / dist) * speed;
         vy = (dy / dist) * speed;
+        vz = (dz / dist) * speed;
     }
 
     auto cvmm = mob->GetObject<ns3::ConstantVelocityMobilityModel>();
     if (cvmm)
     {
-        cvmm->SetVelocity(ns3::Vector(vx, vy, 0.0));
+        cvmm->SetVelocity(ns3::Vector(vx, vy, vz));
     }
 }
 

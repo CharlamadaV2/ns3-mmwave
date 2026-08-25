@@ -148,7 +148,7 @@ def main(argv: list[str] | None = None) -> int:
                    help=f"root of per-day field trace dirs (default: {DEFAULT_FIELD_ROOT})")
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--day", default=None,
-                   help="validate a single day (YYYY-MM-DD)")
+                   help="validate a single day or (YYYY-MM-DD) or scenario (HHMM-HHMM).")
     g.add_argument("--all-days", action="store_true",
                    help="validate every day found under --out-root")
     p.add_argument("--time", "-t", type=float,

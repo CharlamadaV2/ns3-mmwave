@@ -44,6 +44,15 @@ _NOISE_FIGURE   = 5.0
 _TX_GAIN_DBI    = 6.0    ##< Default per-node transmit array gain (dBi); --tx-gain.
 _RX_GAIN_DBI    = 6.0    ##< Default per-node receive array gain (dBi);  --rx-gain.
 
+# --- RL ([rl] section) defaults ---
+_RL_ACTION_TYPE   = "discrete"   ##< discrete (masked 7-action) or continuous.
+_RL_REWARD_TYPE   = "throughput" ##< throughput or mean_sinr.
+_RL_STEP_SIZE_M   = 25.0         ##< Per-move distance for each discrete action (m).
+_RL_ARRIVAL_M     = 1.0          ##< Continuous-mode arrival threshold (m).
+_RL_BOUND_MARGIN  = 250.0        ##< Padding added around node extent for x/y bounds (m).
+_RL_Z_MIN         = 0.0          ##< Min controlled-node height (m).
+_RL_Z_MAX         = 100.0        ##< Max controlled-node height (m).
+
 ## @brief Filename of the combined GPS trace that marks a directory as a run.
 _TRACE_NAME = "gps_all_nodes_trace.csv"
 
@@ -223,7 +232,8 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
                 freq_ghz: float, amc_model: str, bw_mhz: float, power_dbm: float,
                 ticks: float, demand_mbps: float, gateway_id: str | None,
                 noise_figure: float, tx_gain_dbi: float, rx_gain_dbi: float,
-                condition_model: str, channel_scenario: str) -> None:
+                condition_model: str, channel_scenario: str,
+                rl: dict | None = None) -> None:
     cfg = configparser.ConfigParser()
 
     cfg["scenario"] = {
@@ -270,6 +280,25 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
     }
     cfg["output"] = {
         "viz_tick_ms": "100",
+    }
+
+    # [rl] — reinforcement-learning config (read by rl-bridge.cc / config-loader.cc).
+    # Written for every run; harmless when enabled=false (the sim skips RL).
+    if rl is None:
+        rl = {}
+    cfg["rl"] = {
+        "enabled":             str(rl.get("enabled", False)).lower(),
+        "controlled_node_id":  rl.get("controlled_node_id", ""),
+        "action_type":         rl.get("action_type", _RL_ACTION_TYPE),
+        "reward_type":         rl.get("reward_type", _RL_REWARD_TYPE),
+        "step_size_m":         str(rl.get("step_size_m", _RL_STEP_SIZE_M)),
+        "arrival_threshold_m": str(rl.get("arrival_threshold_m", _RL_ARRIVAL_M)),
+        "x_min":               str(rl.get("x_min", 0.0)),
+        "x_max":               str(rl.get("x_max", 0.0)),
+        "y_min":               str(rl.get("y_min", 0.0)),
+        "y_max":               str(rl.get("y_max", 0.0)),
+        "z_min":               str(rl.get("z_min", _RL_Z_MIN)),
+        "z_max":               str(rl.get("z_max", _RL_Z_MAX)),
     }
 
     ini_path = output_path / "run.ini"
@@ -373,10 +402,13 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
                              tx_gain_dbi: float = _TX_GAIN_DBI,
                              rx_gain_dbi: float = _RX_GAIN_DBI,
                              condition_model: str = "static_los",
-                             channel_scenario: str = "RMa") -> int:
+                             channel_scenario: str = "RMa",
+                             rl_opts: dict | None = None) -> int:
     if not days:
         print("ERROR: no runs to process", file=sys.stderr)
         return 1
+    if rl_opts is None:
+        rl_opts = {}
 
     # Channel config is run-independent — read it once.
     chan = _load_channel_config(csv_dir)
@@ -417,6 +449,18 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
         day_dir = output_path / day
         day_dir.mkdir(parents=True, exist_ok=True)
         _create_json(day_dir, node_data, gateway_name)
+
+        # Arena bounds for RL: node x/y extent padded by a margin so the
+        # controlled node has room to move; z from configured limits.
+        xs = [n["x"] for n in node_data]
+        ys = [n["y"] for n in node_data]
+        rl_cfg = dict(rl_opts)
+        rl_cfg.update(
+            x_min=round(min(xs) - _RL_BOUND_MARGIN, 2),
+            x_max=round(max(xs) + _RL_BOUND_MARGIN, 2),
+            y_min=round(min(ys) - _RL_BOUND_MARGIN, 2),
+            y_max=round(max(ys) + _RL_BOUND_MARGIN, 2),
+        )
         _create_ini(day_dir,
                     scenario_name=scenario_name,
                     freq_ghz=freq_ghz,
@@ -431,7 +475,8 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
                     tx_gain_dbi=tx_gain_dbi,
                     rx_gain_dbi=rx_gain_dbi,
                     condition_model=condition_model,
-                    channel_scenario=channel_scenario)
+                    channel_scenario=channel_scenario,
+                    rl=rl_cfg)
         print(f"  {day}: {len(node_data)} nodes, duration={sim_duration:g}s")
         n_ok += 1
 
@@ -492,6 +537,24 @@ def main(argv: list[str] | None = None) -> int:
                    choices=["RMa", "UMa", "UMi", "InH"],
                    help="3GPP propagation scenario. Default: RMa")
 
+    # [rl] section knobs
+    p.add_argument("--rl-enabled", action="store_true",
+                   help="Set [rl] enabled=true (turns on RL mode in the sim)")
+    p.add_argument("--rl-controlled-node", default="",
+                   help="id of the controlled node ([rl] controlled_node_id)")
+    p.add_argument("--rl-action-type", default=_RL_ACTION_TYPE,
+                   choices=["discrete", "continuous"],
+                   help=f"[rl] action_type. Default: {_RL_ACTION_TYPE}")
+    p.add_argument("--rl-reward-type", default=_RL_REWARD_TYPE,
+                   choices=["throughput", "mean_sinr"],
+                   help=f"[rl] reward_type. Default: {_RL_REWARD_TYPE}")
+    p.add_argument("--rl-step-size", type=float, default=_RL_STEP_SIZE_M,
+                   help=f"[rl] step_size_m. Default: {_RL_STEP_SIZE_M}")
+    p.add_argument("--rl-z-min", type=float, default=_RL_Z_MIN,
+                   help=f"[rl] z_min. Default: {_RL_Z_MIN}")
+    p.add_argument("--rl-z-max", type=float, default=_RL_Z_MAX,
+                   help=f"[rl] z_max. Default: {_RL_Z_MAX}")
+
     #Create config for one run vs every run
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--day", default=None,
@@ -529,6 +592,16 @@ def main(argv: list[str] | None = None) -> int:
     # When --day is used, per_day_dir is the run directory itself.
     per_day_dir = (args.input / args.day) if args.day else args.input
 
+    rl_opts = {
+        "enabled":            args.rl_enabled,
+        "controlled_node_id": args.rl_controlled_node,
+        "action_type":        args.rl_action_type,
+        "reward_type":        args.rl_reward_type,
+        "step_size_m":        args.rl_step_size,
+        "z_min":              args.rl_z_min,
+        "z_max":              args.rl_z_max,
+    }
+
     match args.mode, args.band:
         case "node", "sub-6":
             return load_calfex_data_per_day(
@@ -539,7 +612,8 @@ def main(argv: list[str] | None = None) -> int:
                 tx_gain_dbi=args.tx_gain,
                 rx_gain_dbi=args.rx_gain,
                 condition_model=args.condition_model,
-                channel_scenario=args.channel_scenario)
+                channel_scenario=args.channel_scenario,
+                rl_opts=rl_opts)
         case _:
             print("per-run generation only supports node mode + sub-6 band",
                   file=sys.stderr)

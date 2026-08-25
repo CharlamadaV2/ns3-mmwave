@@ -81,6 +81,8 @@ struct RlConfig
     double x_max =  2000.0;  ///< Eastern boundary of the controlled node's allowed area (m).
     double y_min = -1000.0;  ///< Southern boundary of the controlled node's allowed area (m).
     double y_max =  1000.0;  ///< Northern boundary of the controlled node's allowed area (m).
+    double z_min = 0.0;
+    double z_max = 100.0;
 };
 
 /**

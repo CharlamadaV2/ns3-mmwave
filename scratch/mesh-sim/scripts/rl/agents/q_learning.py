@@ -10,7 +10,6 @@ from collections import defaultdict
 
 import numpy as np
 
-
 class TabularQLearning:
     """Tabular Q-learning with discretized state.
 
