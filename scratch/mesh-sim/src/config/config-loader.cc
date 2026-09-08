@@ -86,6 +86,82 @@ parseNodeSpec(const json& j)
     return n;
 }
 
+static JammerSpec
+parseJammerSpec(const json& j)
+{
+    JammerSpec m;
+    m.enabled = j.value("enabled", true);
+    m.id = j.value("id", "");
+    m.type = j.value("type", "constant");
+    m.target_freq = j.value("target_freq", std::vector<double>{});
+    m.tx_power_dbm = j.value("tx_power_dbm", 25.0);
+    m.tx_array_gain_dbi = j.value("tx_array_gain_dbi", 12.0);
+    m.duty_cycle = j.value("duty_cycle", 1.0);
+    m.max_range_m = j.value("max_range_m", 0.0);
+    m.beamwidth_deg = j.value("beamwidth_deg", 360.0);
+    m.azimuth_deg = j.value("azimuth_deg", 0.0);
+    m.zenith_deg = j.value("zenith_deg", 0.0);
+
+    if (j.contains("position"))
+    {
+        const auto& p = j["position"];
+        m.position.x  = p.value("x", 0.0);
+        m.position.y  = p.value("y", 0.0);
+        m.position.z  = p.value("z", 0.0);
+    }
+
+    if (j.contains("velocity"))
+    {
+        const auto& v = j["velocity"];
+        m.velocity.vx = v.value("vx", 0.0);
+        m.velocity.vy = v.value("vy", 0.0);
+        m.velocity.vz = v.value("vz", 0.0);
+    }
+
+    if (j.contains("random_walk"))
+    {
+        const auto& rw = j["random_walk"];
+        if (rw.contains("bounds"))
+        {
+            const auto& b   = rw["bounds"];
+            m.random_walk.x_min = b.value("x_min", -100.0);
+            m.random_walk.x_max = b.value("x_max",  100.0);
+            m.random_walk.y_min = b.value("y_min", -100.0);
+            m.random_walk.y_max = b.value("y_max",  100.0);
+        }
+        m.random_walk.speed_mps = rw.value("speed_mps", 1.5);
+    }
+
+    if (j.contains("waypoints"))
+    {
+        for (const auto& jw : j["waypoints"])
+        {
+            Waypoint w;
+            m.t = jw.value("t", 0.0);
+            m.x = jw.value("x", 0.0);
+            m.y = jw.value("y", 0.0);
+            m.z = jw.value("z", 0.0);
+            m.waypoints.push_back(w);
+        }
+    }
+
+    
+    if (j.contains("intervals"))
+    {
+   	for (const auto& ji : j["intervals"])
+	{
+	     Interval iv;
+	     iv.start = ji.value("start", 0.0);
+	     iv.end = ji.value("end", 0.0;)
+	     m.intervals.push_back(iv);
+	}
+
+    }
+    
+    return m;
+}
+
+
 static BuildingSpec
 parseBuildingSpec(const json& j)
 {
@@ -251,6 +327,24 @@ ConfigLoader::Load(const std::string& run_config_path,
         {
             cfg.nodes.push_back(parseNodeSpec(jn));
         }
+    }
+
+    // -- Load jammer.json (optional) ---
+    std::string jammers_file = iniGet(ini, "scenario", "jammers_file", ""); 
+    if (!jammers_file.empty())
+    {
+	std::string jammers_path = resolvePath(base_dir, jammers_file);
+	std::ifstream jf(jammers_path);
+	if (!jf.is_open())
+	{
+		throw std::runtime_error("Cannot open jammers file: " + jammers_path);
+	}		
+	json jjammers;
+	jf >> jjammers;
+	for (const auto& jj : jjammers)
+	{
+		cfg.jammers.push_back(parseJammerSpec(jj));
+	}
     }
 
     // --- Load buildings.json (optional) ---

@@ -59,6 +59,7 @@ void
 TopologyBuilder::Build()
 {
     CreateNodesAndMobility();
+    CreateJammersAndMobility();
     CreateBuildings();
     ConfigurePropagationModel();
 }
@@ -71,6 +72,12 @@ std::vector<Ptr<MobilityModel>>
 TopologyBuilder::GetMobilityModels() const
 {
     return m_mobilityModels;
+}
+
+std::vector<Ptr<MobilityModel>>
+TopologyBuilder::GetJammerMobilityModels() const
+{
+    return m_jammerMobilityModels;
 }
 
 Ptr<PropagationLossModel>
@@ -122,6 +129,61 @@ TopologyBuilder::CreateNodesAndMobility()
         }
 
         m_mobilityModels.push_back(node->GetObject<MobilityModel>());
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Jammer creation and mobility installation
+// ---------------------------------------------------------------------------
+
+void
+TopologyBuilder::CreateJammersAndMobility()
+{
+    // One ns-3 mobility model per jammer, in the SAME order as cfg.jammers
+    // (JammerModel::Configure asserts the two vectors are equal length).
+    for (const auto& spec : m_cfg.jammers)
+    {
+        NodeContainer nc;
+        nc.Create(1);
+        Ptr<Node> node = nc.Get(0);
+        m_nodes.Add(nc);
+
+        MobilityHelper mob;
+
+        if (!spec.waypoints.empty())
+        {
+            mob.SetMobilityModel("ns3::WaypointMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+            Ptr<WaypointMobilityModel> wm = node->GetObject<WaypointMobilityModel>();
+            for (const auto& wp : spec.waypoints)
+            {
+                wm->AddWaypoint(ns3::Waypoint(Seconds(wp.t), Vector(wp.x, wp.y, wp.z)));
+            }
+        }
+        else if (spec.velocity.vx != 0.0 || spec.velocity.vy != 0.0 ||
+                 spec.velocity.vz != 0.0)
+        {
+            mob.SetMobilityModel("ns3::ConstantVelocityMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+            node->GetObject<MobilityModel>()->SetPosition(
+                Vector(spec.position.x, spec.position.y, spec.position.z));
+            node->GetObject<ConstantVelocityMobilityModel>()->SetVelocity(
+                Vector(spec.velocity.vx, spec.velocity.vy, spec.velocity.vz));
+        }
+        else
+        {
+            // Stationary jammer (the common case for the logged EW positions).
+            Ptr<ListPositionAllocator> posAlloc = CreateObject<ListPositionAllocator>();
+            posAlloc->Add(Vector(spec.position.x, spec.position.y, spec.position.z));
+            mob.SetPositionAllocator(posAlloc);
+            mob.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+        }
+
+        m_jammerMobilityModels.push_back(node->GetObject<MobilityModel>());
     }
 }
 

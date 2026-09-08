@@ -16,6 +16,7 @@
 #include "channel-config.h"
 #include "mesh-config.h"
 #include "node-spec.h"
+#include "src/jammer/jammer-spec.h"
 
 #include <chrono>
 #include <cstdint>
@@ -128,6 +129,10 @@ struct SimConfig
     std::vector<BuildingSpec> buildings;  ///< Optional building obstacles used for
                                            ///<   deterministic LOS/NLOS classification.
                                            ///<   Empty when no @c buildings_file is set.
+
+
+    std::vector<JammerSpec> jammers;	//< Optional Jammer nodes>
+
 };
 
 }  // namespace mesh_sim

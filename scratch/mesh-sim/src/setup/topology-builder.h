@@ -128,6 +128,10 @@ class TopologyBuilder
      */
     ns3::Ptr<ns3::ChannelConditionModel> GetConditionModel() const;
 
+    /* @brief Return the Jammer Mobility Models
+     * */
+    std::vector<Ptr<MobilityModel>> TopologyBuilder::GetJammerMobilityModels() const;
+
   private:
     const SimConfig& m_cfg;  ///< Simulation configuration (const reference; not owned).
 
@@ -147,6 +151,13 @@ class TopologyBuilder
      */
     void CreateNodesAndMobility();
 
+    /*
+     * @brief Create custom Jammer node per @ref JammeSpec and install its mobility model.
+     * */
+    void CreateJammersAndMobility(); 
+    
+    std::vector<ns3::Ptrns3::MobilityModel> m_jammerMobilityModels;	
+    
     /**
      * @brief Create ns-3 @c Building objects from @c cfg.buildings.
      *

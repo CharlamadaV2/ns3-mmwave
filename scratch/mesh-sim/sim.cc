@@ -143,12 +143,13 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         mesh_sim::TopologyBuilder topo(cfg);
         topo.Build();
         auto mobs = topo.GetMobilityModels();
+        auto jammerMobs = topo.GetJammerMobilityModels();
         uint32_t N = static_cast<uint32_t>(mobs.size());
 
         /// @brief Bind the propagation/condition models to a LinkEvaluator
         ///        that will compute per-tick SINR/capacity/MCS.
         mesh_sim::LinkEvaluator linkEval;
-        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel(), args.band);
+        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel(), args.band, jammerMobs);
 
         /// @brief Per-tick components: link table, traffic generator, router.
         mesh_sim::LinkTable      linkTable;
@@ -205,7 +206,7 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             }
 
             /// @brief Evaluate all N*(N-1)/2 links at the current positions.
-            linkTable.Update(N, linkEval.EvaluateAll(mobs));
+            linkTable.Update(N, linkEval.EvaluateAll(mobs, t));
 
             /// @brief Advance traffic state and route active flows over
             ///        the freshly-evaluated link table.

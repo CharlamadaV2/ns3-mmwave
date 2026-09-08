@@ -11,6 +11,8 @@
 namespace mesh_sim
 {
 
+/* @brief Checks if value passed into value passed into field is positive, errors are pushed into validation result
+*/
 static void
 checkPositive(ValidationResult& r, const std::string& field, double val)
 {
@@ -20,6 +22,8 @@ checkPositive(ValidationResult& r, const std::string& field, double val)
     }
 }
 
+/* @brief Checks if value in field is a valid option, errors are pushed into validation result
+ * */
 static void
 checkOneOf(ValidationResult& r,
            const std::string& field,
@@ -233,6 +237,54 @@ ValidateConfig(const SimConfig& cfg)
         }
     }
 
+    // -- jammers --
+    for (const auto& j : cfg.jammers)
+    {
+        std::string label = "jammer '" + j.id + "'";
+
+        // Type check
+        checkOneOf(r, label + " type", j.type, {"constant", "random"});
+
+        // Power / duty cycle
+        if (j.duty_cycle < 0.0 || j.duty_cycle > 1.0)
+        {
+            r.errors.push_back(label + ": duty_cycle must be in [0, 1] (got " +
+                               std::to_string(j.duty_cycle) + ")");
+        }
+
+        // Beamwidth in (0, 360]; azimuth in [0, 360)
+        if (j.beamwidth_deg <= 0.0 || j.beamwidth_deg > 360.0)
+        {
+            r.errors.push_back(label + ": beamwidth_deg must be in (0, 360] (got " +
+                               std::to_string(j.beamwidth_deg) + ")");
+        }
+
+        // Interval check: each [start, end) must be ordered and non-negative.
+        for (const auto& iv : j.intervals)
+        {
+            if (iv.start < 0.0)
+            {
+                r.errors.push_back(label + ": interval start must be >= 0 (got " +
+                                   std::to_string(iv.start) + ")");
+            }
+            if (iv.end <= iv.start)
+            {
+                r.errors.push_back(label + ": interval end must be > start (got start=" +
+                                   std::to_string(iv.start) + ", end=" +
+                                   std::to_string(iv.end) + ")");
+            }
+        }
+
+        // Random-walk bounds (the only bounds a JammerSpec carries).
+        if (j.type == "random")
+        {
+            if (j.random_walk.x_min >= j.random_walk.x_max)
+                r.errors.push_back(label + ": random_walk x_min must be < x_max");
+            if (j.random_walk.y_min >= j.random_walk.y_max)
+                r.errors.push_back(label + ": random_walk y_min must be < y_max");
+        }
+    }
+    
     // -- buildings --
     for (const auto& b : cfg.buildings)
     {

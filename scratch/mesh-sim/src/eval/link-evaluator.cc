@@ -5,6 +5,7 @@
 #include "src/eval/link-evaluator.h"
 #include "src/eval/sinr-capacity.h"
 
+
 #include "ns3/channel-condition-model.h"
 #include "ns3/log.h"
 
@@ -14,6 +15,9 @@
 NS_LOG_COMPONENT_DEFINE("LinkEvaluator");
 
 namespace {
+
+    /// @brief dBm -> watts (same convention as jammer-model.cc).
+    inline double DbmToWatt(double dbm) { return std::pow(10.0, (dbm - 30.0) / 10.0); }
 
     inline uint32_t McsIndexForModel(double sinrDb, const std::string& amcModel)
     {
@@ -37,7 +41,8 @@ void
 LinkEvaluator::Configure(const SimConfig& cfg,
                          ns3::Ptr<ns3::PropagationLossModel> plModel,
                          ns3::Ptr<ns3::ChannelConditionModel> condModel,
-                         const std::string& band)
+                         const std::string& band,
+                         const std::vector<ns3::Ptr<ns3::MobilityModel>>& jammerMobs)
 {
     //Model Checks
     if (!plModel || !condModel)
@@ -55,6 +60,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
     m_frequencyHz      = cfg.channel.frequency_ghz * 1e9;
     m_amcModel         = cfg.channel.amc_model;
     m_buildingsEnabled = !cfg.buildings.empty();
+    m_computeInterference = (band == "sub-6");
 
     m_noiseFloorDbm = -174.0 + 10.0 * std::log10(m_bandwidthHz) + cfg.channel.noise_figure_db;
 
@@ -74,6 +80,11 @@ LinkEvaluator::Configure(const SimConfig& cfg,
         }
     }
 
+    // Configure jammer model if any jammers are present
+    if (!cfg.jammers.empty())
+    {
+    	m_jammerModel.Configure(cfg.jammers, plModel, jammerMobs);
+    }
     NS_LOG_DEBUG("Configure: txPower=" << m_txPowerDbm << " dBm, BW="
                  << m_bandwidthHz / 1e6 << " MHz, noiseFloor="
                  << m_noiseFloorDbm << " dBm, gain default tx="
@@ -91,7 +102,8 @@ LinkResult
 LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
                         ns3::Ptr<ns3::MobilityModel> rxMob,
                         uint32_t txIdx,
-                        uint32_t rxIdx) const
+                        uint32_t rxIdx,
+                        double nowS) const
 {
     LinkResult r;
     r.tx_id = txIdx;
@@ -128,9 +140,11 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
     // SINR.
     //   FSPL(dB) = 20*log10(d) + 20*log10(f_Hz) + 20*log10(4*pi/c)
     //   20*log10(4*pi / 3e8) = -147.55221677811664
+    
     const double fsplDb = 20.0 * std::log10(dLoss)
                         + 20.0 * std::log10(m_frequencyHz)
                         - 147.55221677811664;
+    
     if (!std::isfinite(modelPlDb))   // d == 0 → CalcRxPower diverges
     {
         modelPlDb = fsplDb;
@@ -139,9 +153,26 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 
     r.rx_power_dbm = m_txPowerDbm - r.path_loss_db + bfGainDb;
 
-    // SNR-based calculation, referred to as SINR colloquially (there is no
-    // interference term in this band — see EvaluateAll).
-    r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
+    // Signal and thermal-noise powers in linear watts.
+    const double signalWatt = DbmToWatt(r.rx_power_dbm);
+    const double noiseWatt  = DbmToWatt(m_noiseFloorDbm);
+
+    // Jammer interference: only summed in sub-6 (m_computeInterference) and
+    // only when at least one jammer is active at time nowS. The jammer model
+    // returns total received jammer power (W) at THIS receiver; the link is
+    // evaluated from both endpoints' perspective, so use the worse (higher)
+    // of the two receivers' jammer power to be conservative.
+    double jamWatt = 0.0;
+    if (m_computeInterference && m_jammerModel.HasJammers())
+    {
+        const double jamRx = m_jammerModel.InterfPowerAtReceiver(rxMob, nowS);
+        const double jamTx = m_jammerModel.InterfPowerAtReceiver(txMob, nowS);
+        jamWatt = std::max(jamRx, jamTx);
+    }
+
+    // SINR = signal / (noise + jammer interference). With no active jammer
+    // this reduces exactly to the previous noise-limited SNR.
+    r.sinr_db = 10.0 * std::log10(signalWatt / (noiseWatt + jamWatt));
 
     r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
     r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);
@@ -164,18 +195,18 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 // ---------------------------------------------------------------------------
 std::vector<LinkResult>
 LinkEvaluator::EvaluateAll(
-    const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs) const
+    const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs,
+    double nowS) const
 {
     const auto n = static_cast<uint32_t>(mobs.size());
 
-    // mmWave: no interference — each pair is independent (original behaviour).
     std::vector<LinkResult> results;
     results.reserve(n * (n - 1) / 2);
     for (uint32_t i = 0; i < n; ++i)
     {
         for (uint32_t j = i + 1; j < n; ++j)
         {
-            results.push_back(Evaluate(mobs[i], mobs[j], i, j));
+            results.push_back(Evaluate(mobs[i], mobs[j], i, j, nowS));
         }
     }
     return results;

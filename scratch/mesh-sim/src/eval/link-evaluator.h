@@ -16,6 +16,7 @@
 
 #include "src/domain/link-result.h"
 #include "src/domain/sim-config.h"
+#include "src/jammer/jammer-model.h"
 
 #include "ns3/channel-condition-model.h"
 #include "ns3/mobility-model.h"
@@ -55,7 +56,8 @@ class LinkEvaluator
     void Configure(const SimConfig& cfg,
                    ns3::Ptr<ns3::PropagationLossModel> plModel,
                    ns3::Ptr<ns3::ChannelConditionModel> condModel,
-                   const std::string& band = "mmwave");
+                   const std::string& band = "mmwave",
+                   const std::vector<ns3::Ptr<ns3::MobilityModel>>& jammerMobs = {});
 
     /**
      * @brief Evaluate one directed (tx → rx) link at the current node positions.
@@ -85,7 +87,8 @@ class LinkEvaluator
     LinkResult Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
                         ns3::Ptr<ns3::MobilityModel> rxMob,
                         uint32_t txIdx,
-                        uint32_t rxIdx) const;
+                        uint32_t rxIdx,
+			double nowS = 0.0) const;
 
     /**
      * @brief Evaluate all N·(N−1)/2 unordered node pairs in index order.
@@ -99,7 +102,8 @@ class LinkEvaluator
      * @return Flat vector of N·(N−1)/2 @ref LinkResult objects.
      */
     std::vector<LinkResult> EvaluateAll(
-        const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs) const;
+        const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs,
+       	double nowS = 0.0) const;
 
   private:
     double      m_txPowerDbm       = 30.0;    ///< TX power in dBm (from @ref ChannelConfig).
@@ -121,6 +125,7 @@ class LinkEvaluator
 
     ns3::Ptr<ns3::PropagationLossModel>  m_plModel;    ///< ns-3 path-loss model (set by @ref Configure).
     ns3::Ptr<ns3::ChannelConditionModel> m_condModel;  ///< ns-3 LOS/NLOS model (set by @ref Configure).
+    JammerModel m_jammerModel; //mesh-sim Jammer model
 };
 
 }  // namespace mesh_sim
