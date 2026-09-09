@@ -23,8 +23,9 @@ rm -rf cmake-cache build
 ### Single scenario
 
 ```bash
-./build/scratch/mesh-sim/ns3*-sim-* \
-  --run-config=scratch/mesh-sim/inputs/baselines/01-static-los-baseline/run.ini
+(in ns3-mmwave)
+To run sim:
+./ns3 run scratch/mesh-sim/sim --   --run-config=scratch/mesh-sim/inputs/calfex/06-25/1227-1413/run.ini   --band=sub-6 --seeds=1,2,5,6,8,10   --output-dir=scratch/mesh-sim/outputs/calfex/06-25/1227-1413
 ```
 
 ### Sweep

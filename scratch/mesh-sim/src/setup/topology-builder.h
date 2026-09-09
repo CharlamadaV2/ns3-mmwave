@@ -130,7 +130,7 @@ class TopologyBuilder
 
     /* @brief Return the Jammer Mobility Models
      * */
-    std::vector<Ptr<MobilityModel>> TopologyBuilder::GetJammerMobilityModels() const;
+    std::vector<ns3::Ptr<ns3::MobilityModel>> GetJammerMobilityModels() const;
 
   private:
     const SimConfig& m_cfg;  ///< Simulation configuration (const reference; not owned).
@@ -156,7 +156,7 @@ class TopologyBuilder
      * */
     void CreateJammersAndMobility(); 
     
-    std::vector<ns3::Ptrns3::MobilityModel> m_jammerMobilityModels;	
+    std::vector<ns3::Ptr<ns3::MobilityModel>> m_jammerMobilityModels;	
     
     /**
      * @brief Create ns-3 @c Building objects from @c cfg.buildings.

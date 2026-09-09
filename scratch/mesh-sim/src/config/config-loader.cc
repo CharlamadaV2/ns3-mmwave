@@ -90,7 +90,7 @@ static JammerSpec
 parseJammerSpec(const json& j)
 {
     JammerSpec m;
-    m.enabled = j.value("enabled", true);
+    m.enabled = j.value("enabled", false);
     m.id = j.value("id", "");
     m.type = j.value("type", "constant");
     m.target_freq = j.value("target_freq", std::vector<double>{});
@@ -137,10 +137,10 @@ parseJammerSpec(const json& j)
         for (const auto& jw : j["waypoints"])
         {
             Waypoint w;
-            m.t = jw.value("t", 0.0);
-            m.x = jw.value("x", 0.0);
-            m.y = jw.value("y", 0.0);
-            m.z = jw.value("z", 0.0);
+            w.t = jw.value("t", 0.0);
+            w.x = jw.value("x", 0.0);
+            w.y = jw.value("y", 0.0);
+            w.z = jw.value("z", 0.0);
             m.waypoints.push_back(w);
         }
     }
@@ -152,7 +152,7 @@ parseJammerSpec(const json& j)
 	{
 	     Interval iv;
 	     iv.start = ji.value("start", 0.0);
-	     iv.end = ji.value("end", 0.0;)
+	     iv.end = ji.value("end", 0.0);
 	     m.intervals.push_back(iv);
 	}
 
