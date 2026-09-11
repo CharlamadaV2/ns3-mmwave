@@ -45,7 +45,7 @@ def _watt_to_dbm(w: float) -> float:
 
 
 def build(trials_csv: Path, trace_csv: Path, trial: str | None,
-          beamwidth: float, gain: float, z: float) -> list[dict]:
+          beamwidth: float, gain: float, z: float, zenith: float) -> list[dict]:
     trace = pd.read_csv(trace_csv)
     t = pd.to_datetime(trace["t_utc"], utc=True)
     scen_start = t.min().timestamp()
@@ -70,18 +70,21 @@ def build(trials_csv: Path, trace_csv: Path, trial: str | None,
         x, y = to_enu(float(r["ew_approx_lat"]), float(r["ew_approx_lon"]))
         directional = str(r["ew_type"]).strip().lower() == "directional"
         g = r.get("ew_gain (dBi)")
+        band = str(r.get("ew_band_range", "")).strip()
+        target_freq = ([float(v) for v in band.split("-")]
+                       if "-" in band else [])
         jammers.append({
             "id": str(r["trial"]),
             "enabled": True,
             "type": "constant",
-            "target_freq_mhz": [],
+            "target_freq": target_freq,
             "tx_power_dbm": round(_watt_to_dbm(float(r["ew_strength (W)"])), 2),
             "tx_array_gain_dbi": float(g) if pd.notna(g) else gain,
             "duty_cycle": 1.0,
             "max_range_m": 0.0,
             "beamwidth_deg": beamwidth if directional else 360.0,
             "azimuth_deg": float(r["ew_approx_heading (deg from N)"]) if directional else 0.0,
-            "zenith_deg": 0.0,
+            "zenith_deg": zenith,
             "position": {"x": round(x, 2), "y": round(y, 2), "z": z},
             "intervals": [{"start": round(i_start, 2), "end": round(i_end, 2)}],
         })
@@ -101,11 +104,15 @@ def main(argv=None) -> int:
     p.add_argument("--gain", type=float, default=12.0,
                    help="tx_array_gain_dbi when the CSV cell is blank (default 12)")
     p.add_argument("--z", type=float, default=2.0, help="jammer height in m (default 2)")
+    p.add_argument("--zenith", type=float, default=90.0,
+                   help="zenith_deg (0=up, 90=horizontal, 180=down). Default 90 "
+                        "for a ground emitter — do NOT leave 0 or the 3-D beam points at the sky.")
     p.add_argument("--run-ini", type=Path, default=None,
                    help="optional run.ini to patch with 'jammers_file = <name>' under [scenario]")
     args = p.parse_args(argv)
 
-    jammers = build(args.trials, args.trace, args.trial, args.beamwidth, args.gain, args.z)
+    jammers = build(args.trials, args.trace, args.trial, args.beamwidth,
+                    args.gain, args.z, args.zenith)
     if not jammers:
         print("No jammers overlap this scenario window (or all were ew_type=none).",
               file=sys.stderr)

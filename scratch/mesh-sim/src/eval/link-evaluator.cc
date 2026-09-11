@@ -83,7 +83,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
     // Configure jammer model if any jammers are present
     if (!cfg.jammers.empty())
     {
-    	m_jammerModel.Configure(cfg.jammers, plModel, jammerMobs);
+    	m_jammerModel.Configure(cfg.jammers, plModel, jammerMobs, m_frequencyHz, cfg.seed);
     }
     NS_LOG_DEBUG("Configure: txPower=" << m_txPowerDbm << " dBm, BW="
                  << m_bandwidthHz / 1e6 << " MHz, noiseFloor="
@@ -172,20 +172,15 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 
     // SINR = signal / (noise + jammer interference). With no active jammer
     // this reduces exactly to the previous noise-limited SNR.
-    if (jamWatt <= 0.0)
+    if (jamWatt == 0.0)
     {
 	    r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
     }
     else{
 	    r.sinr_db = 10.0 * std::log10(signalWatt / (noiseWatt + jamWatt));
+	    r.sinr_db = r.sinr_db < 0.0 ? 0.0 : r.sinr_db;
+ 	
 	}
-
-    // Cap lowest sinr_db value to 0.0
-    if (r.sinr_db < 0.0)
-    {
-	    r.sinr_db = 0.0;
-    }	    
-
     r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
     r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);
     r.condition_from_buildings = m_buildingsEnabled;

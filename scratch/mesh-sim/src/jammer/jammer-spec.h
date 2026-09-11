@@ -37,7 +37,7 @@ struct JammerSpec
 	std::string type;
 
 	//Target Frequency: Array of Jamming Frequencies
-	std::vector<double> target_freq_mhz;
+	std::vector<double> target_freq;
 
 	//Power: Power of Jamming in dBm
 	double tx_power_dbm;

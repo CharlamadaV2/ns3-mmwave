@@ -28,6 +28,8 @@
 
 #include "src/jammer/jammer-spec.h"
 
+#include <cstdint>
+
 #include "ns3/mobility-model.h"
 #include "ns3/propagation-loss-model.h"
 
@@ -61,7 +63,9 @@ class JammerModel
      */
     void Configure(const std::vector<JammerSpec>& jammers,
                    ns3::Ptr<ns3::PropagationLossModel> plModel,
-                   const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobModels);
+                   const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobModels,
+                   double carrierHz = 0.0,
+                   uint32_t seed = 1);
 
     /**
      * @brief Return true if at least one enabled jammer was loaded.
@@ -91,6 +95,20 @@ class JammerModel
     ///        A jammer with no intervals is treated as always on.
     static bool ActiveAt(const JammerSpec& spec, double nowS);
 
+    /// @brief True if the link carrier falls within the jammer's target band.
+    ///        An empty target_freq means "no frequency filtering" (all links).
+    bool InBand(const JammerSpec& spec) const;
+
+    /// @brief True if @p rxMob is inside the jammer's 3-D beam cone
+    ///        (azimuth+zenith pointing, half-angle = beamwidth/2). Omni when
+    ///        beamwidth >= 360.
+    static bool InBeam(const JammerSpec& spec,
+                       const ns3::Vector& jamPos, const ns3::Vector& rxPos);
+
+    /// @brief On/off decision for a 'random'-type jammer at @p nowS
+    ///        (deterministic, seed-dependent). 'constant' jammers are always on.
+    bool BurstOn(const JammerSpec& spec, double nowS) const;
+
     /// @brief Internal per-jammer state after Configure().
     struct JammerEntry
     {
@@ -99,7 +117,9 @@ class JammerModel
     };
 
     std::vector<JammerEntry>              m_jammers;  ///< Enabled jammers only.
-    ns3::Ptr<ns3::PropagationLossModel>   m_plModel;  ///< Shared propagation model.
+    ns3::Ptr<ns3::PropagationLossModel>   m_plModel;   ///< Shared propagation model.
+    double                                m_carrierMhz = 0.0; ///< Link carrier freq (MHz) for InBand.
+    uint32_t                              m_seed = 1;    ///< Sim seed for 'random' bursts.
 };
 
 }  // namespace mesh_sim
