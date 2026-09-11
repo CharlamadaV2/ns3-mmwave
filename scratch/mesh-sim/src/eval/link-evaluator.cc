@@ -172,7 +172,19 @@ LinkEvaluator::Evaluate(ns3::Ptr<ns3::MobilityModel> txMob,
 
     // SINR = signal / (noise + jammer interference). With no active jammer
     // this reduces exactly to the previous noise-limited SNR.
-    r.sinr_db = 10.0 * std::log10(signalWatt / (noiseWatt + jamWatt));
+    if (jamWatt <= 0.0)
+    {
+	    r.sinr_db = r.rx_power_dbm - m_noiseFloorDbm;
+    }
+    else{
+	    r.sinr_db = 10.0 * std::log10(signalWatt / (noiseWatt + jamWatt));
+	}
+
+    // Cap lowest sinr_db value to 0.0
+    if (r.sinr_db < 0.0)
+    {
+	    r.sinr_db = 0.0;
+    }	    
 
     r.capacity_mbps            = SinrToCapacity(r.sinr_db, m_bandwidthHz, m_amcModel);
     r.mcs_index                = McsIndexForModel(r.sinr_db, m_amcModel);

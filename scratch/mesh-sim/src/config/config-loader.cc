@@ -93,7 +93,7 @@ parseJammerSpec(const json& j)
     m.enabled = j.value("enabled", false);
     m.id = j.value("id", "");
     m.type = j.value("type", "constant");
-    m.target_freq = j.value("target_freq", std::vector<double>{});
+    m.target_freq_mhz = j.value("target_freq_mhz", std::vector<double>{});
     m.tx_power_dbm = j.value("tx_power_dbm", 25.0);
     m.tx_array_gain_dbi = j.value("tx_array_gain_dbi", 12.0);
     m.duty_cycle = j.value("duty_cycle", 1.0);
