@@ -213,27 +213,9 @@ infer answers from the code.
   jammer trajectory, and should it become waypoints or another recorded-motion
   form?
   Owner: team/Kyle/jammer developer — status: open.
-- **TODO-JAM-5 — Receive antenna effects.** Should the receiving node's antenna
-  direction/gain alter jammer interference, in addition to the jammer's own
-  pointing direction?
-  Owner: team/Kyle/jammer developer — status: open.
 - **TODO-JAM-6 — Duty cycle.** Should constant and random jammers keep
   interpreting duty cycle differently?
   Owner: team/Kyle/jammer developer — status: open.
-
-## Data provenance
-
-### TODO-DATA-1 — EW-trials source table and generated jammers.json
-No EW-trials source CSV and no field-generated `jammers.json` exist anywhere
-under `scratch/mesh-sim/`. The synthetic
-`inputs/baselines/p0-jammer-smoke/jammers.json` is P0's only jammer coverage and
-is not field data. `scripts/validation/make_jammers.py` is the generator: it
-reads an EW trial log CSV plus a scenario's `gps_all_nodes_trace.csv` and emits
-a `jammers.json` aligned to that scenario, but no input table for it is present
-here. Identify the owner and location of the real EW trials table, confirm how
-it drives `make_jammers.py`, and decide whether generated jammer input belongs
-in `inputs/calfex/` or stays local.
-Owner: team — status: open.
 
 ## Beam Codebook Model
 

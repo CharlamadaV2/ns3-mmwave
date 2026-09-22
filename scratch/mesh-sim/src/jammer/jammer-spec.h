@@ -48,7 +48,8 @@ struct JammerSpec
 	//Time Intervals: Set of [start, end] time interval(s) for jamming 
 	std::vector<Interval> intervals;
 
-	//Duty Cycle: Time jammer is transmitting 
+	// 0..1: random = chance of full-power transmission each second;
+	// constant = multiplier on interference power (always transmitting).
 	double duty_cycle;
 
 	//Max Range: Max range for interrupted receivers

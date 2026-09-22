@@ -43,7 +43,7 @@ that passes all gates, in this order:
 | @c target_freq | number[] | Target band (MHz). Empty ⇒ all frequencies. 2 values = @c [lo,hi] band; 1 value = spot ±2.5 MHz. |
 | @c tx_power_dbm | number | Transmit power (dBm). |
 | @c tx_array_gain_dbi | number | Antenna gain (dBi); added to EIRP. |
-| @c duty_cycle | number | [0,1]: constant scales power; random sets on-probability per second. |
+| @c duty_cycle | number | 0–1; its effect depends on @c type (explained below). |
 | @c max_range_m | number | Range cutoff (m); 0 disables. |
 | @c beamwidth_deg | number | Cone width; 360 = omni. |
 | @c azimuth_deg | number | Horizontal pointing, deg from North (0=N, 90=E). |
@@ -56,9 +56,17 @@ that passes all gates, in this order:
 The beam is a hard cone gate: a 60-degree beam accepts receivers within 30
 degrees of the pointing vector; it is not a smooth antenna pattern. Range 0
 disables only the hard distance cutoff—propagation still reduces received power.
-For a constant jammer, duty cycle 0.5 halves interference power (about -3 dB);
-for a random jammer it instead switches full power on/off. These are the current
-model assumptions, not changes to jamming physics.
+@c duty_cycle has two different meanings in the current model:
+
+- @c type=random: at each integer second, a seed-dependent draw decides whether
+  the jammer is **on at full power** for that second. At 0.5 it is on in roughly
+  half the seconds; it does not transmit at half power while on.
+- @c type=constant: the jammer is **always on**, but its interference power is
+  multiplied by @c duty_cycle. At 0.5 it contributes half the watts (about
+  3 dB less), with no on/off randomness.
+
+At 0, either type contributes no interference; at 1, both contribute full
+power. This describes existing behavior, not a change to the jammer model.
 
 @warning A narrow directional ground emitter normally uses @c zenith_deg = 90 (horizontal). A value of
 @c 0 points the beam straight **up**; coplanar receivers are outside a narrow
