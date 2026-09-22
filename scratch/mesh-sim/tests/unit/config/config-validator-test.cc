@@ -68,9 +68,11 @@ makeValid()
     NodeSpec n1;
     n1.id       = "node0";
     n1.mobility = "fixed";
+    n1.node_type = "drone";
     NodeSpec n2;
     n2.id       = "node1";
     n2.mobility = "fixed";
+    n2.node_type = "drone";
     cfg.nodes.push_back(n1);
     cfg.nodes.push_back(n2);
 

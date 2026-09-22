@@ -105,9 +105,9 @@ test_table_mid_range()
 static void
 test_table_highest_mcs()
 {
-    // At 30 dB (well above max), should clamp to highest entry: 5.55
+    // At 30 dB (well above max), should clamp to highest entry: 6.23
     double cap = SinrToCapacity(30.0, 400e6, "table");
-    check(approx(cap, 5.55 * 400, 0.1), "table clamps at highest MCS");
+    check(approx(cap, 6.23 * 400, 0.1), "table clamps at highest MCS");
 }
 
 static void
@@ -166,7 +166,7 @@ test_mcs_index_between_thresholds()
 static void
 test_mcs_index_very_high_sinr()
 {
-    check(SinrToMcsIndex(50.0) == 14, "mcs_index at 50 dB clamps to 14");
+    check(SinrToMcsIndex(50.0) == 15, "mcs_index at 50 dB clamps to 15");
 }
 
 static void
