@@ -26,6 +26,8 @@ For training, follow [`train.py`](../../scripts/rl/train.py) (CLI and model
 output) into [`agents/mask_ppo.py`](../../scripts/rl/agents/mask_ppo.py)
 (MaskablePPO setup), then into the environment. Within `env/`, `config.py`
 reads the seed and movement bounds.
+For a worked configuration, formulas, normalization, and trace inspection, see
+the [policy-input guide](policy-inputs.md).
 
 ## Modes
 
