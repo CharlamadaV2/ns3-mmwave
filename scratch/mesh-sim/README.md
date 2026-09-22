@@ -333,10 +333,15 @@ Python never re-derives them.
 
 Four commands cover a centralized run from configuration to evaluation. Run
 them from `scratch/mesh-sim/`. All but `inspect_model` need a built simulator binary.
+Validation checks the proposed run; training saves a model and its manifest;
+inspection checks those saved files; evaluation loads the model and runs new
+episodes. The [lifecycle test map](src/rl/policy-lifecycle-tests.md) gives the
+purpose and expected result of each focused check.
 
 Check a configuration before spending simulator time. Without `--launch` every
 check is static (no simulator process); `--launch` additionally starts the
-simulator once under `<output-dir>/validate/` and reports the live contract:
+simulator under `<output-dir>/validate/`, resets once, and reports the live
+contract. It does not complete an episode:
 
 ```bash
 .venv/bin/python -m scripts.rl.validate_config \
@@ -362,23 +367,29 @@ Train with bounded checkpoints and a masked during-training evaluation:
 `--keep-checkpoints` (default 3) prunes the oldest checkpoints. `--eval-seed`
 defaults to the training seed + 1. The units are SB3 timesteps, which equal
 policy decisions here because training uses one environment.
+[`callbacks.py`](scripts/rl/agents/callbacks.py) wires SB3's checkpoint
+callback (with bounded retention) and `MaskableEvalCallback` (masked,
+deterministic evaluation on a separate environment and seed). The latter saves
+`best_model.zip` when mean evaluation reward improves; neither callback
+changes the training reward or action rules.
 
 Summarize a finished (or failed) run without loading the model:
 
 ```bash
-.venv/bin/python -m scripts.rl.inspect_model --run-dir outputs/bypass-train [--json]
+.venv/bin/python -m scripts.rl.inspect_model --run-dir outputs/bypass-train
 ```
 
-It prints status, seed and seed source, control mode, the contract shape,
-selection, observation and reward schema digests, scenario digests, every model
+Add `--json` if you need machine-readable output. This command reads the
+manifest and saved files; it does not load or run the policy. It prints status,
+seed and seed source, control mode, the contract shape, selection, observation
+and reward schema digests, scenario digests, every model
 file with `exists`/`digest_ok`, the evaluation settings, and recorded versus
 installed package versions. Exit 0 means the manifest is readable and every
 recorded model file is present with a matching digest; exit 2 means a model file
 is missing or its digest differs; exit 1 means the manifest is missing or
 unreadable.
 
-Evaluate a saved model against the `hold` and seeded `random_valid` baselines,
-with masked deterministic actions:
+Evaluate a saved model against the `hold` and seeded `random_valid` baselines:
 
 ```bash
 .venv/bin/python -m scripts.rl.evaluate \
@@ -387,6 +398,16 @@ with masked deterministic actions:
   --output-dir outputs/bypass-eval \
   --seeds 11,12,13 --policies model,hold,random_valid
 ```
+
+`model` uses deterministic MaskablePPO predictions under the live action mask;
+`hold` stops every controlled node; `random_valid` chooses uniformly among
+each position's valid actions, restarting its random generator from each
+episode seed. [`bundle.py`](scripts/rl/policy/bundle.py) treats the training
+manifest plus a chosen final, best, or checkpoint ZIP as a saved model bundle,
+not a new archive.
+It checks run status and the selected ZIP's recorded digest before loading;
+[`compat.py`](scripts/rl/policy/compat.py) then checks the live scenario and
+policy contract.
 
 `--model` selects `final` (default), `best`, or `checkpoints/<file>.zip`. With
 `--run-dir` the run config, band, and selection come from the training manifest;
@@ -420,6 +441,8 @@ seed in seed order, with `status` `completed`, `failed`, or `not_run` (a seed th
 evaluation never reached), and each record adds `error`,
 `metrics.unroutable_fraction`, and a `summary_json` path that is only a pointer
 and is never parsed.
+Inspect `eval_manifest.json` for returns, per-seed metrics, and action
+validity counts; each episode's `steps.jsonl` has the decision trace.
 
 `train_manifest.json` is version 4. Besides the existing run identity it
 records `status`/`error`, `algorithm`, `seed` and `seed_source`, `control_mode`,
@@ -448,8 +471,9 @@ selection — only the during-training callback writes `best_model.zip`.
 Loading a model checks compatibility in a fixed order and stops at the first
 failure: structural contract fields, then the observation schema, then the
 reward schema, then scenario identity. `--allow-different-scenario` relaxes only
-the last step — it never bypasses the structural, schema, reward, or digest
-checks — and the evaluation manifest records the run as `overridden`. Checks
+the last step, including differences in scenario-input file digests. It never
+bypasses the model ZIP's digest, structural, observation-schema, or reward
+checks, and the evaluation manifest records the run as `overridden`. Checks
 that pass mean the shapes and declared meanings match; they are never evidence
 that a policy transfers to another scenario.
 
