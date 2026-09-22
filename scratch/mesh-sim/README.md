@@ -7,6 +7,9 @@ against an ns-3 propagation model, routes traffic, and writes metrics. It also
 supports an optional reinforcement-learning bridge and an optional jammer /
 interference model.
 
+For changes to configuration, the RL protocol, or saved results, see the
+[contributor checklist](CONTRIBUTING.md).
+
 @section build Build
 
 All commands run from the **ns3-mmwave repo root** (two levels above this directory).
@@ -657,12 +660,14 @@ From `scratch/mesh-sim/tests/`:
 
 ```bash
 make test                                   # standalone unit tests
-MESH_SIM_BIN=<BIN> make integration         # 8 real-binary CLI contracts
+MESH_SIM_BIN=<BIN> make integration         # 9 real-binary CLI contracts
 ```
 
 `make test` stops at the first failing suite. To inspect every suite despite a
 failure, run `make -C unit/config test`, `make -C unit/eval test`,
 `make -C unit/routing test`, and `make -C unit/traffic test` separately.
+The [RL test map](scripts/rl/tests/README.md) lists each centralized-control
+test, its input, and its expected output.
 
 For a quick check without cloud reference data, run two tiny synthetic
 simulations and check output contracts and same-seed repeatability:
