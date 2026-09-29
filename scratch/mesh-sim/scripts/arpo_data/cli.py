@@ -96,11 +96,16 @@ def _save_pairs(results, scen_dir: Path, base_name: str) -> None:
         _save((fig, trace), png, csv)
 
 
-## @brief Plot all bh2 metrics and GPS tracks for one scenario directory.
+## @brief Plot GPS tracks and Silvus RF metrics for one node/scenario directory.
 #
-# @param scen_dir    Path to the scenario directory.
-# @param output_path Root output directory; a subdirectory named after the
-#                    scenario is created inside it.
+# Writes PNGs and trace CSVs under ``output_path/<node_dir.name>/{pngs,csvs}/``.
+# The bh2 plots are commented out in the body (old data format). The RF
+# loader is called here with only ``node_dir``, but ``load_rf_scenario``
+# also requires ``valid_nodes`` and ``node_id_to_name``.
+#
+# @param node_dir    Path to the directory to plot (contains ``gps/`` and ``silvus/``).
+# @param output_path Root output directory; a subdirectory named after
+#                    ``node_dir`` is created inside it.
 def _plot_one(node_dir: Path, output_path: Path) -> None:
     out  = output_path / node_dir.name
     pngs = out / "pngs"
@@ -244,8 +249,9 @@ def _plot_nodes_for_day(
 # Loads each node's full GPS and RF data once, discovers every calendar day
 # present across all nodes, then re-plots each day's filtered slice into its
 # own ``output_path/<day>/`` subdirectory via @ref _plot_nodes_for_day.
-# Silvus GPS is excluded and static nodes are filtered out automatically by
-# @ref load_gps_all-style logic inside the per-day combined plot.
+# Silvus GPS is not used. Every node with GPS data on a day is included in
+# that day's combined ``gps_all_nodes`` plot; no static-node filtering is
+# done here.
 #
 # @param csv_dir     Directory containing per-node subdirs.
 # @param output_path Directory to write per-day PNGs and trace CSVs into.
@@ -362,6 +368,14 @@ def _cmd_split_day(args: argparse.Namespace) -> int:
         print(f"  {date_str}: {path}  ({n_rows} rows)")
     return 0
 
+## @brief Dispatch the split-scenario subcommand.
+#
+# Converts ``--start``/``--end`` (``Hour.Minute`` floats) to seconds since
+# midnight, then calls @ref split_trace_by_scenario. Output defaults to
+# ``data/arpo_extracted/_plots/per_scenario/`` (the parser default).
+#
+# @param args  Parsed argument namespace from argparse.
+# @return 0 on success, 1 on bad input, bad time window, or zero rows in the window.
 def _cmd_split_scenario(args: argparse.Namespace) -> int:
     if not args.input.is_dir():
         print(f"ERROR: input directory not found: {args.input}", file=sys.stderr)
@@ -399,9 +413,11 @@ def _cmd_split_scenario(args: argparse.Namespace) -> int:
         
     
 
-## @brief CLI entry point.
+## @fn main
+# @brief CLI entry point.
 #
 # Subcommands: ``extract``, ``plot``, ``multi-day``, ``split-day``, ``split-scenario``.
+# Arguments are read from ``sys.argv`` (no ``argv`` parameter).
 #
 # @return Exit code: 0 on success, 1 on error.
 def main() -> int:

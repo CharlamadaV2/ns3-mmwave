@@ -36,7 +36,8 @@ def _is_junk(name: str, patterns: tuple[str, ...]) -> bool:
     return any(fnmatch.fnmatch(name, p) for p in patterns)
 
 
-## @brief Extract the ARPO data bundle to the configured directory.
+## @fn extract
+# @brief Extract the ARPO data bundle to the configured directory.
 #
 # The function is idempotent: if the extraction directory already exists and
 # its mtime is newer than the zip, extraction is skipped and a summary of the

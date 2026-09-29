@@ -13,6 +13,7 @@ import pandas as pd
 _COLORS = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
 
+## @brief Apply axis labels, optional title, legend and grid to a time-series axis.
 def _style_timeseries(ax, xlabel="Simulation Time (s)", ylabel="", title=""):
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -22,6 +23,14 @@ def _style_timeseries(ax, xlabel="Simulation Time (s)", ylabel="", title=""):
     ax.grid(True, alpha=0.3)
 
 
+## @brief Line (or step) plot of `<val_col>_mean` per (node_a, node_b) link, with a CI band.
+#
+# @param agg_df   Output of aggregate_timeseries with `time_s`, `node_a`, `node_b`.
+# @param val_col  Base value name; needs `<val_col>_mean`, optionally `<val_col>_ci95`.
+# @param ylabel   Y-axis label.
+# @param title    Plot title.
+# @param step     True for a step ("post") line instead of a straight line.
+# @return The Figure. The CI band is drawn only when some CI is > 0.
 def _plot_per_link(agg_df: pd.DataFrame, val_col: str, ylabel: str,
                    title: str, step: bool = False) -> plt.Figure:
     """Generic per-link time-series with optional CI band."""
@@ -56,6 +65,13 @@ def _plot_per_link(agg_df: pd.DataFrame, val_col: str, ylabel: str,
     return fig
 
 
+## @brief Same as _plot_per_link but grouped by (src, dst) flow, labelled "src->dst".
+#
+# @param agg_df   Output of aggregate_timeseries with `time_s`, `src`, `dst`.
+# @param val_col  Base value name; needs `<val_col>_mean`, optionally `<val_col>_ci95`.
+# @param ylabel   Y-axis label.
+# @param title    Plot title.
+# @return The Figure.
 def _plot_per_flow(agg_df: pd.DataFrame, val_col: str, ylabel: str,
                    title: str) -> plt.Figure:
     """Generic per-flow time-series with optional CI band."""
@@ -90,6 +106,14 @@ def _plot_per_flow(agg_df: pd.DataFrame, val_col: str, ylabel: str,
 # Public plot functions
 # ---------------------------------------------------------------------------
 
+## @fn plot_sinr_timeseries
+# @brief SINR (signal-to-interference-plus-noise ratio, dB) vs simulation time, one line per link.
+#
+# @param agg_df  Aggregated links data with `sinr_db_mean` (and `sinr_db_ci95`).
+# @param title   Optional title; default "SINR Time Series".
+# @return matplotlib Figure (not saved or shown).
+#
+# Rows with `sinr_db_mean` <= -900 (placeholder for "no link") are dropped first.
 def plot_sinr_timeseries(agg_df: pd.DataFrame,
                          title: str | None = None) -> plt.Figure:
     """SINR (dB) vs simulation time, one line per link."""
@@ -100,6 +124,14 @@ def plot_sinr_timeseries(agg_df: pd.DataFrame,
                           title or "SINR Time Series")
 
 
+## @fn plot_rx_power_timeseries
+# @brief Received power (dBm) vs simulation time, one line per link.
+#
+# @param agg_df  Aggregated rx-power data with `rx_power_dbm_mean` (and `_ci95`).
+# @param title   Optional title; default "Rx Power Time Series".
+# @return matplotlib Figure (not saved or shown).
+#
+# Rows with `rx_power_dbm_mean` <= -900 (placeholder value) are dropped first.
 def plot_rx_power_timeseries(agg_df: pd.DataFrame,
                              title: str | None = None) -> plt.Figure:
     """Rx Power (dBm) vs simulation time, one line per link."""
@@ -109,6 +141,12 @@ def plot_rx_power_timeseries(agg_df: pd.DataFrame,
                           title or "Rx Power Time Series")
 
 
+## @fn plot_capacity_timeseries
+# @brief Link capacity (Mbps) vs simulation time, one line per link.
+#
+# @param agg_df  Aggregated links data with `capacity_mbps_mean` (and `_ci95`).
+# @param title   Optional title; default "Link Capacity Time Series".
+# @return matplotlib Figure (not saved or shown).
 def plot_capacity_timeseries(agg_df: pd.DataFrame,
                              title: str | None = None) -> plt.Figure:
     """Capacity (Mbps) vs simulation time, one line per link."""
@@ -116,6 +154,12 @@ def plot_capacity_timeseries(agg_df: pd.DataFrame,
                           title or "Link Capacity Time Series")
 
 
+## @fn plot_mcs_timeseries
+# @brief MCS (modulation and coding scheme) index vs simulation time as a step plot, one line per link.
+#
+# @param agg_df  Aggregated mcs data with `mcs_index_mean` (and `_ci95`).
+# @param title   Optional title; default "MCS Index Time Series".
+# @return matplotlib Figure with integer-only y ticks (not saved or shown).
 def plot_mcs_timeseries(agg_df: pd.DataFrame,
                         title: str | None = None) -> plt.Figure:
     """MCS index vs simulation time, step plot, one line per link."""
@@ -125,6 +169,15 @@ def plot_mcs_timeseries(agg_df: pd.DataFrame,
     return fig
 
 
+## @fn plot_throughput_timeseries
+# @brief Delivered throughput (Mbps) vs simulation time, per link or per flow.
+#
+# @param agg_df  Aggregated data with `delivered_mbps_mean`; either links data
+#                (has `node_a`) or flows data (has `src`, `dst`).
+# @param title   Optional title; default "Link Throughput Time Series" or "Flow Throughput Time Series".
+# @return matplotlib Figure (not saved or shown).
+#
+# The presence of a `node_a` column selects link mode; otherwise flow mode.
 def plot_throughput_timeseries(agg_df: pd.DataFrame,
                                title: str | None = None) -> plt.Figure:
     """Delivered throughput (Mbps) vs time. Works with link or flow data."""
@@ -139,6 +192,12 @@ def plot_throughput_timeseries(agg_df: pd.DataFrame,
                               title or "Flow Throughput Time Series")
 
 
+## @fn plot_latency_timeseries
+# @brief End-to-end latency (ms) vs simulation time, one line per flow.
+#
+# @param agg_df  Aggregated flows data with `latency_ms_mean` (and `_ci95`).
+# @param title   Optional title; default "Flow Latency Time Series".
+# @return matplotlib Figure (not saved or shown).
 def plot_latency_timeseries(agg_df: pd.DataFrame,
                             title: str | None = None) -> plt.Figure:
     """Latency (ms) vs simulation time, one line per flow."""
@@ -146,6 +205,19 @@ def plot_latency_timeseries(agg_df: pd.DataFrame,
                           title or "Flow Latency Time Series")
 
 
+## @fn plot_derived_geometry
+# @brief Elevation and azimuth angles between node pairs vs time, derived from positions.
+#
+# @param positions_df  Table with `time_s`, `node_id`, `x`, `y`, `z` (from positions.csv);
+#                      may be concatenated across seeds, in which case positions are averaged.
+# @param node_pairs    List of (node_a, node_b) ids to plot; None means every unordered pair.
+# @param title         Optional title for the top panel; default "Derived Geometry".
+# @return matplotlib Figure with two stacked panels: elevation (deg) and azimuth (deg) (not saved or shown).
+#
+# For each pair, uses timesteps where both nodes exist, takes the vector a -> b,
+# elevation = atan2(dz, horizontal distance), azimuth = atan2(dx, dy) mod 360
+# (measured from the +y axis toward +x). The input is copied, not modified.
+# Pairs with no common timesteps are skipped.
 def plot_derived_geometry(positions_df: pd.DataFrame,
                           node_pairs: list[tuple[int, int]] | None = None,
                           title: str | None = None) -> plt.Figure:

@@ -1,6 +1,9 @@
 ## @file topology_audit.py
 # @brief Surface label collisions in the (rab, netdev) -> rabN.M scheme.
 #
+# Run as ``python -m scripts.arpo_data.topology_audit``. Reads every
+# ``bh2.csv`` under the extracted CSV root and prints each (rab, netdev) key
+# that maps to more than one local MAC. Read-only; takes no arguments.
 
 
 from __future__ import annotations
@@ -84,7 +87,8 @@ def _peer_counts() -> dict[str, int]:
     return dict(out)
 
 
-## @brief Report (rab, netdev) keys whose MAC address is claimed by more than one device.
+## @fn main
+# @brief Report (rab, netdev) keys whose MAC address is claimed by more than one device.
 #
 # Calls @ref _scan to build the full (rab, mac, netdev, device_name, host)
 # inventory and @ref _peer_counts to annotate activity levels. For each

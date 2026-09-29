@@ -1,12 +1,17 @@
-''''''
+'''build_waypoints.py'''
 ## @file build_waypoints.py
 # @brief Generate waypoint mobility for a sim node from its field GPS trace.
 #
-# Reads the per-day ``gps_track_trace.csv`` (centroid-ENU metres) emitted by
-# ``arpo_data.cli plot``, aligns the field coordinate frame to the sim frame
-# using a stationary anchor node (default: rab1), downsamples the moving
-# node's track to N waypoints, and patches them into the scenario's
-# ``nodes.json``.
+# Reads a field GPS trace (``gps_track_trace.csv`` from ``arpo_data.cli plot``,
+# or a combined ``gps_all_nodes_trace.csv``; centroid-ENU metres), optionally
+# aligns the field frame to the sim frame using a stationary anchor node,
+# downsamples the moving node's track to N waypoints, and patches them into the
+# scenario's ``nodes.json``. Nodes whose field track stays within a 20 m
+# bounding box are written as ``fixed`` with no waypoints instead.
+#
+# CLI: two subcommands, ``scenario`` (spring_lake layout) and ``node`` (calfex
+# layout); see @ref main. Run it as ``python -m scripts.validation.build_waypoints``
+# from ``scratch/mesh-sim/``.
 #
 # **Coordinate frames**
 # Field GPS fixes are expressed in ENU metres relative to an arbitrary
@@ -213,7 +218,8 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
                      g["north_m"].max() - g["north_m"].min()))
 
 
-## @brief Patch one scenario's ``nodes.json`` with field-derived waypoints.
+## @fn patch_scenario_waypoints
+# @brief Patch one scenario's ``nodes.json`` with field-derived waypoints.
 #
 # Full pipeline in one call:
 # -# Load the field GPS trace from @p field_path (file or directory) or
@@ -228,8 +234,10 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
 # @param field_path     Direct path to a trace CSV or directory; when ``None``
 #                       the path is derived from the scenario name and
 #                       @ref FIELD_PER_DAY_ROOT.
-# @param node           ID of the node to author waypoints for (default: ``"rab2"``).
-# @param anchor         ID of the stationary alignment anchor (default: ``"rab1"``).
+# @param node           ID of the node to author waypoints for (keyword-only, required).
+# @param anchor         ID of the stationary alignment anchor (keyword-only, required);
+#                       pass ``None`` to skip frame alignment (offset 0). If the anchor
+#                       has no rows in the field trace, no offset is applied either.
 # @param n_waypoints    Target waypoint count after downsampling (default: 20).
 # @param time_mode      One of ``"raw"``, ``"scale"``, ``"clip"`` (default: ``"raw"``).
 # @param duration       Target duration in seconds for ``clip``/``scale`` modes.
@@ -238,7 +246,12 @@ def _field_bbox_max_m(df: pd.DataFrame, node: str) -> float:
 # @param dry_run        If True, report what would be done without writing.
 # @param mobile_bbox_m  Bbox threshold below which the node is treated as static.
 # @return One-line status string starting with ``"patched"``, ``"skipped"``,
-#         or ``"error"``.
+#         or ``"error"``. Errors are returned, not raised.
+#
+# Side effects: rewrites ``nodes.json`` in place (unless ``dry_run``). A static
+# node is also written (mobility ``fixed``, empty waypoints) and reported as
+# ``skipped``; that write happens even when ``dry_run`` is set. ``time_mode``
+# ``scale`` stretches the field time to ``duration`` seconds; ``clip`` caps it.
 def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
                              node: str, anchor: str,
                              n_waypoints: int = 20, time_mode: str = "raw",
@@ -317,14 +330,27 @@ def patch_scenario_waypoints(sim_dir: Path, *, field_path: Path | None = None,
     return summary
 
 
-## @brief CLI entry point for the build-waypoints tool.
+## @fn main
+# @brief CLI entry point for the build-waypoints tool.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 if no node/scenario reported an error, 1 otherwise (including bad paths).
 #
 # Two subcommands select the data format:
 # - ``scenario`` — spring_lake style, named scenario subdirs under a root.
+#   Flags: ``-i/--input`` (default ``inputs/custom/sherpa/spring_lake``), one of
+#   ``--name`` / ``--all``, ``--node`` (default ``rab2``), ``--anchor``,
+#   ``--n-waypoints`` (20), ``--time-mode {raw,clip,scale}`` (raw), ``--duration``
+#   (seconds), ``--field-z`` (metres), ``--field-scenario``, ``--dry-run``.
 # - ``node``     — calfex style, one scenario dir with a combined trace CSV.
+#   Flags: ``-i/--input`` and ``-f/--field`` (both required), one of ``--node`` /
+#   ``--all-nodes`` (every node except the anchor), plus the shared flags above
+#   minus ``--field-scenario``.
 #
-# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 if no errors occurred, 1 otherwise.
+# ``--anchor`` defaults to None, which means no frame alignment in both
+# subcommands (the ``--help`` text naming rab1 / gateway as defaults is out of
+# date). In node mode an anchor of ``""`` or ``none`` also disables alignment.
+# Prints one status line per node/scenario and a patched/skipped/error summary.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Generate waypoint mobility from field GPS for sim nodes.")

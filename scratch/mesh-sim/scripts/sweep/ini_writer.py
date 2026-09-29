@@ -5,6 +5,19 @@ import os
 import shutil
 
 
+## @fn write_point_ini
+# @brief Write one sweep point's `run.ini`, derived from the base scenario.
+#
+# @param base_run_ini  Path to the base scenario `run.ini`.
+# @param point_dir     Existing directory for this point (must already exist).
+# @param overrides     Constant `(section, key) -> value` overrides for all points.
+# @param point_params  Swept `(section, key) -> value` for this point; wins over `overrides`.
+# @return Path of the written `<point_dir>/run.ini`.
+# @throws OSError if `point_dir` does not exist or is not writable.
+#
+# Copies the base INI, applies `overrides`, then `point_params`, creating missing
+# sections. Then sets `[output] dir` to the absolute `point_dir` and `[scenario] name`
+# to `scenario_name`. Comments in the base INI are not preserved.
 def write_point_ini(
     base_run_ini: str,
     point_dir: str,
@@ -47,6 +60,17 @@ def write_point_ini(
     return out_path
 
 
+## @fn copy_scenario_files
+# @brief Copy the node (and optional building) JSON files into a point directory.
+#
+# @param base_scenario_dir  Base scenario directory.
+# @param point_dir          Destination directory.
+# @param nodes_file         Nodes file name (default `nodes.json`).
+# @param buildings_file     Buildings file name; empty (default) skips buildings.
+# @return None.
+#
+# Files that do not exist in the base scenario are silently skipped.
+# `jammers.json` is not copied.
 def copy_scenario_files(base_scenario_dir: str, point_dir: str,
                         nodes_file: str = "nodes.json",
                         buildings_file: str = "") -> None:

@@ -31,7 +31,7 @@ import pandas as pd
 
 _UNIT_BY_SHORT = {"snr": "dB", "rcpi": "dB", "mcs": "", "per": "", "throughput": "Mbps"}
 
-## @brief Node key column and the per-node value columns that can be differenced.
+## @brief Node key column and the per-node value columns that can be differenced (column -> label).
 _NODE_KEY = "src_rab"
 _VALUE_COLS = {
     "sim_median":       "sim median",
@@ -72,6 +72,8 @@ def _load_summary(path: Path) -> pd.DataFrame | None:
 
 
 ## @brief Reduce a summary to a node x metric Series for one value column.
+#
+# Duplicate peer rows are averaged; returns an empty Series if the column is absent.
 def _node_metric_series(df: pd.DataFrame, value_col: str) -> pd.Series:
     if value_col not in df.columns:
         return pd.Series(dtype=float)
@@ -154,6 +156,8 @@ def _heatmap_delta(per_scen: dict[str, pd.Series], baseline_name: str,
 
 
 ## @brief Long-form CSV of every node x scenario x metric delta vs baseline.
+#
+# @return Number of rows written (0 means no file was created).
 def _write_csv(per_scen: dict[str, pd.Series], baseline_name: str,
                value_col: str, metrics: list[str], out_path: Path) -> int:
     base = per_scen[baseline_name]
@@ -182,10 +186,20 @@ def _write_csv(per_scen: dict[str, pd.Series], baseline_name: str,
     return len(rows)
 
 
-## @brief CLI entry point.
+## @fn main
+# @brief CLI entry point: difference each scenario's per-node values against a baseline scenario.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 on success, 1 on error.
+# @return 0 if at least one heatmap was written, 1 on error (baseline unreadable,
+#         no distinct comparison scenario, empty baseline data, or no heatmaps).
+#
+# Positional ``scenarios`` (one or more scenario dirs or ``validation_summary.csv``
+# files), required ``--baseline``, ``--value`` (default ``diff_medians``),
+# ``--metrics`` (default ``snr,rcpi,mcs``), ``--out``. Inputs come from @ref compare.
+# Writes ``heatmap_<metric>_<value>.png`` per metric and ``baseline_comparison.csv``
+# into ``--out`` (default ``<baseline>/baseline_comparison``, created if needed).
+# Inputs that cannot be loaded, or that are the baseline itself, are skipped with
+# a message on stderr. Values are signed (scenario minus baseline).
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Per-node comparison of each scenario's sim-vs-field result "

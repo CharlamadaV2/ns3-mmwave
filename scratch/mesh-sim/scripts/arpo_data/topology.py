@@ -51,7 +51,8 @@ RAB2_NETDEV_ORIENTATION: dict[str, str] = {
 }
 
 
-## @brief Return the antenna-face orientation for a (rab, netdev) pair.
+## @fn netdev_orientation
+# @brief Return the antenna-face orientation for a (rab, netdev) pair.
 #
 # Only rab2 has a known orientation table; all other rabs return None.
 #
@@ -103,7 +104,8 @@ def _rab_netdevs(csv_root: Path) -> dict[str, list[str]]:
     return ordered
 
 
-## @brief Return the 1-based position of a netdev in its rab's sorted list.
+## @fn radio_index
+# @brief Return the 1-based position of a netdev in its rab's sorted list.
 #
 # @param rab      Chassis hostname.
 # @param netdev   Linux netdev name.
@@ -122,7 +124,8 @@ def radio_index(rab: str, netdev: str, csv_root: Path | None = None) -> int | No
         return None
 
 
-## @brief Return the human-readable ``rabN.M`` label for a (rab, netdev) pair.
+## @fn radio_label
+# @brief Return the human-readable ``rabN.M`` label for a (rab, netdev) pair.
 #
 # Falls back to ``"{rab}.?"`` when the netdev index cannot be determined.
 #
@@ -233,7 +236,8 @@ def _device_netdevs(csv_root: Path) -> dict[str, list[str]]:
     return ordered
 
 
-## @brief Resolve a MAC address to a ``<device_name>.<radio_index>`` label.
+## @fn mac_radio_label
+# @brief Resolve a MAC address to a ``<device_name>.<radio_index>`` label.
 #
 # Uses @ref _global_mac_devices for the chassis name and @ref _device_netdevs
 # for the 1-based radio index. Returns ``None`` when the MAC has no known
@@ -264,7 +268,8 @@ def mac_radio_label(mac: str, csv_root: Path | None = None) -> str | None:
 _GLOBAL_OWNERS_CACHE: dict[Path, dict[str, str]] = {}
 
 
-## @brief Return the matplotlib colour string for a node label.
+## @fn node_color
+# @brief Return the matplotlib colour string for a node label.
 #
 # Unmapped labels (not in @ref FIXED_COLORS) return ``"0.4"`` (medium grey).
 #
@@ -305,7 +310,8 @@ def _global_local_macs(csv_root: Path) -> dict[str, str]:
     return out
 
 
-## @brief Build the {mac: label} topology map for a single scenario directory.
+## @fn build_topology
+# @brief Build the {mac: label} topology map for a single scenario directory.
 #
 # Labels known MACs from the global local-MAC table, then groups any remaining
 # peer-only MACs by last-byte proximity and assigns them ``ext1``, ``ext2``, …
@@ -332,7 +338,8 @@ def build_topology(scen_dir: Path) -> dict[str, str]:
     return topo
 
 
-## @brief Resolve a peer MAC to its label using a pre-built topology map.
+## @fn resolve_peer
+# @brief Resolve a peer MAC to its label using a pre-built topology map.
 #
 # Returns ``"?"`` for NaN/None MACs and ``"?:<last5>"`` for MACs absent from
 # the topology, providing enough context to identify the device in logs.

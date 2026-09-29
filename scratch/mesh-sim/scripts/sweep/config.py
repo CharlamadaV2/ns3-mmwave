@@ -8,6 +8,10 @@ from dataclasses import dataclass, field
 from scripts.sim_support import parse_seed_spec
 
 
+## @class SweepDimension
+# @brief One swept parameter: an INI `section`, a `key`, and its candidate values.
+#
+# Values are kept as strings exactly as written in the sweep INI.
 @dataclass
 class SweepDimension:
     """A single swept parameter with its list of values."""
@@ -17,6 +21,12 @@ class SweepDimension:
     values: list[str] = field(default_factory=list)
 
 
+## @class SweepConfig
+# @brief Validated contents of a sweep INI.
+#
+# `base_scenario` is an absolute directory path. `seeds` is the list of seeds
+# run at every point. `overrides` are constants applied to all points, and
+# `dimensions` are the swept parameters (their cartesian product is the set of points).
 @dataclass
 class SweepConfig:
     """Parsed sweep configuration."""
@@ -30,6 +40,12 @@ class SweepConfig:
     dimensions: list[SweepDimension] = field(default_factory=list)
 
 
+## @fn _parse_section_key
+# @brief Split a `section.key` string at the first dot.
+#
+# @param dotted  Name such as `channel.frequency_ghz`.
+# @return Tuple `(section, key)`.
+# @throws SystemExit (code 1) after printing an error if either part is missing.
 def _parse_section_key(dotted: str) -> tuple[str, str]:
     """Split 'section.key' into (section, key). Exits on bad format."""
     parts = dotted.split(".", 1)
@@ -40,6 +56,22 @@ def _parse_section_key(dotted: str) -> tuple[str, str]:
     return parts[0], parts[1]
 
 
+## @fn parse_sweep_config
+# @brief Read and validate a sweep INI file.
+#
+# @param path  Path to the sweep INI.
+# @return A SweepConfig with an absolute `base_scenario` path.
+# @throws SystemExit (code 1) if the file is missing, `[sweep.meta]` or `[sweep]` is missing,
+#         `auto_plot` is not `each`/`all`/`none`, the base scenario has no `run.ini`,
+#         a name is not `section.key`, or a dimension has no values.
+# @throws ValueError (uncaught) if `seeds` is not a valid seed list.
+#
+# `[sweep.meta]` keys: `base_scenario` (required), `seeds` (default `1`; comma list
+# and `A-B` ranges), `auto_plot` (default `none`), `plot_config` (default empty), `label`
+# (default `sweep`). `[sweep.override]` (optional) holds constants for every point.
+# `[sweep]` holds `section.key = v1, v2, ...` dimensions. `base_scenario` is resolved
+# against the mesh-sim root, found by walking up from the sweep INI until `sim.cc` is
+# seen (falls back to the INI's own directory).
 def parse_sweep_config(path: str) -> SweepConfig:
     """Parse a sweep INI file and return a validated SweepConfig."""
     if not os.path.isfile(path):

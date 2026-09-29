@@ -65,6 +65,7 @@ def parse_ps(text: str) -> dict[int, tuple[int, int]]:
 
 
 def _in_tree(table: dict[int, tuple[int, int]], pid: int, root_pid: int) -> bool:
+    """Whether pid is root_pid or one of its descendants; cycles end the walk."""
     seen: set[int] = set()
     while pid not in seen:
         if pid == root_pid:
@@ -179,6 +180,7 @@ def _read_json(path):
 
 
 def _span_seconds(start, end) -> float | None:
+    """Seconds between two ISO timestamps; None when either is unparseable."""
     try:
         return (datetime.fromisoformat(end) - datetime.fromisoformat(start)).total_seconds()
     except (TypeError, ValueError):

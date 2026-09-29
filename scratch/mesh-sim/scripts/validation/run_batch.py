@@ -65,9 +65,9 @@ def _read_scenario_duration(ini_path: Path) -> float | None:
 
 ## @brief Locate the compiled ns-3 sim binary via glob.
 #
-# Searches for the pattern
+# Delegates to ``scripts.sim_support.find_sim_binary``: searches
 # ``<repo_root>/../../build/scratch/mesh-sim/ns3*-sim-*`` and returns the
-# lexicographically first match (which in practice is the only build).
+# lexicographically first match.
 #
 # @return Absolute path string of the binary, or ``None`` if not found.
 def _find_sim_binary() -> str | None:
@@ -119,7 +119,22 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
     return result.returncode, str(log_path)
 
 
-## @brief CLI entry point for the batch runner.
+## @fn main
+# @brief CLI entry point for the batch runner.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 if all scenarios succeeded (or on ``--dry-run``); 1 if none were found,
+#         the binary could not be found, or any scenario failed.
+#
+# Flags: ``--scenarios-dir`` (default ``inputs/custom/sherpa/spring_lake``),
+# ``--seeds`` (default ``1,2,3,4,5``), ``--out``, ``--sim-binary``, ``--dry-run``,
+# ``--band {mmwave,sub-6}``, ``--only``, ``--auto-waypoints``,
+# ``--waypoint-node`` (default ``rab2``), ``--waypoint-time-mode`` (default ``scale``).
+# Without ``--out`` the batch root is
+# ``outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/``. Side effects: creates the
+# batch root, one directory per scenario with ``console.log``, and
+# ``batch_manifest.json``; ``--auto-waypoints`` rewrites each scenario's
+# ``nodes.json`` in ``inputs/``.
 #
 # Full workflow:
 # -# Discover scenarios under ``--scenarios-dir``.
@@ -131,8 +146,6 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
 #       so a crash doesn't lose partial results).
 # -# Print a final OK/failed count.
 #
-# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 if all scenarios succeeded, 1 if any failed.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Run mesh-sim across validation scenarios.")
     p.add_argument("--scenarios-dir", default=str(DEFAULT_SCENARIOS_DIR),

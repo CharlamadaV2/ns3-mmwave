@@ -52,6 +52,8 @@ def _is_finite_number(value) -> bool:
 
 
 class CentralizedProtocol:
+    """Validates the `init` and per-step messages of centralized control and the joint action."""
+
     def __init__(self, init: dict):
         self.validate_init(init)
         self._num_slots = int(init["max_controlled_nodes"])
@@ -241,6 +243,7 @@ class CentralizedProtocol:
                 )
 
     def validate_step(self, msg: dict, first: bool = False) -> np.ndarray:
+        """Check one step message against the init contract; raise ProtocolError on any violation."""
         if msg.get("type") != "step":
             _fail(
                 f"Expected a 'step' message, got type {msg.get('type')!r}"
@@ -474,6 +477,7 @@ class CentralizedProtocol:
             )
 
     def joint_action(self, action) -> list[int]:
+        """Convert an action to one integer in [0, 4] per slot; raise ValueError otherwise."""
         array = np.asarray(action)
         if array.ndim == 0:
             raise ValueError(
@@ -499,6 +503,8 @@ class CentralizedProtocol:
 
 
 class LegacyProtocol:
+    """Validates single-node legacy step messages, which have no `init` message."""
+
     def __init__(self, obs_width: int | None):
         self.obs_width = obs_width
         self._last_tick: int | None = None

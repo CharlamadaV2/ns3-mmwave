@@ -91,7 +91,8 @@ def _resolve_field_gps(field_root: Path, day: str) -> Path | None:
 # @param metrics     Comma-separated metric shorts to compare.
 # @param tol_m       Pairwise distance tolerance in metres for fidelity checks.
 # @param skip_fidelity Skip the scenario_fidelity step if ``True``.
-# @return           0 on success, 1 if any step reported a hard error.
+# @return           The exit code of ``compare`` (0 or 1). ``sim_to_traces`` and
+#                   ``scenario_fidelity`` results do not affect it.
 def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
             metrics: str, tol_m: float, skip_fidelity: bool) -> int:
     print(f"\n{'=' * 60}")
@@ -130,10 +131,22 @@ def _run_day(day_dir: Path, field_dir: Path, field_gps: Path | None,
     return rc
 
 
-## @brief CLI entry point for the per-day validation orchestrator.
+## @fn main
+# @brief CLI entry point for the per-day validation orchestrator.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return     0 on success, 1 on error.
+# @return     0 if every day was processed without error, 1 otherwise.
+#
+# Flags: ``--out-root`` (default ``outputs/calfex``), ``--field-root`` (default
+# ``data/arpo_extracted/_plots/per_day``), one of ``--day`` / ``--all-days``
+# (required), ``--time/-t`` (required by argparse but its value is never used),
+# ``--metrics`` (default ``snr,rcpi,mcs``), ``--tol-m`` (metres, default 5),
+# ``--field-gps``, ``--field-day``, ``--skip-fidelity``, ``--skip-cross-day``.
+# For each day it runs ``_run_day``; with more than one day and no
+# ``--skip-cross-day`` it then calls ``compare_runs`` and writes heatmaps to
+# ``<out-root>/cross_day_summary``. A day with a missing sim or field directory
+# counts as an error and is skipped. A ``scenario_fidelity`` mismatch is reported
+# but does not change the exit code.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Run sim-vs-field validation for one day or every day, "

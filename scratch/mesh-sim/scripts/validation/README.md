@@ -1,185 +1,262 @@
 @page scripts_validation scripts/validation
 
-@brief Module for comparing simulation results to arpo_data
+@brief Checks mesh-sim output against ARPO field data and against stored regression results.
 
-Sim-vs-field comparison: runs mesh-sim across a directory of scenarios
-(multi-seed), then overlays the pooled sim distribution against the ARPO
-field traces as normalized histograms with a bootstrap CI band on the sim
-curve, plus a two-sample K-S statistic and |Δmedian|/|Δmean| in the
-chart subtitle and CSV.
+This directory does two jobs:
 
-**Scenario inputs** come from `inputs/custom/sherpa/spring_lake/` — one
-subdirectory per scenario, each containing `run.ini` and `nodes.json`.
-**Field traces** come from
-`data/arpo_extracted/_plots/per_day/<scenario>/csvs/<src>/` and must be
-generated up-front via `scripts.arpo_data.cli plot`.
+- **Sim-vs-field validation.** Builds sim scenarios from ARPO field data, runs
+  mesh-sim over several seeds, and overlays the sim distributions of SNR, RCPI
+  (received channel power indicator, dBm) and MCS (modulation and coding scheme
+  index) on the field traces. It reports the two-sample K-S
+  (Kolmogorov-Smirnov) D statistic and |Δmedian| / |Δmean| for each one.
+- **Regression and smoke checks.** Confirms that a new simulator binary still
+  reproduces stored results (`regression_check`), or that it is at least
+  self-consistent on a tiny synthetic scenario (`smoke_check`).
 
+## Module Layout
+
+| File | Role |
+|------|------|
+| @ref build_config_files.py "build_config_files" | Writes per-run `nodes.json` and `run.ini` from field GPS and Silvus config CSVs. |
+| @ref build_waypoints.py "build_waypoints" | Patches waypoint mobility into `nodes.json` from a field GPS track (`scenario` and `node` subcommands). |
+| @ref run_batch.py "run_batch" | Runs the sim binary once per scenario over a set of seeds; writes `batch_manifest.json`. |
+| @ref sim_to_traces.py "sim_to_traces" | Rewrites per-seed sim CSVs into arpo_data-style trace CSVs. |
+| @ref compare.py "compare" | Pools sim seeds and field traces; draws histogram + KDE overlays; writes K-S CSVs and heatmaps. |
+| @ref compare_runs.py "compare_runs" | Cross-batch heatmaps (scenario x batch) from `validation_summary.csv` files. |
+| @ref compare_baseline.py "compare_baseline" | Signed per-node heatmaps of each scenario against one baseline scenario. |
+| @ref scenario_fidelity.py "scenario_fidelity" | Audits sim vs field mobile/static classification and initial pairwise distances (prints tables). |
+| @ref validate_days.py "validate_days" | Runs `sim_to_traces`, `compare` and `scenario_fidelity` per day, then `compare_runs` across days. |
+| @ref make_jammers.py "make_jammers" | Builds `jammers.json` from the field EW (electronic warfare) trial CSV. |
+| @ref regression_check.py "regression_check" | CLI with `capture`, `compare` and `verify-suite` subcommands for the baseline regression. |
+| @ref regression_snapshot.py "regression_snapshot" | Library that builds and compares normalized run snapshots. |
+| @ref smoke_check.py "smoke_check" | Data-free two-run smoke and repeatability check. |
+| @ref tests/test_regression_check.py "tests/test_regression_check.py" | pytest tests for the snapshot and launcher contracts. |
+
+Launcher paths and loader setup live in `scripts/sim_support.py`, one level up.
+
+## Setup
+
+Run every command from `scratch/mesh-sim/`. The scripts use package-relative
+imports, so always call them as `python -m scripts.validation.<name>`.
+
+1. Build the simulator binary (the user handles builds).
+2. Install the Python packages:
+
+   ```bash
+   pip install pandas numpy matplotlib pytest
+   ```
+
+3. For sim-vs-field validation, generate the field trace CSVs once per dataset:
+
+   ```bash
+   python -m scripts.arpo_data.cli plot --all
+   ```
+
+4. For the full regression suite, get the approved reference bundle from the
+   project team and unpack its JSON snapshots under
+   `tests/fixtures/regression/p0/`. The smoke check and unit tests do not need it.
 
 ## Run
 
-From `scratch/mesh-sim/`:
+### Sim-vs-field validation (CalFEX, node mode)
+
+Run the steps in order. Each step needs the output of the one before it.
 
 ```bash
-# 1. Produce field trace CSVs (one-time per dataset; skip if already done)
-python -m scripts.arpo_data.cli plot --all
-
-# 2. Generate sim config files from calfex field data
-python scripts/validation/build_config_files.py \
-    -i data/arpo_extracted \
+# 1. Write run.ini + nodes.json per run (waypoints left empty)
+python -m scripts.validation.build_config_files \
+    --csv-dir <per-node-config-dir> \
+    -i data/arpo_extracted/_plots/per_day \
     -o inputs/calfex \
-    -b sub-6 \
-    -m node
+    -b sub-6 -m node --all-days
 
-# 3. Patch waypoints from GPS tracks into nodes.json
-python -m scripts.validation.build_waypoints --all --time-mode scale --duration 60
+# 2. Fill in waypoints from the field GPS track (edits nodes.json in place)
+python -m scripts.validation.build_waypoints node \
+    -i inputs/calfex/<run> -f <field dir or gps_all_nodes_trace.csv> \
+    --all-nodes --time-mode scale --duration 60
 
-# 4. Run the sim across all scenarios (default: 5 seeds each)
-python -m scripts.validation.run_batch
+# 3. Run the sim over every scenario (default seeds 1,2,3,4,5)
+python -m scripts.validation.run_batch --scenarios-dir inputs/calfex
 
-# 5. Convert per-seed sim outputs to arpo_data-style trace CSVs
-python -m scripts.validation.sim_to_traces outputs/<batch>
+# 4. Convert per-seed sim CSVs to field-style trace CSVs
+python -m scripts.validation.sim_to_traces -m node \
+    outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/<scenario>
 
-# 6. histogram overlay + bootstrap CI + K-S vs field
-python -m scripts.validation.compare      outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation
-
-# 7. Cross-batch summary (overall + per-scenario)
-python -m scripts.validation.compare_runs
-
-# 8. Scenario fidelity audit (sim vs field layout / mobility)
-python -m scripts.validation.scenario_fidelity outputs/<batch>
+# 5. Overlays, K-S statistics, CSVs and heatmaps
+python -m scripts.validation.compare -m node \
+    --batch_root outputs/.../<scenario> --field-root <field dir for that run>
 ```
 
-`build_config_files` reads the calfex GPS and silvus CSVs and writes
-`nodes.json` and `run.ini` directly from field measurements. Channel
-parameters come from `silvus/config.csv` on each IH node. Node starting
-positions are the first GPS fix per node converted to local ENU metres
-relative to the centroid of all nodes. Gateway name and traffic demand are
-read from the sibling `calfex_sdwan/` directory; if not found both default
-to safe placeholders. All IH nodes are written with `"mobility": "waypoint"`
-and empty waypoints — always run `build_waypoints.py` afterwards before
-invoking the sim.
+`--csv-dir` points at a directory with one subdirectory per node, each holding
+`silvus/config.csv`. Use `--day <run>` instead of `--all-days` for one run.
 
-## Regression suite
+### Scenario mode (spring_lake)
 
-The small tracked manifest identifies the pre-change cases and reference hashes.
-Full result snapshots are external artifacts, not source files. Ask the project
-team for the approved cloud bundle and unpack the JSON references under
-`tests/fixtures/regression/p0/`. Gzip archives and reference snapshots stay
-untracked; never replace them by recapturing from changed code.
+Same pipeline, with the scenario variants of steps 2, 4 and 5:
 
-Once the references are installed, one command re-runs the cases against a
-freshly built binary and compares their normalized results:
+```bash
+python -m scripts.validation.build_waypoints scenario --all --time-mode scale --duration 60
+python -m scripts.validation.sim_to_traces -m scenario outputs/.../<HH-MM-SS>-validation
+python -m scripts.validation.compare -m scenario --batch_root outputs/.../<HH-MM-SS>-validation
+```
+
+### Optional follow-ups
+
+Run these after `compare`, because they read `validation_summary.csv` or the
+sim outputs.
+
+```bash
+# Cross-batch heatmaps (auto-discovers outputs/**/validation_summary.csv)
+python -m scripts.validation.compare_runs
+
+# Layout / mobility audit (prints tables, writes nothing)
+python -m scripts.validation.scenario_fidelity -m node \
+    --field-gps <gps_all_nodes_trace.csv> outputs/.../<scenario>
+
+# Signed per-node comparison against one baseline scenario
+python -m scripts.validation.compare_baseline \
+    --baseline outputs/.../<base> outputs/.../<other> ...
+```
+
+### Per-day wrapper
+
+`validate_days` runs steps 4 and 5 plus `scenario_fidelity` for each day, then
+`compare_runs` across days. It expects sim outputs laid out as
+`outputs/calfex/<YYYY-MM-DD>/{inputs/,seed-*/}`.
+
+```bash
+python -m scripts.validation.validate_days --day 2026-05-13 --time 60
+python -m scripts.validation.validate_days --all-days --time 60
+```
+
+### Jammer file
+
+```bash
+python -m scripts.validation.make_jammers --trials <ew_trials.csv> \
+    --trace <gps_all_nodes_trace.csv> -o <scenario dir>/jammers.json \
+    [--run-ini <scenario dir>/run.ini]
+```
+
+### Regression suite
+
+Re-runs every case in the manifest against a freshly built binary and compares
+the normalized results:
 
 ```bash
 python3 -m scripts.validation.regression_check verify-suite \
     --sim-binary <BIN> \
     --manifest tests/fixtures/regression/p0/manifest.json \
-    --out outputs/p0-regression/<name>
+    --out outputs/baseline-regression/<name>
 ```
 
-It validates the manifest and every snapshot hash *before* starting a simulator
-process, then runs each case and prints one `PASS`/`FAIL`/`SKIP` row. Five
-required cases have tracked inputs — three `baselines` scenarios, one CalFEX
-sub-6 scenario, and the synthetic jammer smoke. One optional case uses the local
-Sherpa Spring Lake data: when its recorded source files are absent the row is
-`SKIP` and the console names the missing paths plus the action, "This
-Sherpa/ARPO dataset is not included in Git. Ask the project team or data owner
-for the approved inputs/custom/sherpa data." `--require-all` turns that
-unavailable optional case into a failure. An optional case that is present but
-changed, or that mismatches, always fails.
+- It checks the manifest and every snapshot hash before starting the simulator.
+- It prints one `PASS` / `FAIL` / `SKIP` row per case.
+- The optional Sherpa Spring Lake case is `SKIP` when its data is absent; the
+  console names the missing paths. Add `--require-all` to make that a failure.
+- `--out` must be under `outputs/` (not `outputs/` itself). Reusing it replaces
+  only `suite-report.json` and the case subdirectories.
+- Exit codes: `0` all passed, `1` mismatch or failure, `2` usage or I/O error.
 
-Suite output is disposable. `--out` must resolve beneath `outputs/` and may not
-be `outputs/` itself. Reusing the same `--out` replaces only suite-owned
-products — `suite-report.json` and the manifest-named case subdirectories —
-leaving unrelated siblings alone. It never touches the tracked manifest or
-local reference snapshots.
+Single-case subcommands:
 
-Exit codes: `0` all required (and executed optional) cases passed, `1` a
-mismatch or failure, `2` a usage or I/O error.
+```bash
+python3 -m scripts.validation.regression_check capture --sim-binary <BIN> \
+    --run-config <run.ini> --band {mmwave,sub-6} --seed <N> --family <F> --case <C> \
+    --out <run dir> [--snapshot <file.json>] [--force]
+python3 -m scripts.validation.regression_check compare --baseline <snapshot.json> \
+    --candidate <run dir> [--atol 1e-9] [--max-diffs 20] [--report <file.json>]
+```
 
-Two related launcher notes: `run_batch` writes the launcher's captured
-stdout/stderr to `console.log` beside the simulator's own `run.log`, and accepts
-an optional `--band {mmwave,sub-6}` override; `build_config_files` writes
-`[channel] band` into every generated `run.ini`.
+### Smoke check
 
-Without reference data, `python3 -m scripts.validation.smoke_check --sim-binary
-<BIN> --out outputs/smoke-check/<new-name>` checks the tiny synthetic jammer
-scenario's output contracts and two-run same-seed repeatability. CI runs this
-on Linux/macOS; it is not a comparison against historical cloud references.
-`regression_snapshot.py` owns normalization/comparison; `regression_check.py`
-owns the CLI/suite. Launcher paths and loader setup live in `scripts/sim_support.py`.
+Runs `inputs/baselines/p0-jammer-smoke` twice with seed 1, checks the output
+contracts, and checks that the two runs match. It needs no reference data.
 
-## How to read the chart
+```bash
+python3 -m scripts.validation.smoke_check --sim-binary <BIN> --out outputs/smoke-check/<new-name>
+```
 
-One axis: normalized histograms (densities) of sim and field samples,
-overlaid. Density normalization (∫=1) lets the curves compare directly even
-though sim N (tens of thousands) is much larger than field N. The shaded
-band on the sim curve is a pointwise bootstrap CI (default 90%, B=1000).
+`--out` must not exist yet. It prints `PASS` (exit 0) or `FAIL: <reason>` (exit 1).
 
-Subtitle annotates the K-S D-statistic and |Δmedian|/|Δmean| in the metric's
-units. K-S is unitless (0–1) — useful for ranking similarity across runs;
-|Δmed| / |Δmean| are in the metric's own units. Median is the robust
-central-tendency (skewed wireless metrics + bursty fades drag the mean
-around); mean is reported alongside it so you can see when they diverge.
+### Unit tests
 
-The K-S p-value is intentionally not reported: with N in the tens of
-thousands per pool, p ≈ 0 even for operationally trivial differences.
+```bash
+python -m pytest scripts/validation/tests
+```
 
 ## Output
 
-| Step                 | Where                                                              |
-|----------------------|--------------------------------------------------------------------|
-| `build_config_files` | `inputs/calfex/nodes.json` + `inputs/calfex/run.ini`              |
-| `run_batch`          | `outputs/.../<HH-MM-SS>-validation/<scenario>/seed-N/{links,mcs,rx-power}.csv` + `batch_manifest.json` |
-| `sim_to_traces`      | `outputs/.../<scenario>/sim_traces/seed-N/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv` |
-| `compare`            | `outputs/.../<scenario>/validation/pngs/<src>/hist_<metric>__<src>_to_<peer>.png` + per-scenario `metrics.csv` + top-level `validation_summary.csv` |
+| Step | Where |
+|------|-------|
+| `build_config_files` | `<output>/<run>/nodes.json` and `run.ini` (default `<output>` is `inputs/calfex`) |
+| `build_waypoints` | Edits `nodes.json` in place |
+| `run_batch` | `outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/<scenario>/{console.log, seed-N/...}` and `batch_manifest.json` |
+| `sim_to_traces` | `<scenario>/sim_traces/seed-N/csvs/<src>/` trace CSVs (`bh2_*` in scenario mode, `IH_*` in node mode) |
+| `compare` | `<scenario>/validation/pngs/<src>/hist_*.png`, `<scenario>/validation/metrics.csv`, `<batch_root>/validation_summary.csv`, `<batch_root>/summary/heatmap_*.png` |
+| `compare_runs` | `outputs/cross_batch_summary/heatmap_*.png` (or `--out`) |
+| `compare_baseline` | `<baseline>/baseline_comparison/` heatmaps and `baseline_comparison.csv` (or `--out`) |
+| `validate_days` | Outputs of the wrapped steps, plus `<out-root>/cross_day_summary/` |
+| `make_jammers` | The `-o` JSON file |
+| `regression_check verify-suite` | `<out>/suite-report.json` and `<out>/<case>/` with `console.log`, run output and `comparison.json` |
+| `smoke_check` | `<out>/run-1/` and `<out>/run-2/`, each with `console.log` |
 
-Each figure plots sim density with a shaded pointwise bootstrap CI band
-(default 90%, B=1000) and field density as a line; subtitle annotates K-S,
-|Δmed|, and |Δmean|. The summary CSV has one row per (scenario, link, metric)
-with means, medians, IQRs, sample counts, |Δmedians|, |Δmeans|, and K-S.
-
-## Module layout
-
-| File               | Role                                                              |
-|--------------------|-------------------------------------------------------------------|
-| @ref build_config_files.py "build_config_files" | Generates `nodes.json` and `run.ini` from calfex GPS and silvus field data. |
-| @ref run_batch.py "run_batch"     | One sim binary call per scenario, fanning out seeds via `--seeds=` |
-| @ref sim_to_traces.py "sim_to_traces" | Rewrites per-seed sim CSVs into arpo_data-compatible trace CSVs   |
-| @ref compare.py "compare"       | Pools sim seeds + field directions, renders ECDF overlays + K-S   |
-| @ref compare_runs.py "compare_runs"  | Cross-batch summary table (overall + per-scenario)                |
-| @ref scenario_fidelity.py "scenario_fidelity" | Per-scenario sim-vs-field layout/mobility audit               |
-| @ref build_waypoints.py "build_waypoints" | Generate waypoint mobility for a node from its field GPS trace  |
-
+`validation_summary.csv` has one row per (scenario, link, metric) with means,
+medians, IQRs, sample counts, `abs_diff_*` and `ks_statistic`.
 
 ## Conventions
 
-- **Distributional comparison, not temporal.** Sim and field samples are
-  pooled raw (no smoothing, no time alignment). The comparison is over the
-  marginal distribution of each metric.
-- **MCS cap.** Sim MCS is post-capped at 12 to match the field firmware
-  limit before any comparison is made.
-- **Sim trace MAC columns are empty.** `sim_to_traces` leaves
-  `tag_local_mac`, `tag_sta_mac`, and `tag_interface` blank — the sim has
-  no per-antenna identity.
-- **Scenario name mapping.** Sim names translate to field names by stripping
-  `arpo-`, joining the middle tokens with `_`, and upper-casing
-  single-letter family tokens:
-  `arpo-1-x-misc-04172026` → `1-X_misc_04172026`.
-- **NaN rows in `validation_summary.csv`** mean the field collect did not
-  capture telemetry for that link (e.g. rab2 and rab3 were not beam-paired
-  during the scenario). This is expected for some scenarios and is not a
-  pipeline error.
-- **`--auto-waypoints` mutates `inputs/`.** The patch is permanent for the
-  duration of the run. Use `git diff inputs/` to review and
-  `git checkout inputs/` to revert.
-- **`build_waypoints` mobility classifier is bbox-based** (threshold: 20 m
-  max bounding-box dimension). Path length alone is GPS-noise-prone and
-  would misclassify jittery static nodes as mobile.
-- **`build_config_files` writes empty waypoints.** Always run
-  `build_waypoints.py` after `build_config_files.py` before running the sim.
+### Comparison method
 
+- **Distributions, not time series.** Sim and field samples are compared as
+  marginal distributions with no time alignment. `--window N` keeps only the
+  first N seconds of both.
+- **Seed pooling.** If every seed's trace has the same length, `compare`
+  averages them row by row; otherwise it concatenates them.
+- **Density-normalized histograms** (area = 1), so sim and field compare
+  directly when their sample counts differ. There is no bootstrap band and no
+  K-S p-value.
+- **MCS cap.** Sim and field MCS are both clipped at 12, the field firmware
+  ceiling.
+- **Metrics:** `snr` (dB), `rcpi` (dBm), `mcs`.
+
+### Naming
+
+- Sim scenario names map to field names by stripping `arpo-`, joining the
+  middle tokens with `_`, and upper-casing the minor token:
+  `arpo-1-x-misc-04172026` becomes `1-X_misc_04172026`.
+- Sim trace CSVs leave `tag_interface` blank and fill the MAC columns with node
+  names. Node mode mirrors each link so every node appears as a source.
+
+### Inputs and data handling
+
+- `build_config_files` supports only `-m node -b sub-6`. It writes empty
+  waypoints, so always run `build_waypoints` afterwards.
+- `build_waypoints` edits `nodes.json` in place. Review with `git diff inputs/`
+  and revert with `git checkout inputs/`. A node whose track fits in a 20 m
+  box becomes `fixed`.
+- NaN rows in `validation_summary.csv` mean the field collect had no telemetry
+  for that link. This is expected for some scenarios.
+- Regression snapshots stay local and untracked. Never recapture them from
+  changed code.
+
+### Known issues
+
+- `run_batch --auto-waypoints` fails with a `TypeError`.
+- `build_waypoints --anchor` defaults to no alignment, despite the `--help` text.
+- `validate_days --time` is required but unused.
 
 ## Dependencies
 
-`pandas`, `numpy`, and `matplotlib`
+| Scope | Needs |
+|-------|-------|
+| Field-comparison scripts (`build_*`, `compare*`, `scenario_fidelity`, `sim_to_traces`, `validate_days`, `make_jammers`) | Python 3.10+ (`build_config_files` uses `match`), `pandas`, `numpy`, `matplotlib` |
+| `run_batch`, `regression_check`, `smoke_check` | A built simulator binary (`run_batch` auto-detects `build/scratch/mesh-sim/ns3*-sim-*`; the others take `--sim-binary`) and `scripts/sim_support.py` |
+| `regression_check`, `regression_snapshot`, `smoke_check` | Standard library only |
+| Tests | `pytest`, plus `scripts.sweep` (imported by one test) |
+
+Data that must exist beforehand:
+
+- Field traces under `data/arpo_extracted/_plots/per_day/`, from `scripts.arpo_data.cli plot`.
+- Per-node Silvus config CSVs (`--csv-dir`).
+- Spring Lake inputs under `inputs/custom/sherpa/spring_lake/` (scenario mode default).
+- Regression reference snapshots from the project team.

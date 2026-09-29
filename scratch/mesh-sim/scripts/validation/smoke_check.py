@@ -1,3 +1,9 @@
+# smoke_check.py
+# Data-free sanity check of the simulator binary. Runs the tiny synthetic
+# scenario inputs/baselines/p0-jammer-smoke twice with seed 1, validates the
+# output tables, and requires both runs to match. Used by CI; not a comparison
+# against historical references (see regression_check.py for that).
+# The docstring below doubles as the --help description.
 """Check a tiny real simulation and same-seed repeatability without cloud data."""
 
 import argparse
@@ -11,6 +17,21 @@ from scripts.sim_support import find_mesh_root, simulator_env, tail_lines
 from .regression_snapshot import build_snapshot, compare_snapshots, load_table
 
 
+## @fn check_run
+# @brief Validate the output contracts of one smoke run.
+#
+# @param run_dir  Directory holding `seed-1/` output of the simulator.
+# @param nodes    Parsed `nodes.json` of the scenario (list of node dicts, each
+#                 with a `position` of x/y/z in metres).
+# @return None.
+# @throws ValueError if `summary.json` has the wrong scenario/seed, a non-finite
+#         or out-of-range network metric, zero throughput, positions or links
+#         that are not exactly 5 frames (t = 0.0..0.4 s, 0.1 s apart) for every
+#         node / node pair, moved stationary nodes, or non-finite SINR/capacity.
+# @throws KeyError if an expected key or column is missing.
+#
+# Reads `summary.json`, `positions.csv` and `links.csv` from `seed-1/`. Expects
+# scenario name `p0-jammer-smoke`. Nothing is written.
 def check_run(run_dir: Path, nodes: list[dict]) -> None:
     """Check the shipped stationary three-node jammer scenario's output contracts."""
     seed_dir = run_dir / "seed-1"
@@ -47,6 +68,18 @@ def check_run(run_dir: Path, nodes: list[dict]) -> None:
             raise ValueError("Non-finite link SINR or capacity")
 
 
+## @fn main
+# @brief CLI entry point: run the smoke scenario twice and compare the runs.
+#
+# @param argv  Argument list; defaults to `sys.argv[1:]` when None.
+# @return 0 and prints `PASS` on success; 1 and prints `FAIL: <reason>` to stderr
+#         on any I/O, validation, or timeout error.
+#
+# Flags: `--sim-binary` (required) and `--out` (required, must not exist yet).
+# Creates `<out>/run-1` and `<out>/run-2`, each with a `console.log` and the
+# simulator output. Each run uses `--band=sub-6 --seed=1` and a 60 s timeout,
+# and is validated by `check_run`. The two normalized snapshots must then match
+# (default tolerance of `compare_snapshots`).
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sim-binary", required=True)

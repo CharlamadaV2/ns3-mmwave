@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture and compare compact normalized simulator snapshots for P0 regression.
+"""Capture and compare compact normalized simulator snapshots for baseline regression.
 
 Standard-library helpers only; no RL/analysis dependencies are needed.
 
@@ -7,6 +7,12 @@ Standard-library helpers only; no RL/analysis dependencies are needed.
   python3 -m scripts.validation.regression_check compare ...
   python3 -m scripts.validation.regression_check verify-suite ...
 """
+# regression_check.py
+# CLI and suite runner for the baseline regression check. `capture` runs the simulator
+# on one scenario (optionally saving a snapshot), `compare` diffs a run against a
+# saved snapshot, `verify-suite` does both for every case in a manifest.
+# Snapshot building and numeric comparison live in regression_snapshot.py.
+# Exit codes: 0 pass, 1 mismatch/failure (EXIT_MISMATCH), 2 usage or I/O error (EXIT_USAGE).
 
 from __future__ import annotations
 
@@ -36,11 +42,22 @@ EXIT_USAGE = 2
 # ---------------------------------------------------------------------------
 
 
+## @fn mesh_sim_root
+# @brief Locate the mesh-sim root directory independent of the working directory.
+#
+# @return Path of the mesh-sim root (found from this file's location).
 def mesh_sim_root() -> Path:
     """Locate mesh-sim without depending on the current working directory."""
     return find_mesh_root(__file__)
 
 
+## @fn path_under_root
+# @brief Resolve a manifest path and keep it inside the mesh-sim root.
+#
+# @param value  Path string from the manifest; must be relative.
+# @param root   Resolved mesh-sim root.
+# @return Absolute resolved path.
+# @throws ValueError if `value` is absolute or resolves outside `root`.
 def path_under_root(value: str, root: Path) -> Path:
     """Resolve a manifest path while rejecting absolute or escaping paths."""
     path = Path(value)
@@ -54,6 +71,13 @@ def path_under_root(value: str, root: Path) -> Path:
     return resolved
 
 
+## @fn suite_output_dir
+# @brief Validate the `--out` directory of a suite run.
+#
+# @param value  Path string given to `--out`.
+# @param root   Resolved mesh-sim root.
+# @return Absolute resolved path beneath `<root>/outputs/`.
+# @throws ValueError if the path is outside `outputs/` or is `outputs/` itself.
 def suite_output_dir(value: str, root: Path) -> Path:
     """Require suite output beneath outputs/ without allowing outputs/ itself."""
     path = Path(value).resolve()
@@ -67,6 +91,15 @@ def suite_output_dir(value: str, root: Path) -> Path:
     return path
 
 
+## @fn prepare_suite_output
+# @brief Delete products of a previous suite run, then make sure the output directory exists.
+#
+# @param out_root    Suite output directory.
+# @param case_names  Manifest case names (each is a subdirectory of `out_root`).
+# @return True if anything from an earlier run was found and removed.
+#
+# Removes only `suite-report.json` and the named case subdirectories; other
+# siblings are untouched. Creates `out_root` if needed.
 def prepare_suite_output(out_root: Path, case_names: list[str]) -> bool:
     """Remove only files owned by a previous run of this suite."""
     targets = [out_root / "suite-report.json"]
@@ -86,6 +119,15 @@ def prepare_suite_output(out_root: Path, case_names: list[str]) -> bool:
 # ---------------------------------------------------------------------------
 
 
+## @fn scenario_source_files
+# @brief List the input files a scenario depends on.
+#
+# @param run_config  Path to the scenario's `run.ini`.
+# @return `run.ini` followed by the existing files named by `nodes_file`,
+#         `buildings_file` and `jammers_file` in its `[scenario]` section
+#         (relative names resolve against the `run.ini` directory; blank or
+#         missing files are skipped).
+# @throws OSError if `run_config` cannot be read.
 def scenario_source_files(run_config: Path) -> list[Path]:
     """run.ini plus the node/buildings/jammer files it references."""
     run_config = Path(run_config).resolve()
@@ -111,6 +153,19 @@ def scenario_source_files(run_config: Path) -> list[Path]:
     return sources
 
 
+## @fn cmd_capture
+# @brief `capture` subcommand: run the simulator once and optionally write a snapshot.
+#
+# @param args  Parsed arguments: `sim_binary`, `run_config`, `band`, `seed`,
+#              `family`, `case`, `out`, `snapshot`, `force`, and optional `quiet`.
+# @return 0 on success; 2 (EXIT_USAGE) for a missing input or an existing output
+#         without `--force`; the simulator's own non-zero exit code if it fails.
+#
+# Runs `<sim> --run-config=... --band=... --seed=... --output-dir=<out>` with
+# stdin closed, and writes the combined stdout/stderr to `<out>/console.log`
+# (last 40 lines are echoed to stderr on failure). If `--snapshot` is set, builds
+# the snapshot, refuses it if `check_snapshot_clean` objects, and writes it there
+# (parent directories are created). `--atol` is accepted but unused here.
 def cmd_capture(args) -> int:
     root = mesh_sim_root()
     quiet = getattr(args, "quiet", False)
@@ -201,6 +256,19 @@ def cmd_capture(args) -> int:
 # ---------------------------------------------------------------------------
 
 
+## @fn cmd_compare
+# @brief `compare` subcommand: diff a candidate run against a saved snapshot.
+#
+# @param args  Parsed arguments: `baseline`, `candidate`, `atol`, `max_diffs`,
+#              `report`, and optional `quiet`.
+# @return 0 on match; 1 (EXIT_MISMATCH) on any difference; 2 (EXIT_USAGE) if the
+#         baseline or the candidate's required files are missing.
+#
+# Takes seed, family, case and band from the baseline, builds a snapshot of the
+# candidate run directory, and compares tables and summary. It also re-hashes the
+# scenario input files recorded in the baseline against the current checkout; any
+# changed or missing file counts as a difference. Optionally writes a JSON report
+# to `--report`. Prints `MATCH` or `MISMATCH` plus up to five differences.
 def cmd_compare(args) -> int:
     root = mesh_sim_root()
     quiet = getattr(args, "quiet", False)
@@ -283,6 +351,18 @@ def cmd_compare(args) -> int:
 # ---------------------------------------------------------------------------
 
 
+## @fn load_suite_manifest
+# @brief Read and validate the suite manifest.
+#
+# @param path  Manifest JSON file.
+# @param root  Resolved mesh-sim root, used to check case paths.
+# @return The parsed manifest dict.
+# @throws ValueError if the version is not `MANIFEST_VERSION`, `baseline` lacks
+#         `git_commit` or `simulator_binary_sha256`, `cases` is empty, a case lacks a
+#         required key, has an unsafe or duplicate `name`, a bad `label`,
+#         `required` or `band`, a non-integer `seed`, or paths that are absolute
+#         or escape the root.
+# @throws OSError, json.JSONDecodeError if the file cannot be read or parsed.
 def load_suite_manifest(path: Path, root: Path) -> dict:
     """Load and validate the tracked regression-suite manifest."""
     with open(path, encoding="utf-8") as handle:
@@ -335,6 +415,15 @@ def load_suite_manifest(path: Path, root: Path) -> dict:
     return manifest
 
 
+## @fn verify_manifest_snapshots
+# @brief Check every reference snapshot before any simulator is started.
+#
+# @param manifest  Validated manifest from `load_suite_manifest`.
+# @param root      Resolved mesh-sim root.
+# @return List of `{"case", "snapshot", "snapshot_path"}` in manifest order.
+# @throws ValueError if a snapshot file is not installed, its SHA-256 differs from
+#         `snapshot_sha256`, its metadata (version, family, case, seed, band) differs
+#         from the manifest, or it does not record the case's `run_config`.
 def verify_manifest_snapshots(manifest: dict, root: Path) -> list[dict]:
     """Verify snapshot bytes and duplicated case metadata before running."""
     verified = []
@@ -381,6 +470,12 @@ def verify_manifest_snapshots(manifest: dict, root: Path) -> list[dict]:
     return verified
 
 
+## @fn source_issues
+# @brief Find scenario input files that are missing or changed since the snapshot.
+#
+# @param snapshot  Reference snapshot with a `sources` list.
+# @param root      Resolved mesh-sim root.
+# @return Tuple `(missing_paths, changed_paths)` of relative path strings.
 def source_issues(snapshot: dict, root: Path) -> tuple[list[str], list[str]]:
     """Return missing and digest-mismatched scenario source paths."""
     missing = []
@@ -393,6 +488,22 @@ def source_issues(snapshot: dict, root: Path) -> tuple[list[str], list[str]]:
     return missing, changed
 
 
+## @fn cmd_verify_suite
+# @brief `verify-suite` subcommand: run and compare every case in a manifest.
+#
+# @param args  Parsed arguments: `manifest`, `sim_binary`, `out`, `atol`,
+#              `max_diffs`, `require_all`.
+# @return 0 if no case failed (skipped optional cases do not count); 1 otherwise;
+#         2 if the manifest or binary file does not exist.
+# @throws ValueError for an invalid manifest, snapshot or `--out` (caught in `main`,
+#         which returns 2).
+#
+# Order: validate manifest, verify all snapshot hashes, validate `--out`, clear
+# earlier suite products, then per case: if input files are missing the case is
+# FAIL (required, or `--require-all`) or SKIP (optional); if inputs changed it is
+# FAIL; otherwise runs `cmd_capture` into `<out>/<name>` and `cmd_compare` (report
+# at `<out>/<name>/comparison.json`). Prints one row per case and writes
+# `<out>/suite-report.json`.
 def cmd_verify_suite(args) -> int:
     root = mesh_sim_root()
     manifest_path = Path(args.manifest).resolve()
@@ -420,7 +531,7 @@ def cmd_verify_suite(args) -> int:
     required_total = sum(1 for item in verified if item["case"]["required"])
     optional_total = len(verified) - required_total
 
-    print("P0 simulator regression suite")
+    print("Baseline simulator regression suite")
     print("Purpose: detect unintended changes against fixed pre-change results.")
     print(
         "Reference: commit %s | %s | %s"
@@ -590,6 +701,10 @@ def cmd_verify_suite(args) -> int:
 # ---------------------------------------------------------------------------
 
 
+## @fn build_parser
+# @brief Build the argparse parser with the `capture`, `compare` and `verify-suite` subcommands.
+#
+# @return Configured `argparse.ArgumentParser`. The suite's `--force` flag is hidden and unused.
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="regression_check",
@@ -640,6 +755,12 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+## @fn main
+# @brief CLI entry point.
+#
+# @param argv  Argument list; defaults to `sys.argv[1:]` when None.
+# @return The subcommand's exit code; 2 (EXIT_USAGE) if it raised OSError,
+#         ValueError or json.JSONDecodeError (message printed to stderr).
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
     try:

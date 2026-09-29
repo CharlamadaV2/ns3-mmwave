@@ -1,14 +1,15 @@
 ##@file common.py
 # @brief Helpers shared across bh2 and GPS plots.
 #
-#
+# Caption text, crashed-scenario title suffix, and trace concatenation.
 ##
 
 import pandas as pd
 
 from ..paths import KNOWN_BAD_SCENARIOS
 
-## @brief Generates a short human-readable caption summarising a scenario DataFrame.
+## @fn scenario_caption
+# @brief Generates a short human-readable caption summarising a scenario DataFrame.
 #
 # Counts the number of unique nodes and computes the total duration from either
 # ``__sec__`` (float seconds) or ``__t__`` (datetime). Duration is formatted as
@@ -29,7 +30,8 @@ def scenario_caption(df: pd.DataFrame) -> str:
     label = "rabs" if n_nodes != 1 else "rab"
     return f"{n_nodes} {label}, {dur}"
 
-## @brief Returns a crash-warning suffix for a scenario name if it is known to be bad.
+## @fn crashed_suffix
+# @brief Returns a crash-warning suffix for a scenario name if it is known to be bad.
 #
 # Looks up @p scenario in @ref KNOWN_BAD_SCENARIOS. Used to annotate plot
 # titles so readers know the underlying data may be contaminated or partial.
@@ -40,7 +42,8 @@ def scenario_caption(df: pd.DataFrame) -> str:
 def crashed_suffix(scenario: str) -> str:
     return "  [CRASHED -- see event log]" if scenario in KNOWN_BAD_SCENARIOS else ""
 
-## @brief Concatenates a list of DataFrames into a single DataFrame.
+## @fn concat_trace
+# @brief Concatenates a list of DataFrames into a single DataFrame.
 #
 # Resets the index so the result has a clean integer index regardless of the
 # input indices. Returns an empty DataFrame when @p rows is empty, which lets

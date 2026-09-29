@@ -36,6 +36,7 @@ def covering(receipts: list[dict], index: int) -> list[dict]:
 
 
 def _observe(snapshot: dict, element_id: str | None) -> dict:
+    """Queue and accounting rows for one element id; None for a failed query or no id."""
     queue, accounting = snapshot["queue"], snapshot["accounting"]
     return {"queue": queue["jobs"].get(element_id) if queue["ok"] and element_id
                      else None,
@@ -125,6 +126,7 @@ def _active_row(index: int, receipts: list[dict], snapshot: dict, queued: bool):
 
 
 def _latest(receipts: list[dict]) -> dict | None:
+    """Receipt with the highest submission number, or None."""
     return max(receipts, key=lambda receipt: receipt["submission"]) if receipts else None
 
 

@@ -46,11 +46,15 @@ def _parse_clock(value: float) -> int:
 
 
 ## @brief Format seconds-since-midnight as a compact ``HHMM`` filename tag.
+# @param total_s  Seconds since midnight.
+# @return Four-digit string, e.g. ``"0905"``.
 def _fmt_hhmm(total_s: int) -> str:
     return f"{total_s // 3600:02d}{(total_s % 3600) // 60:02d}"
 
 
 ## @brief Seconds-since-midnight (UTC) for each row of a ``t_utc`` column.
+# @param t_utc  Series of timestamps parseable by ``pd.to_datetime``.
+# @return Float Series of seconds since UTC midnight.
 def _seconds_since_midnight(t_utc: pd.Series) -> pd.Series:
     t = pd.to_datetime(t_utc, utc=True)
     return (t.dt.hour * 3600 + t.dt.minute * 60
@@ -58,6 +62,9 @@ def _seconds_since_midnight(t_utc: pd.Series) -> pd.Series:
 
 
 ## @brief Offset D with seconds_since_midnight ~= sec_since_origin + D.
+# @param df  Frame to inspect.
+# @return Median offset in seconds, or ``None`` if ``t_utc`` or
+#         ``sec_since_origin`` is missing.
 def _day_origin_offset(df: pd.DataFrame) -> float | None:
     if not {"t_utc", "sec_since_origin"}.issubset(df.columns):
         return None
@@ -66,6 +73,8 @@ def _day_origin_offset(df: pd.DataFrame) -> float | None:
 
 
 ## @brief Re-zero the primary time column in place so the slice starts at t=0.
+# @param df  Frame to modify in place; sorts by and re-zeroes the first of
+#            ``sec_since_origin`` / ``sec`` that exists, else does nothing.
 def _rezero_time(df: pd.DataFrame) -> None:
     for col in ("sec_since_origin", "sec"):
         if col in df.columns:
@@ -85,8 +94,13 @@ def _rezero_time(df: pd.DataFrame) -> None:
 #    wall-clock of its own); if the radio and GPS logs didn't co-start, the
 #    metric window is shifted by that difference.
 #
-# Returns ``None`` only when no usable time column is present, or when a
-# ``sec``-based file is seen but no @p day_offset could be derived.
+# @param df          Frame to slice.
+# @param start_s      Window start, seconds since midnight (inclusive).
+# @param end_s        Window end, seconds since midnight (exclusive).
+# @param day_offset   Wall-clock offset from @ref _day_origin_offset, or ``None``.
+# @return Sliced copy (possibly empty) with its time column re-zeroed.
+#         ``None`` only when no usable time column is present, or when a
+#         ``sec``-based file is seen but no @p day_offset could be derived.
 def _slice_frame(df: pd.DataFrame, start_s: int, end_s: int,
                  day_offset: float | None) -> pd.DataFrame | None:
     if "t_utc" in df.columns:
@@ -107,7 +121,8 @@ def _slice_frame(df: pd.DataFrame, start_s: int, end_s: int,
     return sub
 
 
-## @brief Slice every CSV under a day directory to one scenario window.
+## @fn split_trace_by_scenario
+# @brief Slice every CSV under a day directory to one scenario window.
 #
 # Walks @p day_path for ``*.csv`` recursively, slices each to
 # ``[start_s, end_s)``, and writes survivors under ``out_dir/<HHMM-HHMM>/``,
@@ -183,7 +198,8 @@ def split_trace_by_scenario(start_s: int, end_s: int, day_path: Path,
     return total_rows
 
 
-## @brief CLI entry point.
+## @fn main
+# @brief CLI entry point.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
 # @return 0 on success, 1 on error (bad args, missing dir, or empty window).

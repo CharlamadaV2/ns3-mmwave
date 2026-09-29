@@ -1,4 +1,9 @@
 """Normalized snapshot construction and numeric comparison; standard library only."""
+# regression_snapshot.py
+# Library used by regression_check.py and smoke_check.py. A "snapshot" is a JSON-able
+# dict holding one simulator run's per-seed CSV tables (parsed to numbers), its
+# summary.json without wall-clock fields, and SHA-256 digests of the scenario input
+# files. This file has no CLI.
 
 import csv
 import hashlib
@@ -23,6 +28,12 @@ REQUIRED_TABLES = ["links.csv"]
 _VOLATILE_SUMMARY_PREFIX = "wall_"
 
 
+## @fn rel_to_root
+# @brief Express a path relative to the mesh-sim root.
+#
+# @param path  Any path.
+# @param root  Resolved mesh-sim root directory.
+# @return POSIX-style relative string, or the absolute POSIX path if `path` is outside `root`.
 def rel_to_root(path: Path, root: Path) -> str:
     """Path relative to the mesh-sim root with posix separators, if possible."""
     path = Path(path).resolve()
@@ -32,6 +43,12 @@ def rel_to_root(path: Path, root: Path) -> str:
         return path.as_posix()
 
 
+## @fn normalize_value
+# @brief Parse one CSV cell into a comparable value.
+#
+# @param raw  Raw cell text.
+# @return A float when the text parses as one; the strings "nan", "inf" or "-inf"
+#         for those special values; otherwise the original string unchanged.
 def normalize_value(raw: str):
     """Parse a CSV cell as a float when possible, otherwise keep the string."""
     text = raw.strip()
@@ -46,6 +63,15 @@ def normalize_value(raw: str):
     return num
 
 
+## @fn load_table
+# @brief Read one simulator CSV into a plain dict.
+#
+# @param path  CSV file. Leading lines whose first cell starts with `#` are skipped.
+# @return `{"columns": [names], "rows": [{column: value}, ...]}`; both lists are
+#         empty if the file has no header. Cells go through `normalize_value`;
+#         a row shorter than the header gets `None` for the missing cells; blank
+#         rows are dropped.
+# @throws OSError if the file cannot be opened.
 def load_table(path: Path) -> dict:
     """Read one CSV into {"columns": [...], "rows": [{col: value}, ...]}."""
     with open(path, newline="", encoding="utf-8") as handle:
@@ -68,6 +94,11 @@ def load_table(path: Path) -> dict:
     return {"columns": columns, "rows": rows}
 
 
+## @fn normalize_summary
+# @brief Remove volatile fields from a parsed `summary.json`.
+#
+# @param summary  Parsed summary dict.
+# @return New dict without top-level keys that start with `wall_` (wall-clock timings).
 def normalize_summary(summary: dict) -> dict:
     """Drop wall-clock fields from summary.json; keep every other key."""
     return {
@@ -77,6 +108,12 @@ def normalize_summary(summary: dict) -> dict:
     }
 
 
+## @fn sha256_of
+# @brief SHA-256 digest of a file.
+#
+# @param path  File to hash (read in 64 KiB chunks).
+# @return Lowercase hex digest string.
+# @throws OSError if the file cannot be read.
 def sha256_of(path: Path) -> str:
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
@@ -84,6 +121,12 @@ def sha256_of(path: Path) -> str:
             digest.update(chunk)
     return digest.hexdigest()
 
+## @fn source_digests
+# @brief Digest the scenario input files that produced a run.
+#
+# @param paths  Iterable of file paths; entries that are not files are skipped.
+# @param root   mesh-sim root used to make the recorded paths relative.
+# @return List of `{"path", "sha256"}` dicts sorted by path.
 def source_digests(paths, root: Path) -> list[dict]:
     entries = [
         {"path": rel_to_root(p, root), "sha256": sha256_of(p)}
@@ -99,6 +142,22 @@ def source_digests(paths, root: Path) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 
+## @fn build_snapshot
+# @brief Build the normalized snapshot of one completed run.
+#
+# @param run_dir   Run output directory containing `seed-<seed>/`.
+# @param sources   Scenario input files to digest (may be empty).
+# @param root      mesh-sim root, for relative source paths.
+# @param family    Case family label stored in the snapshot (for example "baseline").
+# @param case      Case name stored in the snapshot.
+# @param seed      Integer seed; selects the `seed-<seed>` subdirectory.
+# @param band      Radio band label stored in the snapshot ("mmwave" or "sub-6").
+# @return Snapshot dict with keys `snapshot_version`, `family`, `case`, `seed`,
+#         `band`, `sources`, `seed_dir`, `tables`, `tables_missing`, `summary`.
+# @throws FileNotFoundError if `summary.json` or the required `links.csv` is absent.
+#
+# Loads every file in `TABLE_FILES` that exists (optional ones that are absent are
+# listed in `tables_missing`) and the normalized summary. Nothing is written.
 def build_snapshot(
     run_dir,
     sources,
@@ -145,10 +204,23 @@ def build_snapshot(
     }
 
 
+## @fn serialize_snapshot
+# @brief Serialize a snapshot to deterministic JSON text (2-space indent, sorted keys).
+#
+# @param snapshot  Snapshot dict from `build_snapshot`.
+# @return JSON string without a trailing newline.
 def serialize_snapshot(snapshot: dict) -> str:
     return json.dumps(snapshot, indent=2, sort_keys=True)
 
 
+## @fn check_snapshot_clean
+# @brief Reject snapshot text that would leak machine-specific or volatile data.
+#
+# @param text  Serialized snapshot.
+# @param root  mesh-sim root whose absolute path must not appear in `text`.
+# @return None.
+# @throws ValueError listing what was found: the absolute root path, the text
+#         `wall_`, or the names `run.log` / `console.log`.
 def check_snapshot_clean(text: str, root: Path) -> None:
     """Refuse snapshots leaking absolute paths, wall-clock fields, or raw logs."""
     problems = []
@@ -168,6 +240,7 @@ def check_snapshot_clean(text: str, root: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
+## @brief Compare two scalars; numbers use absolute tolerance `atol`, NaN equals NaN.
 def _values_equal(a, b, atol: float) -> bool:
     if isinstance(a, bool) or isinstance(b, bool):
         return a is b or a == b
@@ -182,6 +255,9 @@ def _values_equal(a, b, atol: float) -> bool:
     return a == b
 
 
+## @brief Recursively compare dicts/lists/scalars, recording up to `max_diffs` differences.
+#
+# Keys missing on one side and list-length changes count as one difference each.
 def _compare_any(where, base, cand, atol, diffs, max_diffs) -> int:
     """Recursively compare two JSON-ish values; returns the difference count."""
     if isinstance(base, dict) and isinstance(cand, dict):
@@ -208,12 +284,16 @@ def _compare_any(where, base, cand, atol, diffs, max_diffs) -> int:
     return _record(diffs, max_diffs, where, base, cand)
 
 
+## @brief Append one difference to `diffs` if there is room; always returns 1.
 def _record(diffs, max_diffs, where, baseline, candidate) -> int:
     if len(diffs) < max_diffs:
         diffs.append({"where": where, "baseline": baseline, "candidate": candidate})
     return 1
 
 
+## @brief Compare two loaded tables (columns, row count, then cells of the baseline's columns).
+#
+# @return Number of differences found (recording is capped by `max_diffs`).
 def _compare_table(name, base, cand, atol, diffs, max_diffs) -> int:
     count = 0
     if base.get("columns") != cand.get("columns"):
@@ -235,6 +315,19 @@ def _compare_table(name, base, cand, atol, diffs, max_diffs) -> int:
     return count
 
 
+## @fn compare_snapshots
+# @brief Compare two snapshots table by table and the summary.
+#
+# @param baseline   Reference snapshot.
+# @param candidate  Snapshot under test.
+# @param atol       Absolute numeric tolerance (default 1e-9).
+# @param max_diffs  Maximum number of differences recorded in the report (default 20).
+# @return Dict `{"match": bool, "differences": [{where, baseline, candidate}],
+#         "counts": {<table or "summary.json">: n, "total": n}}`. `match` is True
+#         only when the total difference count is 0.
+#
+# Tables present on only one side count as one difference. Source digests are
+# not compared here; see `compare_source_digests`.
 def compare_snapshots(baseline: dict, candidate: dict, atol: float = 1e-9,
                       max_diffs: int = 20) -> dict:
     """Compare two normalized snapshots; returns a report dict."""
@@ -268,6 +361,13 @@ def compare_snapshots(baseline: dict, candidate: dict, atol: float = 1e-9,
     return {"match": total == 0, "differences": diffs, "counts": counts}
 
 
+## @fn compare_source_digests
+# @brief Re-hash each input file recorded in a snapshot against the current checkout.
+#
+# @param baseline  Snapshot dict with a `sources` list.
+# @param root      mesh-sim root that the recorded paths are relative to.
+# @return List of `{"path", "baseline", "candidate", "match"}`; `candidate` is None
+#         when the file no longer exists.
 def compare_source_digests(baseline: dict, root: Path) -> list[dict]:
     """Recompute each recorded source digest against the current checkout."""
     results = []

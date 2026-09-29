@@ -46,10 +46,16 @@ class NodeMotion:
     start_xy:   tuple[float, float]
     duration_s: float
 
+    ## @fn NodeMotion::is_mobile
+    # @brief True if the larger bounding-box side exceeds `_MOBILE_BBOX_M` (20 m).
+    # @return bool.
     @property
     def is_mobile(self) -> bool:
         return max(self.bbox_w, self.bbox_h) > _MOBILE_BBOX_M
 
+    ## @fn NodeMotion::label
+    # @brief Text form of the mobility classification.
+    # @return `"mobile"` or `"static"`.
     @property
     def label(self) -> str:
         return "mobile" if self.is_mobile else "static"
@@ -84,7 +90,7 @@ def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
 
 ## @brief Load per-node motion from a field scenario's GPS track trace (scenario mode).
 #
-# Reads ``csvs/gps  track_trace.csv`` from @p field_scenario_dir.
+# Reads ``csvs/gps_track_trace.csv`` from @p field_scenario_dir.
 #
 # @param field_scenario_dir Per-day output directory for the field scenario.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
@@ -208,10 +214,12 @@ def _pairwise_distances(motion: dict[str, NodeMotion]) -> dict[tuple[str, str], 
     return out
 
 
+## @brief Format a float with fixed decimals, or an em dash if not finite.
 def _fmt(v: float, decimals: int = 1) -> str:
     return f"{v:.{decimals}f}" if np.isfinite(v) else "—"
 
 
+## @brief Render a left-aligned plain-text table with a dashed separator row.
 def _render_table(header: tuple, body: list[tuple]) -> str:
     widths = [max(len(str(h)), max((len(str(r[i])) for r in body), default=0))
               for i, h in enumerate(header)]
@@ -386,10 +394,19 @@ def _discover_scenarios(batch_dir: Path) -> list[Path]:
                   if p.is_dir() and (p / "seed-1" / "positions.csv").is_file())
 
 
-## @brief CLI entry point for the scenario-fidelity checker.
+## @fn main
+# @brief CLI entry point for the scenario-fidelity checker.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 if all scenarios passed, 1 if any had mismatches.
+# @return Node mode: 0 if no flags, 1 if any mismatch, missing input or error.
+#         Scenario mode: 0 after reporting (flagged scenarios are listed but do
+#         not change the exit code), 1 for a missing directory or no scenarios.
+#
+# Positional ``batch_root``; ``--mode {scenario,node}`` (default ``scenario``),
+# ``--field-gps`` (required for node mode), ``--only``, ``--tol-m`` (metres,
+# default 5), ``--window`` (seconds, default: whole trace). Read-only: prints
+# tables and writes no files. Sim positions come from ``seed-1/positions.csv``
+# only. A node is "mobile" when its bounding box exceeds 20 m.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Compare sim scenario layout/motion against field GPS.")

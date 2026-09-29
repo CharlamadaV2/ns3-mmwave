@@ -31,10 +31,19 @@ _METRIC_LABELS = {
 }
 
 
+## @brief Human-readable axis label for a metric key (falls back to the key itself).
 def _label(metric: str) -> str:
     return _METRIC_LABELS.get(metric, metric)
 
 
+## @brief Shared bar-chart builder for per-node and per-flow plots.
+#
+# @param ids           Entity ids, in x-axis order.
+# @param stats_by_id   {id: {metric: stats dict}} with `mean`, optional `ci95`/`std`.
+# @param metric        Metric key to plot.
+# @param entity_label  Word used in the default title ("Node" or "Flow").
+# @param title         Title override or None.
+# @return The Figure. Error bars use ci95, else std, else 0; drawn only if any is > 0.
 def _bar_chart(ids: list[str], stats_by_id: dict[str, dict],
                metric: str, entity_label: str,
                title: str | None) -> plt.Figure:
@@ -64,6 +73,16 @@ def _bar_chart(ids: list[str], stats_by_id: dict[str, dict],
     return fig
 
 
+## @fn plot_per_node_bars
+# @brief Bar chart of one metric for every node.
+#
+# @param agg     Aggregated summary dict from aggregate_summaries (uses `per_node`).
+# @param metric  Key such as "mean_sinr_db" or "tx_throughput_mbps".
+# @param title   Optional title; default "<label> per Node".
+# @return matplotlib Figure (not saved or shown).
+#
+# Nodes are sorted by id. Error bars show the 95% CI for multi-seed data, else the
+# standard deviation if it is non-zero.
 def plot_per_node_bars(agg: dict, metric: str,
                        title: str | None = None) -> plt.Figure:
     """Bar chart of one metric per node, with CI error bars if multi-seed."""
@@ -71,6 +90,15 @@ def plot_per_node_bars(agg: dict, metric: str,
     return _bar_chart(sorted(per_node.keys()), per_node, metric, "Node", title)
 
 
+## @fn plot_per_flow_bars
+# @brief Bar chart of one metric for every flow.
+#
+# @param agg     Aggregated summary dict from aggregate_summaries (uses `per_flow`).
+# @param metric  Key such as "delivered_mbps" or "latency_ms".
+# @param title   Optional title; default "<label> per Flow".
+# @return matplotlib Figure (not saved or shown).
+#
+# Flows are sorted by id. Error bars follow the same rule as plot_per_node_bars.
 def plot_per_flow_bars(agg: dict, metric: str,
                        title: str | None = None) -> plt.Figure:
     """Bar chart of one metric per flow, with CI error bars if multi-seed."""
@@ -78,6 +106,16 @@ def plot_per_flow_bars(agg: dict, metric: str,
     return _bar_chart(sorted(per_flow.keys()), per_flow, metric, "Flow", title)
 
 
+## @fn plot_network_summary
+# @brief Table figure of network-level metrics.
+#
+# @param agg    Aggregated summary dict from aggregate_summaries (uses `network`, `per_seed`, `num_seeds`).
+# @param title  Optional title; default "Network Summary (<n> seeds)".
+# @return matplotlib Figure containing a Metric/Value table (not saved or shown).
+#
+# One row per network metric: "mean +/- CI95 [n=..]", or "+/- std" when only std
+# exists and n > 1, or "N/A" if there is no data. If any seed reports
+# `wall_elapsed_s`, a "Mean Runtime" row (seconds) is appended.
 def plot_network_summary(agg: dict,
                          title: str | None = None) -> plt.Figure:
     """Table figure showing network-level metrics with CI where available."""
@@ -131,6 +169,15 @@ def plot_network_summary(agg: dict,
     return fig
 
 
+## @fn plot_sim_runtime
+# @brief Bar chart of wall-clock runtime per seed with a dashed mean line.
+#
+# @param summaries  Per-seed summary dicts (from load_summary); uses `seed` and `wall_elapsed_s`.
+# @param title      Optional title; default "Simulation Runtime per Seed".
+# @return matplotlib Figure (not saved or shown).
+#
+# Seeds without `wall_elapsed_s` are skipped. If none have it, returns a figure with
+# the text "No timing data available".
 def plot_sim_runtime(summaries: list[dict],
                      title: str | None = None) -> plt.Figure:
     """Bar chart of wall-clock runtime per seed with mean line."""

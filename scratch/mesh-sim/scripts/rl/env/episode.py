@@ -27,6 +27,8 @@ def _now_iso() -> str:
 
 
 class EpisodeSession:
+    """Owns one simulator subprocess and its `rl_episode.json` manifest."""
+
     def __init__(self, sim_binary: str, run_config: str, output_dir: Path,
                  band: str | None):
         self._sim_binary = sim_binary
@@ -59,6 +61,7 @@ class EpisodeSession:
         return self._manifest
 
     def start(self, seed: int, seed_source: str) -> None:
+        """Allocate `episode-NNNN/`, write a `running` manifest, and launch the simulator."""
         self._episode_dir, self._episode_index = self._allocate_episode_dir()
         self._last_action = None
         self._cmd = [
@@ -103,6 +106,7 @@ class EpisodeSession:
             raise RuntimeError(f"Failed to launch simulator {self._cmd}: {exc}") from exc
 
     def set_contract(self, init: dict) -> None:
+        """Upgrade the manifest to centralized fields (version 2)."""
         assert self._manifest is not None
         self._manifest.update({
             "manifest_version": 2,
@@ -145,6 +149,7 @@ class EpisodeSession:
             self._write_manifest()
 
     def record_step(self, msg: dict, reward: float, detail: dict | None = None) -> None:
+        """Update manifest totals and, when due, append a telemetry record."""
         if self._manifest is None:
             return
         self._manifest["steps"] += 1
@@ -181,6 +186,7 @@ class EpisodeSession:
             self._manifest["telemetry"]["records"] = recorder.records
 
     def protocol_error(self, detail: str):
+        """Mark the episode failed, stop the simulator, and raise RuntimeError with stderr tail."""
         message = f"{detail} on message line {self._msg_count}"
         if self._manifest is not None:
             self._manifest["error"] = message[:_MAX_ERROR_CHARS]
@@ -193,6 +199,7 @@ class EpisodeSession:
         )
 
     def send_action(self, action) -> None:
+        """Write `{"action": ...}` to the simulator; a broken pipe is ignored so the next read reports it."""
         assert self._proc is not None and self._proc.stdin is not None
         self._last_action = action
         message = json.dumps({"action": action})
@@ -249,6 +256,7 @@ class EpisodeSession:
         return tail_lines(self._stderr_path, _STDERR_TAIL_LINES) or "(stderr empty)"
 
     def read_message(self) -> dict:
+        """Read one JSON line from the simulator; EOF or bad JSON fails the episode."""
         assert self._proc is not None and self._proc.stdout is not None
         line = self._proc.stdout.readline()
         self._msg_count += 1
@@ -313,6 +321,7 @@ class EpisodeSession:
             pass
 
     def stop(self, status: str, stop_reason: str | None = None) -> int | None:
+        """Close stdin, escalate exit -> terminate -> kill, join the drain thread, and finalize the manifest."""
         self._close_recorder()
         proc, self._proc = self._proc, None
         if proc is None:

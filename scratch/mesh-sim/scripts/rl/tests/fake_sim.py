@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
-"""Stand-in for the C++ mesh-sim binary: same flags, same RL stdout/stdin protocol.
-
-Legacy single-node mode is used unless [rl] controlled_nodes is set, which selects
-the centralized protocol. FAKE_SIM_MODE selects normal (default), exit3, malformed,
-no_facts (missing the facts protocol), or an isolated centralized fault mode;
-it never proves real movement or reward correctness. FAKE_SIM_FAIL_SEEDS lists the
-seeds that die mid-episode in centralized mode; other seeds are unaffected.
-"""
+"""Stand-in for the mesh-sim binary: same flags and RL protocol, no radio model."""
 
 import configparser
 import json

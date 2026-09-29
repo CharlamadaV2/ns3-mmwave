@@ -68,6 +68,9 @@ _TRACE_TIME_COLS  = ("sec_since_origin", "t_utc", "t", "time", "timestamp", "utc
 
 
 ## @brief Return the first candidate column that exists in @p df, else None.
+#
+# @param df          Table to search.
+# @param candidates  Column names in priority order.
 def _first_col(df: pd.DataFrame, candidates) -> str | None:
     for c in candidates:
         if c in df.columns:
@@ -228,6 +231,16 @@ def _trace_duration_s(trace_fp: Path) -> float | None:
 
 
 ## @brief Write ``run.ini`` to @p output_path using the provided parameters.
+#
+# @param output_path  Existing directory that receives ``run.ini``.
+# @param gateway_id   Gateway node id; ``None`` selects the ``all_pairs`` traffic topology.
+# @param rl           Optional ``[rl]`` overrides; missing keys fall back to the ``_RL_*`` defaults.
+#
+# Other parameters map one-to-one to keys in ``[scenario]`` / ``[channel]`` /
+# ``[traffic]`` (durations in seconds, ``bw_mhz`` MHz, ``freq_ghz`` GHz,
+# powers dBm, gains dBi, noise figure dB). Always writes seed 1, run_id 1,
+# 3GPP channel model, blockage off, ``table`` beamforming, shortest-path routing
+# with max 5 hops, and ``viz_tick_ms`` 100.
 def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
                 band: str,
                 freq_ghz: float, amc_model: str, bw_mhz: float, power_dbm: float,
@@ -311,6 +324,10 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
 
 ## @brief Write ``nodes.json`` to @p output_path for a single run.
 #
+# @param output_path  Existing directory that receives ``nodes.json``.
+# @param node_data    List of ``{"name", "x", "y"}`` dicts (ENU metres).
+# @param gateway_name Gateway id, or ``None`` for no gateway node.
+#
 # Node positions are the ENU metres returned by @ref _load_day_gps (same origin
 # as the trace, and therefore as ``build_waypoints.py``). The gateway (if any)
 # is placed at the centroid of that run's nodes, elevated and fixed; its ``id``
@@ -382,7 +399,8 @@ def _discover_days(per_day_dir: Path) -> list[str]:
     return sorted(d.name for d in per_day_dir.iterdir() if _has_trace(d))
 
 
-## @brief Generate one ``nodes.json`` + ``run.ini`` per run (day or scenario).
+## @fn load_calfex_data_per_day
+# @brief Generate one ``nodes.json`` + ``run.ini`` per run (day or scenario).
 #
 # Channel params are read once from @p csv_dir (run-independent). For each run,
 # that run's GPS start positions are read from
@@ -395,7 +413,24 @@ def _discover_days(per_day_dir: Path) -> list[str]:
 # @param band           Radio band string (``"sub-6"`` or ``"mmwave"``).
 # @param days           List of run directory names to produce configs for.
 # @param gateway_enable Whether to add a gateway node + gateway traffic topology.
-# @return               0 on success, 1 on error.
+# @param time           Simulation duration in seconds; ``None`` derives it from
+#                       each run's trace time span.
+# @param amc_model      ``[channel] amc_model`` value (``silvus``, ``shannon`` or ``table``).
+# @param ticks          Tick length in seconds.
+# @param scenario_name  ``[scenario] name`` value (default ``"calfex"``).
+# @param noise_figure   Receiver noise figure, dB.
+# @param tx_gain_dbi    Transmit array gain, dBi.
+# @param rx_gain_dbi    Receive array gain, dBi.
+# @param condition_model ``static_los`` or ``auto``.
+# @param channel_scenario 3GPP scenario (``RMa``, ``UMa``, ``UMi`` or ``InH``).
+# @param rl_opts        ``[rl]`` options; x/y bounds are added per run from the node
+#                       extent plus a 250 m margin.
+# @return               0 if at least one run was written, 1 otherwise.
+#
+# Runs with no GPS fixes, or with no derivable duration when ``time`` is None, are
+# skipped with a warning. Creates ``<output_path>/<run>/`` per run. The gateway,
+# when enabled, is named ``gateway`` and placed at the node centroid at 30 m.
+# IH nodes are placed at 1.5 m with ``waypoint`` mobility and empty waypoints.
 def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path,
                              time: float, amc_model: str, band: str,
                              days: list[str], ticks: float, gateway_enable: bool,
@@ -489,7 +524,23 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
     return 0
 
 
-## @brief CLI entry point.
+## @fn main
+# @brief CLI entry point: write per-run ``nodes.json`` and ``run.ini`` from field data.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 on success, 1 on a missing input, no runs found, or when the mode/band
+#         combination is not ``node`` + ``sub-6``.
+#
+# Required flags: ``--csv-dir`` (per-node dirs holding ``silvus/config.csv``),
+# ``--band/-b {mmwave,sub-6}``, ``--mode/-m {node,scenario}``, and one of
+# ``--day <run>`` / ``--all-days``. Optional: ``--input/-i`` (default
+# ``data/arpo_extracted/_plots/per_day``), ``--output/-o`` (default
+# ``inputs/calfex``), ``--time`` (s), ``--tick`` (s, default 1), ``--amc-model``
+# (default ``silvus``), ``--gateway/-g``, ``--name``, ``--noise-figure`` (5 dB),
+# ``--tx-gain`` / ``--rx-gain`` (6 dBi), ``--condition-model``,
+# ``--channel-scenario``, and the ``--rl-*`` options.
+# Only ``--mode node --band sub-6`` is implemented; anything else exits with an
+# error. Run from ``scratch/mesh-sim/``. Writes ``<output>/<run>/{nodes.json,run.ini}``.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Generates per-run config files (day or scenario window) for "

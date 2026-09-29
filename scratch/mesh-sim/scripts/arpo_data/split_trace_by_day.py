@@ -25,7 +25,8 @@ from pathlib import Path
 import pandas as pd
 
 
-## @brief Split a combined GPS trace into one CSV per calendar day.
+## @fn split_trace_by_day
+# @brief Split a combined GPS trace into one CSV per calendar day.
 #
 # Parses ``t_utc`` to extract the calendar date for each row, groups rows by
 # date, and re-zeroes ``sec_since_origin`` within each day group so every
@@ -38,6 +39,10 @@ import pandas as pd
 #                    from the input filename stem).
 # @return            Dict mapping date string (``YYYY-MM-DD``) to the
 #                    written file path.
+# @throws ValueError if the ``t_utc`` column is missing.
+#
+# Rows within each day are also sorted by ``sec_since_origin``. Creates
+# @p out_dir if needed and writes ``<prefix>_<YYYY-MM-DD>.csv`` per day.
 def split_trace_by_day(trace_path: Path, out_dir: Path,
                        prefix: str | None = None) -> dict[str, Path]:
     df = pd.read_csv(trace_path)
@@ -68,7 +73,8 @@ def split_trace_by_day(trace_path: Path, out_dir: Path,
     return written
 
 
-## @brief Print a per-day, per-node row-count summary.
+## @fn print_day_node_summary
+# @brief Print a per-day, per-node row-count summary.
 #
 # Useful for spotting days where a node has little or no data before
 # running @ref build_waypoints on that day's file.
@@ -82,7 +88,8 @@ def print_day_node_summary(trace_path: Path) -> None:
     print(table.to_string())
 
 
-## @brief CLI entry point for the trace-splitting tool.
+## @fn main
+# @brief CLI entry point for the trace-splitting tool.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
 # @return     0 on success, 1 on error.

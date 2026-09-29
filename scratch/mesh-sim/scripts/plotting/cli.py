@@ -42,6 +42,7 @@ from .plots_summary import (
 )
 
 
+## @brief Save a figure to `<out_dir>/<name>.<fmt>`, close it, and print the path.
 def _save(fig, name: str, out_dir: str, fmt: str, dpi: int):
     path = os.path.join(out_dir, f"{name}.{fmt}")
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
@@ -49,10 +50,25 @@ def _save(fig, name: str, out_dir: str, fmt: str, dpi: int):
     print(f"  saved {path}")
 
 
+## @brief True if `[plots] <key>` is enabled in the INI (defaults to True when the key is absent).
 def _enabled(cfg: configparser.ConfigParser, key: str) -> bool:
     return cfg.getboolean("plots", key, fallback=True)
 
 
+## @fn main
+# @brief Command-line entry point: read the INI, aggregate seeds, and save the enabled figures.
+#
+# @return None on success. Exits with status 1 (via sys.exit) if no `seed-N/`
+#         directories exist in `[output] data_dir`.
+# @throws configparser.NoSectionError / NoOptionError if `[output] data_dir` is missing.
+#
+# CLI flag: `--config <path>` (required), the plot INI file. INI keys: `[output]`
+# `data_dir` (required), `format` (default png), `dpi` (default 150); `[plots]`
+# boolean toggles, each defaulting to true when absent (see plot.example.ini).
+# Steps: discover seed dirs, load and aggregate summary.json, aggregate only the CSVs
+# needed by the enabled plots (links.csv, rx-power.csv, mcs.csv, flows.csv), then
+# save figures. Creates `<data_dir>/figures/` and writes one image per plot there.
+# Plots whose input data is missing are skipped without an error. Sim data is never modified.
 def main():
     parser = argparse.ArgumentParser(description="mesh-sim plot generator")
     parser.add_argument("--config", required=True, help="Path to plot INI config")

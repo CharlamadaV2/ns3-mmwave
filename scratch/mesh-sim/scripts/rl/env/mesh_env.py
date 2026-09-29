@@ -101,6 +101,7 @@ class MeshRlEnv(gymnasium.Env):
         return self._session.command
 
     def reset(self, *, seed=None, options=None):
+        """Stop any running episode, launch a fresh simulator, and return the first observation."""
         if seed is not None and isinstance(options, dict) and "seed_source" in options:
             self.seed_value = int(seed)
             self.seed_source = str(options["seed_source"])
@@ -122,6 +123,7 @@ class MeshRlEnv(gymnasium.Env):
         )
 
     def step(self, action):
+        """Send one action, validate the reply, and return (obs, reward, terminated, False, info)."""
         if self._control_mode == "centralized":
             assert isinstance(self._protocol, CentralizedProtocol)
             action_value = self._protocol.joint_action(action)
@@ -175,6 +177,7 @@ class MeshRlEnv(gymnasium.Env):
         pass
 
     def action_masks(self) -> np.ndarray:
+        """Simulator mask in centralized mode; bounds-derived Discrete(7) mask in legacy mode."""
         if self._control_mode == "centralized":
             assert isinstance(self._protocol, CentralizedProtocol)
             mask = self._protocol.mask
@@ -206,9 +209,11 @@ class MeshRlEnv(gymnasium.Env):
         return mask
 
     def valid_action_mask(self) -> np.ndarray:
+        """Alias of `action_masks`."""
         return self.action_masks()
 
     def close(self):
+        """Stop the simulator and mark the episode interrupted."""
         self._session.stop("interrupted", "close")
 
     def _reset_legacy(self, msg: dict):

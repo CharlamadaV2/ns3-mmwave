@@ -1,41 +1,11 @@
-"""Tabular Q-learning agent for mesh-sim RL positioning.
-
-Discretizes the continuous observation into (x_bin, y_bin, sinr_bin) and
-maintains a Q-table over that state space.  Follows the SB3
-``predict(obs) -> (action, None)`` interface so it can be swapped for a
-Stable Baselines 3 policy later with minimal changes.
-"""
+"""Exploratory tabular Q-learning agent over (x_bin, y_bin, sinr_bin) states."""
 
 from collections import defaultdict
 
 import numpy as np
 
 class TabularQLearning:
-    """Tabular Q-learning with discretized state.
-
-    Parameters
-    ----------
-    n_actions : int
-        Number of discrete actions.
-    x_range : tuple[float, float]
-        (x_min, x_max) for position discretization.
-    y_range : tuple[float, float]
-        (y_min, y_max) for position discretization.
-    bin_size : float
-        Spatial bin width in meters for x and y.
-    sinr_edges : list[float]
-        Bin edges for SINR discretization (dB).
-    gamma : float
-        Discount factor for future rewards.
-    epsilon : float
-        Initial exploration probability.
-    lr : float
-        Learning rate.
-    epsilon_decay : float
-        Multiplicative decay applied to epsilon after each episode.
-    epsilon_min : float
-        Floor for epsilon after decay.
-    """
+    """Tabular Q-learning with discretized state; predict() mirrors SB3's signature."""
 
     def __init__(
         self,
@@ -88,10 +58,7 @@ class TabularQLearning:
         return (x_bin, y_bin, sinr_bin)
 
     def predict(self, obs: np.ndarray, deterministic: bool = False):
-        """Select an action using epsilon-greedy over Q[state].
-
-        Returns ``(action, None)`` matching SB3's ``predict()`` signature.
-        """
+        """Epsilon-greedy action over Q[state]; returns (action, None)."""
         state = self._discretize(obs)
         if not deterministic and np.random.random() < self.epsilon:
             action = np.random.randint(self.n_actions)

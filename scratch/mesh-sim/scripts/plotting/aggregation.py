@@ -18,6 +18,23 @@ from scripts.stats import sample_stats, t_critical_95
 # Time-series aggregation (CSV data)
 # ---------------------------------------------------------------------------
 
+## @fn aggregate_timeseries
+# @brief Combine one CSV file from every seed into per-timestep mean and 95% CI.
+#
+# @param seed_dirs   Seed directories (from discover_seed_dirs).
+# @param loader      Function taking a file path and returning a DataFrame or None
+#                    (e.g. load_links_csv).
+# @param filename    CSV file name inside each seed directory (e.g. "links.csv").
+# @param time_col    Time column, seconds; rounded to 3 decimals (1 ms) before grouping.
+# @param group_cols  Columns that identify a series (e.g. ["node_a", "node_b"]).
+# @param value_cols  Numeric columns to aggregate.
+# @return DataFrame with columns `time_col`, `*group_cols`, and for each value column
+#         `<v>_mean` and `<v>_ci95`; None if no seed provided usable data.
+#
+# Seeds whose file is missing (loader returns None) are skipped silently. Seeds
+# missing any required column are skipped with a warning. The CI is
+# `t_critical_95(n) * std / sqrt(n)` in units of the value column; it is 0.0 when
+# only one seed contributes at that timestep. Nothing is written to disk.
 def aggregate_timeseries(
     seed_dirs: list[str],
     loader: Callable[[str], pd.DataFrame | None],
@@ -74,6 +91,7 @@ def aggregate_timeseries(
         std_col = f"{vc}_std"
         ci_col = f"{vc}_ci95"
 
+        # Per-row 95% CI from the count and std columns computed above.
         def _ci(row):
             n = row[n_col]
             if n <= 1:
@@ -96,6 +114,20 @@ _CI_METRICS = {"mean_sinr_db", "sum_throughput_mbps", "connectivity",
                "delivered_mbps", "latency_ms"}
 
 
+## @fn aggregate_summaries
+# @brief Aggregate per-seed summary.json dicts into mean/std/CI statistics.
+#
+# @param summaries  List of dicts as returned by load_summary (one per seed).
+# @return Dict with keys `num_seeds`, `seeds`, `network`, `per_node`, `per_flow`,
+#         `per_seed`. `network` maps metric name to a stats dict; `per_node` and
+#         `per_flow` map an id to {metric: stats dict}; `per_seed` lists
+#         {"seed", optional "wall_elapsed_s"}. With an empty input list, all counts
+#         are 0 and all containers empty.
+#
+# Each stats dict comes from scripts.stats.sample_stats (mean, std, min, max, n, and
+# `ci95` only when n > 1 and the metric is in _CI_METRICS). Metrics absent or null
+# in a seed are ignored for that seed; a metric with no values has mean None.
+# Node and flow ids are the union across seeds, sorted.
 def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
     """Aggregate multiple seed summary dicts into mean/std/ci95.
 

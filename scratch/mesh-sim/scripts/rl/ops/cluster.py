@@ -90,6 +90,7 @@ def _write_task_table(output_root, table: list[dict]) -> str:
 
 
 def _preview(config: dict, output_root, indices: list[int], with_compare: bool) -> None:
+    """Print the tasks sbatch command with provisional names; submits nothing."""
     paths = _paths(output_root, PROVISIONAL)
     spec = slurm.array_spec(indices, config["max_concurrent_tasks"])
     argv = slurm.sbatch_argv(config, "tasks", "meshops-<random>-tasks",
@@ -244,6 +245,7 @@ def _submit_tasks(output_root, config: dict, plan_sha: str, config_sha: str,
 
 
 def _clear_earlier_compare(output_root, entries: list[dict], snapshot: dict) -> None:
+    """Cancel any still-active compare job from earlier receipts before queuing a new one."""
     for receipt in entries:
         job_id = reconcile.active_compare(receipt, snapshot)
         if not job_id:

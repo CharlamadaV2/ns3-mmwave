@@ -1,18 +1,15 @@
 '''compare_runs.py'''
 ## @file compare_runs.py
-# @brief Cross-batch summary table: one row per validation batch.
+# @brief Cross-batch heatmaps: field scenarios (rows) vs validation batches (columns).
 #
-# Reads the ``validation_summary.csv`` produced by @ref compare for each batch
-# and prints ranked comparison tables useful for tuning simulation parameters
-# (channel model, TX power, antenna gain).
+# Reads the ``validation_summary.csv`` produced by @ref compare for each batch,
+# and writes one PNG per (metric, score) with score in |Δmedian|, |Δmean| and K-S.
+# Each cell is the mean of that score over all links of the (scenario, batch)
+# pair. Useful for tuning simulation parameters (channel model, TX power, gain).
+# Nothing is printed except the paths written; there are no console tables.
 #
-# **Tables printed**
-# | Table                  | Contents                                                   |
-# |------------------------|------------------------------------------------------------|
-# | Batch summary          | Per-run mean |Δmed| and mean K-S across all links.         |
-# | Link-class breakdown   | Separate |Δmed| for "close" (rab1↔rab2) vs "far" (↔rab3). |
-# | Per-scenario |Δmed|    | Rows=scenario, cols=run — which scenario drives error.     |
-# | Per-scenario K-S       | Same layout with K-S statistic.                            |
+# Output: ``heatmap_<metric>_{abs-dmed,abs-dmean,ks}.png`` in ``--out``
+# (default ``outputs/cross_batch_summary``).
 
 from __future__ import annotations
 
@@ -139,13 +136,18 @@ def _heatmap_png(df: pd.DataFrame, metric: str, value_col: str,
     return True
 
 
-## @brief CLI entry point for the cross-batch comparison tool.
-#
-# Auto-discovers batches under @ref OUTPUTS_ROOT when no explicit paths are
-# given. Prints several comparison tables and optionally writes CSV exports.
+## @fn main
+# @brief CLI entry point for the cross-batch comparison tool.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 on success, 1 on error.
+# @return 0 if at least one heatmap was written; 1 if no batches or summaries were
+#         found or no heatmap could be drawn.
+#
+# Positional ``batches`` (zero or more batch dirs; if none, every directory under
+# ``outputs/`` holding a ``validation_summary.csv`` is used), ``--metrics``
+# (default ``snr,rcpi,mcs``), ``--out``. Concatenates the summaries, then writes
+# the heatmaps (see the file header) and creates ``--out`` if needed. Batches
+# without a summary are skipped with a message on stderr.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Cross-batch validation heatmaps (sim vs ARPO field).")
     p.add_argument("batches", nargs="*",

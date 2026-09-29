@@ -26,6 +26,14 @@ import numpy as np
 import pandas as pd
 
 
+## @brief Fit a linear lat/lon -> local ENU (east/north, metres) mapping from a trace.
+#
+# @param trace  Table with numeric `lat_deg`, `lon_deg`, `east_m`, `north_m` columns.
+# @return A function `f(lat_deg, lon_deg) -> (x_m, y_m)` (east, north).
+# @throws ValueError if any of the four columns is missing.
+#
+# Drops non-numeric rows and rows at lat=lon=0, then solves two least-squares
+# fits (east and north as affine functions of lat and lon).
 def _fit_enu(trace: pd.DataFrame):
     """Return f(lat,lon)->(x,y) fit from the trace's lat/lon <-> east/north."""
     need = {"lat_deg", "lon_deg", "east_m", "north_m"}
@@ -40,10 +48,36 @@ def _fit_enu(trace: pd.DataFrame):
                              float(cy[0]*lat + cy[1]*lon + cy[2]))
 
 
+## @brief Convert watts to dBm; non-positive input maps to 0.0 dBm (not -inf).
 def _watt_to_dbm(w: float) -> float:
     return 10.0 * math.log10(w) + 30.0 if w > 0 else 0.0
 
 
+## @fn build
+# @brief Build the list of JammerSpec dicts for one scenario from the EW trial log.
+#
+# @param trials_csv  EW trials CSV. Needs columns `trial`, `start`, `end` (epoch
+#                    seconds), `ew_type`, `ew_approx_lat`, `ew_approx_lon`,
+#                    `ew_approx_heading (deg from N)`, `ew_strength (W)`; optional
+#                    `ew_gain (dBi)` and `ew_band_range` ("lo-hi").
+# @param trace_csv   Scenario `gps_all_nodes_trace.csv` (needs `t_utc` plus the
+#                    columns used by `_fit_enu`).
+# @param trial       One trial name to select, or None for every trial that
+#                    overlaps the trace's time window.
+# @param beamwidth   `beamwidth_deg` for directional jammers, degrees.
+# @param gain        `tx_array_gain_dbi` (dBi) used when the CSV gain cell is blank.
+# @param z           Jammer height, metres.
+# @param zenith      `zenith_deg` (0 = up, 90 = horizontal, 180 = down).
+# @return List of JammerSpec dicts, one per non-"none" trial that overlaps the
+#         scenario; empty if none do.
+# @throws ValueError if the trace lacks the columns needed for the ENU fit.
+# @throws KeyError if a required CSV column is missing.
+#
+# Sim time 0 is the trace's earliest `t_utc`. Each trial's interval is clipped
+# to [0, trace duration]; trials that fall outside are dropped. Every spec is a
+# constant-type jammer with duty cycle 1.0 and one interval. Omnidirectional
+# trials get beamwidth 360 and azimuth 0. Trial CSV header cells are stripped of
+# whitespace and a leading BOM.
 def build(trials_csv: Path, trace_csv: Path, trial: str | None,
           beamwidth: float, gain: float, z: float, zenith: float) -> list[dict]:
     trace = pd.read_csv(trace_csv)
@@ -91,6 +125,18 @@ def build(trials_csv: Path, trace_csv: Path, trial: str | None,
     return jammers
 
 
+## @fn main
+# @brief CLI entry point: write a jammers.json for one scenario.
+#
+# @param argv  Argument list; defaults to `sys.argv[1:]` when None.
+# @return 0 on success (also when no jammers were found; a warning goes to stderr).
+#
+# Required flags: `--trials`, `--trace`, `-o/--output`. Optional: `--trial`,
+# `--beamwidth` (60), `--gain` (12), `--z` (2), `--zenith` (90), `--run-ini`.
+# Creates the output's parent directories, writes the JSON, and prints one line
+# per jammer. With `--run-ini`, inserts `jammers_file = <name>` right after the
+# first `[scenario]` line, only if the text `jammers_file` is not already in the
+# file (an existing entry is left as is, even if it points elsewhere).
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Build jammers.json from the EW trials CSV.")
     p.add_argument("--trials", type=Path, required=True, help="trials CSV")

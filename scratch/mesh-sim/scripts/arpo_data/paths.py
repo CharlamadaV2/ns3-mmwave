@@ -49,25 +49,29 @@ class DatasetPaths:
     zip_path: Path = DEFAULT_ZIP_PATH    ##< Path to the source zip bundle.
     extract_dir: Path = DEFAULT_EXTRACT_DIR  ##< Root directory for extracted content.
 
-    ## @brief Root of all per-scenario CSV directories.
+    ## @fn DatasetPaths::csv_root
+    # @brief Root of all per-scenario CSV directories.
     # @return ``<extract_dir>/csv``
     @property
     def csv_root(self) -> Path:
         return self.extract_dir / "csv"
 
-    ## @brief Root of all generated plot output.
+    ## @fn DatasetPaths::plots_dir
+    # @brief Root of all generated plot output.
     # @return ``<extract_dir>/_plots``
     @property
     def plots_dir(self) -> Path:
         return self.extract_dir / "_plots"
 
-    ## @brief Per-scenario PNG and trace CSV output directory.
+    ## @fn DatasetPaths::per_day_dir
+    # @brief Per-scenario PNG and trace CSV output directory.
     # @return ``<plots_dir>/per_day``
     @property
     def per_day_dir(self) -> Path:
         return self.plots_dir / "per_day"
 
-    ## @brief Multi-day ECDF and K-S output directory.
+    ## @fn DatasetPaths::multi_day_dir
+    # @brief Multi-day histogram-overlay and K-S output directory.
     # @return ``<plots_dir>/multi_day``
     @property
     def multi_day_dir(self) -> Path:

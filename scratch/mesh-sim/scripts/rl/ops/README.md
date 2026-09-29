@@ -1,4 +1,4 @@
-# scripts/rl/ops/ — experiment operations
+@page scripts_rl_ops scripts/rl/ops
 
 Operations plumbing *around* an existing `experiment_plan.json`: run one array
 task, measure one task's cost, search the already-wired PPO knobs, submit the

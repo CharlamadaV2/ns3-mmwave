@@ -1,12 +1,17 @@
 ## @file compare.py
-# @brief ECDF + bootstrap-CI comparison of pooled sim seeds vs ARPO field traces.
+# @brief Histogram + KDE comparison of sim traces vs ARPO field traces.
 #
 # For each (scenario, link, metric) triple this module:
-# -# Pools sim samples across all seed runs.
+# -# Pools sim samples across all seed runs (see @ref _pool_sim).
 # -# Loads the matching field trace.
-# -# Computes a two-sample K-S statistic and p-value.
-# -# Renders an ECDF plot with a bootstrap confidence band around the sim curve.
-# -# Writes per-scenario and aggregate ``metrics.csv`` / ``validation_summary.csv``.
+# -# Computes the two-sample K-S D statistic (no p-value) and median/mean/IQR.
+# -# Renders a normalized-histogram overlay with a Gaussian KDE curve for sim and
+#    field. There is no bootstrap band in the code.
+# -# Writes per-scenario ``metrics.csv``, a batch-level ``validation_summary.csv``,
+#    and per-metric heatmap PNGs under ``<batch_root>/summary/``.
+#
+# Inputs are the ``sim_traces/`` written by @ref sim_to_traces plus the field
+# trace CSVs from ``arpo_data.cli plot``.
 #
 # Also exports @ref sim_to_field_scenario, the canonical name-mapping function
 # used throughout the pipeline to translate sim scenario names to field names.
@@ -66,7 +71,8 @@ _METRICS: tuple[_MetricSpec, ...] = (
 _METRICS_BY_SHORT = {m.short: m for m in _METRICS}  ##< Lookup by short name.
 
 
-## @brief Convert a sim scenario name to its corresponding field scenario name.
+## @fn sim_to_field_scenario
+# @brief Convert a sim scenario name to its corresponding field scenario name.
 #
 # Sim names follow ``arpo-1-1-static-04172026``.
 # Field names follow ``1-1_static_04172026``.
@@ -74,6 +80,9 @@ _METRICS_BY_SHORT = {m.short: m for m in _METRICS}  ##< Lookup by short name.
 # @param sim_name  Sim-form scenario directory name.
 # @return          Field-form scenario name, or ``None`` if the name does not
 #                  match the expected pattern.
+#
+# Middle tokens are joined with ``_`` and the minor token is upper-cased
+# (``arpo-1-x-misc-04172026`` -> ``1-X_misc_04172026``).
 def sim_to_field_scenario(sim_name: str) -> str | None:
     m = _SIM_NAME_RE.match(sim_name)
     if not m:
@@ -190,11 +199,16 @@ def _discover_pairs(seed_traces_root: Path, mode: str,
 # In node mode (``peer == "neighbors"``) reads the combined IH trace file:
 # ``IH_<metric>__<src>_to_neighbors_trace.csv``.
 #
+# If every read array has the same non-zero length, the arrays are averaged
+# element-wise (per-row mean across seeds/directions). Otherwise they are
+# concatenated.
+#
 # @param scenario_dir  Scenario directory containing ``sim_traces/``.
 # @param src           Source node label.
 # @param peer          Peer node label, or ``"neighbors"`` for node mode.
 # @param spec          Metric specification.
-# @return              Concatenated float64 array of all valid samples.
+# @param window_s      If set, keep only the first ``window_s`` seconds of each trace.
+# @return              float64 array: per-row mean across seeds, or concatenated samples.
 def _pool_sim(scenario_dir: Path, src: str, peer: str,
               spec: _MetricSpec, window_s: float | None = None) -> np.ndarray:
     sim_traces = scenario_dir / "sim_traces"
@@ -235,6 +249,7 @@ def _pool_sim(scenario_dir: Path, src: str, peer: str,
 # @param src             Source node label.
 # @param peer            Peer node label, or ``"neighbors"`` for node mode.
 # @param spec            Metric specification.
+# @param window_s        If set, keep only the first ``window_s`` seconds of each trace.
 # @return                Concatenated float64 array of all valid samples.
 def _pool_field(field_scen_dir: Path, src: str, peer: str,
                 spec: _MetricSpec, window_s: float | None = None) -> np.ndarray:
@@ -535,6 +550,7 @@ def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
 # @param out_dir       Output directory for PNGs and per-scenario metrics CSV.
 # @param field_dir     Explicit field traces directory; when provided bypasses
 #                      name derivation (node mode).
+# @param window_s      If set, compare only the first ``window_s`` seconds.
 # @return              List of result dicts, one per (pair, metric) combination.
 def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_MetricSpec],
                       out_dir: Path, field_dir: Path | None = None,
@@ -613,15 +629,23 @@ def _process_scenario(scenario_dir: Path, field_root: Path, metrics: list[_Metri
     return rows
 
 
-## @brief CLI entry point for the sim-vs-field comparison tool.
-#
-# In node mode @p batch_root is the scenario directory itself and
-# ``--field-root`` points at the per-day field traces root.
-# In scenario mode @p batch_root contains named scenario subdirectories
-# each with their own ``sim_traces/``.
+## @fn main
+# @brief CLI entry point for the sim-vs-field comparison tool.
 #
 # @param argv  Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return      0 on success, 1 on error.
+# @return      0 on success (even if no rows were produced), 1 on a bad path
+#              or unknown metric.
+#
+# Flags: ``--batch_root`` (required), ``--mode {scenario,node}`` (required),
+# ``--field-root`` (default: ``data/arpo_extracted/_plots/per_day``), ``--only``,
+# ``--metrics`` (default ``snr,rcpi,mcs``), ``--window`` (seconds, default: all).
+#
+# In node mode ``--batch_root`` is the scenario directory itself and
+# ``--field-root`` is used directly as the field directory. In scenario mode
+# ``--batch_root`` contains scenario subdirectories, each with ``sim_traces/``,
+# and the field scenario is looked up under ``--field-root`` by name.
+# Writes ``<scenario>/validation/{pngs/<src>/hist_*.png, metrics.csv}``,
+# ``<batch_root>/validation_summary.csv`` and ``<batch_root>/summary/heatmap_*.png``.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Histogram + KDE comparison of sim vs ARPO field.")

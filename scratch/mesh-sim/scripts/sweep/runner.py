@@ -15,17 +15,26 @@ from .config import SweepConfig
 from .ini_writer import copy_scenario_files, write_point_ini
 
 
+## @fn _find_sim_binary
+# @brief Look up the built sim binary via sim_support.find_sim_binary.
+#
+# @param mesh_sim_root  mesh-sim root directory.
+# @return Binary path, or None if none is found.
 def _find_sim_binary(mesh_sim_root: str) -> str | None:
     """Auto-detect the sim binary from the ns-3 build directory."""
     return find_sim_binary(mesh_sim_root)
 
 
 
+## @fn _point_label
+# @brief Directory name for a 1-based point index, e.g. `point-003`.
 def _point_label(index: int) -> str:
     """Build a directory name for a sweep point."""
     return f"point-{index:03d}"
 
 
+## @fn _is_point_complete
+# @brief True if every `seed-<N>/summary.json` exists under `point_dir` (used by `--resume`).
 def _is_point_complete(point_dir: str, seeds: list[int]) -> bool:
     """Check if all seed dirs have a summary.json (for --resume)."""
     for seed in seeds:
@@ -35,6 +44,8 @@ def _is_point_complete(point_dir: str, seeds: list[int]) -> bool:
     return True
 
 
+## @fn _read_nodes_file
+# @brief Return `[scenario] nodes_file` from a run.ini (default `nodes.json`).
 def _read_nodes_file(base_run_ini: str) -> str:
     """Read the nodes_file value from a base run.ini."""
     cfg = configparser.ConfigParser()
@@ -42,6 +53,8 @@ def _read_nodes_file(base_run_ini: str) -> str:
     return cfg.get("scenario", "nodes_file", fallback="nodes.json")
 
 
+## @fn _read_buildings_file
+# @brief Return `[scenario] buildings_file` from a run.ini (default empty).
 def _read_buildings_file(base_run_ini: str) -> str:
     """Read the buildings_file value from a base run.ini."""
     cfg = configparser.ConfigParser()
@@ -49,6 +62,15 @@ def _read_buildings_file(base_run_ini: str) -> str:
     return cfg.get("scenario", "buildings_file", fallback="")
 
 
+## @fn _run_plotting
+# @brief Write `plot.ini` in a point directory and run `scripts.plotting.cli` on it.
+#
+# @param point_dir      Point output directory (becomes `[output] data_dir`).
+# @param plot_config    Plot INI path relative to the mesh-sim root; empty or missing uses defaults.
+# @param mesh_sim_root  Working directory for the plotting subprocess.
+#
+# If the plot INI has no `[plots]` section, seven default plots are enabled. The
+# plotting exit code is not checked.
 def _run_plotting(point_dir: str, plot_config: str, mesh_sim_root: str) -> None:
     """Generate a plot INI for a point and invoke the plotting CLI."""
     # Read the user's plot config as a base (or use defaults)
@@ -78,6 +100,25 @@ def _run_plotting(point_dir: str, plot_config: str, mesh_sim_root: str) -> None:
     )
 
 
+## @fn run_sweep
+# @brief Run every point of a sweep (cartesian product of dimensions) with all seeds.
+#
+# @param cfg               Parsed SweepConfig.
+# @param sweep_config_path Path of the sweep INI; copied to the output dir as `sweep.ini`.
+# @param sim_binary        Sim binary path; None auto-detects from the ns-3 build tree.
+# @param dry_run           If True, print the sweep matrix and return without running.
+# @param resume            If True, skip points whose seed dirs all contain `summary.json`.
+# @return None.
+# @throws SystemExit (code 1) if no binary is found (not raised in dry-run mode).
+#
+# Output goes to `<root>/outputs/YYYY-MM/DD/HH-MM-SS/` (a new timestamped directory
+# every call, so `--resume` only skips points inside that new directory and in
+# practice never finds finished ones). Per point it creates `point-NNN/`, writes `run.ini`,
+# copies scenario files, runs `<bin> --run-config=... --seeds=...` with output in
+# `console.log`, and rewrites `sweep_manifest.json` after each non-skipped point.
+# Failed points are recorded with status `failed` and the sweep continues. Plotting runs
+# per point (`auto_plot=each`, successful points only) or at the end (`all`).
+# Prints a summary of succeeded, failed and skipped counts.
 def run_sweep(
     cfg: SweepConfig,
     sweep_config_path: str,

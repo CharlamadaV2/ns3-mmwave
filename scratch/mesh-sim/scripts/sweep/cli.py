@@ -13,6 +13,15 @@ from .config import parse_sweep_config
 from .runner import run_sweep
 
 
+## @fn main
+# @brief Parse command-line flags, load the sweep INI, and run the sweep.
+#
+# @return None. Exit codes come from the called functions (see @throws).
+# @throws SystemExit from argparse on bad flags, or from parse_sweep_config on an invalid sweep INI.
+#
+# Flags: `--config` (required), `--dry-run`, `--resume`, `--sim-binary`.
+# Reads the sweep INI with parse_sweep_config() and hands it to run_sweep().
+# Simulations, output directories and files are created by run_sweep().
 def main():
     parser = argparse.ArgumentParser(description="mesh-sim parameter sweep runner")
     parser.add_argument("--config", required=True,
