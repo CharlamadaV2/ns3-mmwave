@@ -89,7 +89,7 @@ bandwidth) before trusting a run.
 
 @subsection run_pipeline Generating a scenario from field data
 
-Scenario generation is ran from **scratch/mesh-sim** directory
+Scenario generation is run from the **scratch/mesh-sim** directory:
 
 ```bash
 # 1. plot raw per-node data into per-day traces
@@ -143,7 +143,7 @@ python -m scripts.validation.make_jammers \
 @subsection run_sweep Sweep
 
 ```bash
-python -m scripts.sweep.cli --config inputs/custom/sherpa/1.1/sweep.ini
+python -m scripts.sweep.cli --config inputs/sweeps/example.ini
 ```
 
 ## Band selection
@@ -185,7 +185,7 @@ subcommand. For a quick tour of the RL files, see the
 .venv/bin/python -m scripts.rl.train \
   --sim-binary <BIN> \
   --run-config inputs/baselines/p0-smoke/run.ini \
-  --output-dir outputs/p0-verification/rl \
+  --output-dir outputs/rl-smoke-verification/rl \
   m-ppo --total-timesteps 16 --n-steps 16 --seed 1
 ```
 
@@ -326,8 +326,9 @@ and routing already live there and must stay deterministic and testable without
 Python; the bridge exposes only observations, masks, and rewards over
 stdin/stdout. Python provides the Gymnasium/SB3 integration because
 MaskablePPO, vectorized rollouts, and model persistence are Python libraries.
-Movement limits and action validity are therefore decided once, in C++, and
-Python never re-derives them.
+In centralized mode, movement limits and action validity are therefore decided
+once, in C++, and Python never re-derives them. (Legacy single-node mode builds
+its `Discrete(7)` mask in Python from the `[rl]` bounds.)
 
 #### Model lifecycle
 
@@ -714,7 +715,7 @@ The small tracked manifest retains the original hashes and scenario provenance:
 python3 -m scripts.validation.regression_check verify-suite \
   --sim-binary <BIN> \
   --manifest tests/fixtures/regression/p0/manifest.json \
-  --out outputs/p0-regression/<name>
+  --out outputs/baseline-regression/<name>
 ```
 
 See [`scripts/validation/README.md`](scripts/validation/README.md) for the
@@ -728,10 +729,11 @@ to start; you open the entry page directly in a browser.
 
 @subsection docs_build Generating the site
 
-From @c scratch/mesh-sim/ (where the @c Doxyfile lives):
+From @c scratch/mesh-sim/docs/ (where the @c Doxyfile lives; its input paths are
+relative to that directory):
 
 ```bash
-cd scratch/mesh-sim
+cd scratch/mesh-sim/docs
 doxygen Doxyfile
 ```
 

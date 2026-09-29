@@ -2,16 +2,25 @@
  * @page scripts Scripts
  * Field data processing and simulation validation pipelines.
  *
- * ## Packages
+ * ## Simulation Packages   
  * - @subpage scripts_arpo_data
  * - @subpage scripts_validation
+ * - @subpage scripts_sweep
+ * - @subpage scripts_plotting
+ * ## RL Packages   
+ * - @subpage scripts_rl
+	* - @subpage scripts_rl_env
+	* - @subpage scripts_rl_agents
+	* - @subpage scripts_rl_ops
+	* - @subpage scripts_rl_policy
+	* - @subpage scripts_rl_tests
  */
 
 /**
  * @page src Src
  * ns-3 mesh simulator source modules.
  *
- * ## Modules
+ * ## Simulation Modules   
  * - @subpage src_domain
  * - @subpage src_config
  * - @subpage src_eval
@@ -22,4 +31,10 @@
  * - @subpage src_util
  * - @subpage src_cli
  * - @subpage src_setup
+ * ## RL Modules   
+ * - @subpage src_rl
+	* - @subpage src_rl_policy_inputs
+	* - @subpage src_rl_policy_input_tests
+	* - @subpage src_rl_policy_lifecycle_tests
+	* - @subpage src_rl_policy_comparison_tests
  */

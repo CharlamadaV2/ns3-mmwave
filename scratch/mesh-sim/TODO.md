@@ -105,7 +105,7 @@ Add 4-direction (up/down in y-axis) and 8-direction (diagonals) as
 additional `action_type` options.
 
 ### TODO-RL-SEEDS-1 — Multi-seed training policy
-P0 trains with one fixed seed (`m-ppo --seed`, else `[scenario] seed`) reused by
+Training currently uses one fixed seed (`m-ppo --seed`, else `[scenario] seed`) reused by
 every episode. Deciding whether episodes should vary the seed, and how the
 model/manifest should record that, is deferred.
 That one integer also sets both the PPO initialization and the training scenario,
@@ -185,9 +185,9 @@ since the budget is what makes trials comparable, and study resume is deferred
 because a seeded sampler restarts its sequence on reload.
 Owner: team — status: open.
 
-## Jammer model decisions (P0, unresolved)
+## Jammer model decisions (unresolved)
 
-P0 deliberately froze the current jammer behavior and changed no physics. The
+The jammer baseline work deliberately froze the current jammer behavior and changed no physics. The
 following questions must be answered by the team before any change; do not
 infer answers from the code.
 
