@@ -3,17 +3,15 @@
  * @file link-result.h
  * @brief Per-link radio evaluation result POD type.
  *
+ * One @ref LinkResult is produced per unordered node pair (i < j) per
+ * simulation tick by @c LinkEvaluator::EvaluateAll, with @c tx_id = i and
+ * @c rx_id = j. The evaluator treats the link as symmetric, so there is no
+ * separate (j, i) result.
  *
- * One @ref LinkResult is produced per ordered (tx, rx) node pair per
- * simulation tick.  The pair is *directed*: a @c LinkResult for
- * (tx=0, rx=1) is independent of (tx=1, rx=0) because path loss,
- * shadow fading, and blockage are evaluated separately for each direction.
- *
- * **Sentinel values**
- * @c rx_power_dbm and @c sinr_db are initialised to @c -999.0 dBm/dB to
- * indicate "no valid measurement" (e.g. the link was not evaluated this
- * tick, or the path loss exceeds the noise floor). Consumers should
- * treat any value below a reasonable threshold (e.g. -200 dB) as invalid.
+ * **Default values**
+ * @c rx_power_dbm and @c sinr_db default to @c -999.0 as a "not evaluated"
+ * marker. @c LinkEvaluator::Evaluate overwrites every field, so results it
+ * returns never carry the marker.
  */
 #pragma once
 
@@ -23,38 +21,36 @@ namespace mesh_sim
 {
 
 /**
- * @brief Radio evaluation result for one directed link at one time step.
+ * @brief Radio evaluation result for one link at one time step.
  *
- * Produced by the link evaluator and consumed by the metrics writer,
- * routing engine, and RL reward calculator.
+ * Produced by the link evaluator and consumed by the link table, metrics
+ * writer, routing, and the RL bridge.
  */
 struct LinkResult
 {
-    uint32_t tx_id = 0;  ///< Transmitter index into the @ref SimConfig::nodes array.
-    uint32_t rx_id = 0;  ///< Receiver index into the @ref SimConfig::nodes array.
+    uint32_t tx_id = 0;  ///< Index of the first node of the pair in @ref SimConfig::nodes.
+    uint32_t rx_id = 0;  ///< Index of the second node of the pair in @ref SimConfig::nodes.
 
-    double distance_m = 0.0;   ///< 3-D Euclidean distance between tx and rx (m).
-    bool   is_los     = false;  ///< @c true if the link is Line-of-Sight; @c false
-                                ///<   for Non-Line-of-Sight.
+    double distance_m = 0.0;   ///< 3-D Euclidean distance between the two nodes (m).
+    bool   is_los     = false;  ///< @c true if the link is Line-of-Sight, @c false if
+                                ///<   Non-Line-of-Sight.
 
-    double path_loss_db  = 0.0;     ///< Total path loss in dB, including shadow fading
-                                     ///<   (and foliage / atmospheric components when
-                                     ///<   those NYU options are enabled).
-    double rx_power_dbm  = -999.0;  ///< Received signal power in dBm after applying
-                                     ///<   TX power, TX/RX array gains, and path loss.
-                                     ///<   Initialised to -999.0 as a sentinel for
-                                     ///<   "not evaluated / below noise floor".
-    double sinr_db       = -999.0;  ///< Signal-to-Interference-plus-Noise Ratio in dB.
-                                     ///<   Initialised to -999.0 as a sentinel.
-    double capacity_mbps = 0.0;     ///< Link capacity in Mbps, computed by the configured
-                                     ///<   AMC model (@c "shannon" or @c "table").
+    double path_loss_db  = 0.0;     ///< Path loss in dB: the propagation-model loss, floored at
+                                     ///<   free-space loss for a distance of at least 1 m.
+    double rx_power_dbm  = -999.0;  ///< Received power in dBm: TX power - path loss + TX and RX
+                                     ///<   array gains.
+    double sinr_db       = -999.0;  ///< Signal-to-Interference-plus-Noise Ratio in dB. Equals SNR
+                                     ///<   when no jammer is active; with an active jammer it is
+                                     ///<   clamped to be >= 0 dB.
+    double capacity_mbps = 0.0;     ///< Link capacity in Mbps from the configured AMC model
+                                     ///<   (@c "shannon", @c "table", or @c "silvus").
 
-    uint32_t mcs_index = 0;  ///< MCS / CQI table index in the range [0, 14] selected
-                              ///<   by the AMC model based on @c sinr_db.
+    uint32_t mcs_index = 0;  ///< Modulation and coding scheme index in [0, 14] chosen from
+                              ///<   @c sinr_db (Silvus table when @c amc_model is @c "silvus").
 
-    bool condition_from_buildings = false;  ///< @c true when the LOS/NLOS condition was
-                                            ///<   determined deterministically by the
-                                            ///<   buildings model rather than statistically.
+    bool condition_from_buildings = false;  ///< @c true when LOS/NLOS came from the buildings model
+                                            ///<   (or @c static_los) rather than the statistical
+                                            ///<   model. Set from the run-wide setting, not per link.
 };
 
 }  // namespace mesh_sim

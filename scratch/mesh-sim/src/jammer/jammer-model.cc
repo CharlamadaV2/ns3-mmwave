@@ -1,5 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file jammer-model.cc */
+/**
+ * @file jammer-model.cc
+ * @brief Implements @ref mesh_sim::JammerModel (gates and power sum); see jammer-model.h.
+ */
 
 #include "src/jammer/jammer-model.h"
 
@@ -71,7 +74,7 @@ JammerModel::HasJammers() const
 // InterfPowerAtReceiver
 // ---------------------------------------------------------------------------
  
-// @brief True if the jammer is transmitting at nowS. No intervals => always on.
+// Interval gate: half-open [start,end). No intervals => always on.
 bool
 JammerModel::ActiveAt(const JammerSpec& spec, double nowS)
 {

@@ -1,5 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file topology-builder.cc*/
+/**
+ * @file topology-builder.cc
+ * @brief Implements TopologyBuilder; per-function behavior is documented in
+ *        topology-builder.h. Not compiled standalone (needs ns-3).
+ */
 
 #include "src/setup/topology-builder.h"
 
@@ -30,6 +34,7 @@ namespace mesh_sim
 // Building-spec string → ns-3 enum helpers
 // ---------------------------------------------------------------------------
 
+/** @brief Map a building type string to the ns-3 enum; unknown values fall back to Residential. */
 static Building::BuildingType_t
 parseBuildingType(const std::string& s)
 {
@@ -39,6 +44,7 @@ parseBuildingType(const std::string& s)
     return Building::Residential;
 }
 
+/** @brief Map an exterior wall string to the ns-3 enum; unknown values fall back to ConcreteWithWindows. */
 static Building::ExtWallsType_t
 parseExtWalls(const std::string& s)
 {

@@ -67,29 +67,31 @@ struct TimingInfo
  */
 struct RlConfig
 {
-    bool        enabled             = false;         ///< Enable RL mode when @c true.
-    std::string controlled_node_id;                  ///< ID of the node the RL agent controls.
-                                                     ///<   Empty string means the last node
-                                                     ///<   in @ref SimConfig::nodes.
+    bool        enabled             = false;         ///< Enable RL mode when @c true (also set by @c --rl-mode).
+    std::string controlled_node_id;                  ///< Legacy mode: ID of the node the RL agent controls.
+                                                     ///<   Empty (or unmatched at resolve time) means
+                                                     ///<   the last node in @ref SimConfig::nodes.
+                                                     ///<   Mutually exclusive with @c controlled_nodes.
     std::string action_type         = "discrete";    ///< Action space type:
                                                      ///<   @c "discrete" or @c "continuous".
     std::string reward_type         = "throughput";  ///< Reward signal:
                                                      ///<   @c "throughput" or @c "all_links_los".
     std::string reward_type_alias;                   ///< Legacy spelling that was normalized
                                                      ///<   (@c "mean_sinr") or empty.
-    double step_size_m          = 50.0;   ///< Per-tick displacement in metres for the
-                                           ///<   @c "discrete" action type.
+    double step_size_m          = 50.0;   ///< Nominal displacement in metres per simulator
+                                           ///<   tick (must be > 0 for @c "discrete"); also sets
+                                           ///<   the speed cap step_size_m / tick_s.
     double arrival_threshold_m  =  1.0;   ///< Distance in metres below which the controlled
-                                           ///<   node is considered to have "arrived" at a
-                                           ///<   target. Used only by @c "continuous" mode.
+                                           ///<   node has "arrived" at its target. Used only by
+                                           ///<   @c "continuous" mode (must be > 0 there).
 
     // ---- Movement bounding box ---------------------------------------------
     double x_min = -1000.0;  ///< Western boundary of the controlled node's allowed area (m).
     double x_max =  2000.0;  ///< Eastern boundary of the controlled node's allowed area (m).
     double y_min = -1000.0;  ///< Southern boundary of the controlled node's allowed area (m).
     double y_max =  1000.0;  ///< Northern boundary of the controlled node's allowed area (m).
-    double z_min = 0.0;
-    double z_max = 100.0;
+    double z_min = 0.0;      ///< Lower altitude limit of the controlled node's allowed area (m).
+    double z_max = 100.0;    ///< Upper altitude limit of the controlled node's allowed area (m).
 
     // ---- Centralized multi-node control (raw @c [rl] keys) -----------------
     std::string controlled_nodes;             ///< @c "all" or a comma-separated list of node
@@ -100,7 +102,7 @@ struct RlConfig
                                               ///<   controlled-node count.
     std::string action_profile = "move_2d";   ///< Centralized action profile; @c "move_2d" only.
     double      decision_interval_s = 0.0;    ///< Seconds between RL decisions; @c 0 means
-                                              ///<   @ref SimConfig::tick_s.
+                                              ///<   @ref SimConfig::tick_s (one decision per tick).
 
     // ---- Resolved fields (never from INI; written by @c ApplyRlControl) -----
     std::string control_mode = "legacy";        ///< @c "legacy" or @c "centralized".
@@ -118,8 +120,8 @@ struct RlConfig
  * references. Validated by @ref ValidateConfig before any ns-3 objects are
  * constructed. Passed by const-reference to every subsystem constructor.
  *
- * **Timing parameters**
- * - @c tick_s must be ≤ @c duration_s.
+ * **Timing parameters** (all in seconds unless the name says @c _ms)
+ * - @c tick_s must be <= @c duration_s.
  * - @c warmup_s samples are excluded from all output metrics but the
  *   simulation still runs for the full @c duration_s.
  * - @c viz_tick_ms controls how frequently CSV position/link snapshots are
@@ -128,15 +130,19 @@ struct RlConfig
 struct SimConfig
 {
     std::string scenario_name;        ///< Human-readable scenario label (from @c [scenario] name).
-    uint32_t    seed       = 42;      ///< RNG seed passed to ns-3 @c RngSeedManager.
-    uint32_t    run_id     = 1;       ///< Run identifier written to output metadata.
-    double      duration_s = 10.0;    ///< Total simulated time in seconds.
-    double      warmup_s   = 0.0;     ///< Seconds to exclude from output metrics.
-                                       ///<   Must be < @c duration_s.
-    double      tick_s     = 0.1;     ///< Simulation time step in seconds (100 ms default).
-    std::string output_dir;           ///< Root output directory. Auto-generated as a
-                                       ///<   timestamped path under @c outputs/ when empty
-                                       ///<   in @c run.ini (see @ref ConfigLoader::Load).
+    uint32_t    seed       = 42;      ///< RNG seed for ns-3 @c RngSeedManager. @c sim.cc overwrites it
+                                       ///<   with each value from the resolved seed list.
+    uint32_t    run_id     = 1;       ///< ns-3 RNG run number (@c RngSeedManager::SetRun) and
+                                       ///<   output metadata; @c --run-id overrides it.
+    double      duration_s = 10.0;    ///< Total simulated time in seconds (must be > 0).
+    double      warmup_s   = 0.0;     ///< Seconds to exclude from output metrics (>= 0, and
+                                       ///<   < @c duration_s). The run still lasts @c duration_s.
+    double      tick_s     = 0.1;     ///< Simulation time step in seconds (default 0.1 = 100 ms);
+                                       ///<   must be > 0 and <= @c duration_s.
+    std::string output_dir;           ///< Base output directory. Auto-generated as a timestamped
+                                       ///<   path under @c outputs/ when empty in @c run.ini;
+                                       ///<   @c --output-dir overrides it. @c sim.cc appends
+                                       ///<   @c /seed-N per seed.
 
     ChannelConfig channel;  ///< Radio and channel model parameters.
     MeshConfig    mesh;     ///< Traffic generation and routing parameters.
@@ -146,22 +152,21 @@ struct SimConfig
     std::string band_source = "default";  ///< Where @c band came from: @c "cli", @c "run.ini",
                                            ///<   or @c "default".
 
-    uint32_t viz_tick_ms = 100;  ///< Interval in milliseconds at which CSV snapshots
-                                  ///<   (positions, link results) are written to disk.
+    uint32_t viz_tick_ms = 100;  ///< Interval in milliseconds between CSV viz snapshots
+                                  ///<   (positions, link results); default 100 ms.
 
     RlConfig rl;  ///< Reinforcement-learning controller parameters.
                    ///<   Ignored when @c rl.enabled is @c false.
 
-    std::vector<NodeSpec>     nodes;      ///< All simulation nodes, in index order.
-                                           ///<   Node IDs assigned by @ref TrafficMatrix
-                                           ///<   and the link evaluator are indices into
-                                           ///<   this vector.
+    std::vector<NodeSpec>     nodes;      ///< All simulation nodes, in index order. Node indices
+                                           ///<   used by the traffic, link, routing, and RL layers
+                                           ///<   refer to positions in this vector.
     std::vector<BuildingSpec> buildings;  ///< Optional building obstacles used for
                                            ///<   deterministic LOS/NLOS classification.
                                            ///<   Empty when no @c buildings_file is set.
 
-
-    std::vector<JammerSpec> jammers;	//< Optional Jammer nodes>
+    std::vector<JammerSpec> jammers;  ///< Optional jammers from @c jammers_file. Their
+                                       ///<   interference applies only when @c band is @c "sub-6".
 
 };
 

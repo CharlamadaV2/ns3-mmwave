@@ -1,8 +1,10 @@
-# Centralized RL and policy-input tests
+@page src_rl_policy_input_tests src/rl/policy-input-tests
+
+@brief Map of the centralized RL and policy-input tests to their inputs and expected outputs.
 
 These checks cover the centralized action contract and the configurable
 observations, rewards, and telemetry described in the
-[policy-input guide](policy-inputs.md). The Python-only tests use
+[policy-input guide](policy-inputs.md); the test files live in [`scripts/rl/tests/`](../../scripts/rl/tests/README.md). The Python-only tests use
 `fake_sim.py` and temporary directories; they do not validate radio physics.
 `test_real_binary.py` runs the bundled `centralized-multi-smoke` scenario in
 pytest's temporary directory and skips unless `MESH_SIM_BIN` points to a built
@@ -16,6 +18,7 @@ simulator. No reference snapshots are created or changed by these tests.
 | `test_mesh_env.py`: `test_long_stdout_is_drained_on_close`, `test_close_is_idempotent_and_reset_still_works`, `test_completed_episode_leaves_no_process_or_reader` | Long/finished fake run or repeated close → child and reader thread cleaned up, correct episode status. |
 | `test_real_binary.py`: `test_live_spaces_and_metadata`, `test_scripted_positions_and_masks`, `test_repeated_resets_are_deterministic` | Real three-node fixture and scripted actions → contract fields, clipped positions/masks, identical repeated trajectories. |
 | `test_real_binary.py`: `test_structural_malformed_actions_hold_everything`, `test_malformed_action_stops_a_moving_node`, `test_semantic_errors_only_affect_invalid_slots` | Bad joint actions → all hold for a malformed list, or only invalid positions hold and appear in `revalidated_slots`. |
+| `test_real_binary.py`: `test_close_mid_episode_is_interrupted` | Real run closed after one step → simulator process and reader thread gone, episode manifest `interrupted` with `stop_reason = close`. |
 | `test_real_binary.py`: `test_partial_windows_clipping_and_reward_mean` | Coarse versus one-tick decisions → matching shared positions and mean reward over each full/partial window. |
 | `test_observations_rewards.py`: `test_local_links_v1_exact_slot_vector`, `test_local_links_v1_padded_slot_is_zero`, `test_local_links_v1_clips_extreme_links`, `test_raw_links_matches_cpp_layout` | Raw facts → exact preset values, bounded local features, zero padding, unchanged raw layout. |
 | `test_observations_rewards.py`: `test_schema_hash_is_deterministic_and_strict_json`, `test_raw_links_schema_uses_null_bounds_but_infinite_box`, `test_check_schema_rejects_structural_change`, `test_check_schema_reports_identity_change_as_warning` | Saved/live schemas → stable fingerprint, correct Box bounds, structural rejection and identity warnings. |

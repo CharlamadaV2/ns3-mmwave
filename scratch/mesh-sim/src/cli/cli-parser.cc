@@ -1,5 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file cli-parser.cc */ 
+/** @file cli-parser.cc
+ * @brief Implements the CLI parsing, seed resolution and input archiving declared in cli-parser.h.
+ */
 
 
 #include "src/cli/cli-parser.h"

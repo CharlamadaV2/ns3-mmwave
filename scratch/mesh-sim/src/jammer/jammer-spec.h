@@ -1,6 +1,12 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/* @brief Jammer Node Properties
- * */
+/**
+ * @file jammer-spec.h
+ * @brief Plain-data description of one jammer emitter (loaded from @c jammers.json).
+ *
+ * Pure POD with no ns-3 dependency. Parsed by @c ConfigLoader, checked by
+ * @c ConfigValidator, given a mobility model by @c TopologyBuilder and
+ * consumed by @ref JammerModel. Held in @ref SimConfig::jammers.
+ */
 
 #pragma once
 
@@ -14,18 +20,31 @@ namespace mesh_sim
 {
 
 
-/* @brief Vector of start and end time for schedule jamming
- * */	
+/**
+ * @brief One active window of a jammer, in simulation seconds since scenario start.
+ *
+ * The window is half-open: the jammer is on when @c start <= t < @c end.
+ * @c ConfigValidator requires @c start >= 0 and @c end > @c start.
+ */
 struct Interval
 {
-	double start;	//Start time in seconds
-	double end;	//End time in seconds
+	double start;	///< Window start, seconds (inclusive).
+	double end;	///< Window end, seconds (exclusive).
 
 };
 
+/**
+ * @brief Parameters of one jammer emitter.
+ *
+ * Fields have no in-class defaults; @c ConfigLoader fills every one. Loader
+ * defaults when a key is absent: enabled=false, type="constant", tx_power_dbm=25,
+ * tx_array_gain_dbi=12, duty_cycle=1, max_range_m=0, beamwidth_deg=360,
+ * azimuth_deg=0, zenith_deg=0. Validation accepts type in {constant, random},
+ * duty_cycle in [0,1] and beamwidth_deg in (0,360].
+ */
 struct JammerSpec
 {
-	//Enabled: Info on Jammer existance status
+	//Enabled: false drops the jammer in JammerModel::Configure (loader default: false)
 	bool enabled; 
 
 	//ID: Record of Jammer Node ID 
@@ -33,10 +52,10 @@ struct JammerSpec
 
 	//Constant: Sends jamming signal for duration at certain interval
 	//Random: Based on sim seed, sends jamming signal for duration per random interval
-	//Type: [0 = Constant, 1 = Random] (Note: Other types are for future implementation)
+	//Type: string "constant" or "random" (anything else fails validation)
 	std::string type;
 
-	//Target Frequency: Array of Jamming Frequencies
+	//Target Frequency (MHz): empty = all; 1 value = spot +/-2.5 MHz; 2+ values = [min,max] band
 	std::vector<double> target_freq;
 
 	//Power: Power of Jamming in dBm
@@ -45,29 +64,29 @@ struct JammerSpec
 	//Gain: Transmission Array Gain of antenna in dBi
 	double tx_array_gain_dbi;
 
-	//Time Intervals: Set of [start, end] time interval(s) for jamming 
+	//Time Intervals: active windows in sim seconds; empty = always on
 	std::vector<Interval> intervals;
 
 	// 0..1: random = chance of full-power transmission each second;
 	// constant = multiplier on interference power (always transmitting).
 	double duty_cycle;
 
-	//Max Range: Max range for interrupted receivers
+	//Max Range (m): receivers farther than this are unaffected; 0 = no cutoff
 	double max_range_m;
 	
-	//Beamwidth Angle: Apex degree of jamming cone (min: 0.0, max: 180)
+	//Beamwidth Angle (deg): full apex angle of the hard cone; >= 360 = omni (valid range (0,360])
 	double beamwidth_deg;
 
 	//Azimuth: Degree of where jammer is pointing horizontally [0 (or 360) = North, 90 = East, 180 = South, 270 = West]
 	double azimuth_deg;
 
-	//Zenith: Degree of where jammer is pointing vertically [0 = Up, 180 = Down]
+	//Zenith: Degree of where jammer is pointing vertically [0 = Up, 90 = horizontal, 180 = Down]
 	double zenith_deg;
 
-	//Waypoints
+	//Waypoints (jammer motion; consumed by TopologyBuilder)
 	std::vector<Waypoint> waypoints;
 
-	//Movement
+	//Initial position (ENU m) and optional motion parameters
 	Position position;
 	Velocity velocity;
 	RandomWalkParams random_walk;

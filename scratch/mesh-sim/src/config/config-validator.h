@@ -6,11 +6,12 @@
  * | Domain     | Rules enforced                                                             |
  * |------------|----------------------------------------------------------------------------|
  * | Timing     | @c duration_s > 0; @c tick_s > 0; @c tick_s <= @c duration_s; @c warmup_s >= 0; @c warmup_s < @c duration_s |
- * | Nodes      | At least 2 nodes; each node's @c mobility and @c node_type must be a recognised value; waypoint nodes require >= 2 waypoints with strictly monotonically increasing times and a non-negative first timestamp |
- * | Channel    | @c frequency_ghz > 0; @c bandwidth_mhz > 0; @c channel_model ∈ {3gpp, nyu}; @c scenario ∈ {UMi, UMa, RMa, InH, InF}; both array gains >= 0 |
+ * | Nodes      | At least 2 nodes; each node's @c mobility ∈ {fixed, constant_velocity, random_walk, waypoint} and @c node_type ∈ {drone, vehicle, pedestrian}; waypoint nodes require >= 2 waypoints with strictly monotonically increasing times and a non-negative first timestamp |
+ * | Channel    | @c frequency_ghz > 0; @c bandwidth_mhz > 0; @c channel_model ∈ {3gpp, nyu}; @c condition_model ∈ {auto, static_los}; @c scenario ∈ {UMi, UMa, RMa, InH, InF}; resolved @c band ∈ {mmwave, sub-6}; both array gains >= 0 (per-node overrides too) |
  * | Traffic    | @c model ∈ {constant, poisson, on_off}; @c flow_topology ∈ {all_pairs, random_pairs, gateway}; @c demand_mbps > 0; @c gateway topology requires a non-empty @c gateway_node_id that matches a node; @c random_pairs requires @c random_pair_count > 0 |
  * | Routing    | @c algorithm ∈ {shortest_path, max_throughput, min_hop}                    |
  * | RL         | (when enabled) @c action_type ∈ {discrete, continuous}; @c reward_type ∈ {throughput, all_links_los}; @c step_size_m > 0 (discrete); @c arrival_threshold_m > 0 (continuous); @c x_min < @c x_max; @c y_min < @c y_max; @c z_min < @c z_max; @c controlled_node_id must match a node if set; plus every error reported by @ref ResolveRlControl (selector, slot, cadence, and start-position rules) |
+ * | Jammers    | @c type ∈ {constant, random}; @c duty_cycle in [0, 1]; @c beamwidth_deg in (0, 360]; each interval has @c start >= 0 and @c end > @c start; @c random type requires @c x_min < @c x_max and @c y_min < @c y_max |
  * | Buildings  | Each building's @c x_min < @c x_max; @c y_min < @c y_max; @c z_min < @c z_max |
  */
 #pragma once
@@ -36,6 +37,7 @@ struct ValidationResult
                                       ///<   empty on success.
 
     /**
+     * @fn ValidationResult::ok
      * @brief Return @c true if no validation errors were found.
      * @return @c true when @c errors is empty, @c false otherwise.
      */
@@ -43,6 +45,7 @@ struct ValidationResult
 };
 
 /**
+ * @fn ValidateConfig
  * @brief Validate a @ref SimConfig for invalid or inconsistent values.
  *
  * Intended to be called immediately after @ref ConfigLoader::Load, before
@@ -54,6 +57,13 @@ struct ValidationResult
  * @param cfg  Fully loaded @ref SimConfig to validate.
  * @return @ref ValidationResult containing all errors found, or an empty
  *         error list if the config is valid.
+ * @throws std::invalid_argument Only via @ref ResolveRlControl if a controlled
+ *         waypoint node has no waypoints; that case is pre-checked, so in
+ *         practice the function reports errors instead of throwing.
+ *
+ * Pure function: reads @p cfg only, prints nothing. Each message names the
+ * offending field (for example @c "traffic.model: unknown value 'x' ...").
+ * RL checks run only when @c cfg.rl.enabled is @c true.
  */
 ValidationResult ValidateConfig(const SimConfig& cfg);
 

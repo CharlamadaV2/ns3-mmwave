@@ -3,6 +3,8 @@
  * @file string-utils.h
  * @brief String and path manipulation utilities shared across all modules.
  *
+ * Trimming, tab splitting, ISO 8601 formatting, path resolution, and seed-list
+ * parsing. Depends only on the standard library.
  */
 #pragma once
 
@@ -15,6 +17,7 @@ namespace mesh_sim
 {
 
 /**
+ * @fn trimStr
  * @brief Strip leading and trailing ASCII whitespace from a string.
  *
  * Whitespace characters removed: space (@c ' '), horizontal tab (@c '\t'),
@@ -28,11 +31,13 @@ std::string trimStr(const std::string& s);
 
 
 /**
+ * @fn splitTab
  * @brief Split a string on tab characters and return all tokens.
  *
  * Consecutive tab characters produce empty tokens between them (no collapsing).
  * An input with no tab characters returns a single-element vector containing
- * the whole string.
+ * the whole string. An empty input returns an empty vector, and a trailing
+ * tab does not produce a trailing empty token.
  *
  * @param line  Input string to split.
  * @return Vector of tokens in the order they appear in @p line.
@@ -41,6 +46,7 @@ std::vector<std::string> splitTab(const std::string& line);
 
 
 /**
+ * @fn toIso8601
  * @brief Format a @c system_clock::time_point as an ISO 8601 UTC string.
  *
  * Output format: @c "YYYY-MM-DDTHH:MM:SSZ" (e.g. @c "2026-03-27T14:30:00Z").
@@ -54,15 +60,18 @@ std::string toIso8601(const std::chrono::system_clock::time_point& tp);
 
 
 /**
+ * @fn resolvePath
  * @brief Resolve a possibly-relative path against a base directory.
  *
  * Returns @p path unchanged if it is:
  * - empty, or
  * - already absolute (@c std::filesystem::path::is_absolute).
  *
- * Otherwise returns @c base_dir / @c path as an absolute string.
- * Used by @ref ConfigLoader to resolve @c nodes.json and @c buildings.json
- * relative to the scenario directory rather than the working directory.
+ * Otherwise returns @c base_dir / @c path. The result is absolute only if
+ * @p base_dir is absolute; no canonicalisation or existence check is done.
+ * Used by @ref ConfigLoader to resolve the @c nodes_file, @c jammers_file, and
+ * @c buildings_file paths relative to the scenario directory rather than the
+ * working directory.
  *
  * @param base_dir  Directory to use as the resolution root.
  * @param path      Path to resolve; may be absolute, relative, or empty.
@@ -72,6 +81,7 @@ std::string resolvePath(const std::string& base_dir, const std::string& path);
 
 
 /**
+ * @fn dirOf
  * @brief Return the parent directory component of a file path.
  *
  * Delegates to @c std::filesystem::path::parent_path. Returns @c "." when
@@ -84,6 +94,7 @@ std::string dirOf(const std::string& path);
 
 
 /**
+ * @fn parseSeedList
  * @brief Parse a comma-separated string of seed values into a @c uint32_t vector.
  *
  * Splits @p arg on @c ',' and converts each non-empty token with
@@ -96,7 +107,9 @@ std::string dirOf(const std::string& path);
  *       in the CLI layer.
  *
  * @param arg  Comma-separated seed string (e.g. @c "1,2,3,4,5").
- * @return Vector of parsed seed values in the order they appear in @p arg.
+ * @return Vector of parsed seed values in the order they appear in @p arg;
+ *         empty if @p arg has no tokens.
+ * @throws Nothing; invalid tokens terminate the process with exit code 1.
  */
 std::vector<uint32_t> parseSeedList(const std::string& arg);
 

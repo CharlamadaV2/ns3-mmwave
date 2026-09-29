@@ -1,100 +1,115 @@
 @page src_jammer src/jammer
 
-The jammer model adds interference from one or more jammer emitters to the
-per-link SINR, so links under active jamming degrade. Without it the sim defaults to noise floor
-(SINR = signal − noise floor). With the jammer, each active jammer's received power is
-added to the SINR denominator (SINR = 10.0 * std::log10(signalWatt / (noiseWatt + jamWatt)) ).
+@brief Adds interference from jammer emitters to per-link SINR in the sub-6 band.
 
-@section jammer_files Files
+Without jammers, SINR is signal power minus the thermal noise floor. With
+jammers, each active jammer's received power is added to the noise in the
+SINR (signal-to-interference-plus-noise ratio) denominator:
+`SINR = 10·log10(signalWatt / (noiseWatt + jamWatt))`. The model is active
+only when `band == sub-6` and `jammers.json` defines at least one enabled
+jammer. Jammers are looked up through `SimConfig::jammers`.
+
+## Module Layout
 
 | File | Role |
 |------|------|
-| @c src/jammer/jammer-spec.h | @ref mesh_sim::JammerSpec — one jammer's parameters (data, loaded from @c jammers.json). |
-| @c src/jammer/jammer-model.h / .cc | @ref mesh_sim::JammerModel — computes total received jammer power (W) at a receiver, applying the gates below. |
-| @c src/eval/link-evaluator.cc | Calls @ref mesh_sim::JammerModel::InterfPowerAtReceiver and folds it into SINR; active only when @c band==sub-6 and jammers exist. |
-| @c src/config/config-loader.cc | Reads @c jammers.json into @c cfg.jammers. |
-| @c src/config/config-validator.cc | Validates each jammer's fields. |
-| @c src/setup/topology-builder.cc | Builds one ns-3 mobility model per jammer. |
-| @c scripts/validation/make_jammers.py | Host-side generator: EW trials CSV → @c jammers.json. |
+| @c src/jammer/jammer-spec.h | @ref mesh_sim::JammerSpec and `Interval`: one jammer's parameters (plain data, loaded from `jammers.json`). |
+| @c src/jammer/jammer-model.h / .cc | @ref mesh_sim::JammerModel: total received jammer power (W) at a receiver, applying the gates below. |
+| @c src/eval/link-evaluator.cc | Calls `JammerModel::InterfPowerAtReceiver` at both link ends and folds the larger into SINR. |
+| @c src/config/config-loader.cc | Reads `jammers.json` into `cfg.jammers` (`parseJammerSpec`). |
+| @c src/config/config-validator.cc | Validates `type`, `duty_cycle`, `beamwidth_deg`, and `intervals`. |
+| @c src/setup/topology-builder.cc | Builds one ns-3 mobility model per jammer, in `cfg.jammers` order. |
+| @c scripts/validation/make_jammers.py | Host-side generator: EW (electronic warfare) trials CSV to `jammers.json`. |
 
-@section jammer_gates How interference is computed
+## Run
 
-Each tick, for each receiver, the model sums the received power of every jammer
-that passes all gates, in this order:
+The model has no executable. It runs inside the simulator when the scenario
+points at a jammers file and the band is sub-6. From `scratch/mesh-sim/`,
+generate a `jammers.json` from field data (writes the file given by `-o`):
 
--# **Time** — the current sim time is inside one of the jammer's
-   @c intervals (empty = always on).
--# **Cycle** — for @c type=random jammers, an on/off draw (probability
-   @c duty_cycle, seed-dependent, per second). @c type=constant is always on.
--# **Frequency** — the link carrier falls within the jammer's
-   @c target_freq band (empty ⇒ no filtering).
--# **Range** — the receiver is within @c max_range_m (0 ⇒ unlimited).
--# **Directional** — the receiver is inside the 3-D beam cone defined by
-   @c azimuth_deg, @c zenith_deg, and @c beamwidth_deg (omni when
-   @c beamwidth_deg >= 360).
+```bash
+python3 -m scripts.validation.make_jammers \
+    --trials <ew_trials.csv> --trace <gps_all_nodes_trace.csv> \
+    -o <scenario_dir>/jammers.json --run-ini <scenario_dir>/run.ini
+```
 
-@section jammer_schema jammers.json layout
+`--run-ini` is optional and adds `jammers_file = <name>` under `[scenario]`.
+Then run the simulator with `--band=sub-6` (or `[channel] band = sub-6`).
+Example scenarios with jammers: `inputs/baselines/p0-jammer-smoke/`, `inputs/calfex/1555-1559/`.
+
+## Conventions
+
+### Gates
+Each tick, for each receiver, the model sums the received power of every
+jammer that passes all gates, in this order:
+
+-# **Time**: sim time is inside one of the jammer's `intervals` (half-open, empty means always on).
+-# **Random burst**: for `type=random`, a seed-dependent on/off draw per whole second (probability `duty_cycle`). `type=constant` is always on.
+-# **Frequency**: the link carrier is inside `target_freq` (empty means no filtering; also skipped if the carrier is unset).
+-# **Range**: the receiver is within `max_range_m` (0 means unlimited).
+-# **Beam**: the receiver is inside the 3-D cone from `azimuth_deg`, `zenith_deg`, `beamwidth_deg` (omni when `beamwidth_deg >= 360`).
+
+A passing jammer contributes `CalcRxPower(tx_power_dbm + tx_array_gain_dbi)`
+through the same propagation model as mesh links. Under 1 m it contributes its EIRP
+(effective isotropic radiated power) directly. No receive-side gain is applied.
+
+### duty_cycle
+- `random`: at each whole second a seed-dependent draw decides whether the jammer is on **at full power**. At 0.5 it is on about half the seconds.
+- `constant`: always on, but its power is multiplied by `duty_cycle`. At 0.5 it adds half the watts (about 3 dB less).
+- At 0 neither type contributes; at 1 both contribute full power.
+
+### jammers.json fields
+Defaults are those applied by `ConfigLoader` when a key is absent.
 
 | Field | Type | Meaning |
 |-------|------|---------|
-| @c id | string | Label (logs / validation). |
-| @c enabled | bool | @c false drops the jammer at load. |
-| @c type | string | @c constant or @c random. |
-| @c target_freq | number[] | Target band (MHz). Empty ⇒ all frequencies. 2 values = @c [lo,hi] band; 1 value = spot ±2.5 MHz. |
-| @c tx_power_dbm | number | Transmit power (dBm). |
-| @c tx_array_gain_dbi | number | Antenna gain (dBi); added to EIRP. |
-| @c duty_cycle | number | 0–1; its effect depends on @c type (explained below). |
-| @c max_range_m | number | Range cutoff (m); 0 disables. |
-| @c beamwidth_deg | number | Cone width; 360 = omni. |
-| @c azimuth_deg | number | Horizontal pointing, deg from North (0=N, 90=E). |
-| @c zenith_deg | number | Vertical pointing (0=up, 90=horizontal, 180=down). |
+| `id` | string | Label (logs, validation, random-burst seed). Default empty. |
+| `enabled` | bool | `false` drops the jammer in `JammerModel::Configure`. **Default `false`.** |
+| `type` | string | `constant` (default) or `random`. |
+| `target_freq` | number[] | Target band (MHz). Empty means all. 2 values = `[lo,hi]`; 1 value = spot ±2.5 MHz. |
+| `tx_power_dbm` | number | Transmit power (dBm). Default 25. |
+| `tx_array_gain_dbi` | number | Antenna gain (dBi), added to EIRP. Default 12. |
+| `duty_cycle` | number | 0 to 1; meaning depends on `type` (see above). Default 1. |
+| `max_range_m` | number | Range cutoff (m); 0 disables. Default 0. |
+| `beamwidth_deg` | number | Full cone angle (deg), in (0, 360]; 360 is omni. Default 360. |
+| `azimuth_deg` | number | Horizontal pointing, degrees from North (0=N, 90=E). Default 0. |
+| `zenith_deg` | number | Vertical pointing (0=up, 90=horizontal, 180=down). Default 0. |
+| `position` | {x,y,z} | Location (ENU metres, same frame as nodes). |
+| `velocity`, `waypoints`, `random_walk` | object / array | Optional jammer motion, same shapes as node mobility. |
+| `intervals` | {start,end}[] | Active windows in sim seconds from scenario start. |
 
-| @c position | {x,y,z} | Location (ENU metres, same frame as nodes). |
-| @c velocity / @c waypoints / @c random_walk | — | Optional jammer motion. |
-| @c intervals | {start,end}[] | Active windows in **sim seconds** (from scenario start). |
+@warning The loader default `zenith_deg = 0` points a directional beam straight
+**up**; ground receivers are outside a narrow upward cone. A ground emitter
+normally uses `zenith_deg = 90`. `make_jammers.py` defaults to 90. An omni
+beam ignores pointing angles.
 
-The beam is a hard cone gate: a 60-degree beam accepts receivers within 30
-degrees of the pointing vector; it is not a smooth antenna pattern. Range 0
-disables only the hard distance cutoff—propagation still reduces received power.
-@c duty_cycle has two different meanings in the current model:
+The beam is a hard cone: a 60-degree beam accepts receivers within 30 degrees
+of the pointing vector; there is no sidelobe roll-off. `max_range_m = 0`
+disables only the cutoff; path loss still reduces power.
 
-- @c type=random: at each integer second, a seed-dependent draw decides whether
-  the jammer is **on at full power** for that second. At 0.5 it is on in roughly
-  half the seconds; it does not transmit at half power while on.
-- @c type=constant: the jammer is **always on**, but its interference power is
-  multiplied by @c duty_cycle. At 0.5 it contributes half the watts (about
-  3 dB less), with no on/off randomness.
-
-At 0, either type contributes no interference; at 1, both contribute full
-power. This describes existing behavior, not a change to the jammer model.
-
-@warning A narrow directional ground emitter normally uses @c zenith_deg = 90 (horizontal). A value of
-@c 0 points the beam straight **up**; coplanar receivers are outside a narrow
-upward cone unless co-located. An omni beam ignores pointing angles.
-@c make_jammers.py defaults to 90.
-
-@section jammer_csv Mapping the EW trials CSV
+### EW trials CSV mapping (make_jammers.py)
 
 | CSV column | Jammer field | Conversion |
 |------------|--------------|------------|
-| @c start / @c end (epoch) | @c intervals | epoch − scenario-start epoch, clipped to @c [0,duration] |
-| @c "ew_strength (W)" | @c tx_power_dbm | @c 10*log10(W)+30 |
-| @c ew_approx_lat / @c lon | @c position.x/y | ENU, fit from the trace's paired lat/lon ↔ east/north |
-| @c "ew_approx_heading (deg from N)" | @c azimuth_deg | direct |
-| @c ew_band_range | @c target_freq | @c "2210-2215" → @c [2210,2215] |
-| @c ew_type | @c beamwidth_deg | @c directional → @c --beamwidth; else 360 |
-| @c ew_type = none | — | no jammer (baseline trial) |
+| `start` / `end` (epoch) | `intervals` | epoch minus scenario-start epoch, clipped to `[0,duration]` |
+| `ew_strength (W)` | `tx_power_dbm` | `10*log10(W)+30` |
+| `ew_approx_lat` / `lon` | `position.x/y` | ENU, fit from the trace's paired lat/lon and east/north |
+| `ew_approx_heading (deg from N)` | `azimuth_deg` | direct |
+| `ew_band_range` | `target_freq` | `"2210-2215"` becomes `[2210,2215]` |
+| `ew_type` | `beamwidth_deg` | `directional` gives `--beamwidth` (default 60); else 360 |
+| `ew_type = none` | none | no jammer (baseline trial) |
 
-@section jammer_limits Limitations
+### Limitations
+- **Beamwidth is an assumption.** The CSV logs heading but not beamwidth; widen `--beamwidth` (up to 360) if nodes are jammed outside a narrow cone.
+- **Hard-edged cone.** Full power just inside the beam, none just outside.
+- **One power and heading per spec.** A sweep is modeled as several specs (one per trial); `make_jammers.py` does this when `--trial` is omitted.
+- **SINR floor.** `LinkEvaluator` clamps SINR to 0 dB whenever jammer power is nonzero, so jammed SINR is never negative. Whether to change this is an unresolved team decision.
 
-- **Beamwidth is an assumption.** The CSV logs heading but not beamwidth;
-  @c --beamwidth (default 60°) sets it. If the field shows nodes jammed well
-  outside a narrow cone, widen it (try @c --beamwidth 360 to bound the case).
-- **Hard-edged cone.** A receiver just inside the beam gets full power, just
-  outside gets none — there is no gradual sidelobe rolloff.
-- **Per-interval power/heading.** One @ref mesh_sim::JammerSpec has a single
-  power and heading; a sweep is modeled as several specs (one per trial),
-  which @c make_jammers.py produces when @c --trial is omitted.
-- **SINR floor.** The current evaluator clamps SINR to 0 dB when jammer power
-  is nonzero. It does not allow negative jammed SINR; whether to change this
-  floor and resulting link-failure behavior is an unresolved team decision.
+## Dependencies
+
+| Dependency | Reason |
+|------------|--------|
+| `ns3/propagation-loss-model.h`, `ns3/mobility-model.h` | Path loss and jammer/receiver positions. |
+| `ns3/log.h` | `NS_LOG` debug output in `jammer-model.cc`. |
+| `src/domain/node-spec.h` | `Position`, `Velocity`, `Waypoint`, `RandomWalkParams` used by `JammerSpec`. |
+| Python 3 (repo `.venv`) | `scripts/validation/make_jammers.py` only. |

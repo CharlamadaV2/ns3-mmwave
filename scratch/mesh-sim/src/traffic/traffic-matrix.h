@@ -13,7 +13,8 @@
  * | @c model      | Flow creation                           | Per-tick update                          |
  * |---------------|-----------------------------------------|------------------------------------------|
  * | @c "constant" | All flows created at @ref Initialize.   | None; flows run for the full simulation. |
- * | @c "poisson"  | New flows arrive each tick via Poisson. | New flows added; expired flows removed.  |
+ * | @c "poisson"  | Initial flows at @ref Initialize, plus | New flows added; expired flows removed.  |
+ * |               | Poisson arrivals each tick.             |                                          |
  * | @c "on_off"   | All flows created at @ref Initialize.   | ON/OFF state machine per flow.           |
  *
  * **Flow removal**
@@ -40,6 +41,7 @@ namespace mesh_sim
 {
 
 /**
+ * @struct Flow
  * @brief A single directed traffic flow between two nodes.
  *
  * Flows are created by @ref TrafficMatrix and consumed by @ref MeshRouter.
@@ -69,6 +71,7 @@ struct Flow
 
 
 /**
+ * @class TrafficMatrix
  * @brief Generates and maintains the set of active flows each simulation tick.
  *
  * Copies @ref TrafficConfig and the node spec list at construction; does not
@@ -78,19 +81,24 @@ class TrafficMatrix
 {
   public:
     /**
+     * @fn TrafficMatrix::TrafficMatrix
      * @brief Construct a traffic matrix from the simulation configuration.
      *
      * Copies @c cfg.mesh.traffic, @c cfg.nodes, and @c cfg.tick_s.
      * Creates two ns-3 RNG objects (@c UniformRandomVariable for Poisson
      * generation / random pairs, @c ExponentialRandomVariable for on-off
-     * phase durations and Poisson holding times) and seeds them via the
-     * ns-3 global @c RngSeedManager.
+     * phase durations and Poisson holding times). The streams are not
+     * seeded here: they draw from the ns-3 global @c RngSeedManager
+     * seed/run, which @c sim.cc sets per seed before constructing this
+     * object, so the same seed reproduces the same traffic.
      *
      * @param cfg  Fully loaded and validated simulation configuration.
+     * @throws None.
      */
     explicit TrafficMatrix(const SimConfig& cfg);
 
     /**
+     * @fn TrafficMatrix::Initialize
      * @brief Create the initial set of flows for the configured topology.
      *
      * Clears any existing flows, sets the node count, then calls the
@@ -104,11 +112,17 @@ class TrafficMatrix
      *
      * @param numNodes    Total number of active simulation nodes.
      * @param currentTime Simulation time at which flows start (seconds).
-     * @throws std::runtime_error for an unrecognised @c flow_topology string.
+     * @throws std::runtime_error for an unrecognised @c flow_topology string,
+     *         or (via @ref InitGateway) an unmatched non-numeric gateway ID.
+     *
+     * Initial flows are created for every traffic model, including
+     * @c "poisson". @c "random_pairs" needs @c numNodes >= 2, otherwise the
+     * self-flow rejection loop never ends.
      */
     void Initialize(uint32_t numNodes, double currentTime);
 
     /**
+     * @fn TrafficMatrix::Tick
      * @brief Advance the traffic state by one simulation tick.
      *
      * Executed in three phases each tick:
@@ -122,10 +136,15 @@ class TrafficMatrix
      *    never removed.
      *
      * @param currentTime  Current simulation time in seconds.
+     * @return None.
+     * @throws None.
+     *
+     * Mutates the internal flow list and advances the RNG streams.
      */
     void Tick(double currentTime);
 
     /**
+     * @fn TrafficMatrix::GetActiveFlows
      * @brief Return a const reference to the internal flow list.
      *
      * Returns *all* flows — including inactive flows (in the OFF phase or
@@ -141,6 +160,7 @@ class TrafficMatrix
     const std::vector<Flow>& GetActiveFlows() const;
 
     /**
+     * @fn TrafficMatrix::GetDemand
      * @brief Return the total active demand from @c src to @c dst (Mbps).
      *
      * Sums @c demand_mbps across all flows where @c f.src == src,
@@ -150,11 +170,15 @@ class TrafficMatrix
      * @param src  Source node index.
      * @param dst  Destination node index.
      * @return Total demand in Mbps; 0.0 if no active flows exist for this pair.
+     * @throws None.
+     *
+     * Directed match: (src, dst) is not the same as (dst, src).
      */
     double GetDemand(uint32_t src, uint32_t dst) const;
 
   private:
     /**
+     * @fn TrafficMatrix::InitAllPairs
      * @brief Create one flow for every unordered node pair (i < j).
      *
      * Produces N*(N-1)/2 flows for @c N nodes.  All flows start active at
@@ -167,6 +191,7 @@ class TrafficMatrix
     void InitAllPairs(uint32_t numNodes, double currentTime);
 
     /**
+     * @fn TrafficMatrix::InitRandomPairs
      * @brief Create @c random_pair_count flows with uniformly random src/dst.
      *
      * Each pair is drawn independently. Self-flows (@c src == @c dst) are
@@ -178,6 +203,7 @@ class TrafficMatrix
     void InitRandomPairs(uint32_t numNodes, double currentTime);
 
     /**
+     * @fn TrafficMatrix::InitGateway
      * @brief Create one flow from every non-gateway node to the gateway.
      *
      * Resolves the gateway index from @ref TrafficConfig::gateway_node_id:
@@ -189,10 +215,16 @@ class TrafficMatrix
      * @param currentTime Flow creation time (seconds).
      * @throws std::runtime_error if @c gateway_node_id is a non-numeric string
      *         that does not match any node ID.
+     *
+     * A numeric value is used as the index as-is with no range check, and
+     * @c std::stoul accepts a numeric prefix (for example @c "3abc" gives 3).
+     * A value too large for @c stoul throws @c std::out_of_range, which is
+     * not caught here.
      */
     void InitGateway(uint32_t numNodes, double currentTime);
 
     /**
+     * @fn TrafficMatrix::MakeFlow
      * @brief Construct a single @ref Flow for the given (src, dst) pair.
      *
      * Sets @c demand_mbps, @c start_time_s, and @c active = true.
@@ -211,6 +243,7 @@ class TrafficMatrix
     Flow MakeFlow(uint32_t src, uint32_t dst, double currentTime) const;
 
     /**
+     * @fn TrafficMatrix::TickOnOff
      * @brief Advance the ON/OFF state machine for all active flows.
      *
      * For each active flow, checks whether @c phase_end_s <= currentTime.
@@ -224,6 +257,7 @@ class TrafficMatrix
     void TickOnOff(double currentTime);
 
     /**
+     * @fn TrafficMatrix::TickPoisson
      * @brief Generate Poisson-distributed new flow arrivals for this tick.
      *
      * Computes the expected arrivals: @c lambda = arrival_rate_hz × tick_s.

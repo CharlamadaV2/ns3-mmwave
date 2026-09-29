@@ -124,6 +124,7 @@ RlBridge::ComputeRewardTick(const LinkTable& linkTable,
     return total;
 }
 
+// Adds one tick to the open decision window that feeds `facts.window` and the mean reward.
 void
 RlBridge::AccumulateTick(const LinkTable& linkTable, const std::vector<FlowResult>& flows)
 {

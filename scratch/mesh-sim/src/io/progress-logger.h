@@ -1,13 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file progress-logger.h
- * @brief Lightweight simulation progress reporter.
+ * @brief Header-only stderr progress reporter for the step loop.
  *
- *
- * @ref ProgressLogger is called directly from the step loop — not via
- * @c ns3::Simulator::Schedule — so it has zero overhead on non-reporting
- * ticks (a single modulo check per tick).
- *
+ * @ref mesh_sim::ProgressLogger is called directly from the step loop, not via
+ * @c ns3::Simulator::Schedule, so non-reporting ticks cost a single modulo check.
  */
 #pragma once
 
@@ -20,10 +17,12 @@ namespace mesh_sim
 {
 
 /**
+ * @struct ProgressLogger
  * @brief Prints sim-time progress, wall-clock elapsed time, and ETA to stderr.
  *
  * All fields must be set before the first call to @ref Tick. The struct has
- * no constructor — use aggregate initialisation or set fields directly.
+ * no constructor; use aggregate initialisation or set fields directly.
+ * @c wall_start is not initialised by default; set it before the loop.
  */
 struct ProgressLogger
 {
@@ -39,6 +38,7 @@ struct ProgressLogger
     std::chrono::time_point<std::chrono::steady_clock> wall_start;
 
     /**
+     * @fn ProgressLogger::Tick
      * @brief Report progress if this tick falls on a reporting boundary.
      *
      * Prints to @c stderr when @c tick_index is a multiple of
@@ -53,7 +53,13 @@ struct ProgressLogger
      * @endcode
      * ETA is 0 when @c sim_t == 0 (avoids division by zero at tick 0).
      *
+     * Output format: @c "[seed N] S.Ss / D.Ds (P%)  wall=W.Ws  ETA~E.Es".
+     *
      * @param tick_index  Zero-based index of the current tick.
+     * @return void.
+     *
+     * Requires @c interval_ticks > 0 and @c total_ticks > 0 (both are
+     * divisors); the caller is responsible for that.
      */
     void Tick(uint32_t tick_index)
     {

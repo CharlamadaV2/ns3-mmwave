@@ -1,4 +1,9 @@
-# RL bridge contract
+@page src_rl src/rl
+
+@brief Wire contract for the stdin/stdout JSON bridge between the C++ simulator and the Python Gymnasium environment.
+
+
+## RL bridge contract
 
 At each decision, the simulator sends Python what the policy can see (`obs`),
 which moves are allowed (`mask`), its reward, and raw measurements (`facts`).
@@ -15,7 +20,11 @@ For a code walkthrough, start with the tick loop in `sim.cc`, then
 `src/rl/rl-bridge.cc` for the messages, actions, and tick reward. Follow one
 `step` into `scripts/rl/env/mesh_env.py` to see what Gymnasium returns.
 
-On the Python side, `scripts/rl/env/mesh_env.py` owns the Gymnasium API,
+The Python side is documented in [`scripts/rl/README.md`](../../scripts/rl/README.md),
+[`scripts/rl/env/README.md`](../../scripts/rl/env/README.md),
+[`scripts/rl/policy/README.md`](../../scripts/rl/policy/README.md), and
+[`scripts/rl/tests/README.md`](../../scripts/rl/tests/README.md). In short,
+`scripts/rl/env/mesh_env.py` owns the Gymnasium API,
 `protocol.py` validates actions and messages, and `episode.py` owns the
 simulator process, episode directories, diagnostics, and manifest.
 `selection.py` resolves the observation/reward/telemetry selection and its
@@ -289,17 +298,19 @@ such campaign.
 
 ## Saved scenario identity
 
-Training writes `scenario_identity` in `train_manifest.json` with three fields:
-`run_config` is the absolute path to the supplied `run.ini`;
-`run_ini_sha256` and `nodes_json_sha256` are fingerprints of the exact file
-contents. The nodes file comes from `[scenario] nodes_file`, resolved relative
-to `run.ini` unless already absolute, and defaults to `nodes.json`. These
-fingerprints help identify which inputs produced a model; they do not change
-the simulation or the reward. The record does **not** fingerprint buildings,
-jammers, waypoints, a CLI band override, or the simulator binary. The selected
-node order and protocol settings are saved separately in the manifest's
-`contract` field. A matching identity is not proof that a model transfers, and
-this version does not yet enforce identity when loading a model.
+Training writes `scenario_identity` in `train_manifest.json` with five fields
+(`read_scenario_identity` in `scripts/rl/env/config.py`): `run_config` is the
+absolute path to the supplied `run.ini`; `run_ini_sha256`, `nodes_json_sha256`,
+`buildings_json_sha256`, and `jammers_json_sha256` are fingerprints of the exact
+file contents (`null` when the optional buildings or jammers file is not
+configured). The nodes file comes from `[scenario] nodes_file`, resolved
+relative to `run.ini` unless already absolute, and defaults to `nodes.json`.
+These fingerprints do not change the simulation or the reward. The record does
+**not** fingerprint waypoints, a CLI band override, or the simulator binary
+(the band is compared separately in step 4 of the
+[compatibility envelope](#compatibility-envelope)). A matching identity is not
+proof that a model transfers. The selected node order and protocol settings are
+saved separately in the manifest's `contract` field.
 
 For the checklist when changing the protocol or saved-file format, see
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md).

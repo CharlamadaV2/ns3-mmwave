@@ -1,7 +1,6 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
- * RL agent placeholder. Returns current positions unchanged (no-op).
- * Replace with actual RL agent (Python IPC via ZMQ, stdin/stdout, or shared memory).
+ * Unused no-op placeholder; nothing includes it. The live agent path is rl-bridge.h.
  */
 #pragma once
 

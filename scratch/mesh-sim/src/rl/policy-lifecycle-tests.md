@@ -1,4 +1,6 @@
-# Policy lifecycle test map
+@page src_rl_policy_lifecycle_tests src/rl/policy-lifecycle-tests
+
+@brief Map of the policy lifecycle (validate, train, inspect, evaluate) tests to their inputs and expected outputs.
 
 The [four-command walkthrough](../../README.md#model-lifecycle) shows how to
 validate, train, inspect, and evaluate. These tests check that path without
@@ -36,5 +38,6 @@ fails with pytest output; its files are confined to pytest's temporary paths.
 | `test_policy_lifecycle.py`: `test_baseline_evaluation_writes_a_completed_manifest`, `test_json_output_is_the_eval_manifest`, `test_evaluation_refuses_to_write_into_a_training_run` | Fake baseline episodes → completed `eval_manifest.json`/JSON stdout; training-directory target → refusal. |
 | `test_policy_lifecycle.py`: `test_model_policy_requires_a_run_dir`, `test_invalid_seed_and_policy_lists_are_refused`, `test_a_masked_action_is_counted_and_reported_as_exit_code_two` | Invalid evaluation request or masked action → input error or recorded violation with exit 2. |
 | `test_policy_lifecycle.py`: `test_model_evaluation_reloads_a_trained_policy`, `test_model_evaluation_refuses_a_different_node_count` | Tiny saved model → evaluated policy; incompatible live node count → structural refusal. |
+| `test_policy_lifecycle.py`: `test_seed_roles_flag_training_and_selection_overlap`, `test_seed_roles_without_an_evaluation_block_only_checks_the_training_seed`, `test_seed_roles_without_a_bundle_are_unknown` | Training manifest and evaluation seeds → `seed_roles` flags overlap with the training or model-selection seed; no bundle → held-out status unknown (`None`). |
 | `test_real_binary.py`: `test_building_bypass_fixture_geometry` | Built binary and building fixture → scripted hold/movement produces expected LOS and positions. |
 | `test_real_binary.py`: `test_lifecycle_train_inspect_evaluate_in_fresh_processes` | Built binary and fixture → train, inspect, and evaluate in separate processes with verified artifacts and completed episodes. |

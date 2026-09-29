@@ -81,25 +81,30 @@ struct Waypoint
  */
 struct NodeSpec
 {
-    std::string id;
-    std::string role;       // "peer" (all nodes are peers in mesh-sim)
-    std::string mobility;   // "fixed", "constant_velocity", "random_walk", "waypoint"
-    std::string node_type;  // "drone", "vehicle", "pedestrian" — determines max speed
-    Position    position;
-    Velocity    velocity;
-    RandomWalkParams random_walk;
-    std::vector<Waypoint> waypoints;  // used only when mobility == "waypoint"
+    std::string id;         ///< Unique node identifier (required in @c nodes.json).
+    std::string role;       ///< Label copied to the viz output; default @c "peer" (all nodes
+                            ///<   are peers, no other value changes behaviour).
+    std::string mobility;   ///< @c "fixed" (default), @c "constant_velocity", @c "random_walk",
+                            ///<   or @c "waypoint".
+    std::string node_type;  ///< @c "drone" (default), @c "vehicle", or @c "pedestrian";
+                            ///<   sets the RL speed cap via @ref MaxSpeedForType.
+    Position    position;   ///< Initial position (m).
+    Velocity    velocity;   ///< Used only when @c mobility is @c "constant_velocity" (m/s).
+    RandomWalkParams random_walk;  ///< Used only when @c mobility is @c "random_walk".
+    std::vector<Waypoint> waypoints;  ///< Used only when @c mobility is @c "waypoint"; needs at
+                                      ///<   least 2 entries with strictly increasing @c t.
 
-    // Per-node array gain overrides; fall back to channel.tx/rx_array_gain_dbi.
+    /// Per-node TX array gain in dBi (>= 0); falls back to @ref ChannelConfig::tx_array_gain_dbi.
     std::optional<double> tx_array_gain_dbi;
+    /// Per-node RX array gain in dBi (>= 0); falls back to @ref ChannelConfig::rx_array_gain_dbi.
     std::optional<double> rx_array_gain_dbi;
 };
 
 /**
  * @brief Return the maximum speed (m/s) allowed for a given node type.
  *
- * Used by the RL controller to cap continuous velocity actions before they
- * are applied to the node.
+ * Used by the RL bridge to cap each controlled node's speed
+ * (@c min(step_size_m / tick_s, MaxSpeedForType)).
  *
  * | node_type      | max speed |
  * |----------------|-----------|
@@ -107,7 +112,8 @@ struct NodeSpec
  * | @c "pedestrian"| 1.5 m/s   |
  * | @c "drone" (default) | 20.0 m/s |
  *
- * @param node_type  Node type string from @ref NodeSpec::node_type.
+ * @param node_type  Node type string from @ref NodeSpec::node_type; any
+ *                   unrecognised value gets the drone limit.
  * @return Maximum speed in metres per second.
  */
 inline double MaxSpeedForType(const std::string& node_type)
@@ -133,9 +139,12 @@ struct BuildingSpec
     double z_min = 0.0;                              ///< Ground level z-coordinate (m).
     double z_max = 1.0;                              ///< Roof z-coordinate (m).
     std::string type      = "Residential";           ///< ns3::Building type: @c "Residential",
-                                                     ///<   @c "Office", or @c "Commercial".
-    std::string ext_walls = "ConcreteWithWindows";   ///< ns3::Building::ExtWallsType string.
-    int n_floors  = 1;  ///< Number of floors; affects internal attenuation.
+                                                     ///<   @c "Office", or @c "Commercial" (anything else
+                                                     ///<   falls back to @c "Residential").
+    std::string ext_walls = "ConcreteWithWindows";   ///< Exterior wall type: @c "Wood", @c "ConcreteWithWindows",
+                                                     ///<   @c "ConcreteWithoutWindows", or @c "StoneBlocks"
+                                                     ///<   (anything else falls back to @c "ConcreteWithWindows").
+    int n_floors  = 1;  ///< Number of floors.
     int n_rooms_x = 1;  ///< Room columns along x-axis.
     int n_rooms_y = 1;  ///< Room rows along y-axis.
 };

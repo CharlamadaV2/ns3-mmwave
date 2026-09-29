@@ -1,5 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file rl-control.cc */
+/**
+ * @file rl-control.cc
+ * @brief Implements the RL control resolver; behavior is documented in rl-control.h.
+ */
 
 #include "src/config/rl-control.h"
 #include "src/util/string-utils.h"

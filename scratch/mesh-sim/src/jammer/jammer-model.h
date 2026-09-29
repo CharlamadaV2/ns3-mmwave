@@ -1,28 +1,16 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file jammer-model.h
- * @brief Per-link jammer interference contribution.
+ * @brief Per-receiver jammer interference power for the sub-6 band.
  *
- * @ref JammerModel computes the total received jammer power (in watts)
- * at a receiver node, summing contributions from every enabled
- * @ref JammerSpec. This value is added to the noise-plus-interference
- * denominator inside @ref LinkEvaluator::EvaluateAll when
- * @c m_computeInterference is true (@c band == @c "sub-6").
+ * @ref mesh_sim::JammerModel sums the received power (watts) of every enabled
+ * @ref JammerSpec that passes the time, random-burst, frequency, range and
+ * beam gates. @ref LinkEvaluator::Evaluate adds the result to the SINR
+ * denominator when @c band is @c "sub-6" and @ref JammerModel::HasJammers is true.
  *
- * **Design**
- *
- * JammerModel is intentionally separate from @ref LinkEvaluator so that:
- * - It can be disabled with zero code changes in the evaluator (just don't
- *   call @ref Configure or pass an empty jammer list).
- * - It can be extended (e.g. directional antenna pattern, frequency sweep)
- *   without touching the core SINR calculation.
- * - Tests can verify jammer power independently of the full link pipeline.
- *
- * **Usage in EvaluateAll**
- * @code
- *   double jamWatt = m_jammerModel.InterfPowerAtReceiver(rxMob);
- *   r.sinr_db = 10.0 * std::log10(signalWatt / (noiseWatt + interfWatt + jamWatt));
- * @endcode
+ * Path loss uses the same ns-3 @c PropagationLossModel as mesh links.
+ * The model is separate from @ref LinkEvaluator so it can be tested or
+ * extended without touching the core SINR code.
  */
 #pragma once
 
@@ -41,25 +29,31 @@ namespace mesh_sim
 /**
  * @brief Computes the aggregate received jammer power at a node.
  *
- * Stateless between calls — all per-call state is local to
- * @ref InterfPowerAtReceiver. The propagation loss model pointer and jammer
- * specs are set once by @ref Configure.
+ * Holds only the state set by @ref Configure; @ref InterfPowerAtReceiver is
+ * const and has no side effects, so results depend only on the arguments
+ * (including @c nowS) and the configured seed.
  */
 class JammerModel
 {
   public:
     /**
-     * @brief Bind the propagation model and load jammer specs.
+     * @fn JammerModel::Configure
+     * @brief Bind the propagation model and load the enabled jammers.
      *
-     * Filters out disabled jammers immediately so they never appear
-     * in the per-tick interference sum.
+     * @param jammers   Jammer specs, normally @c SimConfig::jammers.
+     * @param plModel   Propagation loss model shared with @ref LinkEvaluator.
+     * @param mobModels One mobility model per entry of @p jammers, same order
+     *                  (built by @c TopologyBuilder::GetJammerMobilityModels).
+     * @param carrierHz Link carrier frequency in Hz; converted to MHz for the
+     *                  frequency gate. Default 0.0, which disables that gate.
+     * @param seed      Simulation seed mixed into the @c random burst draw. Default 1.
+     * @return Nothing.
+     * @throws Nothing directly; @c NS_ASSERT_MSG aborts (debug builds) if
+     *         @p jammers and @p mobModels differ in size.
      *
-     * @param jammers  List of @ref JammerSpec instances (from SimConfig).
-     * @param plModel  The same @ref PropagationLossModel used by
-     *                 @ref LinkEvaluator — jammer path loss is computed
-     *                 with identical physics as mesh-node path loss.
-     * @param mobModels Mobility models for jammer nodes, in the same index
-     *                  order as @p jammers. Built by @ref TopologyBuilder.
+     * Replaces any previously loaded jammers. Specs with @c enabled == false
+     * are dropped here and never reach the per-tick sum. Copies each spec.
+     * Not called by @ref LinkEvaluator::Configure when @c cfg.jammers is empty.
      */
     void Configure(const std::vector<JammerSpec>& jammers,
                    ns3::Ptr<ns3::PropagationLossModel> plModel,
@@ -68,35 +62,45 @@ class JammerModel
                    uint32_t seed = 1);
 
     /**
-     * @brief Return true if at least one enabled jammer was loaded.
+     * @fn JammerModel::HasJammers
+     * @brief Report whether at least one enabled jammer was loaded.
      *
-     * LinkEvaluator uses this to skip the jammer computation entirely
-     * when no jammers are present, keeping the no-jammer case as fast
-     * as before.
+     * @return @c true if any enabled jammer is loaded; @c false before
+     *         @ref Configure or when all jammers are disabled.
+     *
+     * @ref LinkEvaluator uses this to skip jammer work entirely.
      */
     bool HasJammers() const;
 
     /**
-     * @brief Compute total jammer interference power received at @p rxMob.
+     * @fn JammerModel::InterfPowerAtReceiver
+     * @brief Sum the jammer power received at one node at a given time.
      *
-     * For each enabled jammer, computes the received power using the
-     * shared propagation loss model (same RMa/UMa/NYU physics as mesh
-     * links), then sums the linear watt values across all jammers.
+     * @param rxMob Mobility model of the receiving node.
+     * @param nowS  Current simulation time in seconds since scenario start. Default 0.0.
+     * @return Total interference in watts (linear, not dBm); 0.0 if no jammer
+     *         is loaded or none passes its gates.
+     * @throws Nothing.
      *
-     * @param rxMob  Mobility model of the receiving mesh node.
-     * @return       Total jammer interference power in watts. Returns 0.0
-     *               if no jammers are configured.
+     * Per jammer, in order: interval gate, random-burst gate, frequency gate,
+     * range gate (@c max_range_m, 0 = off), beam gate. A passing jammer gives
+     * EIRP = @c tx_power_dbm + @c tx_array_gain_dbi. Received power is
+     * @c CalcRxPower(EIRP), or the EIRP itself when the distance is under 1 m.
+     * @c constant jammers are scaled by @c duty_cycle; @c random jammers count
+     * at full power when their burst is on. The receive-side antenna gain is
+     * not applied. Does not read the receiver's own gain or the mesh TX power.
      */
     double InterfPowerAtReceiver(ns3::Ptr<ns3::MobilityModel> rxMob,
                                  double nowS = 0.0) const;
 
   private:
-    /// @brief True if @p spec is transmitting at time @p nowS (per its intervals).
+    /// @brief True if @p spec is inside one of its half-open intervals at @p nowS.
     ///        A jammer with no intervals is treated as always on.
     static bool ActiveAt(const JammerSpec& spec, double nowS);
 
     /// @brief True if the link carrier falls within the jammer's target band.
-    ///        An empty target_freq means "no frequency filtering" (all links).
+    ///        Empty target_freq or an unset carrier (0 MHz) means no filtering.
+    ///        One value is a spot (+/-2.5 MHz); two or more give [min,max].
     bool InBand(const JammerSpec& spec) const;
 
     /// @brief True if @p rxMob is inside the jammer's 3-D beam cone
@@ -105,8 +109,9 @@ class JammerModel
     static bool InBeam(const JammerSpec& spec,
                        const ns3::Vector& jamPos, const ns3::Vector& rxPos);
 
-    /// @brief On/off decision for a 'random'-type jammer at @p nowS
-    ///        (deterministic, seed-dependent). 'constant' jammers are always on.
+    /// @brief On/off decision for a 'random'-type jammer at @p nowS: one hash
+    ///        draw per whole second from (id, seed, second) against duty_cycle.
+    ///        Any other type is always on.
     bool BurstOn(const JammerSpec& spec, double nowS) const;
 
     /// @brief Internal per-jammer state after Configure().

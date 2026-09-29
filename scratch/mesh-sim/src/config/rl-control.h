@@ -38,22 +38,71 @@ struct RlControlResolution
     uint32_t num_ticks = 0;                    ///< Loop tick count for this mode.
 
     /**
+     * @fn RlControlResolution::ok
      * @brief Return @c true if no resolution errors were found.
      * @return @c true when @c errors is empty, @c false otherwise.
      */
     bool ok() const { return errors.empty(); }
 };
 
-/// Resolve the RL control mode, controlled slots, cadence, and tick count.
+/**
+ * @fn ResolveRlControl
+ * @brief Resolve the RL control mode, controlled slots, cadence, and tick count.
+ *
+ * @param cfg  Loaded configuration; only the @c rl, @c nodes, @c jammers,
+ *             @c duration_s, and @c tick_s fields are read.
+ * @return Resolution with @c errors empty on success. When @c cfg.rl.enabled
+ *         is false it returns @c control_mode "legacy" with no errors and all
+ *         other fields at their defaults (@c num_ticks = 0).
+ * @throws std::invalid_argument Not in practice: waypoint nodes without
+ *         waypoints are reported as errors before start positions are read.
+ *
+ * Mode is centralized when @c cfg.rl.controlled_nodes_set is true, else legacy.
+ * Legacy: one slot, the node named by @c controlled_node_id (falling back to
+ * the last node if empty or unmatched), ticks = floor(duration/tick).
+ * Centralized: parses @c controlled_nodes (@c "all" or comma-separated ids),
+ * rejects mixing with @c controlled_node_id, non-discrete @c action_type, and
+ * any @c action_profile other than @c move_2d; sizes slots from
+ * @c max_controlled_nodes (0 = number of controlled nodes, at most 64); turns
+ * @c decision_interval_s (0 = @c tick_s) into an integer tick multiple; and
+ * checks each start position lies inside the [rl] bounds. Ticks use a
+ * 1e-6-tolerant rounding in this mode. Pure; no I/O.
+ */
 RlControlResolution ResolveRlControl(const SimConfig& cfg);
 
-/// Copy a successful resolution into @c cfg.rl's resolved fields.
+/**
+ * @fn ApplyRlControl
+ * @brief Copy a successful resolution into @c cfg.rl's resolved fields.
+ *
+ * @param cfg  Configuration to update (@c control_mode, @c controlled_indices,
+ *             @c num_slots, @c decision_interval_ticks, @c num_ticks).
+ * @param r    Resolution from @ref ResolveRlControl.
+ * @throws std::invalid_argument if @p r.errors is not empty.
+ */
 void ApplyRlControl(SimConfig& cfg, const RlControlResolution& r);
 
-/// Return the loop tick count for a duration/tick pair (@c robust rounds to a tolerance).
+/**
+ * @fn ComputeTickCount
+ * @brief Return the loop tick count for a duration/tick pair.
+ *
+ * @param duration_s  Run length in seconds.
+ * @param tick_s      Tick length in seconds.
+ * @param robust      If true, round the ratio to the nearest integer when
+ *                    within 1e-6 of it, else floor; if false, plain truncation.
+ * @return Tick count, or 0 if either input is non-finite or <= 0, the ratio is
+ *         below 1, or it exceeds the @c uint32_t range.
+ */
 uint32_t ComputeTickCount(double duration_s, double tick_s, bool robust);
 
-/// Return a node's control start position (first waypoint for waypoint mobility).
+/**
+ * @fn ControlledStartPosition
+ * @brief Return a node's control start position.
+ *
+ * @param spec  Node specification.
+ * @return First waypoint for @c "waypoint" mobility, else @c spec.position.
+ * @throws std::invalid_argument if the node uses waypoint mobility but has no
+ *         waypoints.
+ */
 Position ControlledStartPosition(const NodeSpec& spec);
 
 }  // namespace mesh_sim

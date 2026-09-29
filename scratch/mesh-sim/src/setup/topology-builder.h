@@ -20,11 +20,17 @@
  * | @c "waypoint"            | @c WaypointMobilityModel            | All @ref Waypoint entries added via @c ns3::Seconds(wp.t). |
  * | RL-controlled (centralized) | @c ConstantVelocityMobilityModel | Overrides the configured model for every index in @c cfg.rl.controlled_indices; starts at @ref ControlledStartPosition with zero velocity. |
  *
+ * **Jammer mobility** (one ns-3 node per @c cfg.jammers entry, same order):
+ * waypoints if any, else @c ConstantVelocityMobilityModel if any velocity
+ * component is non-zero, else @c ConstantPositionMobilityModel. Jammer
+ * @c random_walk settings are not used here.
+ *
  * **Channel condition model selection**
- * When @c cfg.buildings is non-empty a @c BuildingsChannelConditionModel is
- * installed, giving deterministic LOS/NLOS based on building geometry.
- * When no buildings are configured the propagation model's default statistical
- * condition model is used instead.
+ * When @c cfg.buildings is non-empty, or @c channel.condition_model is
+ * @c "static_los", a @c BuildingsChannelConditionModel is installed, giving
+ * deterministic LOS/NLOS based on building geometry (all LOS with no
+ * buildings). Otherwise the propagation model's default statistical
+ * condition model is used.
  *
  * **Propagation model selection**
  *
@@ -34,6 +40,7 @@
  * | @c "3gpp"        | @c "UMa"    | @c ThreeGppUmaPropagationLossModel                 |
  * | @c "3gpp"        | @c "RMa"    | @c ThreeGppRmaPropagationLossModel                 |
  * | @c "3gpp"        | @c "InH" / @c "InH-Mixed" / @c "InH-Open" | @c ThreeGppIndoorOfficePropagationLossModel |
+ * | @c "3gpp"        | @c "InF"    | none: throws @c std::runtime_error (the validator still accepts @c InF) |
  * | @c "nyu"         | @c "UMi"    | @c NYUUmiPropagationLossModel                      |
  * | @c "nyu"         | @c "UMa"    | @c NYUUmaPropagationLossModel                      |
  * | @c "nyu"         | @c "RMa"    | @c NYURmaPropagationLossModel                      |
@@ -66,6 +73,7 @@ class TopologyBuilder
 {
   public:
     /**
+     * @fn TopologyBuilder::TopologyBuilder
      * @brief Construct a builder for the given simulation configuration.
      *
      * Stores a const reference to @c cfg; does not create any ns-3 objects.
@@ -77,25 +85,31 @@ class TopologyBuilder
     explicit TopologyBuilder(const SimConfig& cfg);
 
     /**
+     * @fn TopologyBuilder::Build
      * @brief Create all ns-3 topology objects in the required order.
      *
-     * Executes three steps in sequence:
+     * Executes four steps in sequence:
      * -# @ref CreateNodesAndMobility — one ns-3 node per @ref NodeSpec,
      *    with the appropriate mobility model installed.
+     * -# @ref CreateJammersAndMobility — one ns-3 node and mobility model per
+     *    @ref JammerSpec, appended to the same node container.
      * -# @ref CreateBuildings — ns-3 @c Building objects plus
-     *    @c BuildingsHelper::Install; skipped when @c cfg.buildings is empty.
+     *    @c BuildingsHelper::Install; skipped when @c cfg.buildings is empty
+     *    and @c condition_model is not @c "static_los".
      * -# @ref ConfigurePropagationModel — selects and configures the 3GPP
      *    or NYU propagation loss model and the channel condition model.
      *
      * Must be called exactly once, before any accessor method.
      *
      * @throws std::runtime_error for an unrecognised @c NodeSpec::mobility
-     *         string, an unknown propagation scenario, or an unknown channel
-     *         model string.
+     *         string or an unknown propagation scenario. An unknown
+     *         @c channel_model does not throw here; it falls into the 3GPP
+     *         branch.
      */
     void Build();
 
     /**
+     * @fn TopologyBuilder::GetMobilityModels
      * @brief Return the mobility model for each node in @c cfg.nodes order.
      *
      * The vector index matches the node index used by @ref LinkEvaluator
@@ -108,6 +122,7 @@ class TopologyBuilder
     std::vector<ns3::Ptr<ns3::MobilityModel>> GetMobilityModels() const;
 
     /**
+     * @fn TopologyBuilder::GetPropagationModel
      * @brief Return the configured propagation loss model.
      *
      * The pointer is valid after @ref Build. Pass directly to
@@ -118,6 +133,7 @@ class TopologyBuilder
     ns3::Ptr<ns3::PropagationLossModel> GetPropagationModel() const;
 
     /**
+     * @fn TopologyBuilder::GetConditionModel
      * @brief Return the channel condition model used for LOS/NLOS determination.
      *
      * When buildings are present this is a @c BuildingsChannelConditionModel
@@ -129,8 +145,13 @@ class TopologyBuilder
      */
     ns3::Ptr<ns3::ChannelConditionModel> GetConditionModel() const;
 
-    /* @brief Return the Jammer Mobility Models
-     * */
+    /**
+     * @fn TopologyBuilder::GetJammerMobilityModels
+     * @brief Return the jammer mobility models in @c cfg.jammers order.
+     *
+     * @return One pointer per jammer; empty when there are no jammers or
+     *         @ref Build has not run.
+     */
     std::vector<ns3::Ptr<ns3::MobilityModel>> GetJammerMobilityModels() const;
 
   private:
@@ -148,13 +169,20 @@ class TopologyBuilder
      * for each, dispatches to the appropriate @c InstallMobility* helper, and
      * appends the resulting @c MobilityModel pointer to @c m_mobilityModels.
      *
+     * In centralized RL mode nodes listed in @c cfg.rl.controlled_indices get
+     * @ref InstallMobilityRlControlled instead of their configured model.
+     *
      * @throws std::runtime_error for any unrecognised @c NodeSpec::mobility value.
      */
     void CreateNodesAndMobility();
 
-    /*
-     * @brief Create custom Jammer node per @ref JammeSpec and install its mobility model.
-     * */
+    /**
+     * @brief Create one ns-3 node per @ref JammerSpec and install its mobility model.
+     *
+     * Waypoints take precedence, then a non-zero velocity, then a fixed
+     * position. Nodes are added to @c m_nodes so buildings apply to them too.
+     * The output order must match @c cfg.jammers.
+     */
     void CreateJammersAndMobility(); 
     
     std::vector<ns3::Ptr<ns3::MobilityModel>> m_jammerMobilityModels;	
@@ -162,8 +190,9 @@ class TopologyBuilder
     /**
      * @brief Create ns-3 @c Building objects from @c cfg.buildings.
      *
-     * A no-op when @c cfg.buildings is empty. For non-empty configs,
-     * creates one @c ns3::Building per @ref BuildingSpec, sets its bounding
+     * A no-op when @c cfg.buildings is empty and @c condition_model is not
+     * @c "static_los" (with @c static_los and no buildings only the helper
+     * install runs). Otherwise creates one @c ns3::Building per @ref BuildingSpec, sets its bounding
      * box, type, exterior wall material, floor count, and room layout, then
      * calls @c BuildingsHelper::Install(m_nodes) to associate all nodes with
      * the building model.  @c BuildingsHelper::Install must be called after
@@ -185,8 +214,13 @@ class TopologyBuilder
      * - No buildings: the propagation model's default statistical condition
      *   model is retrieved and stored as @c m_conditionModel.
      *
-     * @throws std::runtime_error for an unrecognised scenario or channel model
-     *         string.
+     * The buildings condition model is also used when
+     * @c channel.condition_model is @c "static_los".
+     *
+     * @throws std::runtime_error for an unrecognised scenario (3GPP accepts
+     *         UMi, UMa, RMa, InH, InH-Mixed, InH-Open; NYU accepts UMi, UMa,
+     *         RMa, InH, InF). Any @c channel_model other than @c "nyu" takes
+     *         the 3GPP branch.
      */
     void ConfigurePropagationModel();
 

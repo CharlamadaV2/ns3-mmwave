@@ -1,22 +1,19 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file run-logger.h
- * @brief Writes a human-readable run.log capturing seeds, CLI overrides,
- *        and the fully resolved configuration for reproducibility.
- *
+ * @brief Header-only writer for run.log: seeds, CLI overrides, and resolved config.
  *
  * Call @ref WriteRunLog once per batch run (not per seed) immediately after
  * @ref ResolveSeeds, before the per-seed simulation loop begins.  The log
- * captures the state of @ref CliArgs and @ref SimConfig at that point so
- * that any subsequent seed run can be reproduced from the archived inputs
- * alone.
+ * captures the state of @ref CliArgs and @ref SimConfig at that point. Its
+ * "Resolved config" block is the source of truth for a run.
  *
- * **Output: <base_output_dir>/run.log**
+ * **Output: @c \<base_output_dir\>/run.log** (batch root, not per seed)
  *
  * | Section            | Contents                                                       |
  * |--------------------|----------------------------------------------------------------|
  * | Header             | ISO-8601 timestamp, scenario name, run_config path.            |
- * | Seeds              | The resolved seed list and which source provided them          |
+ * | Seeds              | The resolved seed list and its source                          |
  * |                    | (@c --seeds / @c --seed / config default).                     |
  * | CLI overrides      | Every @ref CliArgs field, with @c "(not set)" for unused flags. |
  * | Resolved config    | Key @ref SimConfig scalar fields: timing, channel, traffic,    |
@@ -41,11 +38,13 @@ namespace mesh_sim
 {
 
 /**
+ * @fn WriteRunLog
  * @brief Write a human-readable reproducibility log for a batch run.
  *
- * Creates @c <base_output_dir>/run.log (creating intermediate directories
+ * Creates @c \<base_output_dir\>/run.log (creating intermediate directories
  * as needed). If the file cannot be opened the function returns silently;
- * this is a best-effort log and should not abort the simulation.
+ * this is a best-effort log and should not abort the simulation. The
+ * directory creation is not guarded, so it can throw.
  *
  * **Seed source label**
  * The log annotates which source provided the seed list:
@@ -60,6 +59,14 @@ namespace mesh_sim
  *                         Only scalar fields are logged; node and building
  *                         details are preserved in the archived @c nodes.json.
  * @param seeds            Resolved seed list from @ref ResolveSeeds.
+ * @return void.
+ * @throws std::filesystem::filesystem_error if @c create_directories fails.
+ *
+ * Also derives @c rl.contract from @c cfg.rl (@c mesh_move_2d_v1 for
+ * centralized control, @c legacy_continuous or @c legacy_discrete7
+ * otherwise), lists controlled node ids, and counts enabled jammers.
+ * @c jammer_path_enabled is true only for band @c sub-6 with at least one
+ * enabled jammer. Overwrites an existing @c run.log.
  */
 inline void
 WriteRunLog(const std::string&       base_output_dir,

@@ -3,17 +3,24 @@
  * @file metrics-writer.h
  * @brief Accumulates per-tick simulation metrics and writes summary.json.
  *
- *
+ * One @ref MetricsWriter is created per seed run. @ref MetricsWriter::AccumulateTick
+ * is called every tick; @ref MetricsWriter::Write is called once after the step loop.
+ * The class has no ns-3 dependency.
  *
  * **Output: summary.json**
- * Written to @c cfg.output_dir/summary.json by @ref Write.
+ * Written to @c cfg.output_dir/summary.json (the per-seed directory
+ * @c seed-N/) by @ref MetricsWriter::Write. Indented with 2 spaces.
  *
  * | JSON key              | Value                                                     |
  * |-----------------------|-----------------------------------------------------------|
- * | @c per_node[id]       | @c mean/min/max_sinr_db, @c num_links, @c num_los_links, @c tx/rx_throughput_mbps — all time-averaged over post-warmup ticks. SINR fields are @c null if the node had no measurable links. |
- * | @c per_flow["A->B"]   | @c demand_mbps, @c delivered_mbps, @c latency_ms, @c hop_count — time-averaged. |
- * | @c network            | @c sum_throughput_mbps, @c mean_sinr_db, @c connectivity (fraction of node pairs above −6.7 dB), @c mean_hop_count, @c flows_routed, @c flows_unroutable — all time-averaged. |
- * | @c wall_clock_*       | ISO-8601 start/end timestamps and @c wall_elapsed_s. Present only when @ref SetTiming has been called with a non-zero elapsed time. |
+ * | @c scenario           | @c cfg.scenario_name. |
+ * | @c seed               | @c cfg.seed. |
+ * | @c duration_s         | Simulated duration in seconds. |
+ * | @c warmup_s           | Warm-up period in seconds; earlier ticks are excluded from all averages. |
+ * | @c wall_clock_start, @c wall_clock_end, @c wall_elapsed_s | ISO-8601 timestamps and elapsed wall seconds. Present only when @ref MetricsWriter::SetTiming was called with @c elapsed_s > 0. |
+ * | @c per_node[id]       | Keyed by node id. @c mean/min/max_sinr_db (over all valid link samples; @c null if none), @c num_links (mean connected links per tick), @c num_los_links (mean LOS links per tick), @c tx/rx_throughput_mbps (mean delivered Mbit/s of flows the node sources / sinks). |
+ * | @c per_flow["A->B"]   | Keyed by source and destination node id. @c demand_mbps, @c delivered_mbps, @c latency_ms, @c hop_count, each averaged over the ticks the flow was reported. |
+ * | @c network            | @c sum_throughput_mbps (mean total delivered per tick), @c mean_sinr_db (@c null if no valid sample), @c connectivity (connected node pairs / all pairs, using the default @c LinkTable::IsConnected threshold of -6.7 dB), @c mean_hop_count (over routable flow observations), @c flows_routed and @c flows_unroutable (mean per tick). |
  */
 #pragma once
 
@@ -30,6 +37,7 @@ namespace mesh_sim
 {
 
 /**
+ * @class MetricsWriter
  * @brief Accumulates per-tick radio and flow metrics, then writes summary.json.
  *
  * All accumulation is done in-memory; the file is written exactly once by
@@ -39,16 +47,20 @@ class MetricsWriter
 {
   public:
     /**
+     * @fn MetricsWriter::MetricsWriter
      * @brief Construct a writer bound to the given simulation configuration.
      *
      * Stores a copy of @c cfg so the writer remains valid after the
      * @c SimConfig is modified (e.g. by an RL position override between seeds).
      *
      * @param cfg  Fully loaded and validated simulation configuration.
+     *             @c output_dir must be the per-seed directory by the time
+     *             @ref Write runs, since the copy is taken at construction.
      */
     explicit MetricsWriter(const SimConfig& cfg);
 
     /**
+     * @fn MetricsWriter::SetTiming
      * @brief Store wall-clock timing for inclusion in summary.json.
      *
      * Must be called after the step loop completes and before @ref Write.
@@ -59,12 +71,13 @@ class MetricsWriter
     void SetTiming(const TimingInfo& t);
 
     /**
+     * @fn MetricsWriter::AccumulateTick
      * @brief Accumulate metrics for one simulation tick.
      *
      * Ticks with @c time_s < @c cfg.warmup_s are silently skipped so that
      * transient start-up behaviour is excluded from all averages.
      *
-     * For each node pair the SINR sentinel value (−999.0 dBm) is filtered:
+     * For each node pair the SINR sentinel value (-999.0 dB) is filtered:
      * only links with @c sinr_db > −900.0 contribute to SINR accumulators,
      * preventing unevaluated links from corrupting the statistics.
      *
@@ -79,6 +92,7 @@ class MetricsWriter
                         uint32_t numNodes);
 
     /**
+     * @fn MetricsWriter::Write
      * @brief Write all accumulated metrics to @c <output_dir>/summary.json.
      *
      * All per-node and per-flow values are time-averaged over the number of
@@ -86,7 +100,12 @@ class MetricsWriter
      * @c cfg.nodes are used as JSON keys; unrecognised indices fall back to
      * @c "node<idx>".
      *
-     * Prints an error to @c stderr if the file cannot be opened; does not throw.
+     * Prints an error to @c stderr if the file cannot be opened and returns
+     * without writing; does not throw. Prints a confirmation line to @c stderr
+     * on success. Overwrites an existing @c summary.json. Does not create
+     * the output directory.
+     *
+     * @return void.
      */
     void Write() const;
 

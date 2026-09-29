@@ -46,6 +46,7 @@ struct WindowFacts
     double   legacy_reward_sum = 0.0;
 };
 
+/// Owns RL IPC and physics for the controlled node(s); legacy and centralized modes.
 class RlBridge
 {
   public:
@@ -63,8 +64,7 @@ class RlBridge
     // Add this tick's reward and fact sums to the current decision window (centralized).
     void AccumulateTick(const LinkTable& linkTable, const std::vector<FlowResult>& flows);
 
-    // Write obs+reward to stdout, read action from stdin.
-    // If done==true, writes final obs but does not read action.
+    // Write obs+reward to stdout, read action from stdin (none is read when done).
     void Step(uint32_t tick,
               double time_s,
               const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs,
@@ -72,7 +72,7 @@ class RlBridge
               const std::vector<FlowResult>& flowResults,
               bool done);
 
-    // Apply the last received action to the controlled node(s).
+    // Turn the last received action into velocity on the controlled node(s).
     void ApplyAction(const std::vector<ns3::Ptr<ns3::MobilityModel>>& mobs);
 
   private:

@@ -3,6 +3,9 @@
  * @file ini-parser.h
  * @brief Minimal INI-file parser used by @ref ConfigLoader.
  *
+ * Reads @c run.ini into an @ref IniMap and offers lookup helpers with defaults.
+ * Depends only on the standard library.
+ *
  * **Format rules**
  * - Comments: everything from the first @c # or @c ; to the end of the line
  *   is stripped before processing.
@@ -13,7 +16,8 @@
  *   skipped.
  * - Keys that appear before any @c [section] header are stored under the
  *   empty-string section key @c "".
- *
+ * - A repeated key in the same section keeps the last value.
+ * - Because comments are stripped first, a value cannot contain @c # or @c ;.
  */
 #pragma once
 
@@ -34,10 +38,13 @@ using IniMap = std::map<std::string, std::map<std::string, std::string>>;
 
 
 /**
+ * @fn parseIni
  * @brief Parse an INI-style configuration file into a two-level string map.
  *
  * Reads @c path line by line, strips @c # and @c ; comments, trims
- * whitespace, skips blank lines, and populates an @ref IniMap.
+ * whitespace, skips blank lines, and populates an @ref IniMap. A line is a
+ * section header only if it starts with @c [ and ends with @c ]. Lines with no
+ * @c = are ignored. Reads the file only; no other side effects.
  *
  * @param path  Filesystem path to the @c .ini file.
  * @return Fully populated @ref IniMap; empty if the file has no valid entries.
@@ -47,6 +54,7 @@ IniMap parseIni(const std::string& path);
 
 
 /**
+ * @fn iniGet
  * @brief Retrieve a string value from an @ref IniMap.
  *
  * Returns @p def when either the section or the key is absent, so callers
@@ -66,18 +74,22 @@ std::string iniGet(const IniMap& ini,
 
 
 /**
+ * @fn iniGetBool
  * @brief Retrieve a boolean value from an @ref IniMap.
  *
  * Calls @ref iniGet and interprets the result case-insensitively:
  * - @c true  for @c "true", @c "1", or @c "yes".
  * - @c false for everything else (including @c "false", @c "0", @c "no").
  *
- * Returns @p def when the section or key is absent.
+ * Returns @p def when the section or key is absent. Unrecognised values
+ * (for example @c "on" or @c "2") give @c false without any error.
  *
  * @param ini      Map produced by @ref parseIni.
  * @param section  Section name.
  * @param key      Key within the section.
- * @param def      Default value returned when the entry is not found.
+ * @param def      Default value returned when the entry is not found. It is
+ *                 round-tripped through @c "true"/@c "false", so it is
+ *                 honoured exactly.
  * @return Parsed boolean value, or @p def if not found.
  */
 bool iniGetBool(const IniMap& ini,

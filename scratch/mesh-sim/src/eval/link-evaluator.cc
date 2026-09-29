@@ -1,6 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @file link-evaluator.cc */
+/**
+ * @file link-evaluator.cc
+ * @brief Implements @ref mesh_sim::LinkEvaluator (Configure, Evaluate, EvaluateAll); see link-evaluator.h.
+ */
 
 #include "src/eval/link-evaluator.h"
 #include "src/eval/sinr-capacity.h"
@@ -95,7 +98,7 @@ LinkEvaluator::Configure(const SimConfig& cfg,
 }
 
 // ---------------------------------------------------------------------------
-// Evaluate (single link) — noise-limited; unchanged.
+// Evaluate (single link) — noise-limited, plus jammer power in sub-6
 // ---------------------------------------------------------------------------
 
 LinkResult

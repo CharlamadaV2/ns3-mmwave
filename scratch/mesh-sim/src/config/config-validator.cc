@@ -1,6 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @file config-validator.cc */
+/**
+ * @file config-validator.cc
+ * @brief Implements @ref ValidateConfig; rules are listed in config-validator.h.
+ */
 
 
 #include "src/config/config-validator.h"
@@ -13,8 +16,7 @@
 namespace mesh_sim
 {
 
-/* @brief Checks if value passed into value passed into field is positive, errors are pushed into validation result
-*/
+/** @brief Append an error to @p r if @p val is not > 0. */
 static void
 checkPositive(ValidationResult& r, const std::string& field, double val)
 {
@@ -24,8 +26,7 @@ checkPositive(ValidationResult& r, const std::string& field, double val)
     }
 }
 
-/* @brief Checks if value in field is a valid option, errors are pushed into validation result
- * */
+/** @brief Append an error to @p r if @p val is not one of @p allowed. */
 static void
 checkOneOf(ValidationResult& r,
            const std::string& field,
@@ -46,6 +47,7 @@ checkOneOf(ValidationResult& r,
     }
 }
 
+/** @brief See config-validator.h; collects every error rather than stopping at the first. */
 ValidationResult
 ValidateConfig(const SimConfig& cfg)
 {

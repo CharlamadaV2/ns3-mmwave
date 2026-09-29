@@ -32,6 +32,7 @@ namespace mesh_sim
 {
 
 /**
+ * @struct FlowResult
  * @brief Routing result for one flow at one simulation tick.
  *
  * Produced by @ref MeshRouter::Route and consumed by @ref MetricsWriter,
@@ -74,6 +75,7 @@ struct FlowResult
 
 
 /**
+ * @class MeshRouter
  * @brief Routes flows over the mesh link graph and applies congestion scaling.
  *
  * Stateless between @ref Route calls (all per-call state is local).
@@ -83,13 +85,19 @@ class MeshRouter
 {
   public:
     /**
+     * @fn MeshRouter::MeshRouter
      * @brief Construct a router with the given routing configuration.
      *
      * @param cfg  Routing algorithm and max-hops settings from @ref SimConfig::mesh.
+     *             Defaults are @c "shortest_path" and @c max_hops = 5.
+     * @throws None.
+     *
+     * Copies @p cfg; no other state is created.
      */
     explicit MeshRouter(const RoutingConfig& cfg);
 
     /**
+     * @fn MeshRouter::Route
      * @brief Route all flows and return one @ref FlowResult per flow.
      *
      * **Per-flow pipeline:**
@@ -109,6 +117,13 @@ class MeshRouter
      *                  the dimension of @c links.
      * @return Vector of @ref FlowResult, one per entry in @c flows, in the
      *         same order.
+     * @throws None. Every @c Flow::src / @c Flow::dst must be < @c numNodes;
+     *         this is not checked.
+     *
+     * Congestion scaling never changes @c latency_ms or @c path. Flows with
+     * zero effective demand get an empty path and stay unroutable (except
+     * self-flows, which are routable). Unknown @c algorithm strings fall
+     * back to shortest path (the config validator rejects them earlier).
      */
     std::vector<FlowResult> Route(const LinkTable& links,
                                   const std::vector<Flow>& flows,
@@ -118,6 +133,7 @@ class MeshRouter
     RoutingConfig m_cfg;  ///< Routing algorithm and hop-limit settings.
 
     /**
+     * @fn MeshRouter::FindPath
      * @brief Dispatch to the appropriate path-finding algorithm and enforce
      *        the hop limit.
      *
@@ -140,6 +156,7 @@ class MeshRouter
                                    uint32_t numNodes) const;
 
     /**
+     * @fn MeshRouter::FindPathShortestPath
      * @brief Dijkstra shortest path with edge weight @c 1/capacity_mbps.
      *
      * High-capacity links are preferred (lower weight). Edges with
@@ -158,6 +175,7 @@ class MeshRouter
                                                uint32_t numNodes) const;
 
     /**
+     * @fn MeshRouter::FindPathMaxThroughput
      * @brief Widest-path algorithm: maximises bottleneck link capacity.
      *
      * Modified Dijkstra using a max-heap. For each candidate next hop,
@@ -178,6 +196,7 @@ class MeshRouter
                                                 uint32_t numNodes) const;
 
     /**
+     * @fn MeshRouter::FindPathMinHop
      * @brief Minimum-hop path via BFS.
      *
      * Ignores link capacity entirely (beyond the > 0 connectivity check).
@@ -196,6 +215,7 @@ class MeshRouter
                                          uint32_t numNodes) const;
 
     /**
+     * @fn MeshRouter::ReconstructPath
      * @brief Reconstruct a node path by walking the predecessor array.
      *
      * Walks @c prev[] backward from @c dst to @c src, then reverses the
@@ -215,6 +235,7 @@ class MeshRouter
                                           uint32_t dst) const;
 
     /**
+     * @fn MeshRouter::ApplyCongestionScaling
      * @brief Apply proportional-fairness congestion scaling to all results.
      *
      * For each physical edge (identified by the sorted node-index pair)
@@ -234,6 +255,7 @@ class MeshRouter
                                 const LinkTable& links) const;
 
     /**
+     * @fn MeshRouter::ComputeLatency
      * @brief Compute end-to-end path latency in milliseconds.
      *
      * Uses a store-and-forward model summing two components per hop:

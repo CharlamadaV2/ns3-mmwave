@@ -1,5 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file config-loader.cc */
+/**
+ * @file config-loader.cc
+ * @brief Implements @ref ConfigLoader::Load and the JSON-to-struct helpers.
+ *        Key names and defaults are documented in config-loader.h.
+ */
 
 #include "src/config/config-loader.h"
 #include "src/util/ini-parser.h"
@@ -22,6 +26,7 @@ namespace mesh_sim
 // JSON -> POD helpers (inlined here; no separate spec-parser file needed)
 // ---------------------------------------------------------------------------
 
+/** @brief Build a NodeSpec from one nodes-file entry; throws if @c id is missing. */
 static NodeSpec
 parseNodeSpec(const json& j)
 {
@@ -86,6 +91,7 @@ parseNodeSpec(const json& j)
     return n;
 }
 
+/** @brief Build a JammerSpec from one jammers-file entry; every field is optional. */
 static JammerSpec
 parseJammerSpec(const json& j)
 {
@@ -162,6 +168,7 @@ parseJammerSpec(const json& j)
 }
 
 
+/** @brief Build a BuildingSpec from one buildings-file entry; every field is optional. */
 static BuildingSpec
 parseBuildingSpec(const json& j)
 {

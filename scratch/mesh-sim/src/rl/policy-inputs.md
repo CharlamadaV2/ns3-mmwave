@@ -1,11 +1,13 @@
-# Policy observations, rewards, and telemetry
+@page src_rl_policy_inputs src/rl/policy-inputs
+
+@brief Observation presets, reward components, and telemetry for centralized RL policies.
 
 This page covers centralized RL. The simulator computes positions, links,
 traffic, and per-tick reward in C++; every decision message includes those raw
 measurements as `facts`. Python's `selection.py` chooses what the policy sees,
 what reward Gymnasium returns, and whether to save decision records. The
 simulator's physics and action masks do not change when these options change.
-For actions and timing, see the [bridge contract](README.md).
+For actions and timing, see the [bridge contract](README.md); for the Python modules, see the [environment README](../../scripts/rl/env/README.md).
 
 ## Try one selection
 

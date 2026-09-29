@@ -31,7 +31,7 @@ struct NyuChannelConfig
 {
     // ---- NYUChannelModel attributes ----------------------------------------
 
-    double rf_bandwidth_mhz = 800.0;  ///< RF bandwidth passed to NYUChannelModel
+    double rf_bandwidth_mhz = 800.0;  ///< RF bandwidth in MHz passed to NYUChannelModel
                                        ///<   (NYUChannelModel::RfBandwidth).
 
     // ---- NYUPropagationLossModel attributes --------------------------------
@@ -42,7 +42,7 @@ struct NyuChannelConfig
                                                     ///<   (NYUPropagationLossModel::Pressure).
     double humidity_pct             = 50.0;        ///< Relative humidity in percent
                                                     ///<   (NYUPropagationLossModel::Humidity).
-    double temperature_c            = 20.0;        ///< Air temperature in °C
+    double temperature_c            = 20.0;        ///< Air temperature in degrees Celsius
                                                     ///<   (NYUPropagationLossModel::Temperature).
     double rain_rate_mm_hr          = 0.0;         ///< Rain rate in mm/hr; 0 = dry
                                                     ///<   (NYUPropagationLossModel::RainRate).
@@ -63,26 +63,39 @@ struct NyuChannelConfig
  * Parameters shared between the 3GPP and NYU models are at the top level.
  * NYU-specific parameters live in the @ref nyu sub-struct.
  *
- * Gain values (@c tx_array_gain_dbi, @c rx_array_gain_dbi) represent peak
- * directional beamforming gain per side and are applied symmetrically; each
- * node uses the same antenna model.
+ * Gain values (@c tx_array_gain_dbi, @c rx_array_gain_dbi) are peak
+ * directional gains in dBi. The link evaluator adds the TX node's gain and the
+ * RX node's gain to each link; a per-node override in @ref NodeSpec replaces the
+ * value here for that node.
+ *
+ * Defaults match the fallbacks in @c ConfigLoader::Load; the validator
+ * (@c ValidateConfig) enforces the allowed values.
  */
 struct ChannelConfig
 {
-    // Shared between 3gpp and nyu
-    double      frequency_ghz    = 28.0;
-    double      tx_power_dbm     = 30.0;   // per-node transmit power (dBm)
-    std::string scenario         = "UMi";  // "UMi", "UMa", "RMa", "InH", "InF"
-    std::string channel_model    = "3gpp"; // "3gpp" or "nyu"
-    std::string condition_model  = "auto"; // "auto" or "static_los"
-    bool        blockage_enabled = true;   // 3gpp: ThreeGppChannelModel::Blockage
-                                           // nyu:  NYUChannelModel::Blockage
-    std::string beamforming_model = "svd";    // for reference; simplified in mesh-sim
-    std::string amc_model         = "shannon"; // "shannon" or "table"
-    double      noise_figure_db   = 5.0;      // receiver noise figure
-    double      bandwidth_mhz     = 400.0;    // system bandwidth for noise floor and capacity
-    double      tx_array_gain_dbi = 12.0;     // peak directional gain per side
-    double      rx_array_gain_dbi = 12.0;
+    // ---- Shared between 3gpp and nyu ---------------------------------------
+    double      frequency_ghz     = 28.0;        ///< Carrier frequency in GHz (must be > 0).
+    double      tx_power_dbm      = 30.0;        ///< Per-node transmit power in dBm.
+    std::string scenario          = "UMi";       ///< 3GPP scenario: @c "UMi", @c "UMa", @c "RMa",
+                                                 ///<   @c "InH", or @c "InF".
+    std::string channel_model     = "3gpp";      ///< @c "3gpp" or @c "nyu".
+    std::string condition_model   = "auto";      ///< LOS/NLOS source: @c "auto" (statistical) or
+                                                 ///<   @c "static_los". Buildings, when present,
+                                                 ///<   take over the decision regardless.
+    bool        blockage_enabled  = true;        ///< Parsed from run.ini but not read by any code
+                                                 ///<   outside the config loader.
+    std::string beamforming_model = "svd";       ///< Parsed from run.ini but not read by any code
+                                                 ///<   outside the config loader.
+    std::string amc_model         = "shannon";   ///< Capacity model: @c "shannon", @c "table", or
+                                                 ///<   @c "silvus" (not checked by the validator;
+                                                 ///<   an unknown value throws in the link evaluator).
+    double      noise_figure_db   = 5.0;         ///< Receiver noise figure in dB.
+    double      bandwidth_mhz     = 400.0;       ///< System bandwidth in MHz (must be > 0); sets the
+                                                 ///<   noise floor and the capacity.
+    double      tx_array_gain_dbi = 12.0;        ///< Peak TX array gain in dBi (>= 0); a node's own
+                                                 ///<   @c tx_array_gain_dbi overrides it.
+    double      rx_array_gain_dbi = 12.0;        ///< Peak RX array gain in dBi (>= 0); a node's own
+                                                 ///<   @c rx_array_gain_dbi overrides it.
 
     NyuChannelConfig nyu;  ///< NYU model parameters; ignored when @c channel_model is @c "3gpp".
 };

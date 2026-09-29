@@ -1,5 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file viz-writer.cc */
+/**
+ * @file viz-writer.cc
+ * @brief Implements VizWriter: opens the six CSV files and writes one snapshot per call.
+ *
+ * Public API and column schemas are documented in viz-writer.h.
+ */
 
 #include "src/io/viz-writer.h"
 #include "src/eval/sinr-capacity.h"

@@ -1,5 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file traffic-matrix.cc*/
+/**
+ * @file traffic-matrix.cc
+ * @brief Flow initialisation, expiry, Poisson arrivals and on-off state machine for @ref TrafficMatrix.
+ *
+ * Function contracts are documented in traffic-matrix.h.
+ */
 
 #include "src/traffic/traffic-matrix.h"
 

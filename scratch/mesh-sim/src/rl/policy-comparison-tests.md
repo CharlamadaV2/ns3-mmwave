@@ -1,4 +1,6 @@
-# Policy comparison and experiment-matrix tests
+@page src_rl_policy_comparison_tests src/rl/policy-comparison-tests
+
+@brief Map of the policy comparison, experiment-matrix, and evaluation-pipeline tests.
 
 Run these from `scratch/mesh-sim/`. The first three files use temporary
 manifests, a stub executor, or `fake_sim.py`; they do not need an ns-3 build:
