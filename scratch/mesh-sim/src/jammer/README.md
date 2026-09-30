@@ -14,7 +14,7 @@ jammer. Jammers are looked up through `SimConfig::jammers`.
 | File | Role |
 |------|------|
 | @c src/jammer/jammer-spec.h | @ref mesh_sim::JammerSpec and `Interval`: one jammer's parameters (plain data, loaded from `jammers.json`). |
-| @c src/jammer/jammer-model.h / .cc | @ref mesh_sim::JammerModel: total received jammer power (W) at a receiver, applying the gates below. |
+| @c src/jammer/jammer-model.h / .cc | @ref mesh_sim::JammerModel returns total received jammer power (W) at a receiver, applying the gates below. |
 | @c src/eval/link-evaluator.cc | Calls `JammerModel::InterfPowerAtReceiver` at both link ends and folds the larger into SINR. |
 | @c src/config/config-loader.cc | Reads `jammers.json` into `cfg.jammers` (`parseJammerSpec`). |
 | @c src/config/config-validator.cc | Validates `type`, `duty_cycle`, `beamwidth_deg`, and `intervals`. |

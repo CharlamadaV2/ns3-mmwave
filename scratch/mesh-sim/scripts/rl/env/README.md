@@ -5,9 +5,9 @@
 `MeshRlEnv` starts one simulator process per episode, validates every message
 it sends back, and turns the reply into a Gymnasium observation, reward, and
 `info` dict. It also writes the per-episode manifest and optional step
-telemetry. The wire contract lives in [`src/rl/README.md`](../../../src/rl/README.md);
+telemetry. The wire contract lives in [`src/rl/README.md`](@ref src_rl);
 observation presets and reward components are specified in
-[`src/rl/policy-inputs.md`](../../../src/rl/policy-inputs.md). This page does
+[`src/rl/policy-inputs.md`](@ref src_rl_policy_inputs). This page does
 not repeat them.
 
 ## Module Layout
@@ -95,7 +95,7 @@ Written under `<output_dir>/episode-NNNN/`, one directory per reset.
 ## Dependencies
 
 - Python packages: `gymnasium` and `numpy`; install as described in the
-  [main README](../../../README.md#python-environment).
+  [main README](@ref python_environment).
 - `scripts/sim_support.py` for the simulator environment and helpers.
 - A built simulator binary passed as `sim_binary`; this package does not build it.
-- Tests: [`../tests/README.md`](../tests/README.md).
+- Tests: [`../tests/README.md`](@ref scripts_rl_tests).

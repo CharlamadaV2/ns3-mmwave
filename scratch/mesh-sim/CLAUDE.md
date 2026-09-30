@@ -105,7 +105,7 @@ Band resolves as `--band` > `[channel] band` in `run.ini` > default `mmwave`.
 domain  <--  config, cli, eval, io, jammer, routing, rl, setup, traffic, util
 util    <--  config, io
 jammer  <--  eval, setup
-config  <--  sim.cc
+config  <--  sim.cc, setup
 cli     <--  sim.cc
 setup   <--  sim.cc
 eval    <--  sim.cc, rl (link-table)

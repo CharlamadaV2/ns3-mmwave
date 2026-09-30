@@ -8,10 +8,10 @@ plan to SLURM, and copy results to another machine.
 
 Create an experiment plan before benchmarking or submitting cluster tasks;
 tuning reads a study spec directly, and fetch copies an existing run. For a
-resource estimate, start at [Benchmark](#benchmark); for a small search, see
-[Tuning smoke](#tuning-smoke); for job submission and recovery, see
-[Cluster runs](#cluster-runs); for copying results home, see [Fetch](#fetch).
-The [module map](#module-map) below tells contributors which file owns each
+resource estimate, start at [Benchmark](@ref scripts_rl_ops_benchmark); for a small search, see
+[Tuning smoke](@ref scripts_rl_ops_tuning_smoke); for job submission and recovery, see
+[Cluster runs](@ref scripts_rl_ops_cluster_runs); for copying results home, see [Fetch](@ref scripts_rl_ops_fetch).
+The [module map](@ref scripts_rl_ops_module_map) below tells contributors which file owns each
 part. The cluster guide documents the current CLI, but live SLURM and real
 `rsync` behavior still need validation on the target site.
 
@@ -44,7 +44,7 @@ part. The cluster guide documents the current CLI, but live SLURM and real
 - No study resume, no array chunking beyond the site limit, and no automatic
   deletion or renaming of a blocked step directory.
 
-## Module map
+## Module map {#scripts_rl_ops_module_map}
 
 ```
 tasks.py       plan -> array tasks, per-task filesystem state, exit-code tolerance,
@@ -141,7 +141,7 @@ healthy task as FAILED, while the raw code survives in the record.
 `task_index` and `task_id` are `null` in compare mode. A skipped step records
 `exit_code: null` and `tolerated: null`.
 
-## Cluster runs
+## Cluster runs {#scripts_rl_ops_cluster_runs}
 
 For now, use one SLURM account per output root. Scheduler lookups use the
 current account, so a second operator may not see an existing job and could
@@ -307,9 +307,9 @@ job name.
    will appear automatically.
 
 The `sbatch` argv is
-`sbatch --parsable --no-requeue --job-name=J [--array=SPEC] --output=<log pattern>
+`sbatch --parsable --no-requeue --job-name=J [--array=SPEC] --output=LOG_PATTERN
 [--dependency=…] [--partition=] [--account=] [--qos=] [--constraint=] --time= --mem=
---cpus-per-task= <script>`, with each `null` config value omitting its flag.
+--cpus-per-task= SCRIPT`, with each `null` config value omitting its flag.
 `SPEC` is the compressed index list (`0-7`, `1,3`) plus `%N` when
 `max_concurrent_tasks` is set.
 
@@ -423,7 +423,7 @@ prints one line from the comparison outcome plus the raw exit code:
 
 `fetch` copies files **to another machine** and computes nothing.
 
-## Fetch
+## Fetch {#scripts_rl_ops_fetch}
 
 ```bash
 .venv/bin/python -m scripts.rl.ops.fetch --remote user@host:/abs/output-root \
@@ -449,7 +449,7 @@ Always included: `experiment_plan.json`, `cluster/tasks.json`, and
 | `logs` | `cluster/logs/**` |
 
 The argv is `rsync -a --prune-empty-dirs --ignore-existing --include=… --include='*/'
---exclude='*' <remote>/ <dest>/`. `--ignore-existing` is always present, so a
+--exclude='*' REMOTE/ DEST/`. `--ignore-existing` is always present, so a
 local file is never overwritten. A non-empty destination is refused unless
 `--update`, which only adds files that are absent locally and keeps an earlier
 manifest as `fetch_manifest.<n>.json`. The destination is also refused when it
@@ -483,7 +483,7 @@ paths do not exist locally.
 Fetched trees live under the git-ignored `outputs/`; nothing fetched is
 committed.
 
-## Benchmark
+## Benchmark {#scripts_rl_ops_benchmark}
 
 This is a measurement run, not a dry run: it executes one planned train step
 and its evaluation, then records wall-clock time and sampled memory. Use a
@@ -573,7 +573,7 @@ times the safety factor; both are `null` only when no step's memory was measured
 macOS, is never a cluster estimate; there is no queue, ETA, or throughput
 figure anywhere in the output.
 
-## Tuning smoke
+## Tuning smoke {#scripts_rl_ops_tuning_smoke}
 
 ```bash
 .venv/bin/python -m pip install -r requirements-tuning.txt

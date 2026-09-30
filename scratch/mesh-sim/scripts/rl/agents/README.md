@@ -1,9 +1,9 @@
 @page scripts_rl_agents scripts/rl/agents
 @brief Agent code for the RL pipeline: a MaskablePPO wrapper, training callbacks, and an exploratory Q-learning agent.
 
-This directory holds the learning-side code used by [`../train.py`](../train.py).
+This directory holds the learning-side code used by [`../train.py`](@ref rl/train.py).
 For the overall RL code map, setup, and training command, see
-[`../README.md`](../README.md); this page does not repeat them.
+[`../README.md`](@ref scripts_rl); this page does not repeat them.
 
 ## Module Layout
 
@@ -35,7 +35,7 @@ replay is deterministic.
 
 All other MaskablePPO settings use SB3 defaults. Adding a new tunable
 hyperparameter means updating the `train.py` CLI, the train manifest,
-`policy/compare.py::_TRAINING_SETTINGS`, and `ops/tune.py`'s `_SEARCHABLE`.
+`_TRAINING_SETTINGS` in `policy/compare.py`, and `ops/tune.py`'s `_SEARCHABLE`.
 
 ## Callbacks
 
@@ -72,6 +72,6 @@ imports it.
 ## Dependencies
 
 - `__init__.py` imports `sb3_contrib` eagerly, so importing the package needs the full `requirements.txt`.
-  Code that must work without it (for example `policy/bundle.py::load_model`) imports `mask_ppo` lazily.
+  Code that must work without it (for example `load_model` in `policy/bundle.py`) imports `mask_ppo` lazily.
 - `mask_ppo.py` and `callbacks.py`: `stable_baselines3`, `sb3_contrib`, `gymnasium`.
 - `q_learning.py`: `numpy` only.

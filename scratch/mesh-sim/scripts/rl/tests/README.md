@@ -7,7 +7,7 @@ they do not write to scenario inputs. `fake_sim.py` supplies protocol messages
 for Python tests and does not model radio propagation. Set `MESH_SIM_BIN` to a
 freshly built simulator for the real-binary tests; without it, that module
 skips. Install the Python requirements first as described in the [main
-README](../../../README.md#python-environment).
+README](@ref python_environment).
 
 ```bash
 .venv/bin/python -m pytest scripts/rl/tests/test_mesh_env.py -q
@@ -28,9 +28,9 @@ MESH_SIM_BIN=/absolute/path/to/mesh-sim-binary make -C tests integration
 
 | Modules | Map |
 | --- | --- |
-| `test_observations_rewards.py` and policy-input cases in `test_mesh_env.py` / `test_real_binary.py` | [policy-input-tests.md](../../../src/rl/policy-input-tests.md) |
-| `test_lifecycle_cli.py`, `test_policy_lifecycle.py` | [policy-lifecycle-tests.md](../../../src/rl/policy-lifecycle-tests.md) |
-| `test_evaluation_pipeline.py`, `test_experiment_matrix.py`, `test_policy_comparison.py` | [policy-comparison-tests.md](../../../src/rl/policy-comparison-tests.md) |
+| `test_observations_rewards.py` and policy-input cases in `test_mesh_env.py` / `test_real_binary.py` | [policy-input-tests.md](@ref src_rl_policy_input_tests) |
+| `test_lifecycle_cli.py`, `test_policy_lifecycle.py` | [policy-lifecycle-tests.md](@ref src_rl_policy_lifecycle_tests) |
+| `test_evaluation_pipeline.py`, `test_experiment_matrix.py`, `test_policy_comparison.py` | [policy-comparison-tests.md](@ref src_rl_policy_comparison_tests) |
 
 ## Python adapter: `test_mesh_env.py`
 
@@ -109,12 +109,12 @@ and checks accepted values or precise errors; it writes no simulation output.
 `tests/integration/cli-integration-test.sh` Test 9 runs the legacy smoke
 scenario with closed stdin. It expects five `step` lines, no `init`, and a
 `controlled_pos` observation on the first line; other CLI checks are described
-in the [main verification section](../../../README.md#verify).
+in the [main verification section](@ref verify).
 
 ## Ops and tooling tests
 
 These use stub executors, `fake_slurm.py`, or a fake `rsync`; no cluster or
-simulator is needed. Behavior is specified in `scripts/rl/ops/README.md`.
+simulator is needed. Behavior is specified in [`scripts/rl/ops/README.md`](@ref scripts_rl_ops).
 Parametrized tests cover several inputs each; only the pattern is listed.
 
 ### `test_ops_tasks.py`

@@ -14,6 +14,8 @@ link, and window sums); preset selection and normalization live in Python.
 ## Files
 - **rl-bridge.h/cc** -- `RlBridge` class with `Step()` (IPC) and `ApplyAction()` (physics).
 - **README.md** -- Mode/message/mask/action contract shared with the Python env.
+- **policy-inputs.md** -- Observation presets, reward components, telemetry.
+- **policy-input-tests.md / policy-lifecycle-tests.md / policy-comparison-tests.md** -- Test maps.
 - **rl-agent.h** -- Legacy placeholder (no-op). Superseded by rl-bridge.
 
 ## Dependencies

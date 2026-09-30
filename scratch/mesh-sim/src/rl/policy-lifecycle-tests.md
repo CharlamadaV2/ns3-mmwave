@@ -2,7 +2,7 @@
 
 @brief Map of the policy lifecycle (validate, train, inspect, evaluate) tests to their inputs and expected outputs.
 
-The [four-command walkthrough](../../README.md#model-lifecycle) shows how to
+The [four-command walkthrough](@ref scripts_rl_lifecycle) shows how to
 validate, train, inspect, and evaluate. These tests check that path without
 adding reference snapshots. The Python contract tests use a fake simulator
 and temporary directories; they do not establish radio accuracy. Run them

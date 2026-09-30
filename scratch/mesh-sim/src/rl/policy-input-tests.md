@@ -4,7 +4,7 @@
 
 These checks cover the centralized action contract and the configurable
 observations, rewards, and telemetry described in the
-[policy-input guide](policy-inputs.md); the test files live in [`scripts/rl/tests/`](../../scripts/rl/tests/README.md). The Python-only tests use
+[policy-input guide](@ref src_rl_policy_inputs); the test files live in [`scripts/rl/tests/`](@ref scripts_rl_tests). The Python-only tests use
 `fake_sim.py` and temporary directories; they do not validate radio physics.
 `test_real_binary.py` runs the bundled `centralized-multi-smoke` scenario in
 pytest's temporary directory and skips unless `MESH_SIM_BIN` points to a built

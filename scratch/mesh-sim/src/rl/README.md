@@ -20,10 +20,10 @@ For a code walkthrough, start with the tick loop in `sim.cc`, then
 `src/rl/rl-bridge.cc` for the messages, actions, and tick reward. Follow one
 `step` into `scripts/rl/env/mesh_env.py` to see what Gymnasium returns.
 
-The Python side is documented in [`scripts/rl/README.md`](../../scripts/rl/README.md),
-[`scripts/rl/env/README.md`](../../scripts/rl/env/README.md),
-[`scripts/rl/policy/README.md`](../../scripts/rl/policy/README.md), and
-[`scripts/rl/tests/README.md`](../../scripts/rl/tests/README.md). In short,
+The Python side is documented in [`scripts/rl/README.md`](@ref scripts_rl),
+[`scripts/rl/env/README.md`](@ref scripts_rl_env),
+[`scripts/rl/policy/README.md`](@ref scripts_rl_policy), and
+[`scripts/rl/tests/README.md`](@ref scripts_rl_tests). In short,
 `scripts/rl/env/mesh_env.py` owns the Gymnasium API,
 `protocol.py` validates actions and messages, and `episode.py` owns the
 simulator process, episode directories, diagnostics, and manifest.
@@ -31,12 +31,12 @@ simulator process, episode directories, diagnostics, and manifest.
 precedence, and validates it. `observations.py` owns the named observation
 presets and their schema identity. `rewards.py` owns the reward components and
 the composer. `telemetry.py` owns `steps.jsonl` records and their replay.
-For training, follow [`train.py`](../../scripts/rl/train.py) (CLI and model
-output) into [`agents/mask_ppo.py`](../../scripts/rl/agents/mask_ppo.py)
+For training, follow [`train.py`](@ref rl/train.py) (CLI and model
+output) into [`agents/mask_ppo.py`](@ref agents/mask_ppo.py)
 (MaskablePPO setup), then into the environment. Within `env/`, `config.py`
 reads the seed and movement bounds.
 For a worked configuration, formulas, normalization, and trace inspection, see
-the [policy-input guide](policy-inputs.md).
+the [policy-input guide](@ref src_rl_policy_inputs).
 
 ## Modes
 
@@ -49,7 +49,7 @@ the [policy-input guide](policy-inputs.md).
 automatic migration: legacy action `4` is `-Z`, centralized action `4` is hold.
 `action_set` and `dimensions` are not configuration keys.
 
-## Centralized contract (`mesh_move_2d_v1`)
+## Centralized contract (`mesh_move_2d_v1`) {#src_rl_centralized_contract}
 
 Here, **contract** means the agreed C++/Python message and action format—not a
 radio link or a training objective. `mesh_move_2d_v1` identifies the current
@@ -71,7 +71,7 @@ contract name; it is reported by the simulator, not chosen in `run.ini`.
 | Reward window | `mean`: one policy reward is the arithmetic mean of the per-tick rewards since the previous decision; the last window can be shorter. |
 | Terminal message | emitted at `tick == num_ticks` with `done: true`; no action is read after it |
 
-### Reward and wall behavior
+### Reward and wall behavior {#src_rl_reward_and_wall}
 
 At tick 0, the simulator evaluates links and traffic and sends an initial
 reward in the reset message; Gymnasium's `reset()` does **not** return that
@@ -153,7 +153,7 @@ ordinary dictionary, not a SHA hash or another configuration file.
 | Signature field | Meaning |
 | --- | --- |
 | `control_mode` | `centralized`; identifies the multi-node protocol (set by Python, not sent in `init`). |
-| `contract` | C++/Python protocol identifier; see [Centralized contract](#centralized-contract-mesh_move_2d_v1). |
+| `contract` | C++/Python protocol identifier; see [Centralized contract](@ref src_rl_centralized_contract). |
 | `dimensions` | `2`: actions move horizontally; z can still appear in observations. |
 | `action_meanings` | Ordered meanings of actions 0–4: west, east, south, north, hold. |
 | `num_mesh_nodes` | Total mesh nodes `N` in `nodes.json`, including uncontrolled nodes but not jammers. |
@@ -169,8 +169,8 @@ ordinary dictionary, not a SHA hash or another configuration file.
 | `num_ticks` | Total simulator ticks in the episode. |
 | `num_decisions` | Number of decision windows, `ceil(num_ticks / k)`. |
 | `reward_type` | C++ reward selected by `[rl] reward_type`. |
-| `reward_window` | `mean`: one arithmetic mean over this decision's ticks; see [Reward and wall behavior](#reward-and-wall-behavior). |
-| `wall_policy` | `clip`: x/y movement lands at the bounds rather than crossing them; see [Reward and wall behavior](#reward-and-wall-behavior). |
+| `reward_window` | `mean`: one arithmetic mean over this decision's ticks; see [Reward and wall behavior](@ref src_rl_reward_and_wall). |
+| `wall_policy` | `clip`: x/y movement lands at the bounds rather than crossing them; see [Reward and wall behavior](@ref src_rl_reward_and_wall). |
 
 The `init` message also has `type: "init"` and `num_controlled`, the actual
 number of active nodes (`num_controlled <= max_controlled_nodes`).
@@ -178,7 +178,7 @@ number of active nodes (`num_controlled <= max_controlled_nodes`).
 facts, not additional `run.ini` settings.
 The signature also includes `type`, `facts_schema`, `facts_columns`,
 `node_ids`, `num_links`, `bounds`, `band`, `jammer_path_enabled`, and `warmup_s`
-(see [Per-decision facts](#per-decision-facts-mesh_facts_v1)). Padded entries
+(see [Per-decision facts](@ref src_rl_per_decision_facts)). Padded entries
 in `slot_node_ids` and `slot_speed_mps` are `null`.
 
 Each centralized `step` is a message from C++ to Python:
@@ -193,7 +193,7 @@ Each centralized `step` is a message from C++ to Python:
 | `mask` | Flat 0/1 valid-action array, five entries per slot, length `mask_dim`. |
 | `reward` | Mean reward across this message's ticks, as described above. |
 | `done` | Whether the episode reached its final tick; no action follows a true value. |
-| `revalidated_slots` | Zero-based positions from the previous action that C++ changed to hold; see [Invalid or missing actions](#invalid-or-missing-actions). |
+| `revalidated_slots` | Zero-based positions from the previous action that C++ changed to hold; see [Invalid or missing actions](@ref src_rl_invalid_actions). |
 | `facts` | Raw node, link, and window measurements described below. |
 
 Python replies with `{"action":[…]}`: exactly `M` integers in `[0,4]`, with
@@ -206,7 +206,7 @@ Legacy `step` remains unchanged: `type`, `tick`, `time_s`,
 `time_s` is simulated time, never wall clock, so identical inputs give identical
 stdout.
 
-## Per-decision facts (`mesh_facts_v1`)
+## Per-decision facts (`mesh_facts_v1`) {#src_rl_per_decision_facts}
 
 Every centralized `step` carries a `facts` object of raw simulator values; C++
 does no clipping, scaling, or feature selection. Legacy mode emits no facts and
@@ -245,7 +245,7 @@ the emitted `reward` is unchanged by the facts export. The reset message covers
 tick 0 only, so its window has `ticks = 1`; that reward is observable but is not
 a policy reward. C++ never emits NaN or infinity in `facts`.
 
-## Invalid or missing actions
+## Invalid or missing actions {#src_rl_invalid_actions}
 
 | Case | Centralized | Legacy |
 | --- | --- | --- |
@@ -263,7 +263,7 @@ whole action (which makes all positions hold instead).
 
 A centralized run never accepts a scalar action; a legacy run never accepts a list.
 
-## Compatibility envelope
+## Compatibility envelope {#src_rl_compatibility_envelope}
 
 A policy is structurally compatible with a run only when `contract`,
 `action_meanings`, `max_controlled_nodes` (→ `nvec`) and `num_mesh_nodes`
@@ -296,7 +296,7 @@ resets stay deterministic, but that alone does not make an RL-versus-baseline
 comparison fair: confirm uncontrolled and jammer randomness is paired before any
 such campaign.
 
-## Saved scenario identity
+## Saved scenario identity {#src_rl_saved_scenario_identity}
 
 Training writes `scenario_identity` in `train_manifest.json` with five fields
 (`read_scenario_identity` in `scripts/rl/env/config.py`): `run_config` is the
@@ -308,9 +308,19 @@ relative to `run.ini` unless already absolute, and defaults to `nodes.json`.
 These fingerprints do not change the simulation or the reward. The record does
 **not** fingerprint waypoints, a CLI band override, or the simulator binary
 (the band is compared separately in step 4 of the
-[compatibility envelope](#compatibility-envelope)). A matching identity is not
+[compatibility envelope](@ref src_rl_compatibility_envelope)). A matching identity is not
 proof that a model transfers. The selected node order and protocol settings are
 saved separately in the manifest's `contract` field.
 
 For the checklist when changing the protocol or saved-file format, see
-[`CONTRIBUTING.md`](../../CONTRIBUTING.md).
+@ref contribution.
+
+## Tests {#src_rl_tests}
+
+Test maps (inputs and expected outputs):
+
+- @ref src_rl_policy_input_tests -- centralized action contract, observations, rewards, telemetry.
+- @ref src_rl_policy_lifecycle_tests -- validate, train, inspect, evaluate.
+- @ref src_rl_policy_comparison_tests -- policy comparison, experiment matrix, evaluation pipeline.
+
+The test files live in [`scripts/rl/tests/`](@ref scripts_rl_tests).

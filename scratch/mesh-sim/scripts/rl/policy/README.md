@@ -1,10 +1,10 @@
 @page scripts_rl_policy scripts/rl/policy
 @brief Library behind `evaluate.py` and `compare.py`: verify a saved training run, run policies, compute paired statistics.
 
-This package holds the logic. The two command-line programs, [`../evaluate.py`](../evaluate.py)
-and [`../compare.py`](../compare.py), own argument parsing, printing, and process exit codes.
-For the wider RL code map see [`../README.md`](../README.md); for the four-command
-walkthrough see [Model lifecycle](../../../README.md#model-lifecycle).
+This package holds the logic. The two command-line programs, [`../evaluate.py`](@ref rl/evaluate.py)
+and [`../compare.py`](@ref rl/compare.py), own argument parsing, printing, and process exit codes.
+For the wider RL code map see [`../README.md`](@ref scripts_rl); for the four-command
+walkthrough see [Model lifecycle](@ref scripts_rl_lifecycle).
 
 ## Module Layout
 
@@ -26,8 +26,8 @@ Train, evaluate, and compare are three separate commands. This package serves th
 3. Comparison reads one or more `eval_manifest.json` files and writes `episodes.csv` and
    `comparison.json`.
 
-Test maps: [lifecycle](../../../src/rl/policy-lifecycle-tests.md) and
-[comparison](../../../src/rl/policy-comparison-tests.md).
+Test maps: [lifecycle](@ref src_rl_policy_lifecycle_tests) and
+[comparison](@ref src_rl_policy_comparison_tests).
 
 ## Bundle Verification
 
@@ -118,7 +118,7 @@ computes `model - baseline` differences.
 
 ## Dependencies
 
-- `numpy`; MaskablePPO (via [`../agents/mask_ppo.py`](../agents/mask_ppo.py)) only when loading a model.
+- `numpy`; MaskablePPO (via [`../agents/mask_ppo.py`](@ref agents/mask_ppo.py)) only when loading a model.
 - `../cli_common.py`, `../env/`, and `scripts/stats.py` (`t_critical_95`) from this repository.
 - Run the CLIs as `python -m scripts.rl.evaluate` / `python -m scripts.rl.compare` from
   `scratch/mesh-sim/`; evaluation needs a built simulator binary.

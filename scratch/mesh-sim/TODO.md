@@ -49,8 +49,8 @@ change it; do not infer the answer from the code.
 
 ### P2 observation/reward/telemetry follow-ups
 
-- **TODO-P2-1 — Jammer 0 dB SINR clamp.** `src/eval/link-evaluator.cc:179-183`
-  clamps SINR to at least 0 dB whenever a jammer contributes power, so a jammed
+- **TODO-P2-1 — Jammer 0 dB SINR clamp.** the jammed branch of
+  `LinkEvaluator::Evaluate` in `src/eval/link-evaluator.cc` clamps SINR to at least 0 dB whenever a jammer contributes power, so a jammed
   link can never fall below the connectivity threshold and a weak link can even
   become *connected* when a jammer turns on. Jamming enters SINR only when
   `band = sub-6`. No jamming-aware claim, reward experiment, or jammer feature
@@ -72,13 +72,6 @@ change it; do not infer the answer from the code.
   a leakage review (what a real node could actually know) before becoming a
   preset feature, and any jammer feature also depends on TODO-P2-1.
   Owner: team — status: open.
-
-### TODO-DOC-1 — Root CLAUDE.md dependency layers
-The root `scratch/mesh-sim/CLAUDE.md` dependency-layer list does not record the
-new `setup → config` edge: `src/setup/topology-builder.cc` includes
-`src/config/rl-control.h` for `ControlledStartPosition`. That file is
-human-owned and was deliberately not edited when centralized control was
-added; the line should be added by its owner. Owner: team — status: open.
 
 ### Continuous Desired-Position Actions with SB3
 The discrete left/right/stay action space is a v0 simplification. The
@@ -250,8 +243,8 @@ architecture change.
 
 ## Interference Modeling
 
-Currently assumes orthogonal channels between all node pairs (no
-inter-node interference). This is reasonable for narrow mmWave beams with
+Apart from configured jammers (sub-6 only), assumes orthogonal channels
+between all node pairs (no inter-node interference). This is reasonable for narrow mmWave beams with
 high spatial isolation, but underestimates interference in dense deployments.
 
 Full interference modeling would require:
