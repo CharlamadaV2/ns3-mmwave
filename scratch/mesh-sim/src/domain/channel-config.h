@@ -5,10 +5,10 @@
  * @brief Radio and channel configuration POD types.
  *
  *
- * Two channel models are supported, selected by @ref ChannelConfig::channel_model:
+ * Two channel models are supported, selected by @ref mesh_sim::ChannelConfig::channel_model.
  * - @c "3gpp" — 3GPP TR 38.901 statistical model (default).
  * - @c "nyu"  — NYU WIRELESS mmWave model; requires the additional
- *               parameters in @ref NyuChannelConfig.
+ *               parameters in @ref mesh_sim::NyuChannelConfig.
  */
 #pragma once
 

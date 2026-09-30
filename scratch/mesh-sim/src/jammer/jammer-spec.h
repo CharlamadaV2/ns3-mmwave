@@ -5,7 +5,7 @@
  *
  * Pure POD with no ns-3 dependency. Parsed by @c ConfigLoader, checked by
  * @c ConfigValidator, given a mobility model by @c TopologyBuilder and
- * consumed by @ref JammerModel. Held in @ref SimConfig::jammers.
+ * consumed by @ref mesh_sim::JammerModel. Held in @ref mesh_sim::SimConfig::jammers.
  */
 
 #pragma once

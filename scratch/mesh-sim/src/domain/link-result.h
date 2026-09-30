@@ -3,7 +3,7 @@
  * @file link-result.h
  * @brief Per-link radio evaluation result POD type.
  *
- * One @ref LinkResult is produced per unordered node pair (i < j) per
+ * One @ref mesh_sim::LinkResult is produced per unordered node pair (i < j) per
  * simulation tick by @c LinkEvaluator::EvaluateAll, with @c tx_id = i and
  * @c rx_id = j. The evaluator treats the link as symmetric, so there is no
  * separate (j, i) result.

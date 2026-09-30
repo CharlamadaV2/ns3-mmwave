@@ -3,14 +3,14 @@
  * @file link-evaluator.h
  * @brief Per-link path loss, SINR, and capacity computation.
  *
- * @ref LinkEvaluator wraps a pair of ns-3 propagation models — a
+ * @ref mesh_sim::LinkEvaluator wraps a pair of ns-3 propagation models — a
  * @c PropagationLossModel and a @c ChannelConditionModel — and applies
  * the configured TX power, per-node array gains, bandwidth, and noise figure
- * to produce a complete @ref LinkResult for each node pair. In the sub-6
- * band it also folds in jammer power via @ref JammerModel.
+ * to produce a complete @ref mesh_sim::LinkResult for each node pair. In the sub-6
+ * band it also folds in jammer power via @ref mesh_sim::JammerModel.
  *
- * @note @ref Configure must be called before @ref Evaluate or
- *       @ref EvaluateAll; calling either without first configuring produces
+ * @note @ref mesh_sim::LinkEvaluator::Configure must be called before @ref mesh_sim::LinkEvaluator::Evaluate or
+ *       @ref mesh_sim::LinkEvaluator::EvaluateAll; calling either without first configuring produces
  *       undefined behaviour (null model pointers and empty gain vectors).
  */
 #pragma once

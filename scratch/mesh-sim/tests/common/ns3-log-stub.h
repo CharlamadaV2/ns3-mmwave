@@ -1,7 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Minimal stub for ns3/log.h so that eval code compiles in standalone tests.
- * Only the macros used in eval/ are stubbed here.
+ * Minimal stub for ns3/log.h so ns-3-free sources (eval, routing, traffic)
+ * compile in standalone tests. Logging macros expand to no-ops.
  */
 #pragma once
 

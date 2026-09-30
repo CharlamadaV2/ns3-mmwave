@@ -15,7 +15,7 @@
  * | @c "silvus"   | Silvus radio's native single-stream MCS table (MCS 0–6).        |
  * |               | Throughputs are the radio's published spec-sheet numbers; the   |
  * |               | SINR thresholds are calculated by matching each level to the    |
- * |               | nearest 3GPP CQI entry (see @ref SilvusMcsEntry). The 2-stream  |
+ * |               | nearest 3GPP CQI entry (see @ref mesh_sim::SilvusMcsEntry). The 2-stream  |
  * |               | MIMO levels (MCS 8–14) are never selected (no MIMO model).      |
  *
  * The MCS table is derived from 3GPP TS 38.214 Table 5.1.3.1-1 and uses
@@ -109,10 +109,10 @@ static constexpr uint32_t MCS_TABLE_SIZE = 16;
  * The Silvus manual (Table 5) publishes MCS, streams, constellation, FEC
  * rate, and PHY throughput — but NO SINR column. @c sinr_min_db is therefore
  * a CALCULATED approximation, not a spec-sheet or field-measured value: each
- * single-stream level is matched to the 3GPP TS 38.214 CQI entry (@ref
- * MCS_TABLE) with the nearest spectral efficiency, and that entry's ~10%-BLER
+ * single-stream level is matched to the 3GPP TS 38.214 CQI entry (@c MCS_TABLE)
+ * with the nearest spectral efficiency, and that entry's ~10%-BLER
  * SINR threshold is used. This grounds the ladder in the same link-level
- * curve as the rest of the sim. See @ref SILVUS_MCS_TABLE for the per-level
+ * curve as the rest of the sim. See @c SILVUS_MCS_TABLE for the per-level
  * derivation and its limitations.
  */
 struct SilvusMcsEntry

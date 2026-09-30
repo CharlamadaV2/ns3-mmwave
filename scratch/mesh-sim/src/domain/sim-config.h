@@ -3,11 +3,11 @@
  * @file sim-config.h
  * @brief Top-level simulation configuration and runtime metadata POD types.
  *
- * @ref SimConfig is the single root object that flows through the entire
- * simulation.  It is produced by @ref ConfigLoader::Load, validated by
- * @ref ValidateConfig, and then passed by const-reference to every
+ * @ref mesh_sim::SimConfig is the single root object that flows through the entire
+ * simulation.  It is produced by @ref mesh_sim::ConfigLoader::Load, validated by
+ * @ref mesh_sim::ValidateConfig, and then passed by const-reference to every
  * subsystem constructor.
- * @ref TimingInfo is intentionally separate from @ref SimConfig because it
+ * @ref mesh_sim::TimingInfo is intentionally separate from @ref mesh_sim::SimConfig because it
  * is not loaded from any file — it is populated by @c sim.cc after the step
  * loop completes and written to the output JSON by @c MetricsWriter.
  */

@@ -3,13 +3,13 @@
  * @file metrics-writer.h
  * @brief Accumulates per-tick simulation metrics and writes summary.json.
  *
- * One @ref MetricsWriter is created per seed run. @ref MetricsWriter::AccumulateTick
- * is called every tick; @ref MetricsWriter::Write is called once after the step loop.
+ * One @ref mesh_sim::MetricsWriter is created per seed run. @ref mesh_sim::MetricsWriter::AccumulateTick
+ * is called every tick; @ref mesh_sim::MetricsWriter::Write is called once after the step loop.
  * The class has no ns-3 dependency.
  *
  * **Output: summary.json**
  * Written to @c cfg.output_dir/summary.json (the per-seed directory
- * @c seed-N/) by @ref MetricsWriter::Write. Indented with 2 spaces.
+ * @c seed-N/) by @ref mesh_sim::MetricsWriter::Write. Indented with 2 spaces.
  *
  * | JSON key              | Value                                                     |
  * |-----------------------|-----------------------------------------------------------|
@@ -17,7 +17,7 @@
  * | @c seed               | @c cfg.seed. |
  * | @c duration_s         | Simulated duration in seconds. |
  * | @c warmup_s           | Warm-up period in seconds; earlier ticks are excluded from all averages. |
- * | @c wall_clock_start, @c wall_clock_end, @c wall_elapsed_s | ISO-8601 timestamps and elapsed wall seconds. Present only when @ref MetricsWriter::SetTiming was called with @c elapsed_s > 0. |
+ * | @c wall_clock_start, @c wall_clock_end, @c wall_elapsed_s | ISO-8601 timestamps and elapsed wall seconds. Present only when @ref mesh_sim::MetricsWriter::SetTiming was called with @c elapsed_s > 0. |
  * | @c per_node[id]       | Keyed by node id. @c mean/min/max_sinr_db (over all valid link samples; @c null if none), @c num_links (mean connected links per tick), @c num_los_links (mean LOS links per tick), @c tx/rx_throughput_mbps (mean delivered Mbit/s of flows the node sources / sinks). |
  * | @c per_flow["A->B"]   | Keyed by source and destination node id. @c demand_mbps, @c delivered_mbps, @c latency_ms, @c hop_count, each averaged over the ticks the flow was reported. |
  * | @c network            | @c sum_throughput_mbps (mean total delivered per tick), @c mean_sinr_db (@c null if no valid sample), @c connectivity (connected node pairs / all pairs, using the default @c LinkTable::IsConnected threshold of -6.7 dB), @c mean_hop_count (over routable flow observations), @c flows_routed and @c flows_unroutable (mean per tick). |
@@ -93,7 +93,7 @@ class MetricsWriter
 
     /**
      * @fn MetricsWriter::Write
-     * @brief Write all accumulated metrics to @c <output_dir>/summary.json.
+     * @brief Write all accumulated metrics to @c output_dir/summary.json.
      *
      * All per-node and per-flow values are time-averaged over the number of
      * post-warmup ticks in which they were observed. Node IDs from

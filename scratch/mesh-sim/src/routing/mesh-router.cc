@@ -1,7 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file mesh-router.cc
- * @brief Path finding, congestion scaling and latency model for @ref MeshRouter.
+ * @brief Path finding, congestion scaling and latency model for @ref mesh_sim::MeshRouter.
  *
  * Function contracts are documented in mesh-router.h.
  */

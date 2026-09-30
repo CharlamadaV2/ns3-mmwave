@@ -3,9 +3,9 @@
  * @file run-logger.h
  * @brief Header-only writer for run.log: seeds, CLI overrides, and resolved config.
  *
- * Call @ref WriteRunLog once per batch run (not per seed) immediately after
- * @ref ResolveSeeds, before the per-seed simulation loop begins.  The log
- * captures the state of @ref CliArgs and @ref SimConfig at that point. Its
+ * Call @ref mesh_sim::WriteRunLog once per batch run (not per seed) immediately after
+ * @ref mesh_sim::ResolveSeeds, before the per-seed simulation loop begins.  The log
+ * captures the state of @ref mesh_sim::CliArgs and @ref mesh_sim::SimConfig at that point. Its
  * "Resolved config" block is the source of truth for a run.
  *
  * **Output: @c \<base_output_dir\>/run.log** (batch root, not per seed)
@@ -15,11 +15,11 @@
  * | Header             | ISO-8601 timestamp, scenario name, run_config path.            |
  * | Seeds              | The resolved seed list and its source                          |
  * |                    | (@c --seeds / @c --seed / config default).                     |
- * | CLI overrides      | Every @ref CliArgs field, with @c "(not set)" for unused flags. |
- * | Resolved config    | Key @ref SimConfig scalar fields: timing, channel, traffic,    |
+ * | CLI overrides      | Every @ref mesh_sim::CliArgs field, with @c "(not set)" for unused flags. |
+ * | Resolved config    | Key @ref mesh_sim::SimConfig scalar fields: timing, channel, traffic,    |
  * |                    | routing, node/building counts, plus band/RL-reward provenance,  |
  * |                    | the resolved RL control block, and jammer counts.              |
- * | Jammers            | One line per configured @ref JammerSpec (omitted when none).    |
+ * | Jammers            | One line per configured @ref mesh_sim::JammerSpec (omitted when none).    |
  */
 #pragma once
 

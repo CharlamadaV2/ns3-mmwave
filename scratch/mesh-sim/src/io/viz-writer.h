@@ -3,15 +3,15 @@
  * @file viz-writer.h
  * @brief Writes per-tick CSV snapshots for the GUI and offline plotting.
  *
- * @ref VizWriter keeps six CSV files open for the duration of one seed run and
- * appends rows each time @ref VizWriter::WriteTick is called. Writes are
+ * @ref mesh_sim::VizWriter keeps six CSV files open for the duration of one seed run and
+ * appends rows each time @ref mesh_sim::VizWriter::WriteTick is called. Writes are
  * rate-limited to @c viz_tick_ms so a small @c tick_s does not inflate file sizes.
  *
  * **Output files** (all written to @c cfg.output_dir, the per-seed @c seed-N/ directory)
  *
  * | File             | Columns                                                                  |
  * |------------------|--------------------------------------------------------------------------|
- * | @c positions.csv | @c time_s, @c node_id, @c x, @c y, @c z, @c node_type, @c active. Starts with @c # metadata lines (see @ref VizWriter::Open). |
+ * | @c positions.csv | @c time_s, @c node_id, @c x, @c y, @c z, @c node_type, @c active. Starts with @c # metadata lines (see @ref mesh_sim::VizWriter::Open). |
  * | @c links.csv     | @c time_s, @c node_a, @c node_b, @c dist_m, @c sinr_db, @c condition, @c condition_reason, @c capacity_mbps, @c delivered_mbps, @c hop_count |
  * | @c rx-power.csv  | @c time_s, @c node_a, @c node_b, @c rx_power_dbm                        |
  * | @c mcs.csv       | @c time_s, @c node_a, @c node_b, @c mcs_index, @c spectral_eff          |
@@ -160,7 +160,7 @@ class VizWriter
     /**
      * @brief Write one MCS row per unordered node pair to @c mcs.csv.
      *
-     * Looks up @c spectral_eff from @ref MCS_TABLE using the stored
+     * Looks up @c spectral_eff from @c MCS_TABLE using the stored
      * @c mcs_index so consumers do not need to re-derive it.
      */
     void WriteMcs(double time_s, const LinkTable& links);

@@ -3,8 +3,8 @@
  * Unit tests for config validation and seed parsing.
  * Standalone binary -- no ns-3 dependency.
  *
- * Build:  see mesh-sim-config-test target in CMakeLists.txt
- * Run:    ./mesh-sim-config-test
+ * Build:  make   (in this directory)
+ * Run:    make test, or ./config-validator-test
  */
 
 #include "src/config/config-loader.h"

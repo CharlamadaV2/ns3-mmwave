@@ -3,7 +3,7 @@
  * @file traffic-matrix.h
  * @brief Flow-level traffic demand generation for the mesh.
  *
- * @ref TrafficMatrix maintains a list of @ref Flow objects and updates
+ * @ref mesh_sim::TrafficMatrix maintains a list of @ref mesh_sim::Flow objects and updates
  * them each tick according to the configured traffic model. There are no
  * packets — a flow simply represents "node A wants X Mbps to node B."
  *
@@ -12,10 +12,10 @@
  *
  * | @c model      | Flow creation                           | Per-tick update                          |
  * |---------------|-----------------------------------------|------------------------------------------|
- * | @c "constant" | All flows created at @ref Initialize.   | None; flows run for the full simulation. |
- * | @c "poisson"  | Initial flows at @ref Initialize, plus | New flows added; expired flows removed.  |
+ * | @c "constant" | All flows created at @ref mesh_sim::TrafficMatrix::Initialize.   | None; flows run for the full simulation. |
+ * | @c "poisson"  | Initial flows at @ref mesh_sim::TrafficMatrix::Initialize, plus | New flows added; expired flows removed.  |
  * |               | Poisson arrivals each tick.             |                                          |
- * | @c "on_off"   | All flows created at @ref Initialize.   | ON/OFF state machine per flow.           |
+ * | @c "on_off"   | All flows created at @ref mesh_sim::TrafficMatrix::Initialize.   | ON/OFF state machine per flow.           |
  *
  * **Flow removal**
  * Expired flows (@c end_time_s > 0 and @c active == false) are erased from
@@ -23,9 +23,9 @@
  * even when they transition to inactive in the on-off model.
  *
  * **Gateway resolution**
- * For the @c "gateway" topology, @ref TrafficConfig::gateway_node_id is
+ * For the @c "gateway" topology, @ref mesh_sim::TrafficConfig::gateway_node_id is
  * resolved as a numeric index first (@c stoul); if that throws, it falls
- * back to a linear search by @ref NodeSpec::id string. Index 0 is used
+ * back to a linear search by @ref mesh_sim::NodeSpec::id string. Index 0 is used
  * when @c gateway_node_id is empty.
  */
 #pragma once
@@ -206,7 +206,7 @@ class TrafficMatrix
      * @fn TrafficMatrix::InitGateway
      * @brief Create one flow from every non-gateway node to the gateway.
      *
-     * Resolves the gateway index from @ref TrafficConfig::gateway_node_id:
+     * Resolves the gateway index from @ref mesh_sim::TrafficConfig::gateway_node_id as follows.
      * -# Attempt @c std::stoul (numeric index).
      * -# On @c std::invalid_argument, search @c m_nodeSpecs by @c id string.
      * -# Default to index 0 when @c gateway_node_id is empty.

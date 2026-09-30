@@ -1,8 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Minimal stub for ns3/random-variable-stream.h so that routing code
- * compiles in standalone tests. Only the types referenced (transitively)
- * by traffic-matrix.h are stubbed here.
+ * compiles in standalone tests. Only the types reached through
+ * traffic-matrix.h are stubbed.
  */
 #pragma once
 

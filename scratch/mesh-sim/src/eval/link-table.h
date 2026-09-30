@@ -3,8 +3,8 @@
  * @file link-table.h
  * @brief NxN symmetric link-quality matrix with O(1) per-link lookup.
  *
- * @ref LinkTable wraps the flat vector produced by
- * @ref LinkEvaluator::EvaluateAll into a symmetric N×N matrix.
+ * @ref mesh_sim::LinkTable wraps the flat vector produced by
+ * @ref mesh_sim::LinkEvaluator::EvaluateAll into a symmetric N×N matrix.
  * It is updated once per tick and then queried by the routing engine,
  * metrics and viz writers, and the RL bridge. Pure C++ apart from
  * @c NS_LOG in the .cc, so it is unit-tested standalone.
@@ -88,7 +88,7 @@ class LinkTable
      * @brief Count unordered node pairs whose SINR meets the threshold.
      *
      * @param sinrThresholdDb  Minimum acceptable SINR in dB. Default −6.7,
-     *                         a literal equal to @ref SINR_MIN_DB (not linked to it).
+     *                         a literal equal to @c SINR_MIN_DB (not linked to it).
      * @return Number of connected unordered pairs in [0, N·(N−1)/2].
      * @throws Nothing.
      *
@@ -103,7 +103,7 @@ class LinkTable
      *
      * @param i               First node index, in [0, N).
      * @param j               Second node index, in [0, N).
-     * @param sinrThresholdDb Minimum acceptable SINR in dB (default −6.7, equal to @ref SINR_MIN_DB).
+     * @param sinrThresholdDb Minimum acceptable SINR in dB (default −6.7, equal to @c SINR_MIN_DB).
      * @return @c true if @c Get(i,j).sinr_db >= @p sinrThresholdDb.
      * @throws Nothing; out-of-range indices are undefined behaviour.
 

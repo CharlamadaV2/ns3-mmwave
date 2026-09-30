@@ -1,6 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file sim
-*/
+/**
+ * @file sim.cc
+ * @brief mesh-sim entry point: config load, per-seed tick loop, output and RL bridge.
+ */
 
 #include "src/cli/cli-parser.h"
 #include "src/config/config-loader.h"

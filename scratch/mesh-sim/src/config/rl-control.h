@@ -4,7 +4,7 @@
  * @brief Pure resolution of the @c [rl] control selectors into slots, cadence,
  *        and tick counts.
  *
- * Single source of truth shared by @ref ValidateConfig (which reports the
+ * Single source of truth shared by @ref mesh_sim::ValidateConfig (which reports the
  * errors) and @c sim.cc (which applies the resolved fields). No ns-3 headers.
  */
 #pragma once

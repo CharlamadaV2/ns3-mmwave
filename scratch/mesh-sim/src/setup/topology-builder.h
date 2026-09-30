@@ -4,7 +4,7 @@
  * @brief Creates ns-3 mobility models, buildings, and propagation models
  *        for the mesh topology.
  *
- * @ref TopologyBuilder is the **only layer in mesh-sim that creates ns-3
+ * @ref mesh_sim::TopologyBuilder is the **only layer in mesh-sim that creates ns-3
  * objects**. All other subsystems receive the resulting pointers via the
  * accessor methods and operate entirely through the domain types defined
  * in @c src/domain/. No EPC, RRC, MAC, or protocol stack is created.
@@ -12,13 +12,13 @@
  *
  * **Mobility models**
  *
- * | @ref NodeSpec::mobility  | ns-3 class                          | Notes                                  |
+ * | @ref mesh_sim::NodeSpec::mobility  | ns-3 class                          | Notes                                  |
  * |--------------------------|-------------------------------------|----------------------------------------|
  * | @c "fixed"               | @c ConstantPositionMobilityModel    | Position set from @c NodeSpec::position. |
  * | @c "constant_velocity"   | @c ConstantVelocityMobilityModel    | Position and velocity set after install. |
- * | @c "random_walk"         | @c RandomWalk2dMobilityModel        | Direction changes every 1 simulated second; bounds and speed from @ref RandomWalkParams. |
- * | @c "waypoint"            | @c WaypointMobilityModel            | All @ref Waypoint entries added via @c ns3::Seconds(wp.t). |
- * | RL-controlled (centralized) | @c ConstantVelocityMobilityModel | Overrides the configured model for every index in @c cfg.rl.controlled_indices; starts at @ref ControlledStartPosition with zero velocity. |
+ * | @c "random_walk"         | @c RandomWalk2dMobilityModel        | Direction changes every 1 simulated second; bounds and speed from @ref mesh_sim::RandomWalkParams. |
+ * | @c "waypoint"            | @c WaypointMobilityModel            | All @ref mesh_sim::Waypoint entries added via @c ns3::Seconds(wp.t). |
+ * | RL-controlled (centralized) | @c ConstantVelocityMobilityModel | Overrides the configured model for every index in @c cfg.rl.controlled_indices; starts at @ref mesh_sim::ControlledStartPosition with zero velocity. |
  *
  * **Jammer mobility** (one ns-3 node per @c cfg.jammers entry, same order):
  * waypoints if any, else @c ConstantVelocityMobilityModel if any velocity
@@ -113,7 +113,7 @@ class TopologyBuilder
      * @brief Return the mobility model for each node in @c cfg.nodes order.
      *
      * The vector index matches the node index used by @ref LinkEvaluator
-     * and @ref LinkTable: @c GetMobilityModels()[k] corresponds to
+     * and @ref mesh_sim::LinkTable, so @c GetMobilityModels()[k] corresponds to
      * @c cfg.nodes[k].
      *
      * @return Vector of @c N mobility model smart pointers, where @c N is

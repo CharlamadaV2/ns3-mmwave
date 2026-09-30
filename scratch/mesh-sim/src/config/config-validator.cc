@@ -2,7 +2,7 @@
 
 /**
  * @file config-validator.cc
- * @brief Implements @ref ValidateConfig; rules are listed in config-validator.h.
+ * @brief Implements @ref mesh_sim::ValidateConfig; rules are listed in config-validator.h.
  */
 
 

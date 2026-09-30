@@ -1,7 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file config-loader.cc
- * @brief Implements @ref ConfigLoader::Load and the JSON-to-struct helpers.
+ * @brief Implements @ref mesh_sim::ConfigLoader::Load and the JSON-to-struct helpers.
  *        Key names and defaults are documented in config-loader.h.
  */
 
