@@ -10,7 +10,7 @@
 # bounding box are written as ``fixed`` with no waypoints instead.
 #
 # CLI: two subcommands, ``scenario`` (spring_lake layout) and ``node`` (calfex
-# layout); see @ref main. Run it as ``python -m scripts.validation.build_waypoints``
+# layout); see @c main. Run it as ``python -m scripts.validation.build_waypoints``
 # from ``scratch/mesh-sim/``.
 #
 # **Coordinate frames**

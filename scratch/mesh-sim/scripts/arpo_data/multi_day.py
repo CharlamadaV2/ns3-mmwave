@@ -43,7 +43,7 @@ _TRACE_RE = re.compile(r"^bh2_([a-z]+)__([a-z0-9]+)_to_([a-z0-9]+)_trace\.csv$")
 
 ## @brief Specification for loading and rendering one radio metric.
 #
-# Instances are collected in @ref _METRICS and looked up by prefix or short name.
+# Instances are collected in @c _METRICS and looked up by prefix or short name.
 @dataclass(frozen=True)
 class _MetricSpec:
     prefix: str  ##< CSV filename prefix (e.g. ``"bh2_snr"``).
@@ -83,7 +83,7 @@ def _parse_scenario(name: str) -> tuple[str, str] | None:
 
 ## @brief Group scenario directories under a per-day root by family and date.
 #
-# Scenarios listed in @ref KNOWN_BAD_SCENARIOS are silently excluded.
+# Scenarios listed in @c KNOWN_BAD_SCENARIOS are silently excluded.
 #
 # @param per_day_root Root directory produced by the ``plot`` subcommand.
 # @return Nested mapping ``{family: {date_str: [scenario_dir, ...]}}``
@@ -115,6 +115,7 @@ class _DayBag:
 # ``(day, src, peer, metric_short)``.
 #
 # @param days Mapping ``{date_str: [scenario_dir, ...]}`` for one family.
+# @param audit Keyword-only; if true, enable audit mode.
 # @return Dict keyed by ``(day, src_rab, peer_rab, metric_short)`` → @ref _DayBag.
 def _load_traces_for_family(
     days: dict[str, list[Path]],

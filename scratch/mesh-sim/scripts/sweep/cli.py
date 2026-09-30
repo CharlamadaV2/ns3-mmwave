@@ -16,7 +16,7 @@ from .runner import run_sweep
 ## @fn main
 # @brief Parse command-line flags, load the sweep INI, and run the sweep.
 #
-# @return None. Exit codes come from the called functions (see @throws).
+# @return None. Exit codes come from the called functions (see below).
 # @throws SystemExit from argparse on bad flags, or from parse_sweep_config on an invalid sweep INI.
 #
 # Flags: `--config` (required), `--dry-run`, `--resume`, `--sim-binary`.

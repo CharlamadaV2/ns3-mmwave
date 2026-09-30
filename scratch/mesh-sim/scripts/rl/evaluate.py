@@ -26,6 +26,7 @@ SELECTION_FLAGS = ("observation_preset", "reward_components", "reward_weights",
 
 
 def mask_fn(env):
+    """Action-mask accessor used by ActionMasker."""
     return env.unwrapped.action_masks()
 
 

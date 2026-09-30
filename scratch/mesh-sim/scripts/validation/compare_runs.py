@@ -2,7 +2,7 @@
 ## @file compare_runs.py
 # @brief Cross-batch heatmaps: field scenarios (rows) vs validation batches (columns).
 #
-# Reads the ``validation_summary.csv`` produced by @ref compare for each batch,
+# Reads the ``validation_summary.csv`` produced by @c compare for each batch,
 # and writes one PNG per (metric, score) with score in |Δmedian|, |Δmean| and K-S.
 # Each cell is the mean of that score over all links of the (scenario, batch)
 # pair. Useful for tuning simulation parameters (channel model, TX power, gain).

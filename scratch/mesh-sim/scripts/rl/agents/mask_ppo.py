@@ -11,6 +11,7 @@ from sb3_contrib.ppo_mask import MaskablePPO
 
 @dataclass
 class MaskablePPOConfig:
+    """Training hyperparameters; defaults differ from SB3 where commented."""
     total_timesteps: int = 100_000   # budget for .learn(); mesh env is slow -> start low
     n_steps: int = 1024              # SB3 default 2048; smaller = more frequent updates
     gamma: float = 0.95              # SB3 default 0.99
@@ -38,6 +39,7 @@ class MaskablePpoTrainer:
         )
 
     def train(self, callback=None):
+        """Run learn() for total_timesteps and return the model."""
         self.model.learn(total_timesteps=self.cfg.total_timesteps, callback=callback)
         return self.model
 
@@ -47,4 +49,5 @@ class MaskablePpoTrainer:
         return MaskablePPO.load(path, env=ActionMasker(env, mask_fn), device="cpu")
 
     def save(self, path: str) -> None:
+        """Save the model zip to path."""
         self.model.save(path)

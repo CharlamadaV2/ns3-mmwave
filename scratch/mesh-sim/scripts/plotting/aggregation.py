@@ -43,15 +43,7 @@ def aggregate_timeseries(
     group_cols: list[str],
     value_cols: list[str],
 ) -> pd.DataFrame | None:
-    """Load *filename* from each seed dir, then compute per-group mean and CI.
-
-    For each (time_col, *group_cols) combination, computes mean and 95% CI
-    of each value_col across seeds.
-
-    Returns a DataFrame with columns:
-        time_col, *group_cols, {val}_mean, {val}_ci95 for each val in value_cols.
-    Returns None if no data is found.
-    """
+    """Load *filename* from each seed dir, then compute per-group mean and CI."""
     frames = []
     for sd in seed_dirs:
         path = os.path.join(sd, filename)
@@ -129,10 +121,7 @@ _CI_METRICS = {"mean_sinr_db", "sum_throughput_mbps", "connectivity",
 # in a seed are ignored for that seed; a metric with no values has mean None.
 # Node and flow ids are the union across seeds, sorted.
 def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
-    """Aggregate multiple seed summary dicts into mean/std/ci95.
-
-    Returns a dict with: num_seeds, seeds, network, per_node, per_flow, per_seed.
-    """
+    """Aggregate multiple seed summary dicts into mean/std/ci95."""
     if not summaries:
         return {"num_seeds": 0, "seeds": [], "network": {}, "per_node": {},
                 "per_flow": {}, "per_seed": []}

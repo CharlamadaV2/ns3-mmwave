@@ -193,7 +193,7 @@ def plot_bh2_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_
 # series within one figure per metric rather than one figure per neighbor.
 # Each unique ``neighbor`` value becomes a separate series via ``tag_sta_mac``.
 #
-# @param df  DataFrame produced by @ref load_rf_scenario.
+# @param df  DataFrame produced by @c load_rf_scenario.
 # @return    Copy of @p df with bh2-compatible columns added.
 def _silvus_to_bh2_format(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
@@ -217,7 +217,7 @@ def _silvus_to_bh2_format(df: pd.DataFrame) -> pd.DataFrame:
 ## @fn plot_silvus_snr
 # @brief Plot SNR per (node, neighbor) pair from silvus RF data.
 #
-# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param df             DataFrame produced by @c load_rf_scenario.
 # @param scenario_name  Human-readable scenario identifier for figure titles.
 # @return               List of ``(src, peer, Figure, trace_df)`` tuples.
 def plot_silvus_snr(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
@@ -236,9 +236,9 @@ def plot_silvus_snr(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_Pair
 ## @fn plot_silvus_rcpi
 # @brief Plot RCPI per (node, neighbor) pair from silvus RF data.
 #
-# RCPI is the mean RSSI across active antennas computed by @ref load_rf_scenario.
+# RCPI is the mean RSSI across active antennas computed by @c load_rf_scenario.
 #
-# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param df             DataFrame produced by @c load_rf_scenario.
 # @param scenario_name  Human-readable scenario identifier for figure titles.
 # @return               List of ``(src, peer, Figure, trace_df)`` tuples.
 def plot_silvus_rcpi(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
@@ -257,7 +257,7 @@ def plot_silvus_rcpi(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_Pai
 ## @fn plot_silvus_mcs
 # @brief Plot MCS index per (node, neighbor) pair from silvus RF data.
 #
-# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param df             DataFrame produced by @c load_rf_scenario.
 # @param scenario_name  Human-readable scenario identifier for figure titles.
 # @return               List of ``(src, peer, Figure, trace_df)`` tuples.
 def plot_silvus_mcs(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
@@ -280,9 +280,9 @@ def plot_silvus_mcs(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_Pair
 #
 # Unlike @ref plot_bh2_throughput which derives rate from byte counter deltas,
 # this function uses the pre-computed ``throughput_mbps`` column from
-# @ref load_rf_scenario directly.
+# @c load_rf_scenario directly.
 #
-# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param df             DataFrame produced by @c load_rf_scenario.
 # @param scenario_name  Human-readable scenario identifier for figure titles.
 # @return               List of ``(src, peer, Figure, trace_df)`` tuples.
 def plot_silvus_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
@@ -301,7 +301,7 @@ def plot_silvus_throughput(df: pd.DataFrame, scenario_name: str = "") -> list[_B
 ## @fn plot_silvus_per
 # @brief Plot PER per (node, neighbor) pair from silvus RF data.
 #
-# @param df             DataFrame produced by @ref load_rf_scenario.
+# @param df             DataFrame produced by @c load_rf_scenario.
 # @param scenario_name  Human-readable scenario identifier for figure titles.
 # @return               List of ``(src, peer, Figure, trace_df)`` tuples.
 def plot_silvus_per(df: pd.DataFrame, scenario_name: str = "") -> list[_BH2_PairResult]:
@@ -380,9 +380,9 @@ def _per_radio_metric(
             results.append(result)
     return results
 
-## @brief Resolve a list of peer MACs to their ``<device>.<index>`` radio labels.
+## @brief Resolve a list of peer MACs to their ``device.index`` radio labels.
 #
-# Calls @ref mac_radio_label for each MAC. MACs that resolve to a label
+# Calls @c mac_radio_label for each MAC. MACs that resolve to a label
 # containing ``".?"`` (unknown radio index) are excluded from the output so
 # only fully resolved labels are returned.
 #
@@ -782,7 +782,7 @@ def _peer_mac_colors(peer_macs: list[str]) -> dict[str, str]:
 ## @brief Order source-side local MACs by their global radio index, unknowns last.
 #
 # Reads ``tag_interface`` for each local MAC to look up its 1-based radio
-# index via @ref radio_index. MACs with an unknown index are sorted to the
+# index via @c radio_index. MACs with an unknown index are sorted to the
 # end with a synthetic key of 10,000.
 #
 # @param pair_df  DataFrame for this (src, peer) pair.
@@ -836,7 +836,7 @@ def _per_radio_stats_rows(pair_df: pd.DataFrame, value_col: str,
 # @param src            Source rab hostname.
 # @param peer           Peer rab hostname.
 # @param title_metric   Metric name for the main title line.
-# @param df             DataFrame used to compute @ref scenario_caption.
+# @param df             DataFrame used to compute @c scenario_caption.
 # @param y_main         Normalised Y position for the main title line.
 # @param y_scenario     Normalised Y position for the scenario subtitle line.
 def _figure_centered_header(fig: plt.Figure, scenario_name: str,

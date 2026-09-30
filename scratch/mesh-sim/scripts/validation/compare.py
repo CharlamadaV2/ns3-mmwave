@@ -2,7 +2,7 @@
 # @brief Histogram + KDE comparison of sim traces vs ARPO field traces.
 #
 # For each (scenario, link, metric) triple this module:
-# -# Pools sim samples across all seed runs (see @ref _pool_sim).
+# -# Pools sim samples across all seed runs (see @c _pool_sim).
 # -# Loads the matching field trace.
 # -# Computes the two-sample K-S D statistic (no p-value) and median/mean/IQR.
 # -# Renders a normalized-histogram overlay with a Gaussian KDE curve for sim and
@@ -10,10 +10,10 @@
 # -# Writes per-scenario ``metrics.csv``, a batch-level ``validation_summary.csv``,
 #    and per-metric heatmap PNGs under ``<batch_root>/summary/``.
 #
-# Inputs are the ``sim_traces/`` written by @ref sim_to_traces plus the field
+# Inputs are the ``sim_traces/`` written by @c sim_to_traces plus the field
 # trace CSVs from ``arpo_data.cli plot``.
 #
-# Also exports @ref sim_to_field_scenario, the canonical name-mapping function
+# Also exports @c sim_to_field_scenario, the canonical name-mapping function
 # used throughout the pipeline to translate sim scenario names to field names.
 
 from __future__ import annotations
@@ -539,7 +539,7 @@ def _write_batch_heatmaps(rows: list[dict], metrics: list[_MetricSpec],
 ## @brief Run the sim-vs-field comparison for one scenario directory.
 #
 # In scenario mode derives the field directory from the scenario name via
-# @ref sim_to_field_scenario. In node mode uses @p field_dir directly.
+# @c sim_to_field_scenario. In node mode uses @p field_dir directly.
 # Discovers (src, peer) pairs, pools sim and field samples, computes K-S
 # and summary statistics, writes one histogram PNG per (pair, metric), and
 # returns a list of result dicts for the summary CSV.

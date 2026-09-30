@@ -232,9 +232,9 @@ def _trace_duration_s(trace_fp: Path) -> float | None:
 
 ## @brief Write ``run.ini`` to @p output_path using the provided parameters.
 #
-# @param output_path  Existing directory that receives ``run.ini``.
-# @param gateway_id   Gateway node id; ``None`` selects the ``all_pairs`` traffic topology.
-# @param rl           Optional ``[rl]`` overrides; missing keys fall back to the ``_RL_*`` defaults.
+# @p output_path is an existing directory that receives ``run.ini``.
+# @p gateway_id is the gateway node id; ``None`` selects the ``all_pairs`` traffic topology.
+# @p rl holds optional ``[rl]`` overrides; missing keys fall back to the ``_RL_*`` defaults.
 #
 # Other parameters map one-to-one to keys in ``[scenario]`` / ``[channel]`` /
 # ``[traffic]`` (durations in seconds, ``bw_mhz`` MHz, ``freq_ghz`` GHz,

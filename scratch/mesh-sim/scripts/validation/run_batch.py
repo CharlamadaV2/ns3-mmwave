@@ -7,7 +7,7 @@
 # writes outputs to a timestamped batch directory.
 #
 # Optionally patches each scenario's ``nodes.json`` with real-GPS-derived
-# waypoints before running (see @ref build_waypoints).
+# waypoints before running (see @c build_waypoints).
 #
 # **Output layout**
 # @code

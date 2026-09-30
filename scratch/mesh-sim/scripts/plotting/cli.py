@@ -3,7 +3,7 @@
 
 Usage:
     python -m scripts.plotting.cli --config scripts/plotting/plot.example.ini
-    python scripts/plotting/cli.py --config path/to/plot.ini
+    python -m scripts.plotting.cli --config path/to/plot.ini
 """
 
 import argparse
@@ -42,7 +42,7 @@ from .plots_summary import (
 )
 
 
-## @brief Save a figure to `<out_dir>/<name>.<fmt>`, close it, and print the path.
+## @brief Save a figure to the file out_dir/name.fmt, close it, and print the path.
 def _save(fig, name: str, out_dir: str, fmt: str, dpi: int):
     path = os.path.join(out_dir, f"{name}.{fmt}")
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
@@ -50,7 +50,7 @@ def _save(fig, name: str, out_dir: str, fmt: str, dpi: int):
     print(f"  saved {path}")
 
 
-## @brief True if `[plots] <key>` is enabled in the INI (defaults to True when the key is absent).
+## @brief True if the given key under `[plots]` is enabled in the INI (defaults to True when the key is absent).
 def _enabled(cfg: configparser.ConfigParser, key: str) -> bool:
     return cfg.getboolean("plots", key, fallback=True)
 

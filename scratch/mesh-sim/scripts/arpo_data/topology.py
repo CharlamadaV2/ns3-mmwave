@@ -77,7 +77,7 @@ _RAB_NETDEVS_CACHE: dict[Path, dict[str, list[str]]] = {}
 # groups them by node directory name. Results are cached keyed by ``csv_root``
 # so repeated calls within one process pay the I/O cost only once.
 #
-# @param csv_root Root of the per-scenario CSV tree (see @ref DatasetPaths.csv_root).
+# @param csv_root Root of the per-scenario CSV tree (see @c DatasetPaths.csv_root).
 # @return Mapping from rab hostname to its sorted list of observed netdev names.
 def _rab_netdevs(csv_root: Path) -> dict[str, list[str]]:
     if csv_root in _RAB_NETDEVS_CACHE:

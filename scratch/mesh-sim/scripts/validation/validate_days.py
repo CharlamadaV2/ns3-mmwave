@@ -3,10 +3,10 @@
 # @brief Orchestrates per-day sim validation, with single-day or multi-day modes.
 #
 # Wraps the three node-mode validation steps —
-# @ref scripts.validation.sim_to_traces, @ref scripts.validation.compare, and
-# @ref scripts.validation.scenario_fidelity — and runs them once per requested
+# @c scripts.validation.sim_to_traces, @c scripts.validation.compare, and
+# @c scripts.validation.scenario_fidelity — and runs them once per requested
 # day's sim output directory (``outputs/calfex/<day>/``). After all requested
-# days are processed, optionally calls @ref scripts.validation.compare_runs
+# days are processed, optionally calls @c scripts.validation.compare_runs
 # to build cross-day heatmaps from the per-day ``validation_summary.csv``
 # files, giving a day-vs-day comparison equivalent to ``arpo_data``'s
 # ``multi-day`` subcommand but for sim-vs-field validation results.

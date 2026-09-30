@@ -17,7 +17,7 @@ from .paths import CSV_ROOT
 
 ## @brief Scan all bh2.csv files and return one row per unique (rab, mac, netdev, device_name, host).
 #
-# Iterates every scenario and node directory under @ref CSV_ROOT, reads
+# Iterates every scenario and node directory under @c CSV_ROOT, reads
 # ``tag_local_mac``, ``tag_interface``, ``tag_device_name``, and ``tag_host``
 # from each ``bh2.csv``, and deduplicates the result. Files missing any of
 # the required columns are silently skipped.
@@ -97,7 +97,7 @@ def _peer_counts() -> dict[str, int]:
 # under one hostname.
 #
 # @return 0 if no collisions are found or all collisions are reported
-#         successfully; 1 if no bh2.csv files exist under @ref CSV_ROOT.
+#         successfully; 1 if no bh2.csv files exist under @c CSV_ROOT.
 def main() -> int:
     df = _scan()
     if df.empty:

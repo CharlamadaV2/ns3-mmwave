@@ -46,15 +46,13 @@ class NodeMotion:
     start_xy:   tuple[float, float]
     duration_s: float
 
-    ## @fn NodeMotion::is_mobile
-    # @brief True if the larger bounding-box side exceeds `_MOBILE_BBOX_M` (20 m).
+    ## @brief True if the larger bounding-box side exceeds `_MOBILE_BBOX_M` (20 m).
     # @return bool.
     @property
     def is_mobile(self) -> bool:
         return max(self.bbox_w, self.bbox_h) > _MOBILE_BBOX_M
 
-    ## @fn NodeMotion::label
-    # @brief Text form of the mobility classification.
+    ## @brief Text form of the mobility classification.
     # @return `"mobile"` or `"static"`.
     @property
     def label(self) -> str:
@@ -93,6 +91,7 @@ def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
 # Reads ``csvs/gps_track_trace.csv`` from @p field_scenario_dir.
 #
 # @param field_scenario_dir Per-day output directory for the field scenario.
+# @param window_s Optional time window in seconds; ``None`` uses the full trace.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
 def _load_field_motion(field_scenario_dir: Path,
                        window_s: float | None = None) -> dict[str, NodeMotion]:
@@ -108,6 +107,7 @@ def _load_field_motion(field_scenario_dir: Path,
 # ``east_m``, ``north_m`` — including ``gps_all_nodes_trace.csv``.
 #
 # @param trace_path Direct path to the GPS trace CSV.
+# @param window_s Optional time window in seconds; ``None`` uses the full trace.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
 def _load_field_motion_from_file(trace_path: Path,
                                  window_s: float | None = None) -> dict[str, NodeMotion]:
@@ -169,6 +169,7 @@ def _sim_mobility_modes(scenario_out_dir: Path) -> dict[str, str]:
 #
 # @param scenario_out_dir Scenario output directory (contains ``seed-*/``).
 # @param seed_name        Seed subdirectory to read (default: ``"seed-1"``).
+# @param window_s         Optional time window in seconds; ``None`` uses the full trace.
 # @return Tuple ``(motion_dict, label_map)``.
 def _load_sim_motion(scenario_out_dir: Path,
                      seed_name: str = "seed-1",
@@ -302,6 +303,7 @@ def _render_pairwise(field: dict[str, NodeMotion],
 #
 # @param scenario_out_dir Scenario output directory.
 # @param tol_m            Pairwise distance tolerance in metres.
+# @param window_s         Optional time window in seconds; ``None`` uses the full trace.
 # @return Tuple ``(had_mismatch, report_text)``.
 def _process_scenario(scenario_out_dir: Path, tol_m: float,
                       window_s: float | None = None) -> tuple[bool, str]:
@@ -325,6 +327,7 @@ def _process_scenario(scenario_out_dir: Path, tol_m: float,
 # @param batch_root    Scenario output directory (calfex flat layout).
 # @param field_gps_path Direct path to the GPS trace CSV.
 # @param tol_m         Pairwise distance tolerance in metres.
+# @param window_s      Optional time window in seconds; ``None`` uses the full trace.
 # @return Tuple ``(had_mismatch, report_text)``.
 def _process_scenario_node(batch_root: Path, field_gps_path: Path,
                            tol_m: float,

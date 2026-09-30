@@ -16,10 +16,12 @@ MODEL_BASENAME = "maskable_ppo_mesh"
 
 
 def now_iso() -> str:
+    """Current UTC time as an ISO-8601 string."""
     return datetime.now(timezone.utc).isoformat()
 
 
 def package_versions() -> dict:
+    """Installed version of each direct dependency; None if missing."""
     versions = {}
     for mod, distribution in DIRECT_DEPS.items():
         try:
@@ -30,6 +32,7 @@ def package_versions() -> dict:
 
 
 def make_out_dir(output_dir: str) -> str:
+    """Create and return the output dir; default is outputs/YYYY-MM/DD/HH-MM-SS."""
     if output_dir:
         out_dir = output_dir
     else:
@@ -41,6 +44,7 @@ def make_out_dir(output_dir: str) -> str:
 
 
 def has_previous_run(out_dir: str) -> str | None:
+    """Name of the first manifest or model file already in out_dir, else None."""
     for name in (MANIFEST_NAME, f"{MODEL_BASENAME}.zip"):
         if os.path.exists(os.path.join(out_dir, name)):
             return name
@@ -48,6 +52,7 @@ def has_previous_run(out_dir: str) -> str | None:
 
 
 def sha256_file(path) -> str:
+    """Hex SHA-256 of a file's bytes."""
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 

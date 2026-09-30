@@ -96,6 +96,7 @@ class CentralizedProtocol:
         return self._mask_dim
 
     def validate_init(self, init: dict) -> None:
+        """Check the init message against its declared contract; raises on mismatch."""
         contract = init.get("contract")
         spec = _CONTRACTS.get(contract) if isinstance(contract, str) else None
         if spec is None:
@@ -510,6 +511,7 @@ class LegacyProtocol:
         self._last_tick: int | None = None
 
     def validate_step(self, msg: dict, first: bool = False) -> None:
+        """Check a legacy step message; tick must advance after the first."""
         if msg.get("type") != "step":
             _fail(
                 f"Expected a 'step' message, got type {msg.get('type')!r}"
