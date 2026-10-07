@@ -1,7 +1,13 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file topology-builder.cc*/
+/**
+ * @file topology-builder.cc
+ * @brief Implements TopologyBuilder; per-function behavior is documented in
+ *        topology-builder.h. Not compiled standalone (needs ns-3).
+ */
 
 #include "src/setup/topology-builder.h"
+
+#include "src/config/rl-control.h"
 
 #include "ns3/boolean.h"
 #include "ns3/buildings-helper.h"
@@ -16,6 +22,7 @@
 #include "ns3/waypoint-mobility-model.h"
 #include "ns3/waypoint.h"
 
+#include <algorithm>
 #include <stdexcept>
 
 using namespace ns3;
@@ -27,6 +34,7 @@ namespace mesh_sim
 // Building-spec string → ns-3 enum helpers
 // ---------------------------------------------------------------------------
 
+/** @brief Map a building type string to the ns-3 enum; unknown values fall back to Residential. */
 static Building::BuildingType_t
 parseBuildingType(const std::string& s)
 {
@@ -36,6 +44,7 @@ parseBuildingType(const std::string& s)
     return Building::Residential;
 }
 
+/** @brief Map an exterior wall string to the ns-3 enum; unknown values fall back to ConcreteWithWindows. */
 static Building::ExtWallsType_t
 parseExtWalls(const std::string& s)
 {
@@ -56,9 +65,17 @@ TopologyBuilder::TopologyBuilder(const SimConfig& cfg)
 }
 
 void
+TopologyBuilder::SetProbes(const ProbeGrid& probes)
+{
+    m_probes = probes;
+}
+
+void
 TopologyBuilder::Build()
 {
     CreateNodesAndMobility();
+    CreateJammersAndMobility();
+    CreateProbes();
     CreateBuildings();
     ConfigurePropagationModel();
 }
@@ -71,6 +88,18 @@ std::vector<Ptr<MobilityModel>>
 TopologyBuilder::GetMobilityModels() const
 {
     return m_mobilityModels;
+}
+
+std::vector<Ptr<MobilityModel>>
+TopologyBuilder::GetJammerMobilityModels() const
+{
+    return m_jammerMobilityModels;
+}
+
+std::vector<Ptr<MobilityModel>>
+TopologyBuilder::GetProbeMobilityModels() const
+{
+    return m_probeMobilityModels;
 }
 
 Ptr<PropagationLossModel>
@@ -92,14 +121,29 @@ TopologyBuilder::GetConditionModel() const
 void
 TopologyBuilder::CreateNodesAndMobility()
 {
-    for (const auto& spec : m_cfg.nodes)
+    const bool centralizedRl =
+        m_cfg.rl.enabled && m_cfg.rl.control_mode == "centralized";
+
+    for (uint32_t i = 0; i < m_cfg.nodes.size(); ++i)
     {
+        const auto& spec = m_cfg.nodes[i];
+
         NodeContainer nc;
         nc.Create(1);
         Ptr<Node> node = nc.Get(0);
         m_nodes.Add(nc);
 
-        if (spec.mobility == "fixed")
+        const bool rlControlled =
+            centralizedRl &&
+            std::find(m_cfg.rl.controlled_indices.begin(),
+                      m_cfg.rl.controlled_indices.end(),
+                      i) != m_cfg.rl.controlled_indices.end();
+
+        if (rlControlled)
+        {
+            InstallMobilityRlControlled(node, spec);
+        }
+        else if (spec.mobility == "fixed")
         {
             InstallMobilityFixed(node, spec);
         }
@@ -122,6 +166,75 @@ TopologyBuilder::CreateNodesAndMobility()
         }
 
         m_mobilityModels.push_back(node->GetObject<MobilityModel>());
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Jammer creation and mobility installation
+// ---------------------------------------------------------------------------
+
+void
+TopologyBuilder::CreateJammersAndMobility()
+{
+    // One ns-3 mobility model per jammer, in the SAME order as cfg.jammers
+    // (JammerModel::Configure asserts the two vectors are equal length).
+    for (const auto& spec : m_cfg.jammers)
+    {
+        NodeContainer nc;
+        nc.Create(1);
+        Ptr<Node> node = nc.Get(0);
+        m_nodes.Add(nc);
+
+        MobilityHelper mob;
+
+        if (!spec.waypoints.empty())
+        {
+            mob.SetMobilityModel("ns3::WaypointMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+            Ptr<WaypointMobilityModel> wm = node->GetObject<WaypointMobilityModel>();
+            for (const auto& wp : spec.waypoints)
+            {
+                wm->AddWaypoint(ns3::Waypoint(Seconds(wp.t), Vector(wp.x, wp.y, wp.z)));
+            }
+        }
+        else if (spec.velocity.vx != 0.0 || spec.velocity.vy != 0.0 ||
+                 spec.velocity.vz != 0.0)
+        {
+            mob.SetMobilityModel("ns3::ConstantVelocityMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+            node->GetObject<MobilityModel>()->SetPosition(
+                Vector(spec.position.x, spec.position.y, spec.position.z));
+            node->GetObject<ConstantVelocityMobilityModel>()->SetVelocity(
+                Vector(spec.velocity.vx, spec.velocity.vy, spec.velocity.vz));
+        }
+        else
+        {
+            // Stationary jammer (the common case for the logged EW positions).
+            Ptr<ListPositionAllocator> posAlloc = CreateObject<ListPositionAllocator>();
+            posAlloc->Add(Vector(spec.position.x, spec.position.y, spec.position.z));
+            mob.SetPositionAllocator(posAlloc);
+            mob.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+            NodeContainer one; one.Add(node);
+            mob.Install(one);
+        }
+
+        m_jammerMobilityModels.push_back(node->GetObject<MobilityModel>());
+    }
+}
+
+void
+TopologyBuilder::CreateProbes()
+{
+    for (const auto& p : m_probes.points)
+    {
+        Ptr<Node> node = CreateObject<Node>();
+        Ptr<ConstantPositionMobilityModel> mm = CreateObject<ConstantPositionMobilityModel>();
+        mm->SetPosition(Vector(p.x, p.y, p.z));
+        node->AggregateObject(mm);
+        m_nodes.Add(node);
+        m_probeMobilityModels.push_back(mm);
     }
 }
 
@@ -150,6 +263,20 @@ TopologyBuilder::InstallMobilityConstantVelocity(const Ptr<Node>& node, const No
         Vector(spec.position.x, spec.position.y, spec.position.z));
     node->GetObject<ConstantVelocityMobilityModel>()->SetVelocity(
         Vector(spec.velocity.vx, spec.velocity.vy, spec.velocity.vz));
+}
+
+void
+TopologyBuilder::InstallMobilityRlControlled(const Ptr<Node>& node, const NodeSpec& spec)
+{
+    const Position start = ControlledStartPosition(spec);
+
+    MobilityHelper mob;
+    mob.SetMobilityModel("ns3::ConstantVelocityMobilityModel");
+    NodeContainer nc;
+    nc.Add(node);
+    mob.Install(nc);
+    node->GetObject<MobilityModel>()->SetPosition(Vector(start.x, start.y, start.z));
+    node->GetObject<ConstantVelocityMobilityModel>()->SetVelocity(Vector(0.0, 0.0, 0.0));
 }
 
 void

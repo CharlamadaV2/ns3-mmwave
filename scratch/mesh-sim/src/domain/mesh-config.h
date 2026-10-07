@@ -23,8 +23,8 @@ namespace mesh_sim
  *
  * | @c model     | Behaviour                                                         |
  * |--------------|-------------------------------------------------------------------|
- * | @c "constant"| All flows are active for the full simulation at @c demand_mbps.  |
- * | @c "poisson" | New flows arrive at @c arrival_rate_hz (network-wide Poisson process). Each flow has an exponentially distributed holding time when @c holding_time_s > 0, otherwise it is permanent. |
+ * | @c "constant"| All flows are active from the start at @c demand_mbps until @c holding_time_s expires (never, if 0). |
+ * | @c "poisson" | New flows arrive at @c arrival_rate_hz (network-wide Poisson process). When @c holding_time_s > 0 each flow lasts an exponentially distributed time with that mean; otherwise it is permanent. |
  * | @c "on_off"  | Each flow alternates between ON (sending at @c demand_mbps) and OFF phases. Phase durations are drawn from exponential distributions with means @c on_time_s and @c off_time_s respectively. |
  *
  * Three flow topologies are supported, selected by @c flow_topology:
@@ -41,8 +41,8 @@ struct TrafficConfig
                                      ///<   or @c "on_off".
 
     // ---- constant model ----------------------------------------------------
-    double demand_mbps = 10.0;  ///< Per-flow demand in Mbps. Used by all models
-                                 ///<   as the rate during the ON phase.
+    double demand_mbps = 10.0;  ///< Per-flow demand in Mbps (must be > 0). Used by all
+                                 ///<   models; for @c "on_off" it is the rate while ON.
 
     // ---- poisson model -----------------------------------------------------
     double arrival_rate_hz = 1.0;  ///< Network-wide flow arrival rate (flows/s).
@@ -55,10 +55,10 @@ struct TrafficConfig
                                ///<   Used only when @c model is @c "on_off".
 
     // ---- holding time (all models) -----------------------------------------
-    double holding_time_s = 0.0;  ///< Mean flow lifetime in seconds (exponential).
-                                   ///<   @c 0 means the flow lasts the entire simulation.
-                                   ///<   For @c "poisson" this sets how long each arrived
-                                   ///<   flow persists before expiring.
+    double holding_time_s = 0.0;  ///< Flow lifetime in seconds. @c 0 means the flow lasts the
+                                   ///<   entire simulation. For @c "poisson" it is the mean of an
+                                   ///<   exponential draw per flow; for the other models every
+                                   ///<   flow lasts exactly this long.
 
     // ---- flow topology -----------------------------------------------------
     std::string flow_topology     = "all_pairs";  ///< How node pairs are assigned flows:
@@ -67,9 +67,9 @@ struct TrafficConfig
     uint32_t    random_pair_count = 3;             ///< Number of randomly chosen src/dst
                                                    ///<   pairs. Used only when
                                                    ///<   @c flow_topology is @c "random_pairs".
-    std::string gateway_node_id   = "";            ///< ID or numeric index of the gateway
-                                                   ///<   node. Required when @c flow_topology
-                                                   ///<   is @c "gateway"; ignored otherwise.
+    std::string gateway_node_id   = "";            ///< Node ID of the gateway. Required (and must match a
+                                                   ///<   node ID) when @c flow_topology is @c "gateway";
+                                                   ///<   ignored otherwise.
 };
 
 /**
@@ -88,8 +88,8 @@ struct RoutingConfig
 {
     std::string algorithm = "shortest_path";  ///< Routing algorithm: @c "shortest_path",
                                                ///<   @c "max_throughput", or @c "min_hop".
-    uint32_t max_hops = 5;  ///< Maximum number of hops allowed per path.
-                             ///<   @c 0 means unlimited.
+    uint32_t max_hops = 5;  ///< Maximum number of hops allowed per path; longer
+                             ///<   paths are treated as unroutable. @c 0 means unlimited.
 };
 
 /**

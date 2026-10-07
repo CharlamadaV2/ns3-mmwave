@@ -26,7 +26,8 @@ import pandas as pd
 from .topology import build_topology, resolve_peer
 
 
-## @brief Convert a ``timestamp`` column (nanoseconds since epoch) to UTC datetimes.
+## @fn to_datetime
+# @brief Convert a ``timestamp`` column (nanoseconds since epoch) to UTC datetimes.
 #
 # Non-numeric values are coerced to NaT rather than raising.
 #
@@ -39,7 +40,8 @@ def to_datetime(df: pd.DataFrame) -> pd.Series:
     )
 
 
-## @brief Compute seconds elapsed since each session's earliest ``__t__`` value.
+## @fn session_relative_seconds
+# @brief Compute seconds elapsed since each session's earliest ``__t__`` value.
 #
 # Groups by ``__session__`` if present, otherwise by ``__node__``. This
 # normalises clock skew so that t=0 is the first sample for each node.
@@ -53,7 +55,8 @@ def session_relative_seconds(df: pd.DataFrame) -> pd.Series:
     return (df["__t__"] - t0).dt.total_seconds()
 
 
-## @brief Filter a loaded DataFrame down to rows from a single calendar day.
+## @fn filter_by_day
+# @brief Filter a loaded DataFrame down to rows from a single calendar day.
 #
 # Works on any DataFrame produced by the loaders in this module, since they
 # all add a ``__t__`` UTC datetime column. Returns ``None`` instead of an
@@ -73,7 +76,8 @@ def filter_by_day(df: pd.DataFrame | None, day) -> pd.DataFrame | None:
     return out.reset_index(drop=True)
 
 
-## @brief List all calendar days present in a loaded DataFrame's ``__t__`` column.
+## @fn days_present
+# @brief List all calendar days present in a loaded DataFrame's ``__t__`` column.
 #
 # @param df  DataFrame containing a ``__t__`` UTC datetime column.
 # @return    Sorted list of ``date`` objects, or an empty list if @p df is
@@ -84,7 +88,8 @@ def days_present(df: pd.DataFrame | None) -> list:
     return sorted(df["__t__"].dt.date.dropna().unique())
 
 
-## @brief Load and concatenate every node's ``bh2.csv`` for a scenario.
+## @fn load_bh2_scenario
+# @brief Load and concatenate every node's ``bh2.csv`` for a scenario.
 #
 # Backhaul-2 (bh2) logs contain per-link radio metrics sampled at the
 # driver level: SNR, RCPI, MCS (TX/RX), byte counters, PER, and AGC.
@@ -129,7 +134,8 @@ def load_bh2_scenario(scen_dir: Path) -> pd.DataFrame | None:
     return out
 
 
-## @brief Load and concatenate every node's ``mcm.csv`` for a scenario.
+## @fn load_mcm_scenario
+# @brief Load and concatenate every node's ``mcm.csv`` for a scenario.
 #
 # Mesh-Client-Manager (MCM) logs contain per-radio state: channel, beacon
 # RSSI, connected-client count, and sample rate. ``field_mac`` is required;
@@ -162,7 +168,8 @@ def load_mcm_scenario(scen_dir: Path) -> pd.DataFrame | None:
     return out if not out.empty else None
 
 
-## @brief Load GPS fixes for a single node directory.
+## @fn load_gps_scenario
+# @brief Load GPS fixes for a single node directory.
 #
 # Wraps @ref _load_node_gps and applies the standard post-processing:
 # drops NaN coordinates, drops zero-coordinate no-fix sentinels, and
@@ -217,7 +224,8 @@ def _load_node_gps(node: Path) -> pd.DataFrame | None:
     return None
 
 
-## @brief Load GPS data from a directory of per-node subdirectories, returning
+## @fn load_gps_all
+# @brief Load GPS data from a directory of per-node subdirectories, returning
 #  all nodes in one DataFrame ready for @ref plot_gps_tracks.
 #
 # Iterates every subdirectory under @p directory (skipping ``sdwan``) and
@@ -261,11 +269,12 @@ def load_gps_all(directory: Path) -> pd.DataFrame | None:
     out["__sec__"] = session_relative_seconds(out)
     return out
 
-## @brief Reads the node ID and name from a node's silvus config file.
+## @fn load_node_id
+# @brief Read the node ID from a node's ``silvus/config.csv``.
 #
 # @param node_dir  Path to one node subdirectory.
-# @return          Tuple of ``(node_name, node_id)`` or ``None`` if
-#                  ``config.csv`` is missing or has no ``node_id`` column.
+# @return          One-entry dict ``{node_id: node_dir.name}``, or ``None`` if
+#                  ``silvus/config.csv`` is missing or has no rows.
 def load_node_id(node_dir: Path) -> dict[str, str] | None:
     cfg_fp = node_dir / "silvus" / "config.csv"
     if not cfg_fp.exists():
@@ -417,14 +426,17 @@ def _load_config_stat(config_dir: Path, valid_nodes: list[str]) -> pd.DataFrame 
         subset=["__t__"]).reset_index(drop=True)
 
 
-## @brief Parse through silvus data from each node and produce an RF quality DataFrame.
+## @fn load_rf_scenario
+# @brief Parse through silvus data from each node and produce an RF quality DataFrame.
 #
 # Merges network status, local stats, and config data for one node. Only
 # rows belonging to valid IH nodes are kept throughout.
 #
 # @param node_dir     Path to the directory that contains the node's data.
 # @param valid_nodes  List of node ID strings to keep across all three sources.
-# @return             Concatenated DataFrame with RF Signal Quality columns,
+# @param node_id_to_name  Map of node id to directory name; used to rename the
+#                         ``node_id`` and ``neighbor`` columns.
+# @return             Merged DataFrame with RF Signal Quality columns,
 #                     or ``None`` if no network status data is found.
 def load_rf_scenario(node_dir: Path, valid_nodes: list[str], 
                     node_id_to_name: dict[str, str]) -> pd.DataFrame | None:

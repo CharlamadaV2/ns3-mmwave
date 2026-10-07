@@ -1,6 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @file link-table.cc*/
+/**
+ * @file link-table.cc
+ * @brief Implements LinkTable: fills the symmetric N x N matrix and answers capacity and connectivity queries.
+ */
 
 #include "src/eval/link-table.h"
 

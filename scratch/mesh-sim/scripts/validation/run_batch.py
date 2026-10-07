@@ -7,13 +7,14 @@
 # writes outputs to a timestamped batch directory.
 #
 # Optionally patches each scenario's ``nodes.json`` with real-GPS-derived
-# waypoints before running (see @ref build_waypoints).
+# waypoints before running (see `build_waypoints`).
 #
 # **Output layout**
 # @code
 # outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/
 #   <scenario>/
-#     run.log
+#     console.log       (launcher-captured stdout/stderr)
+#     run.log           (written by the simulator)
 #     seed-<N>/         (written by the sim binary)
 #   batch_manifest.json
 # @endcode
@@ -21,7 +22,6 @@
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 import os
 import subprocess
@@ -29,9 +29,11 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from scripts.sim_support import find_mesh_root, find_sim_binary, simulator_env
+
 from .build_waypoints import patch_scenario_waypoints
 
-REPO_ROOT              = Path(__file__).resolve().parents[2]
+REPO_ROOT              = find_mesh_root(__file__)
 DEFAULT_SCENARIOS_DIR  = REPO_ROOT / "inputs" / "custom" / "sherpa" / "spring_lake"
 DEFAULT_SEEDS          = "1,2,3,4,5"  ##< Default comma-separated seed list.
 
@@ -63,16 +65,13 @@ def _read_scenario_duration(ini_path: Path) -> float | None:
 
 ## @brief Locate the compiled ns-3 sim binary via glob.
 #
-# Searches for the pattern
+# Delegates to ``scripts.sim_support.find_sim_binary``: searches
 # ``<repo_root>/../../build/scratch/mesh-sim/ns3*-sim-*`` and returns the
-# lexicographically first match (which in practice is the only build).
+# lexicographically first match.
 #
 # @return Absolute path string of the binary, or ``None`` if not found.
 def _find_sim_binary() -> str | None:
-    ns3_root = REPO_ROOT.parent.parent
-    pattern  = str(ns3_root / "build" / "scratch" / "mesh-sim" / "ns3*-sim-*")
-    matches  = sorted(glob.glob(pattern))
-    return matches[0] if matches else None
+    return find_sim_binary(REPO_ROOT)
 
 
 ## @brief Discover all scenario directories that contain a ``run.ini`` file.
@@ -90,16 +89,18 @@ def _discover_scenarios(scenarios_dir: Path) -> list[Path]:
 #
 # The command passes the scenario's ``run.ini``, the seed list, and the output
 # directory as command-line arguments. Both stdout and stderr are written to
-# ``<out_dir>/run.log``.
+# ``<out_dir>/console.log``; the simulator writes its own ``run.log`` there.
 #
 # @param sim_binary Path string of the ns-3 sim binary.
 # @param scenario   Scenario directory (contains ``run.ini``).
 # @param seeds      Comma-separated seed string (e.g. ``"1,2,3,4,5"``).
 # @param out_dir    Destination for sim output files and the log.
 # @param env        Environment variables dict for the subprocess.
+# @param band       Optional ``--band`` override; omitted when ``None``.
 # @return Tuple ``(returncode, log_path_str)``.
 def _run_one(sim_binary: str, scenario: Path, seeds: str,
-             out_dir: Path, env: dict[str, str]) -> tuple[int, str]:
+             out_dir: Path, env: dict[str, str],
+             band: str | None = None) -> tuple[int, str]:
     out_dir.mkdir(parents=True, exist_ok=True)
     cmd = [
         sim_binary,
@@ -107,15 +108,33 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
         f"--seeds={seeds}",
         f"--output-dir={out_dir}",
     ]
-    log_path = out_dir / "run.log"
+    if band is not None:
+        cmd.append(f"--band={band}")
+    log_path = out_dir / "console.log"
     with open(log_path, "w") as log_f:
         log_f.write("Command: " + " ".join(cmd) + "\n\n")
         log_f.flush()
-        result = subprocess.run(cmd, stdout=log_f, stderr=subprocess.STDOUT, env=env)
+        result = subprocess.run(cmd, stdin=subprocess.DEVNULL, stdout=log_f,
+                                stderr=subprocess.STDOUT, env=env)
     return result.returncode, str(log_path)
 
 
-## @brief CLI entry point for the batch runner.
+## @fn main
+# @brief CLI entry point for the batch runner.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 if all scenarios succeeded (or on ``--dry-run``); 1 if none were found,
+#         the binary could not be found, or any scenario failed.
+#
+# Flags: ``--scenarios-dir`` (default ``inputs/custom/sherpa/spring_lake``),
+# ``--seeds`` (default ``1,2,3,4,5``), ``--out``, ``--sim-binary``, ``--dry-run``,
+# ``--band {mmwave,sub-6}``, ``--only``, ``--auto-waypoints``,
+# ``--waypoint-node`` (default ``rab2``), ``--waypoint-time-mode`` (default ``scale``).
+# Without ``--out`` the batch root is
+# ``outputs/<YYYY-MM>/<DD>/<HH-MM-SS>-validation/``. Side effects: creates the
+# batch root, one directory per scenario with ``console.log``, and
+# ``batch_manifest.json``; ``--auto-waypoints`` rewrites each scenario's
+# ``nodes.json`` in ``inputs/``.
 #
 # Full workflow:
 # -# Discover scenarios under ``--scenarios-dir``.
@@ -127,8 +146,6 @@ def _run_one(sim_binary: str, scenario: Path, seeds: str,
 #       so a crash doesn't lose partial results).
 # -# Print a final OK/failed count.
 #
-# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 if all scenarios succeeded, 1 if any failed.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Run mesh-sim across validation scenarios.")
     p.add_argument("--scenarios-dir", default=str(DEFAULT_SCENARIOS_DIR),
@@ -141,6 +158,8 @@ def main(argv: list[str] | None = None) -> int:
                    help="Override auto-detected sim binary path")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would run, don't invoke the sim")
+    p.add_argument("--band", choices=("mmwave", "sub-6"), default=None,
+                   help="Simulator --band override; omit to let each run.ini decide")
     p.add_argument("--only", default=None,
                    help="Run only this scenario name (matches scenario dir basename)")
     p.add_argument("--auto-waypoints", action="store_true",
@@ -191,17 +210,14 @@ def main(argv: list[str] | None = None) -> int:
     batch_root.mkdir(parents=True, exist_ok=True)
 
     # Extend library search paths so the sim binary can find ns-3 shared libs.
-    env     = os.environ.copy()
-    ns3_root = REPO_ROOT.parent.parent
-    lib_dir  = str(ns3_root / "build" / "lib")
-    env["DYLD_LIBRARY_PATH"] = lib_dir + ":" + env.get("DYLD_LIBRARY_PATH", "")
-    env["LD_LIBRARY_PATH"]   = lib_dir + ":" + env.get("LD_LIBRARY_PATH",   "")
+    env = simulator_env(REPO_ROOT)
 
     manifest = {
         "timestamp":     datetime.now().isoformat(),
         "scenarios_dir": str(scenarios_dir),
         "seeds":         args.seeds,
         "sim_binary":    sim_binary,
+        "band_override": args.band,
         "runs":          [],
     }
 
@@ -221,7 +237,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             print(f"  waypoints: {status}")
 
-        rc, log  = _run_one(sim_binary, scen, args.seeds, out_dir, env)
+        rc, log  = _run_one(sim_binary, scen, args.seeds, out_dir, env, args.band)
         ok_flag  = rc == 0
         if ok_flag:
             n_ok += 1
@@ -234,6 +250,7 @@ def main(argv: list[str] | None = None) -> int:
             "scenario":     scen.name,
             "scenario_dir": str(scen),
             "output_dir":   str(out_dir),
+            "console_log":  log,
             "status":       "ok" if ok_flag else "failed",
             "exit_code":    rc,
         })

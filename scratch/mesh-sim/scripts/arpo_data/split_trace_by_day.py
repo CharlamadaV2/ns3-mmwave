@@ -3,7 +3,7 @@
 # @brief Split a combined multi-day GPS trace CSV into one file per calendar day.
 #
 # The calfex field collect spans multiple days (e.g. 2026-05-13 through
-# 2026-05-17). Feeding the full combined trace into @ref build_waypoints
+# 2026-05-17). Feeding the full combined trace into ``validation.build_waypoints``
 # produces waypoint timelines spanning the entire collect (tens of hours),
 # which is far longer than any reasonable simulated duration. Splitting by
 # day lets each day be simulated independently with a sensible duration.
@@ -13,7 +13,7 @@
 # ``arpo_data.cli plot --nodes``).
 #
 # Output: one CSV per day, with ``sec_since_origin`` re-zeroed so each day's
-# trace starts at ``t=0`` (required for @ref build_waypoints time-mode logic
+# trace starts at ``t=0`` (required for ``validation.build_waypoints`` time-mode logic
 # to work correctly per day).
 
 from __future__ import annotations
@@ -25,11 +25,12 @@ from pathlib import Path
 import pandas as pd
 
 
-## @brief Split a combined GPS trace into one CSV per calendar day.
+## @fn split_trace_by_day
+# @brief Split a combined GPS trace into one CSV per calendar day.
 #
 # Parses ``t_utc`` to extract the calendar date for each row, groups rows by
 # date, and re-zeroes ``sec_since_origin`` within each day group so every
-# day's trace starts at ``t=0`` (matching the convention @ref build_waypoints
+# day's trace starts at ``t=0`` (matching the convention ``validation.build_waypoints``
 # expects for a single-day trace).
 #
 # @param trace_path  Path to the combined multi-day trace CSV.
@@ -38,6 +39,10 @@ import pandas as pd
 #                    from the input filename stem).
 # @return            Dict mapping date string (``YYYY-MM-DD``) to the
 #                    written file path.
+# @throws ValueError if the ``t_utc`` column is missing.
+#
+# Rows within each day are also sorted by ``sec_since_origin``. Creates
+# @p out_dir if needed and writes ``<prefix>_<YYYY-MM-DD>.csv`` per day.
 def split_trace_by_day(trace_path: Path, out_dir: Path,
                        prefix: str | None = None) -> dict[str, Path]:
     df = pd.read_csv(trace_path)
@@ -68,10 +73,11 @@ def split_trace_by_day(trace_path: Path, out_dir: Path,
     return written
 
 
-## @brief Print a per-day, per-node row-count summary.
+## @fn print_day_node_summary
+# @brief Print a per-day, per-node row-count summary.
 #
 # Useful for spotting days where a node has little or no data before
-# running @ref build_waypoints on that day's file.
+# running ``validation.build_waypoints`` on that day's file.
 #
 # @param trace_path Path to the combined multi-day trace CSV.
 def print_day_node_summary(trace_path: Path) -> None:
@@ -82,7 +88,8 @@ def print_day_node_summary(trace_path: Path) -> None:
     print(table.to_string())
 
 
-## @brief CLI entry point for the trace-splitting tool.
+## @fn main
+# @brief CLI entry point for the trace-splitting tool.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
 # @return     0 on success, 1 on error.

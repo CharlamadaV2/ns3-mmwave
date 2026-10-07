@@ -1,0 +1,15 @@
+{
+  "study_version": 1,
+  "name": "bypass-smoke-study",
+  "description": "Plumbing smoke: three tiny trials; values are not recommendations.",
+  "matrix": "inputs/experiments/bypass-smoke-matrix.json",
+  "row": "local-delivery",
+  "training_seed": 101,
+  "sampler": {"type": "tpe", "seed": 7},
+  "n_trials": 3,
+  "search_space": {
+    "n_steps":  {"type": "categorical", "choices": [32, 64]},
+    "gamma":    {"type": "float", "low": 0.90, "high": 0.99},
+    "ent_coef": {"type": "float", "low": 0.001, "high": 0.05, "log": true}
+  }
+}

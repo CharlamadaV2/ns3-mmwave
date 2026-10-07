@@ -67,20 +67,24 @@ foreach(scratch_src ${single_source_file_scratches})
   create_scratch(${scratch_src})
 endforeach()
 
-# Scan *.cc files in ns-3-dev/scratch subdirectories and build a target for each
-# subdirectory
-file(
-  GLOB_RECURSE scratch_subdirectories
-  CONFIGURE_DEPENDS
-  LIST_DIRECTORIES true
-  ${CMAKE_CURRENT_SOURCE_DIR}/**
-)
-# Filter out files
-foreach(entry ${scratch_subdirectories})
-  if(NOT (IS_DIRECTORY ${entry}))
-    list(REMOVE_ITEM scratch_subdirectories ${entry})
-  endif()
-endforeach()
+# Discover scratch directories without descending into projects that manage
+# their own sources, including their generated output trees.
+function(collect_scratch_subdirectories root result)
+  file(GLOB entries CONFIGURE_DEPENDS LIST_DIRECTORIES true "${root}/*")
+  set(subdirs)
+  foreach(entry IN LISTS entries)
+    if(IS_DIRECTORY "${entry}" AND NOT IS_SYMLINK "${entry}")
+      list(APPEND subdirs "${entry}")
+      if(NOT EXISTS "${entry}/CMakeLists.txt")
+        collect_scratch_subdirectories("${entry}" nested)
+        list(APPEND subdirs ${nested})
+      endif()
+    endif()
+  endforeach()
+  set(${result} "${subdirs}" PARENT_SCOPE)
+endfunction()
+
+collect_scratch_subdirectories("${CMAKE_CURRENT_SOURCE_DIR}" scratch_subdirectories)
 
 foreach(subdir ${scratch_subdirectories})
   if(EXISTS ${subdir}/CMakeLists.txt)

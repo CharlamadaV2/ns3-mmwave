@@ -46,10 +46,14 @@ class NodeMotion:
     start_xy:   tuple[float, float]
     duration_s: float
 
+    ## @brief True if the larger bounding-box side exceeds `_MOBILE_BBOX_M` (20 m).
+    # @return bool.
     @property
     def is_mobile(self) -> bool:
         return max(self.bbox_w, self.bbox_h) > _MOBILE_BBOX_M
 
+    ## @brief Text form of the mobility classification.
+    # @return `"mobile"` or `"static"`.
     @property
     def label(self) -> str:
         return "mobile" if self.is_mobile else "static"
@@ -84,9 +88,10 @@ def _motion_from_xy(node: str, t: np.ndarray, x: np.ndarray,
 
 ## @brief Load per-node motion from a field scenario's GPS track trace (scenario mode).
 #
-# Reads ``csvs/gps  track_trace.csv`` from @p field_scenario_dir.
+# Reads ``csvs/gps_track_trace.csv`` from @p field_scenario_dir.
 #
 # @param field_scenario_dir Per-day output directory for the field scenario.
+# @param window_s        If set, keep only samples within this many seconds of the first one; ``None`` keeps all.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
 def _load_field_motion(field_scenario_dir: Path,
                        window_s: float | None = None) -> dict[str, NodeMotion]:
@@ -102,6 +107,7 @@ def _load_field_motion(field_scenario_dir: Path,
 # ``east_m``, ``north_m`` — including ``gps_all_nodes_trace.csv``.
 #
 # @param trace_path Direct path to the GPS trace CSV.
+# @param window_s        If set, keep only samples within this many seconds of the first one; ``None`` keeps all.
 # @return Dict mapping node name to @ref NodeMotion, or empty dict if absent.
 def _load_field_motion_from_file(trace_path: Path,
                                  window_s: float | None = None) -> dict[str, NodeMotion]:
@@ -163,6 +169,7 @@ def _sim_mobility_modes(scenario_out_dir: Path) -> dict[str, str]:
 #
 # @param scenario_out_dir Scenario output directory (contains ``seed-*/``).
 # @param seed_name        Seed subdirectory to read (default: ``"seed-1"``).
+# @param window_s        If set, keep only samples within this many seconds of the first one; ``None`` keeps all.
 # @return Tuple ``(motion_dict, label_map)``.
 def _load_sim_motion(scenario_out_dir: Path,
                      seed_name: str = "seed-1",
@@ -208,10 +215,12 @@ def _pairwise_distances(motion: dict[str, NodeMotion]) -> dict[tuple[str, str], 
     return out
 
 
+## @brief Format a float with fixed decimals, or an em dash if not finite.
 def _fmt(v: float, decimals: int = 1) -> str:
     return f"{v:.{decimals}f}" if np.isfinite(v) else "—"
 
 
+## @brief Render a left-aligned plain-text table with a dashed separator row.
 def _render_table(header: tuple, body: list[tuple]) -> str:
     widths = [max(len(str(h)), max((len(str(r[i])) for r in body), default=0))
               for i, h in enumerate(header)]
@@ -294,6 +303,7 @@ def _render_pairwise(field: dict[str, NodeMotion],
 #
 # @param scenario_out_dir Scenario output directory.
 # @param tol_m            Pairwise distance tolerance in metres.
+# @param window_s        If set, keep only samples within this many seconds of the first one; ``None`` keeps all.
 # @return Tuple ``(had_mismatch, report_text)``.
 def _process_scenario(scenario_out_dir: Path, tol_m: float,
                       window_s: float | None = None) -> tuple[bool, str]:
@@ -317,6 +327,7 @@ def _process_scenario(scenario_out_dir: Path, tol_m: float,
 # @param batch_root    Scenario output directory (calfex flat layout).
 # @param field_gps_path Direct path to the GPS trace CSV.
 # @param tol_m         Pairwise distance tolerance in metres.
+# @param window_s        If set, keep only samples within this many seconds of the first one; ``None`` keeps all.
 # @return Tuple ``(had_mismatch, report_text)``.
 def _process_scenario_node(batch_root: Path, field_gps_path: Path,
                            tol_m: float,
@@ -386,10 +397,19 @@ def _discover_scenarios(batch_dir: Path) -> list[Path]:
                   if p.is_dir() and (p / "seed-1" / "positions.csv").is_file())
 
 
-## @brief CLI entry point for the scenario-fidelity checker.
+## @fn main
+# @brief CLI entry point for the scenario-fidelity checker.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return 0 if all scenarios passed, 1 if any had mismatches.
+# @return Node mode: 0 if no flags, 1 if any mismatch, missing input or error.
+#         Scenario mode: 0 after reporting (flagged scenarios are listed but do
+#         not change the exit code), 1 for a missing directory or no scenarios.
+#
+# Positional ``batch_root``; ``--mode {scenario,node}`` (default ``scenario``),
+# ``--field-gps`` (required for node mode), ``--only``, ``--tol-m`` (metres,
+# default 5), ``--window`` (seconds, default: whole trace). Read-only: prints
+# tables and writes no files. Sim positions come from ``seed-1/positions.csv``
+# only. A node is "mobile" when its bounding box exceeds 20 m.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Compare sim scenario layout/motion against field GPS.")

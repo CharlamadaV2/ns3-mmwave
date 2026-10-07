@@ -1,0 +1,2 @@
+# Tuning-only dependency, pinned to the version tested on the Implementer's platform -- not installed by bootstrap_venv.py and never needed to train, evaluate, or compare.
+optuna==5.0.0

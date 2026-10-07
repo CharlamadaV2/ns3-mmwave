@@ -1,0 +1,87 @@
+{
+  "baseline": {
+    "build": {
+      "architecture": "arm64",
+      "clean": true,
+      "profile": "debug"
+    },
+    "git_commit": "a4e700d9947db57d06ade3ce391425681a3c2746",
+    "simulator_binary_sha256": "370d8356186a2b97d988061019cbd8ab4391c191f076da8b559e531854da32d5"
+  },
+  "cases": [
+    {
+      "band": "mmwave",
+      "case": "static-los",
+      "family": "baseline",
+      "label": "Static line of sight",
+      "name": "baseline-static-los",
+      "required": true,
+      "run_config": "inputs/baselines/01-static-los-baseline/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/baseline-static-los.json",
+      "snapshot_sha256": "10e8683c440bc83e5d4d89a7b655cd541745dd2b9fe079e7307877f9245816d5"
+    },
+    {
+      "band": "mmwave",
+      "case": "building-blockage",
+      "family": "baseline",
+      "label": "Building blockage",
+      "name": "baseline-building-blockage",
+      "required": true,
+      "run_config": "inputs/baselines/03-building-blockage/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/baseline-building-blockage.json",
+      "snapshot_sha256": "4633c33619210ae9b6e608b0f1917527d05ed4983c18959d3b0acc86d0481bf3"
+    },
+    {
+      "band": "mmwave",
+      "case": "three-node-relay",
+      "family": "baseline",
+      "label": "Three-node relay",
+      "name": "baseline-three-node-relay",
+      "required": true,
+      "run_config": "inputs/baselines/07-three-node-relay/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/baseline-three-node-relay.json",
+      "snapshot_sha256": "ed8f888924da4acdb0f558b6b76a85713174ae32842c8f8a12921a0aebaba338"
+    },
+    {
+      "band": "mmwave",
+      "case": "spring-lake-static",
+      "family": "sherpa",
+      "label": "Sherpa Spring Lake",
+      "missing_help": "This Sherpa/ARPO dataset is not included in Git. Ask the project team or data owner for the approved inputs/custom/sherpa data.",
+      "name": "sherpa-spring-lake-static",
+      "required": false,
+      "run_config": "inputs/custom/sherpa/spring_lake/arpo-1-1-static-04172026/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/sherpa-spring-lake-static.json",
+      "snapshot_sha256": "278fe57b3eb298e5c6a28dd7839d326dfc9b431a9da05680c46ee9b4320d4924"
+    },
+    {
+      "band": "sub-6",
+      "case": "06-25-1509-1513",
+      "family": "calfex",
+      "label": "CalFEX field scenario",
+      "name": "calfex-06-25-1509-1513",
+      "required": true,
+      "run_config": "inputs/calfex/06-25/1509-1513/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/calfex-06-25-1509-1513.json",
+      "snapshot_sha256": "1c9b14f2d77869fa18df48f46f299659317ce3789e469413d78c7f0a24422512"
+    },
+    {
+      "band": "sub-6",
+      "case": "synthetic-jammer",
+      "family": "baseline",
+      "label": "Synthetic jammer",
+      "name": "baseline-synthetic-jammer",
+      "required": true,
+      "run_config": "inputs/baselines/p0-jammer-smoke/run.ini",
+      "seed": 1,
+      "snapshot": "tests/fixtures/regression/p0/baseline-synthetic-jammer.json",
+      "snapshot_sha256": "39152a1fec6bb0f170840696849eee2732ab264707d91309842d16dda6fb9ab7"
+    }
+  ],
+  "manifest_version": 1
+}

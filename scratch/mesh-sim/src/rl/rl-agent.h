@@ -1,7 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * RL agent placeholder. Returns current positions unchanged (no-op).
- * Replace with actual RL agent (Python IPC via ZMQ, stdin/stdout, or shared memory).
+/**
+ * @file rl-agent.h
+ * @brief Unused no-op placeholder; nothing includes it. The live agent path is rl-bridge.h.
  */
 #pragma once
 
@@ -17,6 +17,13 @@ namespace mesh_sim
 class RlAgent
 {
   public:
+    /**
+     * @fn RlAgent::GetActions
+     * @brief Return the current positions unchanged (no-op placeholder).
+     *
+     * @param currentPositions  Node positions, metres.
+     * @return A copy of @p currentPositions; the link and flow arguments are ignored.
+     */
     std::vector<Position> GetActions(
         const std::vector<Position>& currentPositions,
         const std::vector<LinkResult>& /* links */,

@@ -1,5 +1,7 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file cli-parser.cc */ 
+/** @file cli-parser.cc
+ * @brief Implements the CLI parsing, seed resolution and input archiving declared in cli-parser.h.
+ */
 
 
 #include "src/cli/cli-parser.h"
@@ -48,9 +50,13 @@ ParseCommandLine(int argc, char* argv[])
                  "Enable RL mode: exchange observations and actions via stdin/stdout JSON.",
                  args.rl_mode);
     cmd.AddValue("band",
-                 "Radio band: 'mmwave' (orthogonal beams, no interference) or "
-                 "'sub-6' (omnidirectional, co-channel interference computed).",
+                 "Override [channel] band from run.ini: 'mmwave' (jammer interference "
+                 "disabled) or 'sub-6' (jammer interference enabled).",
                  args.band);
+    cmd.AddValue("channel-query",
+                 "Serve candidate-layout channel queries (mesh_channel_query_v1 NDJSON) on "
+                 "stdin/stdout instead of running; writes no output files.",
+                 args.channel_query);
     cmd.Parse(argc, argv);
 
     //Makes config path required
@@ -67,7 +73,7 @@ ParseCommandLine(int argc, char* argv[])
         std::exit(1);
     }
     
-    if (args.band != "mmwave" && args.band != "sub-6")
+    if (!args.band.empty() && args.band != "mmwave" && args.band != "sub-6")
     {
         std::cerr << "Error: --band must be 'mmwave' or 'sub-6', got '"
                   << args.band << "'.\n";
@@ -80,6 +86,11 @@ ParseCommandLine(int argc, char* argv[])
         std::cerr << "Error: positions-override file not found: "
                   << args.positions_override_path << "\n";
         std::exit(1);
+    }
+
+    if (args.channel_query && !args.output_dir.empty())
+    {
+        std::cerr << "Note: --output-dir is ignored with --channel-query.\n";
     }
 
     return args;
@@ -111,6 +122,18 @@ ResolveSeeds(const CliArgs& args, const SimConfig& cfg)
     }
 
     return seeds;
+}
+
+uint32_t
+ResolveQuerySeed(const CliArgs& args, const SimConfig& cfg)
+{
+    const auto seeds = ResolveSeeds(args, cfg);
+    if (seeds.size() != 1)
+    {
+        std::cerr << "Error: --channel-query needs exactly one seed\n";
+        std::exit(1);
+    }
+    return seeds.front();
 }
 
 void

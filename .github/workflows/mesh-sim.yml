@@ -1,0 +1,59 @@
+name: mesh-sim smoke
+
+on:
+  pull_request:
+    branches: [arpo-main]
+    paths: ['scratch/mesh-sim/**', '.github/workflows/mesh-sim.yml']
+  push:
+    branches: [arpo-main]
+    paths: ['scratch/mesh-sim/**', '.github/workflows/mesh-sim.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mesh-sim-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prepare Python environment
+        working-directory: scratch/mesh-sim
+        run: python3 scripts/rl/bootstrap_venv.py
+      - name: Python contracts
+        working-directory: scratch/mesh-sim
+        run: .venv/bin/python -m pytest scripts/rl/tests scripts/validation/tests scripts/baselines/tests -q
+      - name: Build only mesh-sim and required ns-3 modules
+        run: |
+          ./ns3 configure --build-profile=debug --enable-modules=core,network,mobility,propagation,buildings --disable-examples --disable-tests -- -DNS3_WARNINGS_AS_ERRORS=OFF
+          ./ns3 build scratch/mesh-sim/sim -j 2
+      - name: CLI and synthetic results checks
+        shell: bash
+        working-directory: scratch/mesh-sim
+        run: |
+          binaries=("$GITHUB_WORKSPACE"/build/scratch/mesh-sim/ns3*-sim-debug)
+          test "${#binaries[@]}" -eq 1
+          test -x "${binaries[0]}"
+          MESH_SIM_BIN="${binaries[0]}" make -C tests integration
+          python3 -m scripts.validation.smoke_check --sim-binary "${binaries[0]}" --out outputs/ci-smoke
+          MESH_SIM_BIN="${binaries[0]}" .venv/bin/python -m pytest scripts/rl/tests/test_real_binary.py scripts/baselines/tests/test_real_binary.py -q
+      - name: Retain smoke diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mesh-sim-smoke-${{ matrix.os }}
+          path: scratch/mesh-sim/outputs/ci-smoke/
+          if-no-files-found: ignore
+          retention-days: 7

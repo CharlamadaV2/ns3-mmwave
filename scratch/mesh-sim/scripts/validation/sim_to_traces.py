@@ -53,7 +53,7 @@ _METRIC_SPECS_NODE = (
 # index 0 maps to the first node spec's ``id`` field.
 #
 # @param seed_dir One seed output directory; ``nodes.json`` is read from
-#                 its parent's ``inputs/`` subdirectory.
+#                 its parent's ``inputs/`` subdirectory (the archived scenario copy).
 # @return Dict ``{node_index: node_label_string}``.
 # @throws FileNotFoundError if ``inputs/nodes.json`` is absent.
 def _load_node_id_map(seed_dir: Path) -> dict[int, str]:
@@ -84,7 +84,7 @@ def _read_warmup_s(seed_dir: Path) -> float:
 # returns a DataFrame with canonical columns. Returns empty if the file is
 # missing or unusable.
 #
-# @param csv_path  Path to the sim metric CSV.
+# @param csv_path  Path to the sim metric CSV (needs ``time_s``, ``node_a``, ``node_b``).
 # @param value_col Column holding the numeric metric value.
 # @param trace_col Column name to use in the output trace DataFrame.
 # @param node_map  Dict mapping integer node IDs to node labels.
@@ -149,7 +149,8 @@ def _convert_one(csv_path: Path, value_col: str, trace_col: str,
     return pd.concat([fwd, rev], ignore_index=True)
 
 
-## @brief Convert all metric CSVs for one seed (scenario mode).
+## @fn convert_seed
+# @brief Convert all metric CSVs for one seed (scenario mode).
 #
 # Writes one file per (source, peer) pair:
 # ``<out_root>/csvs/<src>/bh2_<metric>__<src>_to_<peer>_trace.csv``
@@ -175,7 +176,8 @@ def convert_seed(seed_dir: Path, out_root: Path) -> int:
     return n_written
 
 
-## @brief Convert all metric CSVs for one seed (node/calfex mode).
+## @fn convert_seed_node
+# @brief Convert all metric CSVs for one seed (node/calfex mode).
 #
 # Writes one file per source node per metric with all neighbors combined,
 # matching the IH field trace format:
@@ -212,11 +214,14 @@ def convert_seed_node(seed_dir: Path, out_root: Path) -> int:
     return n_written
 
 
-## @brief Convert all seed directories for one scenario.
+## @fn convert_scenario
+# @brief Convert all seed directories for one scenario.
 #
-# @param scenario_dir Top-level scenario output directory.
+# @param scenario_dir Top-level scenario output directory (holds ``seed-*`` dirs).
 # @param mode         ``"scenario"`` or ``"node"``.
-# @return Total trace CSV files written across all seeds.
+# @return Total trace CSV files written across all seeds; 0 if no ``seed-*`` dir exists.
+#
+# Writes to ``<scenario_dir>/sim_traces/<seed-N>/`` and prints one line per seed.
 def convert_scenario(scenario_dir: Path, mode: str = "scenario") -> int:
     seed_dirs = sorted(p for p in scenario_dir.iterdir()
                        if p.is_dir() and p.name.startswith("seed-"))
@@ -233,13 +238,16 @@ def convert_scenario(scenario_dir: Path, mode: str = "scenario") -> int:
     return total
 
 
-## @brief Convert all scenarios in a batch output directory.
+## @fn convert_batch
+# @brief Convert all scenarios in a batch output directory.
 #
 # - ``scenario`` mode — scans for named scenario subdirs with ``inputs/``.
 # - ``node``     mode — treats ``batch_root`` as the scenario dir directly.
 #
 # @param batch_root Top-level batch output directory.
 # @param mode       ``"scenario"`` or ``"node"``.
+# @return None. Missing ``inputs/`` (node) or no scenarios (scenario) prints an
+#         error to stderr and returns without writing.
 def convert_batch(batch_root: Path, mode: str) -> None:
     if mode == "node":
         if not (batch_root / "inputs").is_dir():
@@ -261,10 +269,15 @@ def convert_batch(batch_root: Path, mode: str) -> None:
         print(f"  total: {n} csvs")
 
 
-## @brief CLI entry point for the sim-to-traces converter.
+## @fn main
+# @brief CLI entry point for the sim-to-traces converter.
 #
 # @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
-# @return Always 0.
+# @return Always 0, even when nothing was converted (errors are only printed).
+#
+# Positional ``batch_root`` and required ``--mode {node,scenario}``.
+# Note: ``--mode`` is required by the code, so the ``run_batch`` -> ``sim_to_traces``
+# step needs ``-m`` or ``--mode``.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Convert sim seed CSVs to arpo_data-style trace CSVs.")

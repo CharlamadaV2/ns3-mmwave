@@ -1,0 +1,20 @@
+{
+  "matrix_version": 1,
+  "name": "bypass-smoke",
+  "description": "Diagnostic matrix on the building-bypass fixture; smoke-sized budgets, not evidence of learning.",
+  "run_config": "inputs/baselines/building-bypass-smoke/run.ini",
+  "band": null,
+  "seeds": {"training": [101, 102], "model_selection": 201, "held_out": "301-303"},
+  "training": {"total_timesteps": 256, "n_steps": 64, "eval_every_steps": 128},
+  "evaluation": {"model": "best", "policies": ["model", "hold", "random_valid"]},
+  "rows": [
+    {"name": "local-delivery", "observation_preset": "local_links_v1",
+     "action_profile": "move_2d", "reward_components": ["delivery_ratio"], "reward_weights": [1.0]},
+    {"name": "raw-delivery", "observation_preset": "raw_links_v1",
+     "action_profile": "move_2d", "reward_components": ["delivery_ratio"], "reward_weights": [1.0]},
+    {"name": "local-connectivity", "observation_preset": "local_links_v1",
+     "action_profile": "move_2d", "reward_components": ["connectivity"], "reward_weights": [1.0]},
+    {"name": "local-legacy", "observation_preset": "local_links_v1",
+     "action_profile": "move_2d", "reward_components": ["legacy"], "reward_weights": [1.0]}
+  ]
+}

@@ -1,8 +1,11 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Minimal stub for ns3/random-variable-stream.h so that routing code
- * compiles in standalone tests. Only the types referenced (transitively)
- * by traffic-matrix.h are stubbed here.
+/**
+ * @file ns3-random-stub.h
+ * @brief Stub for ns3/random-variable-stream.h so routing code compiles
+ *        without ns-3.
+ *
+ * Declares empty Ptr and random-variable types, enough for the header
+ * traffic-matrix.h that mesh-router.h includes. Not behavioral.
  */
 #pragma once
 

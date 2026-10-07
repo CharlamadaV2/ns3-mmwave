@@ -1,15 +1,17 @@
 ## @file multi_day.py
 # @brief Day-vs-day comparison for the same scenario family.
 #
-# Pools per-day trace CSVs at the (link, metric) level, then renders ECDF
-# overlays and computes two-sample K-S distances for every day pair.
+# Pools per-day trace CSVs at the (link, metric) level, then renders
+# normalised histogram + KDE overlays and computes two-sample K-S distances
+# for every day pair. Only ``bh2_<metric>__<src>_to_<peer>_trace.csv`` files
+# are read (the ``IH_*`` Silvus traces are not consumed).
 # Antenna identity is dropped here — drill into the per-day plots if you
 # need per-radio breakdown.
 #
 # **Output files written to multi_day_root/**
 # | File                        | Contents                                          |
 # |-----------------------------|---------------------------------------------------|
-# | ``<family>/pngs/<src>/``    | ECDF overlay PNGs per (link, metric).             |
+# | ``<family>/pngs/<src>/``    | Histogram overlay PNGs per (link, metric).        |
 # | ``_per_day_stats.csv``      | Quantile summary per (family, day, link, metric). |
 # | ``_pairwise_ks.csv``        | K-S statistic + median delta for every day pair.  |
 
@@ -41,7 +43,7 @@ _TRACE_RE = re.compile(r"^bh2_([a-z]+)__([a-z0-9]+)_to_([a-z0-9]+)_trace\.csv$")
 
 ## @brief Specification for loading and rendering one radio metric.
 #
-# Instances are collected in @ref _METRICS and looked up by prefix or short name.
+# Instances are collected in `_METRICS` and looked up by prefix or short name.
 @dataclass(frozen=True)
 class _MetricSpec:
     prefix: str  ##< CSV filename prefix (e.g. ``"bh2_snr"``).
@@ -61,9 +63,9 @@ _METRICS: tuple[_MetricSpec, ...] = (
 _METRICS_BY_PREFIX = {m.prefix: m for m in _METRICS}  ##< Lookup by CSV prefix.
 _METRICS_BY_SHORT  = {m.short:  m for m in _METRICS}  ##< Lookup by short name.
 
-## @brief Minimum samples per day for a bag to be included in ECDF/K-S analysis.
+## @brief Minimum samples per day for a bag to be included in histogram/K-S analysis.
 #
-# Bags below this threshold produce unreliable ECDFs and noisy K-S statistics.
+# Bags below this threshold produce noisy distributions and K-S statistics.
 _MIN_SAMPLES_PER_DAY = 100
 
 
@@ -81,7 +83,7 @@ def _parse_scenario(name: str) -> tuple[str, str] | None:
 
 ## @brief Group scenario directories under a per-day root by family and date.
 #
-# Scenarios listed in @ref KNOWN_BAD_SCENARIOS are silently excluded.
+# Scenarios listed in `KNOWN_BAD_SCENARIOS` are silently excluded.
 #
 # @param per_day_root Root directory produced by the ``plot`` subcommand.
 # @return Nested mapping ``{family: {date_str: [scenario_dir, ...]}}``
@@ -113,6 +115,7 @@ class _DayBag:
 # ``(day, src, peer, metric_short)``.
 #
 # @param days Mapping ``{date_str: [scenario_dir, ...]}`` for one family.
+# @param audit Print raw-vs-parsed diagnostics per CSV if ``True`` (default ``False``).
 # @return Dict keyed by ``(day, src_rab, peer_rab, metric_short)`` → @ref _DayBag.
 def _load_traces_for_family(
     days: dict[str, list[Path]],
@@ -419,16 +422,19 @@ def _fmt_day(day: str) -> str:
     return day
 
 
-## @brief Run the full multi-day analysis and write all output files.
+## @fn run_multi_day
+# @brief Run the full multi-day analysis and write all output files.
 #
 # For each scenario family that has at least two days of data:
 # -# Pool trace CSVs into @ref _DayBag objects via @ref _load_traces_for_family.
 # -# Compute quantile summaries for ``_per_day_stats.csv``.
 # -# Compute K-S statistics for every day pair for ``_pairwise_ks.csv``.
-# -# Render and save an ECDF overlay PNG per (link, metric).
+# -# Render and save a histogram overlay PNG per (link, metric).
 #
 # @param per_day_root  Directory of per-day plot output (produced by ``plot``).
 # @param multi_day_root Output directory for multi-day results.
+# @param audit          Print raw-vs-parsed row/max diagnostics per CSV if ``True``.
+# @param family_filter  Only process this family name; ``None`` processes all.
 # @return Tuple ``(per_day_rows, pairwise_rows)`` of the raw dicts written to CSV,
 #         useful for testing or downstream processing.
 # @throws FileNotFoundError if ``per_day_root`` does not exist.
@@ -550,12 +556,16 @@ def run_multi_day(
     return per_day_rows, pairwise_rows
 
 
-## @brief CLI entry point for the ``multi-day`` subcommand.
+## @fn multi_day
+# @brief CLI entry point for the ``multi-day`` subcommand.
 #
 # Delegates to @ref run_multi_day using the default @ref PER_DAY_DIR and
 # @ref MULTI_DAY_DIR paths.
 #
+# @param audit          Print raw-vs-parsed diagnostics if ``True``.
+# @param family_filter  Only process this family; ``None`` for all.
 # @return 0 on success.
+# @throws FileNotFoundError if the per-day plots directory does not exist.
 def multi_day(audit: bool = False, family_filter: str | None = None) -> int:
     # CLI entrypoint.
     run_multi_day(PER_DAY_DIR, MULTI_DAY_DIR,

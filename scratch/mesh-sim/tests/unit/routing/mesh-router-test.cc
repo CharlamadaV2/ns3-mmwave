@@ -1,10 +1,11 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Unit tests for MeshRouter.
- * Standalone binary -- no ns-3 dependency.
+/**
+ * @file mesh-router-test.cc
+ * @brief Unit tests for MeshRouter: path finding, algorithm choice, max hops,
+ *        latency, and congestion.
  *
- * Build:  make
- * Run:    ./mesh-router-test
+ * Standalone binary; ns-3 headers are stubbed from tests/common/.
+ * Build and run: `make -C tests/unit/routing test`.
  */
 
 #include "src/routing/mesh-router.h"
@@ -425,6 +426,15 @@ test_multiple_independent_flows()
 
 // ---- main ----
 
+/**
+ * @fn main
+ * @brief Run every routing test and print a pass/fail count.
+ *
+ * @return 0 if all checks passed, 1 if any failed.
+ *
+ * Calls each test_* function in order; failures print "FAIL: <name>" to
+ * stderr. A new test function must be added to this list to run.
+ */
 int
 main()
 {

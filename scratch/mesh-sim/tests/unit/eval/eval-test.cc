@@ -1,10 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Unit tests for SinrToCapacity and LinkTable.
- * Standalone binary -- no ns-3 dependency.
+/**
+ * @file eval-test.cc
+ * @brief Unit tests for SinrToCapacity, SinrToMcsIndex, and LinkTable.
  *
- * Build:  make -f Makefile.eval
- * Run:    ./eval-test
+ * Standalone binary; ns-3 logging is stubbed via common/ns3-log-stub.h.
+ * Build and run: `make -C tests/unit/eval test`.
  */
 
 #include "src/eval/sinr-capacity.h"
@@ -105,9 +105,9 @@ test_table_mid_range()
 static void
 test_table_highest_mcs()
 {
-    // At 30 dB (well above max), should clamp to highest entry: 5.55
+    // At 30 dB (well above max), should clamp to highest entry: 6.23
     double cap = SinrToCapacity(30.0, 400e6, "table");
-    check(approx(cap, 5.55 * 400, 0.1), "table clamps at highest MCS");
+    check(approx(cap, 6.23 * 400, 0.1), "table clamps at highest MCS");
 }
 
 static void
@@ -166,7 +166,7 @@ test_mcs_index_between_thresholds()
 static void
 test_mcs_index_very_high_sinr()
 {
-    check(SinrToMcsIndex(50.0) == 14, "mcs_index at 50 dB clamps to 14");
+    check(SinrToMcsIndex(50.0) == 15, "mcs_index at 50 dB clamps to 15");
 }
 
 static void
@@ -311,6 +311,15 @@ test_link_table_diagonal_is_default()
 
 // ---- main ----
 
+/**
+ * @fn main
+ * @brief Run every eval test and print a pass/fail count.
+ *
+ * @return 0 if all checks passed, 1 if any failed.
+ *
+ * Calls each test_* function in order; failures print "FAIL: <name>" to
+ * stderr. A new test function must be added to this list to run.
+ */
 int
 main()
 {

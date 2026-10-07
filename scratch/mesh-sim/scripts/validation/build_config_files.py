@@ -44,6 +44,15 @@ _NOISE_FIGURE   = 5.0
 _TX_GAIN_DBI    = 6.0    ##< Default per-node transmit array gain (dBi); --tx-gain.
 _RX_GAIN_DBI    = 6.0    ##< Default per-node receive array gain (dBi);  --rx-gain.
 
+# --- RL ([rl] section) defaults ---
+_RL_ACTION_TYPE   = "discrete"   ##< discrete (masked 7-action) or continuous.
+_RL_REWARD_TYPE   = "throughput" ##< throughput or all_links_los (mean_sinr alias).
+_RL_STEP_SIZE_M   = 25.0         ##< Per-move distance for each discrete action (m).
+_RL_ARRIVAL_M     = 1.0          ##< Continuous-mode arrival threshold (m).
+_RL_BOUND_MARGIN  = 250.0        ##< Padding added around node extent for x/y bounds (m).
+_RL_Z_MIN         = 0.0          ##< Min controlled-node height (m).
+_RL_Z_MAX         = 100.0        ##< Max controlled-node height (m).
+
 ## @brief Filename of the combined GPS trace that marks a directory as a run.
 _TRACE_NAME = "gps_all_nodes_trace.csv"
 
@@ -59,6 +68,9 @@ _TRACE_TIME_COLS  = ("sec_since_origin", "t_utc", "t", "time", "timestamp", "utc
 
 
 ## @brief Return the first candidate column that exists in @p df, else None.
+#
+# @param df          Table to search.
+# @param candidates  Column names in priority order.
 def _first_col(df: pd.DataFrame, candidates) -> str | None:
     for c in candidates:
         if c in df.columns:
@@ -219,11 +231,37 @@ def _trace_duration_s(trace_fp: Path) -> float | None:
 
 
 ## @brief Write ``run.ini`` to @p output_path using the provided parameters.
+#
+# @param output_path  Existing directory that receives ``run.ini``.
+# @param scenario_name  Value written to ``[scenario] name``.
+# @param sim_duration   Simulated duration, seconds.
+# @param band           Radio band written to ``[channel] band``.
+# @param freq_ghz       Carrier frequency, GHz.
+# @param amc_model      Adaptive modulation and coding model name.
+# @param bw_mhz         Bandwidth, MHz.
+# @param power_dbm      Transmit power, dBm.
+# @param ticks          Tick length, seconds.
+# @param demand_mbps    Per-flow traffic demand, Mbit/s.
+# @param noise_figure   Receiver noise figure, dB.
+# @param tx_gain_dbi    Transmit antenna gain, dBi.
+# @param rx_gain_dbi    Receive antenna gain, dBi.
+# @param condition_model  Channel condition model name.
+# @param channel_scenario Channel scenario name.
+# @param gateway_id   Gateway node id; ``None`` selects the ``all_pairs`` traffic topology.
+# @param rl           Optional ``[rl]`` overrides; missing keys fall back to the ``_RL_*`` defaults.
+#
+# Other parameters map one-to-one to keys in ``[scenario]`` / ``[channel]`` /
+# ``[traffic]`` (durations in seconds, ``bw_mhz`` MHz, ``freq_ghz`` GHz,
+# powers dBm, gains dBi, noise figure dB). Always writes seed 1, run_id 1,
+# 3GPP channel model, blockage off, ``table`` beamforming, shortest-path routing
+# with max 5 hops, and ``viz_tick_ms`` 100.
 def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
+                band: str,
                 freq_ghz: float, amc_model: str, bw_mhz: float, power_dbm: float,
                 ticks: float, demand_mbps: float, gateway_id: str | None,
                 noise_figure: float, tx_gain_dbi: float, rx_gain_dbi: float,
-                condition_model: str, channel_scenario: str) -> None:
+                condition_model: str, channel_scenario: str,
+                rl: dict | None = None) -> None:
     cfg = configparser.ConfigParser()
 
     cfg["scenario"] = {
@@ -237,6 +275,7 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
         "buildings_file": "",
     }
     cfg["channel"] = {
+        "band":              band,
         "frequency_ghz":     str(freq_ghz),
         "tx_power_dbm":      str(power_dbm),
         "scenario":          channel_scenario,
@@ -272,6 +311,25 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
         "viz_tick_ms": "100",
     }
 
+    # [rl] — reinforcement-learning config (read by rl-bridge.cc / config-loader.cc).
+    # Written for every run; harmless when enabled=false (the sim skips RL).
+    if rl is None:
+        rl = {}
+    cfg["rl"] = {
+        "enabled":             str(rl.get("enabled", False)).lower(),
+        "controlled_node_id":  rl.get("controlled_node_id", ""),
+        "action_type":         rl.get("action_type", _RL_ACTION_TYPE),
+        "reward_type":         rl.get("reward_type", _RL_REWARD_TYPE),
+        "step_size_m":         str(rl.get("step_size_m", _RL_STEP_SIZE_M)),
+        "arrival_threshold_m": str(rl.get("arrival_threshold_m", _RL_ARRIVAL_M)),
+        "x_min":               str(rl.get("x_min", 0.0)),
+        "x_max":               str(rl.get("x_max", 0.0)),
+        "y_min":               str(rl.get("y_min", 0.0)),
+        "y_max":               str(rl.get("y_max", 0.0)),
+        "z_min":               str(rl.get("z_min", _RL_Z_MIN)),
+        "z_max":               str(rl.get("z_max", _RL_Z_MAX)),
+    }
+
     ini_path = output_path / "run.ini"
     with open(ini_path, "w") as f:
         cfg.write(f)
@@ -279,6 +337,10 @@ def _create_ini(output_path: Path, scenario_name: str, sim_duration: float,
 
 
 ## @brief Write ``nodes.json`` to @p output_path for a single run.
+#
+# @param output_path  Existing directory that receives ``nodes.json``.
+# @param node_data    List of ``{"name", "x", "y"}`` dicts (ENU metres).
+# @param gateway_name Gateway id, or ``None`` for no gateway node.
 #
 # Node positions are the ENU metres returned by @ref _load_day_gps (same origin
 # as the trace, and therefore as ``build_waypoints.py``). The gateway (if any)
@@ -351,7 +413,8 @@ def _discover_days(per_day_dir: Path) -> list[str]:
     return sorted(d.name for d in per_day_dir.iterdir() if _has_trace(d))
 
 
-## @brief Generate one ``nodes.json`` + ``run.ini`` per run (day or scenario).
+## @fn load_calfex_data_per_day
+# @brief Generate one ``nodes.json`` + ``run.ini`` per run (day or scenario).
 #
 # Channel params are read once from @p csv_dir (run-independent). For each run,
 # that run's GPS start positions are read from
@@ -364,7 +427,24 @@ def _discover_days(per_day_dir: Path) -> list[str]:
 # @param band           Radio band string (``"sub-6"`` or ``"mmwave"``).
 # @param days           List of run directory names to produce configs for.
 # @param gateway_enable Whether to add a gateway node + gateway traffic topology.
-# @return               0 on success, 1 on error.
+# @param time           Simulation duration in seconds; ``None`` derives it from
+#                       each run's trace time span.
+# @param amc_model      ``[channel] amc_model`` value (``silvus``, ``shannon`` or ``table``).
+# @param ticks          Tick length in seconds.
+# @param scenario_name  ``[scenario] name`` value (default ``"calfex"``).
+# @param noise_figure   Receiver noise figure, dB.
+# @param tx_gain_dbi    Transmit array gain, dBi.
+# @param rx_gain_dbi    Receive array gain, dBi.
+# @param condition_model ``static_los`` or ``auto``.
+# @param channel_scenario 3GPP scenario (``RMa``, ``UMa``, ``UMi`` or ``InH``).
+# @param rl_opts        ``[rl]`` options; x/y bounds are added per run from the node
+#                       extent plus a 250 m margin.
+# @return               0 if at least one run was written, 1 otherwise.
+#
+# Runs with no GPS fixes, or with no derivable duration when ``time`` is None, are
+# skipped with a warning. Creates ``<output_path>/<run>/`` per run. The gateway,
+# when enabled, is named ``gateway`` and placed at the node centroid at 30 m.
+# IH nodes are placed at 1.5 m with ``waypoint`` mobility and empty waypoints.
 def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path,
                              time: float, amc_model: str, band: str,
                              days: list[str], ticks: float, gateway_enable: bool,
@@ -373,10 +453,13 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
                              tx_gain_dbi: float = _TX_GAIN_DBI,
                              rx_gain_dbi: float = _RX_GAIN_DBI,
                              condition_model: str = "static_los",
-                             channel_scenario: str = "RMa") -> int:
+                             channel_scenario: str = "RMa",
+                             rl_opts: dict | None = None) -> int:
     if not days:
         print("ERROR: no runs to process", file=sys.stderr)
         return 1
+    if rl_opts is None:
+        rl_opts = {}
 
     # Channel config is run-independent — read it once.
     chan = _load_channel_config(csv_dir)
@@ -417,8 +500,21 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
         day_dir = output_path / day
         day_dir.mkdir(parents=True, exist_ok=True)
         _create_json(day_dir, node_data, gateway_name)
+
+        # Arena bounds for RL: node x/y extent padded by a margin so the
+        # controlled node has room to move; z from configured limits.
+        xs = [n["x"] for n in node_data]
+        ys = [n["y"] for n in node_data]
+        rl_cfg = dict(rl_opts)
+        rl_cfg.update(
+            x_min=round(min(xs) - _RL_BOUND_MARGIN, 2),
+            x_max=round(max(xs) + _RL_BOUND_MARGIN, 2),
+            y_min=round(min(ys) - _RL_BOUND_MARGIN, 2),
+            y_max=round(max(ys) + _RL_BOUND_MARGIN, 2),
+        )
         _create_ini(day_dir,
                     scenario_name=scenario_name,
+                    band=band,
                     freq_ghz=freq_ghz,
                     sim_duration=sim_duration,
                     amc_model=amc_model,
@@ -431,7 +527,8 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
                     tx_gain_dbi=tx_gain_dbi,
                     rx_gain_dbi=rx_gain_dbi,
                     condition_model=condition_model,
-                    channel_scenario=channel_scenario)
+                    channel_scenario=channel_scenario,
+                    rl=rl_cfg)
         print(f"  {day}: {len(node_data)} nodes, duration={sim_duration:g}s")
         n_ok += 1
 
@@ -441,7 +538,23 @@ def load_calfex_data_per_day(csv_dir: Path, per_day_dir: Path, output_path: Path
     return 0
 
 
-## @brief CLI entry point.
+## @fn main
+# @brief CLI entry point: write per-run ``nodes.json`` and ``run.ini`` from field data.
+#
+# @param argv Argument list; defaults to ``sys.argv[1:]`` when ``None``.
+# @return 0 on success, 1 on a missing input, no runs found, or when the mode/band
+#         combination is not ``node`` + ``sub-6``.
+#
+# Required flags: ``--csv-dir`` (per-node dirs holding ``silvus/config.csv``),
+# ``--band/-b {mmwave,sub-6}``, ``--mode/-m {node,scenario}``, and one of
+# ``--day <run>`` / ``--all-days``. Optional: ``--input/-i`` (default
+# ``data/arpo_extracted/_plots/per_day``), ``--output/-o`` (default
+# ``inputs/calfex``), ``--time`` (s), ``--tick`` (s, default 1), ``--amc-model``
+# (default ``silvus``), ``--gateway/-g``, ``--name``, ``--noise-figure`` (5 dB),
+# ``--tx-gain`` / ``--rx-gain`` (6 dBi), ``--condition-model``,
+# ``--channel-scenario``, and the ``--rl-*`` options.
+# Only ``--mode node --band sub-6`` is implemented; anything else exits with an
+# error. Run from ``scratch/mesh-sim/``. Writes ``<output>/<run>/{nodes.json,run.ini}``.
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Generates per-run config files (day or scenario window) for "
@@ -492,6 +605,24 @@ def main(argv: list[str] | None = None) -> int:
                    choices=["RMa", "UMa", "UMi", "InH"],
                    help="3GPP propagation scenario. Default: RMa")
 
+    # [rl] section knobs
+    p.add_argument("--rl-enabled", action="store_true",
+                   help="Set [rl] enabled=true (turns on RL mode in the sim)")
+    p.add_argument("--rl-controlled-node", default="",
+                   help="id of the controlled node ([rl] controlled_node_id)")
+    p.add_argument("--rl-action-type", default=_RL_ACTION_TYPE,
+                   choices=["discrete", "continuous"],
+                   help=f"[rl] action_type. Default: {_RL_ACTION_TYPE}")
+    p.add_argument("--rl-reward-type", default=_RL_REWARD_TYPE,
+                   choices=["throughput", "all_links_los", "mean_sinr"],
+                   help=f"[rl] reward_type. Default: {_RL_REWARD_TYPE}")
+    p.add_argument("--rl-step-size", type=float, default=_RL_STEP_SIZE_M,
+                   help=f"[rl] step_size_m. Default: {_RL_STEP_SIZE_M}")
+    p.add_argument("--rl-z-min", type=float, default=_RL_Z_MIN,
+                   help=f"[rl] z_min. Default: {_RL_Z_MIN}")
+    p.add_argument("--rl-z-max", type=float, default=_RL_Z_MAX,
+                   help=f"[rl] z_max. Default: {_RL_Z_MAX}")
+
     #Create config for one run vs every run
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--day", default=None,
@@ -529,6 +660,16 @@ def main(argv: list[str] | None = None) -> int:
     # When --day is used, per_day_dir is the run directory itself.
     per_day_dir = (args.input / args.day) if args.day else args.input
 
+    rl_opts = {
+        "enabled":            args.rl_enabled,
+        "controlled_node_id": args.rl_controlled_node,
+        "action_type":        args.rl_action_type,
+        "reward_type":        args.rl_reward_type,
+        "step_size_m":        args.rl_step_size,
+        "z_min":              args.rl_z_min,
+        "z_max":              args.rl_z_max,
+    }
+
     match args.mode, args.band:
         case "node", "sub-6":
             return load_calfex_data_per_day(
@@ -539,7 +680,8 @@ def main(argv: list[str] | None = None) -> int:
                 tx_gain_dbi=args.tx_gain,
                 rx_gain_dbi=args.rx_gain,
                 condition_model=args.condition_model,
-                channel_scenario=args.channel_scenario)
+                channel_scenario=args.channel_scenario,
+                rl_opts=rl_opts)
         case _:
             print("per-run generation only supports node mode + sub-6 band",
                   file=sys.stderr)

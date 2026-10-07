@@ -1,0 +1,16 @@
+[
+  {
+    "id": "jammer-0",
+    "enabled": true,
+    "type": "constant",
+    "target_freq": [2400.0],
+    "tx_power_dbm": 30.0,
+    "tx_array_gain_dbi": 12.0,
+    "duty_cycle": 1.0,
+    "max_range_m": 0.0,
+    "beamwidth_deg": 360.0,
+    "azimuth_deg": 0.0,
+    "zenith_deg": 90.0,
+    "position": {"x": 50.0, "y": 0.0, "z": 10.0}
+  }
+]

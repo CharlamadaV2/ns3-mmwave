@@ -1,7 +1,7 @@
 ##@file gps.py
 # @brief GPS track plot for one scenario.
 #
-#
+# Returns the figure and a trace DataFrame; saving is left to ``cli.py``.
 ##
 
 from __future__ import annotations
@@ -14,7 +14,8 @@ from matplotlib.lines import Line2D
 
 from .common import crashed_suffix, scenario_caption
 
-## @brief Plot GPS tracks for all nodes in a scenario as XY scatter coloured by time.
+## @fn plot_gps_tracks
+# @brief Plot GPS tracks for all nodes in a scenario as XY scatter coloured by time.
 #
 # Converts latitude/longitude to local East-North metres relative to the
 # centroid of all fixes. Each node is drawn with a distinct marker shape;

@@ -1,9 +1,14 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 
-/** @file config-validator.cc */
+/**
+ * @file config-validator.cc
+ * @brief Implements @ref mesh_sim::ValidateConfig; rules are listed in config-validator.h.
+ */
 
 
 #include "src/config/config-validator.h"
+
+#include "src/config/rl-control.h"
 
 #include <algorithm>
 #include <initializer_list>
@@ -11,6 +16,7 @@
 namespace mesh_sim
 {
 
+/** @brief Append an error to @p r if @p val is not > 0. */
 static void
 checkPositive(ValidationResult& r, const std::string& field, double val)
 {
@@ -20,6 +26,7 @@ checkPositive(ValidationResult& r, const std::string& field, double val)
     }
 }
 
+/** @brief Append an error to @p r if @p val is not one of @p allowed. */
 static void
 checkOneOf(ValidationResult& r,
            const std::string& field,
@@ -40,6 +47,7 @@ checkOneOf(ValidationResult& r,
     }
 }
 
+/** @brief See config-validator.h; collects every error rather than stopping at the first. */
 ValidationResult
 ValidateConfig(const SimConfig& cfg)
 {
@@ -128,6 +136,7 @@ ValidateConfig(const SimConfig& cfg)
                {"auto", "static_los"});
     checkOneOf(r, "channel.scenario", cfg.channel.scenario,
                {"UMi", "UMa", "RMa", "InH", "InF"});
+    checkOneOf(r, "channel.band", cfg.band, {"mmwave", "sub-6"});
     if (cfg.channel.tx_array_gain_dbi < 0.0)
     {
         r.errors.push_back("channel.tx_array_gain_dbi must be >= 0 (got " +
@@ -197,7 +206,7 @@ ValidateConfig(const SimConfig& cfg)
         checkOneOf(r, "rl.action_type", cfg.rl.action_type,
                    {"discrete", "continuous"});
         checkOneOf(r, "rl.reward_type", cfg.rl.reward_type,
-                   {"throughput", "mean_sinr"});
+                   {"throughput", "all_links_los"});
 
         if (cfg.rl.action_type == "discrete")
         {
@@ -212,6 +221,8 @@ ValidateConfig(const SimConfig& cfg)
             r.errors.push_back("rl.x_min must be < rl.x_max");
         if (cfg.rl.y_min >= cfg.rl.y_max)
             r.errors.push_back("rl.y_min must be < rl.y_max");
+        if (cfg.rl.z_min >= cfg.rl.z_max)
+            r.errors.push_back("rl.z_min must be < rl.z_max");
 
         if (!cfg.rl.controlled_node_id.empty())
         {
@@ -231,8 +242,64 @@ ValidateConfig(const SimConfig& cfg)
                     "' does not match any node ID");
             }
         }
+
+        // Slot/cadence/start-position rules live in the shared resolver.
+        const RlControlResolution ctl = ResolveRlControl(cfg);
+        r.errors.insert(r.errors.end(), ctl.errors.begin(), ctl.errors.end());
     }
 
+    // -- baseline -- value only; the direct-run guard needs the explicit --rl-mode flag (sim.cc).
+    checkOneOf(r, "baseline.algorithm", cfg.baseline.algorithm,
+               {"none", "geometric", "optimization"});
+
+    // -- jammers --
+    for (const auto& j : cfg.jammers)
+    {
+        std::string label = "jammer '" + j.id + "'";
+
+        // Type check
+        checkOneOf(r, label + " type", j.type, {"constant", "random"});
+
+        // Power / duty cycle
+        if (j.duty_cycle < 0.0 || j.duty_cycle > 1.0)
+        {
+            r.errors.push_back(label + ": duty_cycle must be in [0, 1] (got " +
+                               std::to_string(j.duty_cycle) + ")");
+        }
+
+        // Beamwidth in (0, 360]; azimuth in [0, 360)
+        if (j.beamwidth_deg <= 0.0 || j.beamwidth_deg > 360.0)
+        {
+            r.errors.push_back(label + ": beamwidth_deg must be in (0, 360] (got " +
+                               std::to_string(j.beamwidth_deg) + ")");
+        }
+
+        // Interval check: each [start, end) must be ordered and non-negative.
+        for (const auto& iv : j.intervals)
+        {
+            if (iv.start < 0.0)
+            {
+                r.errors.push_back(label + ": interval start must be >= 0 (got " +
+                                   std::to_string(iv.start) + ")");
+            }
+            if (iv.end <= iv.start)
+            {
+                r.errors.push_back(label + ": interval end must be > start (got start=" +
+                                   std::to_string(iv.start) + ", end=" +
+                                   std::to_string(iv.end) + ")");
+            }
+        }
+
+        // Random-walk bounds (the only bounds a JammerSpec carries).
+        if (j.type == "random")
+        {
+            if (j.random_walk.x_min >= j.random_walk.x_max)
+                r.errors.push_back(label + ": random_walk x_min must be < x_max");
+            if (j.random_walk.y_min >= j.random_walk.y_max)
+                r.errors.push_back(label + ": random_walk y_min must be < y_max");
+        }
+    }
+    
     // -- buildings --
     for (const auto& b : cfg.buildings)
     {

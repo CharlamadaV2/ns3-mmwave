@@ -12,34 +12,29 @@ from typing import Any, Callable
 
 import pandas as pd
 
-# ---------------------------------------------------------------------------
-# t-distribution critical values for 95% CI (two-tailed, df = n-1).
-# For df >= 30, 1.96 is a good approximation (normal distribution).
-# ---------------------------------------------------------------------------
-_T_TABLE_95 = {
-    1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
-    6: 2.447,  7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
-    15: 2.131, 20: 2.086, 25: 2.060, 30: 2.042,
-}
-
-
-def _t_critical(n: int) -> float:
-    """Return t critical value for 95% CI with *n* observations."""
-    df = n - 1
-    if df <= 0:
-        return 0.0
-    if df in _T_TABLE_95:
-        return _T_TABLE_95[df]
-    for k in sorted(_T_TABLE_95.keys()):
-        if k >= df:
-            return _T_TABLE_95[k]
-    return 1.96
-
+from scripts.stats import sample_stats, t_critical_95
 
 # ---------------------------------------------------------------------------
 # Time-series aggregation (CSV data)
 # ---------------------------------------------------------------------------
 
+## @fn aggregate_timeseries
+# @brief Combine one CSV file from every seed into per-timestep mean and 95% CI.
+#
+# @param seed_dirs   Seed directories (from discover_seed_dirs).
+# @param loader      Function taking a file path and returning a DataFrame or None
+#                    (e.g. load_links_csv).
+# @param filename    CSV file name inside each seed directory (e.g. "links.csv").
+# @param time_col    Time column, seconds; rounded to 3 decimals (1 ms) before grouping.
+# @param group_cols  Columns that identify a series (e.g. ["node_a", "node_b"]).
+# @param value_cols  Numeric columns to aggregate.
+# @return DataFrame with columns `time_col`, `*group_cols`, and for each value column
+#         `<v>_mean` and `<v>_ci95`; None if no seed provided usable data.
+#
+# Seeds whose file is missing (loader returns None) are skipped silently. Seeds
+# missing any required column are skipped with a warning. The CI is
+# `t_critical_95(n) * std / sqrt(n)` in units of the value column; it is 0.0 when
+# only one seed contributes at that timestep. Nothing is written to disk.
 def aggregate_timeseries(
     seed_dirs: list[str],
     loader: Callable[[str], pd.DataFrame | None],
@@ -96,11 +91,12 @@ def aggregate_timeseries(
         std_col = f"{vc}_std"
         ci_col = f"{vc}_ci95"
 
+        # Per-row 95% CI from the count and std columns computed above.
         def _ci(row):
             n = row[n_col]
             if n <= 1:
                 return 0.0
-            return _t_critical(int(n)) * row[std_col] / math.sqrt(n)
+            return t_critical_95(int(n)) * row[std_col] / math.sqrt(n)
 
         result[ci_col] = result.apply(_ci, axis=1)
         # Drop intermediate columns
@@ -118,28 +114,20 @@ _CI_METRICS = {"mean_sinr_db", "sum_throughput_mbps", "connectivity",
                "delivered_mbps", "latency_ms"}
 
 
-def _stats(values: list[float], use_ci: bool = False) -> dict[str, Any]:
-    """Compute mean, sample std, min, max, n, and optionally 95% CI."""
-    n = len(values)
-    if n == 0:
-        return {"mean": None, "std": None, "min": None, "max": None, "n": 0}
-
-    mean = sum(values) / n
-    variance = sum((v - mean) ** 2 for v in values) / (n - 1) if n > 1 else 0.0
-    std = math.sqrt(variance)
-
-    result: dict[str, Any] = {
-        "mean": mean,
-        "std": std,
-        "min": min(values),
-        "max": max(values),
-        "n": n,
-    }
-    if use_ci and n > 1:
-        result["ci95"] = _t_critical(n) * std / math.sqrt(n)
-    return result
-
-
+## @fn aggregate_summaries
+# @brief Aggregate per-seed summary.json dicts into mean/std/CI statistics.
+#
+# @param summaries  List of dicts as returned by load_summary (one per seed).
+# @return Dict with keys `num_seeds`, `seeds`, `network`, `per_node`, `per_flow`,
+#         `per_seed`. `network` maps metric name to a stats dict; `per_node` and
+#         `per_flow` map an id to {metric: stats dict}; `per_seed` lists
+#         {"seed", optional "wall_elapsed_s"}. With an empty input list, all counts
+#         are 0 and all containers empty.
+#
+# Each stats dict comes from scripts.stats.sample_stats (mean, std, min, max, n, and
+# `ci95` only when n > 1 and the metric is in _CI_METRICS). Metrics absent or null
+# in a seed are ignored for that seed; a metric with no values has mean None.
+# Node and flow ids are the union across seeds, sorted.
 def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
     """Aggregate multiple seed summary dicts into mean/std/ci95.
 
@@ -156,7 +144,7 @@ def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
     for key in net_keys:
         vals = [s["network"][key] for s in summaries
                 if "network" in s and s["network"].get(key) is not None]
-        net_agg[key] = _stats(vals, use_ci=(key in _CI_METRICS))
+        net_agg[key] = sample_stats(vals, use_ci=(key in _CI_METRICS))
 
     # --- Per-node ---
     all_node_ids: set[str] = set()
@@ -173,7 +161,7 @@ def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
             vals = [s["per_node"][nid][key] for s in summaries
                     if nid in s.get("per_node", {})
                     and s["per_node"][nid].get(key) is not None]
-            nagg[key] = _stats(vals, use_ci=(key in _CI_METRICS))
+            nagg[key] = sample_stats(vals, use_ci=(key in _CI_METRICS))
         per_node_agg[nid] = nagg
 
     # --- Per-flow ---
@@ -189,7 +177,7 @@ def aggregate_summaries(summaries: list[dict]) -> dict[str, Any]:
             vals = [s["per_flow"][fid][key] for s in summaries
                     if fid in s.get("per_flow", {})
                     and s["per_flow"][fid].get(key) is not None]
-            fagg[key] = _stats(vals, use_ci=(key in _CI_METRICS))
+            fagg[key] = sample_stats(vals, use_ci=(key in _CI_METRICS))
         per_flow_agg[fid] = fagg
 
     # --- Per-seed metadata ---

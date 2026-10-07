@@ -1,5 +1,10 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file metrics-writer.cc*/
+/**
+ * @file metrics-writer.cc
+ * @brief Implements MetricsWriter: per-tick accumulation and summary.json output.
+ *
+ * Public API is documented in metrics-writer.h.
+ */
 
 #include "src/io/metrics-writer.h"
 #include "src/util/string-utils.h"

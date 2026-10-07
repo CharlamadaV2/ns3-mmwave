@@ -1,0 +1,1161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mesh-sim policy decision records v1",
+  "description": "Opt-in per-episode decision records: policy_decisions_manifest.json (manifest) and each line of policy_decisions.jsonl (reset or decision record). Frozen; any change is a new versioned file. See src/rl/decision-records.md.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/manifest"
+    },
+    {
+      "$ref": "#/$defs/reset_record"
+    },
+    {
+      "$ref": "#/$defs/decision_record"
+    }
+  ],
+  "$defs": {
+    "manifest": {
+      "type": "object",
+      "required": [
+        "contract",
+        "version",
+        "episode",
+        "settings",
+        "observation_schema",
+        "model_input",
+        "reward_schema_sha256",
+        "contract_identity",
+        "model",
+        "preferences",
+        "coverage",
+        "status",
+        "jsonl_sha256",
+        "bytes",
+        "error",
+        "writer"
+      ],
+      "properties": {
+        "contract": {
+          "type": "string",
+          "const": "decision_record"
+        },
+        "version": {
+          "type": "integer",
+          "const": 1
+        },
+        "episode": {
+          "type": "object",
+          "required": [
+            "dir_name",
+            "index",
+            "seed",
+            "seed_source",
+            "mode",
+            "source",
+            "policy",
+            "status",
+            "rl_episode_manifest",
+            "steps_file",
+            "steps_telemetry_every"
+          ],
+          "properties": {
+            "dir_name": {
+              "type": "string",
+              "pattern": "^episode-[0-9]+$"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "seed": {
+              "type": "integer"
+            },
+            "seed_source": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "training",
+                "evaluation"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "train",
+                "train_eval",
+                "evaluate"
+              ]
+            },
+            "policy": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "completed",
+                    "interrupted",
+                    "failed"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rl_episode_manifest": {
+              "type": "string",
+              "const": "rl_episode.json"
+            },
+            "steps_file": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "const": "steps.jsonl"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "steps_telemetry_every": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "settings": {
+          "$ref": "#/$defs/settings"
+        },
+        "observation_schema": {
+          "type": "object",
+          "required": [
+            "schema_id",
+            "dtype",
+            "obs_dim",
+            "sha256"
+          ],
+          "properties": {
+            "schema_id": {
+              "type": "string"
+            },
+            "dtype": {
+              "type": "string"
+            },
+            "obs_dim": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "model_input": {
+          "type": "object",
+          "required": [
+            "dtype",
+            "conversion",
+            "lossless_from_obs"
+          ],
+          "properties": {
+            "dtype": {
+              "type": "string",
+              "const": "float32"
+            },
+            "conversion": {
+              "type": "string",
+              "const": "stable_baselines3.common.preprocessing.preprocess_obs: obs.float()"
+            },
+            "lossless_from_obs": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "reward_schema_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "contract_identity": {
+          "type": "object",
+          "required": [
+            "contract_id",
+            "node_ids",
+            "slot_node_ids",
+            "action_meanings",
+            "hold_index",
+            "tick_s",
+            "decision_interval_ticks",
+            "num_decisions"
+          ],
+          "properties": {
+            "contract_id": {
+              "type": "string"
+            },
+            "node_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "slot_node_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "action_meanings": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "string"
+              }
+            },
+            "hold_index": {
+              "type": "integer",
+              "const": 4
+            },
+            "tick_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "decision_interval_ticks": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "num_decisions": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "model": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/model"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preferences": {
+          "$ref": "#/$defs/preferences"
+        },
+        "coverage": {
+          "$ref": "#/$defs/coverage"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "writing",
+            "complete",
+            "capped",
+            "interrupted",
+            "failed"
+          ]
+        },
+        "jsonl_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "error": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "writer": {
+          "type": "object",
+          "required": [
+            "library_versions",
+            "written_after_outcome"
+          ],
+          "properties": {
+            "library_versions": {
+              "type": "object",
+              "required": [
+                "numpy"
+              ],
+              "properties": {
+                "numpy": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "written_after_outcome": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "reset_record": {
+      "type": "object",
+      "required": [
+        "type",
+        "decision",
+        "tick",
+        "time_s",
+        "obs_dtype",
+        "obs_sha256",
+        "mask",
+        "mask_sha256",
+        "steps_ref",
+        "note"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "reset"
+        },
+        "decision": {
+          "type": "integer",
+          "const": 0
+        },
+        "tick": {
+          "type": "integer",
+          "const": 0
+        },
+        "time_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "obs_dtype": {
+          "type": "string"
+        },
+        "obs_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "mask": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        },
+        "mask_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "steps_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/steps_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "type": "string",
+          "const": "reset snapshot; no policy inference"
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision_record": {
+      "type": "object",
+      "required": [
+        "type",
+        "decision",
+        "targets",
+        "input",
+        "action",
+        "outcome",
+        "preferences"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "decision"
+        },
+        "decision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "input": {
+          "type": "object",
+          "required": [
+            "source_decision",
+            "tick",
+            "time_s",
+            "steps_ref",
+            "obs_dtype",
+            "obs_sha256",
+            "model_input_dtype",
+            "model_input_conversion",
+            "model_input_sha256",
+            "obs_vector",
+            "mask",
+            "mask_sha256"
+          ],
+          "properties": {
+            "source_decision": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tick": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "time_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "steps_ref": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/steps_ref"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "obs_dtype": {
+              "type": "string"
+            },
+            "obs_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "model_input_dtype": {
+              "type": "string",
+              "const": "float32"
+            },
+            "model_input_conversion": {
+              "type": "string",
+              "const": "torch.Tensor.float() == numpy.astype(float32)"
+            },
+            "model_input_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "obs_vector": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "mask": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "mask_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "action": {
+          "type": "object",
+          "required": [
+            "requested",
+            "revalidated_slots",
+            "applied",
+            "applied_status",
+            "hold_index"
+          ],
+          "properties": {
+            "requested": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            },
+            "revalidated_slots": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "applied": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            },
+            "applied_status": {
+              "type": "string",
+              "enum": [
+                "derived"
+              ]
+            },
+            "hold_index": {
+              "type": "integer",
+              "const": 4
+            }
+          },
+          "additionalProperties": false
+        },
+        "outcome": {
+          "type": "object",
+          "required": [
+            "tick",
+            "time_s",
+            "ticks_in_step",
+            "interval_s",
+            "done",
+            "legacy_reward",
+            "reward",
+            "reward_schema_sha256"
+          ],
+          "properties": {
+            "tick": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "time_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "ticks_in_step": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "interval_s": {
+              "type": "object",
+              "required": [
+                "start_exclusive",
+                "end_inclusive"
+              ],
+              "properties": {
+                "start_exclusive": {
+                  "type": "number"
+                },
+                "end_inclusive": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            "done": {
+              "type": "boolean"
+            },
+            "legacy_reward": {
+              "type": "number"
+            },
+            "reward": {
+              "$ref": "#/$defs/reward"
+            },
+            "reward_schema_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "preferences": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "representation",
+                "capture",
+                "per_slot",
+                "masked_probs"
+              ],
+              "properties": {
+                "representation": {
+                  "type": "string",
+                  "const": "raw_action_net_logits_float32"
+                },
+                "capture": {
+                  "type": "string",
+                  "const": "action_net_forward_hook"
+                },
+                "per_slot": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "array",
+                    "minItems": 5,
+                    "maxItems": 5,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "masked_probs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "array",
+                    "minItems": 5,
+                    "maxItems": 5,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "steps_ref": {
+      "type": "object",
+      "required": [
+        "file",
+        "decision",
+        "obs_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "const": "steps.jsonl"
+        },
+        "decision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "obs_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reward": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "total",
+            "components",
+            "valid"
+          ],
+          "properties": {
+            "total": {
+              "type": "number"
+            },
+            "components": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "delivery_ratio": {
+                  "type": "number"
+                },
+                "connectivity": {
+                  "type": "number"
+                },
+                "throughput_mbps": {
+                  "type": "number"
+                },
+                "legacy": {
+                  "type": "number"
+                },
+                "delivery_binary": {
+                  "type": "number"
+                },
+                "signed_delivery_ratio": {
+                  "type": "number"
+                },
+                "service_success": {
+                  "type": "number"
+                },
+                "service_failure": {
+                  "type": "number"
+                },
+                "travel_fraction": {
+                  "type": "number"
+                },
+                "origin_fraction": {
+                  "type": "number"
+                },
+                "sinr_quality": {
+                  "type": "number"
+                },
+                "unmet_sinr_quality": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            "valid": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "delivery_ratio": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "connectivity": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "throughput_mbps": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "legacy": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "delivery_binary": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "signed_delivery_ratio": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "service_success": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "service_failure": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "travel_fraction": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "origin_fraction": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "sinr_quality": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                },
+                "unmet_sinr_quality": {
+                  "type": "integer",
+                  "enum": [0, 1]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "total",
+            "source"
+          ],
+          "properties": {
+            "total": {
+              "type": "number"
+            },
+            "source": {
+              "type": "string",
+              "const": "cpp"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "preferences": {
+      "type": "object",
+      "required": [
+        "captured",
+        "representation",
+        "capture",
+        "error"
+      ],
+      "properties": {
+        "captured": {
+          "type": "boolean"
+        },
+        "representation": {
+          "oneOf": [
+            {
+              "type": "string",
+              "const": "raw_action_net_logits_float32"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "capture": {
+          "oneOf": [
+            {
+              "type": "string",
+              "const": "action_net_forward_hook"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "model_sha256",
+        "policy_weights_sha256",
+        "model_selection",
+        "model_path_recorded",
+        "num_timesteps",
+        "train_manifest_sha256",
+        "inference"
+      ],
+      "properties": {
+        "model_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "policy_weights_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_selection": {
+          "type": "string",
+          "enum": [
+            "final",
+            "best",
+            "checkpoint"
+          ]
+        },
+        "model_path_recorded": {
+          "type": "string"
+        },
+        "num_timesteps": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "train_manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "inference": {
+          "type": "object",
+          "required": [
+            "deterministic",
+            "device",
+            "stable_baselines3",
+            "sb3_contrib",
+            "torch"
+          ],
+          "properties": {
+            "deterministic": {
+              "type": "boolean",
+              "const": true
+            },
+            "device": {
+              "type": "string",
+              "const": "cpu"
+            },
+            "stable_baselines3": {
+              "type": "string"
+            },
+            "sb3_contrib": {
+              "type": "string"
+            },
+            "torch": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "decisions_expected",
+        "decision_0_retained",
+        "terminal_decision",
+        "saved_ranges",
+        "gaps",
+        "records"
+      ],
+      "properties": {
+        "decisions_expected": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decision_0_retained": {
+          "type": "boolean"
+        },
+        "terminal_decision": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "saved_ranges": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "integer",
+                "minimum": 1
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "integer",
+                "minimum": 1
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "records": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "obs_vector",
+        "preferences",
+        "record_every",
+        "max_bytes_per_episode",
+        "source"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "obs_vector": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "always"
+          ]
+        },
+        "preferences": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "off"
+          ]
+        },
+        "record_every": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_bytes_per_episode": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "obs_vector",
+            "preferences",
+            "record_every",
+            "max_bytes_per_episode"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "string",
+              "enum": [
+                "cli",
+                "default"
+              ]
+            },
+            "obs_vector": {
+              "type": "string",
+              "enum": [
+                "cli",
+                "default"
+              ]
+            },
+            "preferences": {
+              "type": "string",
+              "enum": [
+                "cli",
+                "default"
+              ]
+            },
+            "record_every": {
+              "type": "string",
+              "enum": [
+                "cli",
+                "default"
+              ]
+            },
+            "max_bytes_per_episode": {
+              "type": "string",
+              "enum": [
+                "cli",
+                "default"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

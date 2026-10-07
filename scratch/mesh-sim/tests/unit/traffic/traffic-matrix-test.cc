@@ -1,10 +1,11 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Unit tests for TrafficMatrix.
- * Standalone binary -- no ns-3 dependency.
+/**
+ * @file traffic-matrix-test.cc
+ * @brief Unit tests for TrafficMatrix: flow topologies, expiry, on/off phases.
  *
- * Build:  make
- * Run:    ./traffic-matrix-test
+ * Standalone binary; random variables come from the deterministic
+ * ns3-traffic-stub.h in this directory.
+ * Build and run: `make -C tests/unit/traffic test`.
  */
 
 #include "src/traffic/traffic-matrix.h"
@@ -288,6 +289,15 @@ test_reinitialize_clears_flows()
 
 // ---- main ----
 
+/**
+ * @fn main
+ * @brief Run every traffic test and print a pass/fail count.
+ *
+ * @return 0 if all checks passed, 1 if any failed.
+ *
+ * Calls each test_* function in order; failures print "FAIL: <name>" to
+ * stderr. A new test function must be added to this list to run.
+ */
 int
 main()
 {

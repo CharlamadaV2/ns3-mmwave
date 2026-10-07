@@ -1,6 +1,9 @@
 ## @file topology_audit.py
 # @brief Surface label collisions in the (rab, netdev) -> rabN.M scheme.
 #
+# Run as ``python -m scripts.arpo_data.topology_audit``. Reads every
+# ``bh2.csv`` under the extracted CSV root and prints each (rab, netdev) key
+# that maps to more than one local MAC. Read-only; takes no arguments.
 
 
 from __future__ import annotations
@@ -14,7 +17,7 @@ from .paths import CSV_ROOT
 
 ## @brief Scan all bh2.csv files and return one row per unique (rab, mac, netdev, device_name, host).
 #
-# Iterates every scenario and node directory under @ref CSV_ROOT, reads
+# Iterates every scenario and node directory under `CSV_ROOT`, reads
 # ``tag_local_mac``, ``tag_interface``, ``tag_device_name``, and ``tag_host``
 # from each ``bh2.csv``, and deduplicates the result. Files missing any of
 # the required columns are silently skipped.
@@ -84,7 +87,8 @@ def _peer_counts() -> dict[str, int]:
     return dict(out)
 
 
-## @brief Report (rab, netdev) keys whose MAC address is claimed by more than one device.
+## @fn main
+# @brief Report (rab, netdev) keys whose MAC address is claimed by more than one device.
 #
 # Calls @ref _scan to build the full (rab, mac, netdev, device_name, host)
 # inventory and @ref _peer_counts to annotate activity levels. For each
@@ -93,7 +97,7 @@ def _peer_counts() -> dict[str, int]:
 # under one hostname.
 #
 # @return 0 if no collisions are found or all collisions are reported
-#         successfully; 1 if no bh2.csv files exist under @ref CSV_ROOT.
+#         successfully; 1 if no bh2.csv files exist under `CSV_ROOT`.
 def main() -> int:
     df = _scan()
     if df.empty:

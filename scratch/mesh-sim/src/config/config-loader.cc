@@ -1,5 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file config-loader.cc */
+/**
+ * @file config-loader.cc
+ * @brief Implements @ref mesh_sim::ConfigLoader::Load and the JSON-to-struct helpers.
+ *        Key names and defaults are documented in config-loader.h.
+ */
 
 #include "src/config/config-loader.h"
 #include "src/util/ini-parser.h"
@@ -22,6 +26,7 @@ namespace mesh_sim
 // JSON -> POD helpers (inlined here; no separate spec-parser file needed)
 // ---------------------------------------------------------------------------
 
+/** @brief Build a NodeSpec from one nodes-file entry; throws if @c id is missing. */
 static NodeSpec
 parseNodeSpec(const json& j)
 {
@@ -86,6 +91,84 @@ parseNodeSpec(const json& j)
     return n;
 }
 
+/** @brief Build a JammerSpec from one jammers-file entry; every field is optional. */
+static JammerSpec
+parseJammerSpec(const json& j)
+{
+    JammerSpec m;
+    m.enabled = j.value("enabled", false);
+    m.id = j.value("id", "");
+    m.type = j.value("type", "constant");
+    m.target_freq = j.value("target_freq", std::vector<double>{});
+    m.tx_power_dbm = j.value("tx_power_dbm", 25.0);
+    m.tx_array_gain_dbi = j.value("tx_array_gain_dbi", 12.0);
+    m.duty_cycle = j.value("duty_cycle", 1.0);
+    m.max_range_m = j.value("max_range_m", 0.0);
+    m.beamwidth_deg = j.value("beamwidth_deg", 360.0);
+    m.azimuth_deg = j.value("azimuth_deg", 0.0);
+    m.zenith_deg = j.value("zenith_deg", 0.0);
+
+    if (j.contains("position"))
+    {
+        const auto& p = j["position"];
+        m.position.x  = p.value("x", 0.0);
+        m.position.y  = p.value("y", 0.0);
+        m.position.z  = p.value("z", 0.0);
+    }
+
+    if (j.contains("velocity"))
+    {
+        const auto& v = j["velocity"];
+        m.velocity.vx = v.value("vx", 0.0);
+        m.velocity.vy = v.value("vy", 0.0);
+        m.velocity.vz = v.value("vz", 0.0);
+    }
+
+    if (j.contains("random_walk"))
+    {
+        const auto& rw = j["random_walk"];
+        if (rw.contains("bounds"))
+        {
+            const auto& b   = rw["bounds"];
+            m.random_walk.x_min = b.value("x_min", -100.0);
+            m.random_walk.x_max = b.value("x_max",  100.0);
+            m.random_walk.y_min = b.value("y_min", -100.0);
+            m.random_walk.y_max = b.value("y_max",  100.0);
+        }
+        m.random_walk.speed_mps = rw.value("speed_mps", 1.5);
+    }
+
+    if (j.contains("waypoints"))
+    {
+        for (const auto& jw : j["waypoints"])
+        {
+            Waypoint w;
+            w.t = jw.value("t", 0.0);
+            w.x = jw.value("x", 0.0);
+            w.y = jw.value("y", 0.0);
+            w.z = jw.value("z", 0.0);
+            m.waypoints.push_back(w);
+        }
+    }
+
+    
+    if (j.contains("intervals"))
+    {
+   	for (const auto& ji : j["intervals"])
+	{
+	     Interval iv;
+	     iv.start = ji.value("start", 0.0);
+	     iv.end = ji.value("end", 0.0);
+	     m.intervals.push_back(iv);
+	}
+
+    }
+    
+    return m;
+}
+
+
+/** @brief Build a BuildingSpec from one buildings-file entry; every field is optional. */
 static BuildingSpec
 parseBuildingSpec(const json& j)
 {
@@ -142,11 +225,27 @@ ConfigLoader::Load(const std::string& run_config_path,
     {
         // Auto-generate a timestamped output directory anchored to
         // scratch/mesh-sim/outputs/ regardless of cwd.
-        // base_dir points at the scenario dir (e.g. .../inputs/baselines/foo)
-        // so we go up three levels to reach scratch/mesh-sim/.
-        fs::path mesh_sim_dir = fs::path(base_dir).parent_path()  // baselines/
-                                                    .parent_path()  // inputs/
-                                                    .parent_path(); // mesh-sim/
+        // Scenarios can be nested at different depths under inputs/ (for
+        // example inputs/custom/calfex/06-24/1420-1430). Find the simulator
+        // root instead of assuming a fixed number of parent directories.
+        fs::path mesh_sim_dir;
+        for (fs::path candidate = fs::absolute(base_dir); !candidate.empty();
+             candidate = candidate.parent_path())
+        {
+            if (fs::exists(candidate / "sim.cc") && fs::is_directory(candidate / "inputs"))
+            {
+                mesh_sim_dir = candidate;
+                break;
+            }
+            if (candidate == candidate.root_path())
+            {
+                break;
+            }
+        }
+        if (mesh_sim_dir.empty())
+        {
+            throw std::runtime_error("Could not locate mesh-sim root for automatic output directory");
+        }
         std::time_t now = std::time(nullptr);
         std::tm* lt = std::localtime(&now);
 
@@ -180,6 +279,16 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.channel.bandwidth_mhz   = std::stod(iniGet(ini, "channel", "bandwidth_mhz",   "400.0"));
     cfg.channel.tx_array_gain_dbi = std::stod(iniGet(ini, "channel", "tx_array_gain_dbi", "12.0"));
     cfg.channel.rx_array_gain_dbi = std::stod(iniGet(ini, "channel", "rx_array_gain_dbi", "12.0"));
+
+    // Absent [channel] band keeps the "mmwave"/"default" pair set in SimConfig.
+    {
+        const std::string band = iniGet(ini, "channel", "band", "");
+        if (!band.empty())
+        {
+            cfg.band        = band;
+            cfg.band_source = "run.ini";
+        }
+    }
 
     // Validate channel_model
     {
@@ -226,12 +335,35 @@ ConfigLoader::Load(const std::string& run_config_path,
     cfg.rl.controlled_node_id   = iniGet(ini, "rl", "controlled_node_id", "");
     cfg.rl.action_type          = iniGet(ini, "rl", "action_type", "discrete");
     cfg.rl.reward_type          = iniGet(ini, "rl", "reward_type", "throughput");
+    if (cfg.rl.reward_type == "mean_sinr")
+    {
+        cfg.rl.reward_type       = "all_links_los";
+        cfg.rl.reward_type_alias = "mean_sinr";
+    }
     cfg.rl.step_size_m          = std::stod(iniGet(ini, "rl", "step_size_m", "50.0"));
     cfg.rl.arrival_threshold_m  = std::stod(iniGet(ini, "rl", "arrival_threshold_m", "1.0"));
     cfg.rl.x_min                = std::stod(iniGet(ini, "rl", "x_min", "-1000.0"));
     cfg.rl.x_max                = std::stod(iniGet(ini, "rl", "x_max", "2000.0"));
     cfg.rl.y_min                = std::stod(iniGet(ini, "rl", "y_min", "-1000.0"));
     cfg.rl.y_max                = std::stod(iniGet(ini, "rl", "y_max", "1000.0"));
+    cfg.rl.z_min		= std::stod(iniGet(ini, "rl", "z_min", "0.0"));
+    cfg.rl.z_max		= std::stod(iniGet(ini, "rl", "z_max", "100.0"));
+
+    // Key presence (not its value) selects centralized multi-node control.
+    cfg.rl.controlled_nodes     = iniGet(ini, "rl", "controlled_nodes", "");
+    cfg.rl.controlled_nodes_set =
+        ini.count("rl") != 0 && ini.at("rl").count("controlled_nodes") != 0;
+    cfg.rl.max_controlled_nodes = std::stoi(iniGet(ini, "rl", "max_controlled_nodes", "0"));
+    cfg.rl.action_profile       = iniGet(ini, "rl", "action_profile", "move_2d");
+    cfg.rl.decision_interval_s  = std::stod(iniGet(ini, "rl", "decision_interval_s", "0.0"));
+
+    // [baseline] — only the selector; scripts/baselines/config.py owns the other keys.
+    cfg.baseline.algorithm = iniGet(ini, "baseline", "algorithm", "none");
+    if (cfg.baseline.algorithm.empty())
+    {
+        cfg.baseline.algorithm = "none";
+    }
+
 
     // --- Load nodes.json ---
     std::string nodes_file = iniGet(ini, "scenario", "nodes_file", "nodes.json");
@@ -248,6 +380,24 @@ ConfigLoader::Load(const std::string& run_config_path,
         {
             cfg.nodes.push_back(parseNodeSpec(jn));
         }
+    }
+
+    // -- Load jammer.json (optional) ---
+    std::string jammers_file = iniGet(ini, "scenario", "jammers_file", ""); 
+    if (!jammers_file.empty())
+    {
+	std::string jammers_path = resolvePath(base_dir, jammers_file);
+	std::ifstream jf(jammers_path);
+	if (!jf.is_open())
+	{
+		throw std::runtime_error("Cannot open jammers file: " + jammers_path);
+	}		
+	json jjammers;
+	jf >> jjammers;
+	for (const auto& jj : jjammers)
+	{
+		cfg.jammers.push_back(parseJammerSpec(jj));
+	}
     }
 
     // --- Load buildings.json (optional) ---

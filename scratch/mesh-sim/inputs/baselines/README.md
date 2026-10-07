@@ -1,6 +1,8 @@
-# Baseline Validation Scenarios
+@page inputs_baselines inputs/baselines
 
-16 scenarios that progressively test each layer of the simulator.  Every
+@brief Numbered synthetic validation scenarios (01-16) and small smoke fixtures for the simulator.
+
+16 numbered scenarios that progressively test each layer of the simulator.  Every
 scenario changes **one knob** from scenario 01 (the baseline) so results are
 easy to interpret and compare.
 
@@ -39,6 +41,20 @@ easy to interpret and compare.
 | 14 | max-hops-limit | max_hops=3, low TX power | 5 | Some flows unroutable |
 | 15 | umi-los-probability | scenario = UMi | 2 | Seed-dependent (teaching scenario) |
 | 16 | random-walk-urban | everything (integration) | 3 | Noisy, NLOS/LOS transitions |
+
+---
+
+## Smoke fixtures
+
+Unnumbered scenarios used by tests, RL and regression checks, not part of the 01-16 ladder.
+
+| Directory | Role |
+|---|---|
+| `p0-smoke` | 3 fixed peers, mmwave, RL enabled on the relay node (CLI/RL smoke) |
+| `p0-jammer-smoke` | 3 fixed peers plus one 2400 MHz jammer, `band = sub-6`, RL disabled (baseline regression) |
+| `rl-test` | 2 nodes with `buildings.json`, mmwave, RL enabled on `node-b` (not referenced by tests or other docs) |
+| `centralized-multi-smoke` | 3 peers, two RL-controlled slots, mmwave |
+| `building-bypass-smoke` | 2 peers around one building; diagnostic RL fixture used by `inputs/experiments/` |
 
 ---
 

@@ -1,5 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file ini-parser.cc */
+/**
+ * @file ini-parser.cc
+ * @brief Implementation of @ref mesh_sim::parseIni, @ref mesh_sim::iniGet, and @ref mesh_sim::iniGetBool; see ini-parser.h.
+ */
 
 #include "src/util/ini-parser.h"
 #include "src/util/string-utils.h"

@@ -1,0 +1,12 @@
+{
+  "cluster_config_version": 1,
+  "name": "<REQUIRED label for receipts>",
+  "venv": "<REQUIRED absolute path to the prepared venv>",
+  "setup_lines": [],
+  "task":    {"partition": null, "account": null, "qos": null, "constraint": null,
+              "time": "<REQUIRED HH:MM:SS>", "mem": "<REQUIRED e.g. 4G>",
+              "cpus_per_task": "<REQUIRED integer>"},
+  "compare": {"time": "<REQUIRED HH:MM:SS>", "mem": "<REQUIRED>", "cpus_per_task": 1},
+  "max_array_size": "<REQUIRED integer: site MaxArraySize>",
+  "max_concurrent_tasks": null
+}

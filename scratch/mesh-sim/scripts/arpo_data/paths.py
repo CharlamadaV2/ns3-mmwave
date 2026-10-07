@@ -2,7 +2,7 @@
 # @brief Filesystem locations and per-file conventions for ARPO-style datasets.
 #
 # Defaults target the bundled Spring Lake zip under ``data/``. Callers that
-# analyse a different bundle should construct their own @ref DatasetPaths
+# analyse a different bundle should construct their own `DatasetPaths`
 # instead of relying on the module-level aliases at the bottom of this file.
 #
 # Directory layout expected after extraction:
@@ -67,7 +67,7 @@ class DatasetPaths:
     def per_day_dir(self) -> Path:
         return self.plots_dir / "per_day"
 
-    ## @brief Multi-day ECDF and K-S output directory.
+    ## @brief Multi-day histogram-overlay and K-S output directory.
     # @return ``<plots_dir>/multi_day``
     @property
     def multi_day_dir(self) -> Path:

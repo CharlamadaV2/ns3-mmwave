@@ -1,5 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file string-utils.cc */
+/**
+ * @file string-utils.cc
+ * @brief Implementations of the helpers declared in string-utils.h.
+ */
 
 #include "src/util/string-utils.h"
 

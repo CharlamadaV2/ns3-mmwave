@@ -12,9 +12,13 @@
  * CliArgs    args  = ParseCommandLine(argc, argv);
  * SimConfig  cfg   = ConfigLoader::Load(args.run_config_path,
  *                                       args.positions_override_path);
+ * // sim.cc then applies --run-id, --output-dir, --rl-mode and --band to cfg.
  * auto       seeds = ResolveSeeds(args, cfg);
- * ArchiveScenarioInputs(args.output_dir, args.run_config_path);
+ * ArchiveScenarioInputs(cfg.output_dir, args.run_config_path);
  * @endcode
+ *
+ * All error paths in this module print to @c stderr and call
+ * @c std::exit(1); nothing here throws on bad user input.
  */
 #pragma once
 
@@ -50,12 +54,16 @@ struct CliArgs
                                           ///<   Negative means not set.
     bool        debug_links     = false;  ///< Enable verbose per-link debug logging when @c true.
     bool        rl_mode         = false;  ///< Enable RL mode (stdin/stdout JSON exchange) when @c true.
-    std::string band            = "mmwave"; ///< Radio band: "mmwave" (no interference, default)
-                                            ///<   or "sub-6" (co-channel interference summed).
+    std::string band;                     ///< Radio band override: @c "mmwave" or @c "sub-6".
+                                          ///<   Empty means no CLI override, so @c [channel] band
+                                          ///<   from @c run.ini decides.
+    bool        channel_query   = false;  ///< Serve @c mesh_channel_query_v1 on stdin/stdout instead
+                                          ///<   of running (see @ref src_query).
 };
 
 
 /**
+ * @fn ParseCommandLine
  * @brief Parse @c argv via @c ns3::CommandLine and return a populated @ref CliArgs.
  *
  * Registered flags:
@@ -69,19 +77,34 @@ struct CliArgs
  * | @c --output-dir         | string | no       | Output directory override.                   |
  * | @c --debug-links        | bool   | no       | Enable verbose link-evaluation logging.      |
  * | @c --rl-mode            | bool   | no       | Enable RL stdin/stdout JSON exchange.        |
+ * | @c --band               | string | no       | Optional band override @c 'mmwave' or        |
+ * |                         |        |          | @c 'sub-6'; empty means run.ini decides.     |
+ * | @c --channel-query      | bool   | no       | Serve candidate-layout channel queries on    |
+ * |                         |        |          | stdin/stdout; no outputs are written.        |
  *
- * Exits with code 1 if:
- * - @c --run-config is not provided.
- * - The @c run-config file does not exist on disk.
- * - @c --positions-override is provided but the file does not exist.
+ * Flags are written @c --name=value. The three bool flags may be given bare
+ * (e.g. @c --rl-mode) and default to @c false. @c --help is handled by
+ * @c ns3::CommandLine. With @c --channel-query a non-empty @c --output-dir
+ * is ignored with a note on @c stderr.
  *
  * @param argc  Argument count from @c main.
  * @param argv  Argument vector from @c main.
  * @return Populated @ref CliArgs struct.
+ * @throws Never throws; on invalid input it prints to @c stderr and calls
+ *         @c std::exit(1) when:
+ *         - @c --run-config is not provided;
+ *         - the @c --run-config file does not exist on disk;
+ *         - @c --band is supplied with a value other than @c mmwave / @c sub-6;
+ *         - @c --positions-override is provided but the file does not exist.
+ *
+ * Registers each flag with @c ns3::CommandLine, parses, then runs the four
+ * checks above in that order. It only checks that files exist, not that they
+ * are valid. It does not create or modify any files.
  */
 CliArgs ParseCommandLine(int argc, char* argv[]);
 
 /**
+ * @fn ResolveSeeds
  * @brief Determine the list of random seeds to run from CLI args and config defaults.
  *
  * Resolution priority (highest to lowest):
@@ -89,16 +112,34 @@ CliArgs ParseCommandLine(int argc, char* argv[]);
  * -# @c --seed  (single integer override).
  * -# @c cfg.seed (value from @c run.ini).
  *
- * Exits with code 1 if the resolved list is empty (e.g. @c --seeds was
- * supplied but contained no valid integers after parsing).
- *
  * @param args  Parsed CLI arguments from @ref ParseCommandLine.
- * @param cfg   Fully loaded simulation config from @c ConfigLoader::Load.
+ * @param cfg   Fully loaded simulation config from @c ConfigLoader::Load
+ *              (only @c cfg.seed is read).
  * @return Non-empty vector of seed values in the order they should be run.
+ * @throws Never throws; prints to @c stderr and calls @c std::exit(1) if the
+ *         resolved list is empty (e.g. @c --seeds="," ) or if
+ *         @c parseSeedList meets a token that is not an unsigned integer.
+ *
+ * Empty items in @c --seeds (as in @c "1,,2") are skipped. Seeds are not
+ * de-duplicated. Only the first source that is set is used; @c --seed is
+ * ignored when @c --seeds is given.
  */
 std::vector<uint32_t> ResolveSeeds(const CliArgs& args, const SimConfig& cfg);
 
 /**
+ * @fn ResolveQuerySeed
+ * @brief Return the single planning seed for @c --channel-query.
+ *
+ * @param args  Parsed CLI arguments.
+ * @param cfg   Loaded config (only @c cfg.seed is read, via @ref ResolveSeeds).
+ * @return The one seed @ref ResolveSeeds resolves.
+ * @throws Never throws; prints @c "Error: --channel-query needs exactly one seed"
+ *         and calls @c std::exit(1) when more than one seed resolves.
+ */
+uint32_t ResolveQuerySeed(const CliArgs& args, const SimConfig& cfg);
+
+/**
+ * @fn ArchiveScenarioInputs
  * @brief Copy all scenario input files into the batch output directory for reproducibility.
  *
  * Creates @c <base_output_dir>/inputs/ and copies every regular file from
@@ -113,6 +154,13 @@ std::vector<uint32_t> ResolveSeeds(const CliArgs& args, const SimConfig& cfg);
  * @param base_output_dir  Root output directory for this batch run.
  * @param run_config_path  Path to @c run.ini; its parent directory is the
  *                         source of files to archive.
+ * @return Nothing.
+ * @throws std::filesystem::filesystem_error if the archive directory cannot
+ *         be created, the scenario directory cannot be read, or a copy fails.
+ *         @c sim.cc catches this and returns 1.
+ *
+ * A bare filename for @c run_config_path has an empty parent path, which
+ * makes the directory iteration fail. Pass a path with a directory part.
  */
 void ArchiveScenarioInputs(const std::string& base_output_dir,
                             const std::string& run_config_path);

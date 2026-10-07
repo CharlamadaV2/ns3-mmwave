@@ -1,8 +1,11 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Deterministic ns-3 RNG stubs for traffic-matrix unit tests.
+/**
+ * @file ns3-traffic-stub.h
+ * @brief Deterministic ns-3 RNG stubs for the traffic-matrix unit tests.
+ *
  * UniformRandomVariable returns a cycling sequence so tests are repeatable.
  * ExponentialRandomVariable always returns exactly the configured mean.
+ * The Makefile symlinks this file as ns3/random-variable-stream.h and ns3/double.h.
  */
 #pragma once
 

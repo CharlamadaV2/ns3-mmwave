@@ -1,16 +1,25 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/** @file sim
-*/
+/**
+ * @file sim.cc
+ * @brief Simulator entry point: loads a scenario, then runs the per-seed, per-tick
+ *        loop (links, traffic, routing, metrics, optional RL bridge).
+ *
+ * This is the only file that owns the tick loop; each stage lives in `src/`
+ * (see the dependency layers in CLAUDE.md). `--channel-query` returns early
+ * and serves placement-baseline queries instead of simulating.
+ */
 
 #include "src/cli/cli-parser.h"
 #include "src/config/config-loader.h"
 #include "src/config/config-validator.h"
+#include "src/config/rl-control.h"
 #include "src/eval/link-evaluator.h"
 #include "src/eval/link-table.h"
 #include "src/io/metrics-writer.h"
 #include "src/io/progress-logger.h"
 #include "src/io/run-logger.h"
 #include "src/io/viz-writer.h"
+#include "src/query/channel-query.h"
 #include "src/rl/rl-bridge.h"
 #include "src/routing/mesh-router.h"
 #include "src/setup/topology-builder.h"
@@ -29,11 +38,22 @@ namespace fs = std::filesystem;
 
 NS_LOG_COMPONENT_DEFINE("MeshSim");
 
-/// @brief Entry point: loads config, builds topology, runs the per-tick
-///        simulation loop for each seed, and writes metrics/run logs.
-/// @param argc CLI argument count.
-/// @param argv CLI argument values.
-/// @return 0 on success, 1 on config/load/output error.
+/**
+ * @fn main
+ * @brief Entry point: loads config, builds topology, runs the per-tick
+ *        simulation loop for each seed, and writes metrics/run logs.
+ *
+ * @param argc CLI argument count.
+ * @param argv CLI argument values (see README.md for the flags).
+ * @return 0 on success; 1 on config load/validation, RL-control resolution,
+ *         input archiving, or output-directory errors, or when an active
+ *         `[baseline]` is used in a direct run. With `--channel-query`, the
+ *         return value of `RunChannelQuery`.
+ *
+ * Each seed writes into `<output-dir>/seed-<N>/`. The loop runs ticks
+ * `0..numTicks` inclusive; `numTicks` is `cfg.rl.num_ticks` in RL mode,
+ * otherwise `duration_s / tick_s` (truncated).
+ */
 int
 main(int argc, char* argv[]) ///< Takes params for cli at start
 {
@@ -77,6 +97,12 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         cfg.rl.enabled = true;
     }
 
+    if (!args.band.empty())
+    {
+        cfg.band        = args.band;
+        cfg.band_source = "cli";
+    }
+
     /// @brief Validate the fully-resolved config before running.
     auto vr = mesh_sim::ValidateConfig(cfg);
     if (!vr.ok())
@@ -86,6 +112,47 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             std::cerr << "Config error: " << e << "\n";
         }
         return 1;
+    }
+
+    // Only the explicit --rl-mode flag acknowledges an active baseline; [rl] enabled alone does not.
+    const bool baselineActive = (cfg.baseline.algorithm != "none");
+    if (baselineActive && !args.rl_mode && !args.channel_query)
+    {
+        std::cerr << "baseline.algorithm '" << cfg.baseline.algorithm
+                  << "' is active but this is a direct simulator run; the binary never plans"
+                     " placements. Run 'python -m scripts.baselines.runner --run-config <ini>'"
+                     " or select the method with 'scripts.rl.evaluate --policies'. To"
+                     " intentionally run RL from this INI, pass --rl-mode.\n";
+        return 1;
+    }
+
+    /// @brief Resolve the RL control slots, cadence, and tick count once, so
+    ///        the topology, bridge, and run.log all read the same values.
+    auto ctl = mesh_sim::ResolveRlControl(cfg);
+    if (!ctl.ok())
+    {
+        for (const auto& e : ctl.errors)
+        {
+            std::cerr << "Config error: " << e << "\n";
+        }
+        return 1;
+    }
+    mesh_sim::ApplyRlControl(cfg, ctl);
+
+    if (args.channel_query)
+    {
+        return mesh_sim::RunChannelQuery(cfg, args, std::cin, std::cout);
+    }
+
+    if (cfg.rl.reward_type_alias == "mean_sinr")
+    {
+        std::cerr << "Warning: [rl] reward_type 'mean_sinr' is deprecated; use 'all_links_los'.\n";
+    }
+    if (baselineActive)
+    {
+        std::cerr << "Note: [baseline] algorithm '" << cfg.baseline.algorithm
+                  << "' is not applied in RL mode; this run uses the scenario layout."
+                     " Placement methods are selected by the evaluation policy list.\n";
     }
 
     auto seeds = mesh_sim::ResolveSeeds(args, cfg); //< From cli-parser, manages seeds
@@ -143,12 +210,13 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         mesh_sim::TopologyBuilder topo(cfg);
         topo.Build();
         auto mobs = topo.GetMobilityModels();
+        auto jammerMobs = topo.GetJammerMobilityModels();
         uint32_t N = static_cast<uint32_t>(mobs.size());
 
         /// @brief Bind the propagation/condition models to a LinkEvaluator
         ///        that will compute per-tick SINR/capacity/MCS.
         mesh_sim::LinkEvaluator linkEval;
-        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel(), args.band);
+        linkEval.Configure(cfg, topo.GetPropagationModel(), topo.GetConditionModel(), cfg.band, jammerMobs);
 
         /// @brief Per-tick components: link table, traffic generator, router.
         mesh_sim::LinkTable      linkTable;
@@ -166,26 +234,21 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
         /// @brief Optional RL bridge — picks the controlled node and steps
         ///        the obs/action loop alongside the main tick loop.
         std::unique_ptr<mesh_sim::RlBridge> rlBridge;
-        uint32_t rlControlledIdx = N - 1; // default: last node
+        const bool centralizedRl = (cfg.rl.control_mode == "centralized");
         if (cfg.rl.enabled)
         {
-            if (!cfg.rl.controlled_node_id.empty())
+            rlBridge = std::make_unique<mesh_sim::RlBridge>(cfg);
+            if (centralizedRl)
             {
-                for (uint32_t i = 0; i < cfg.nodes.size(); ++i)
-                {
-                    if (cfg.nodes[i].id == cfg.rl.controlled_node_id)
-                    {
-                        rlControlledIdx = i;
-                        break;
-                    }
-                }
+                rlBridge->WriteInit();
             }
-            rlBridge = std::make_unique<mesh_sim::RlBridge>(cfg, rlControlledIdx);
         }
 
         /// @brief Main per-tick loop: advance sim time, evaluate links,
         ///        route flows, log progress, write metrics/viz.
-        uint32_t numTicks = static_cast<uint32_t>(cfg.duration_s / cfg.tick_s);
+        uint32_t numTicks = cfg.rl.enabled
+                                ? cfg.rl.num_ticks
+                                : static_cast<uint32_t>(cfg.duration_s / cfg.tick_s);
 
         uint32_t progressInterval = std::max(1u, numTicks / 20);
         mesh_sim::ProgressLogger progress{numTicks, progressInterval, seed,
@@ -200,12 +263,16 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             // and ThreeGpp/NYU channel-condition cache expiry.
             if (ti > 0)
             {
+                if (rlBridge)
+                {
+                    rlBridge->BeforeAdvance(mobs);
+                }
                 ns3::Simulator::Stop(ns3::Seconds(cfg.tick_s));
                 ns3::Simulator::Run();
             }
 
             /// @brief Evaluate all N*(N-1)/2 links at the current positions.
-            linkTable.Update(N, linkEval.EvaluateAll(mobs));
+            linkTable.Update(N, linkEval.EvaluateAll(mobs, t));
 
             /// @brief Advance traffic state and route active flows over
             ///        the freshly-evaluated link table.
@@ -243,10 +310,25 @@ main(int argc, char* argv[]) ///< Takes params for cli at start
             if (rlBridge)
             {
                 bool done = (ti == numTicks);
-                rlBridge->Step(ti, t, mobs, linkTable, flowResults, done);
-                if (!done)
+                if (centralizedRl)
                 {
-                    rlBridge->ApplyAction(mobs[rlControlledIdx]);
+                    rlBridge->AccumulateTick(linkTable, flowResults);
+                    if (done || rlBridge->IsDecisionTick(ti))
+                    {
+                        rlBridge->Step(ti, t, mobs, linkTable, flowResults, done);
+                        if (!done)
+                        {
+                            rlBridge->ApplyAction(mobs);
+                        }
+                    }
+                }
+                else
+                {
+                    rlBridge->Step(ti, t, mobs, linkTable, flowResults, done);
+                    if (!done)
+                    {
+                        rlBridge->ApplyAction(mobs);
+                    }
                 }
             }
         }
