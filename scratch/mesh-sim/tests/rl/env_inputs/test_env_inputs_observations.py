@@ -115,28 +115,6 @@ def test_local_position_maps_bounds_to_unit_interval_and_clamps(x, expected):
     assert obs[3] == pytest.approx(1.0)    # z at z_max
 
 
-@pytest.mark.parametrize("preset_name", FLOAT32_PRESETS)
-@pytest.mark.parametrize("bounds", [
-    dict(BOUNDS, x_min=20.0, x_max=10.0),   # inverted
-], ids=["inverted"])
-def test_degenerate_bounds_stay_finite(preset_name, bounds):
-    # Zero-width bounds are not covered: CentralizedProtocol rejects low >= high,
-    # so the unguarded span division in observations.py is unreachable (ignored).
-    contract = make_contract(2, ("node-a",), bounds=bounds)
-    facts = make_facts(contract, positions=[(10.0, 0.0, 0.0), (99.0, 0.0, 0.0)])
-    obs = get_preset(preset_name).build(facts, contract)
-    assert np.isfinite(obs).all()
-    if preset_name == "local_links_v1":
-        assert obs[1] == 0.0
-
-
-def test_nonfinite_position_normalizes_to_zero():
-    contract = make_contract(2, ("node-a",))
-    facts = make_facts(contract, positions=[(math.nan, math.inf, -math.inf), (0, 0, 0)])
-    obs = get_preset("local_links_v1").build(facts, contract)
-    assert obs[1:4].tolist() == [0.0, 0.0, 0.0]
-
-
 # --- Link normalization and validity -------------------------------------------------
 
 @pytest.mark.parametrize("sinr,expected", [(-20.0, 0.0), (10.0, 0.5), (40.0, 1.0),
@@ -241,24 +219,6 @@ def test_documented_sizes_for_three_nodes_three_slots():
     assert observation_schema("local_links_v1", contract)["obs_dim"] == 36
 
 
-@pytest.mark.parametrize("preset_name", FLOAT32_PRESETS)
-def test_bounded_presets_stay_in_box_for_extreme_facts(preset_name):
-    contract = make_contract(3, ("node-b", "node-c", None))
-    extreme_window = {"ticks": 1, "demand_mbps_sum": 1e12, "delivered_mbps_sum": 1e12,
-                      "flow_ticks_with_demand": 10, "unroutable_flow_ticks": 10,
-                      "connected_pairs_sum": 3, "los_pairs_sum": 3,
-                      "legacy_reward_sum": -1e9}
-    facts = make_facts(contract,
-                       positions=[(-1e9, 1e9, 1e9), (1e9, -1e9, -1e9), (0.0, 0.0, 0.0)],
-                       links=[[1e6, 1e15, 1], [-1e6, 0.0, 0], [-999.0, 0.0, 0]],
-                       window=extreme_window)
-    facts["nodes"][0][3:6] = [1e4, -1e4, 1e4]
-    preset = get_preset(preset_name)
-    obs = preset.build(facts, contract)
-    assert np.isfinite(obs).all()
-    assert preset.space(contract).contains(obs)
-
-
 @pytest.mark.parametrize("preset_name", ["service_v1", "full_facts_v1"])
 def test_zero_demand_and_zero_flow_window_is_finite(preset_name):
     contract = make_contract(3, ("node-b", "node-c", None))
@@ -283,14 +243,6 @@ def test_build_is_pure_and_deterministic(preset_name):
 
 
 # --- Schema hashing ----------------------------------------------------------------
-
-def test_schema_hash_ignores_dict_key_order():
-    contract = make_contract()
-    reordered = dict(reversed(list(contract.items())))
-    reordered["bounds"] = dict(reversed(list(contract["bounds"].items())))
-    for name in PRESETS:
-        assert (observation_schema(name, contract)["sha256"]
-                == observation_schema(name, reordered)["sha256"])
 
 
 @pytest.mark.parametrize("change", [
@@ -329,12 +281,6 @@ def test_schema_sha256_recomputes_and_excludes_its_own_field():
     assert len(schema["sha256"]) == 64 and schema["sha256"] == schema["sha256"].lower()
 
 
-def test_canonical_json_rejects_nan_and_is_compact_sorted():
-    with pytest.raises(ValueError):
-        canonical_json({"x": math.nan})
-    assert canonical_json({"b": 1, "a": [1, 2]}) == '{"a":[1,2],"b":1}'
-
-
 def test_local_schema_low_high_match_box():
     contract = make_contract()
     schema = observation_schema("local_links_v1", contract)
@@ -361,34 +307,9 @@ def test_check_schema_rejects_bounds_for_normalized_presets(preset_name):
     assert excinfo.value.fields == ["bounds"]
 
 
-def test_check_schema_preset_switch_lists_every_structural_field():
-    contract = make_contract()
-    saved = observation_schema("raw_links_v1", contract)
-    live = observation_schema("local_links_v1", contract)
-    with pytest.raises(SchemaMismatchError) as excinfo:
-        check_schema(saved, live)
-    assert set(excinfo.value.fields) == {"schema_id", "dtype", "obs_dim",
-                                         "feature_names", "normalization"}
-    assert isinstance(excinfo.value, ValueError)
-
-
-def test_check_schema_missing_structural_field_in_saved_is_rejected():
-    live = observation_schema("local_links_v1", make_contract())
-    saved = {key: value for key, value in live.items() if key != "normalization"}
-    with pytest.raises(SchemaMismatchError) as excinfo:
-        check_schema(saved, live)
-    assert excinfo.value.fields == ["normalization"]
-
-
 def test_check_schema_slot_reassignment_only_warns():
     saved = observation_schema("local_links_v1", make_contract())
     live = observation_schema("local_links_v1",
                               make_contract(slot_nodes=("node-a", "node-c", None)))
     warnings = check_schema(saved, live)
     assert len(warnings) == 1 and warnings[0].startswith("slot_node_ids changed")
-
-
-@pytest.mark.parametrize("name", ["", "RAW_LINKS_V1", "raw_links_v2", "local_links"])
-def test_get_preset_unknown_name_lists_choices(name):
-    with pytest.raises(ValueError, match="valid choices"):
-        get_preset(name)

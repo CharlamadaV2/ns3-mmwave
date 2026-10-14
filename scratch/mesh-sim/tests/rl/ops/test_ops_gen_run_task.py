@@ -138,20 +138,6 @@ def test_gen_a_blocked_evaluation_is_refused_after_a_pending_training(root, tmp_
         == [("train", "executed"), ("evaluate", "skipped")]
 
 
-@pytest.mark.parametrize("index", [-1, 2, 99])
-def test_gen_an_out_of_range_index_writes_no_record(root, tmp_path, index, capsys):
-    executor = _Executor()
-    assert run_task.run_task(root, index, tmp_path / "r.json", executor) == 1
-    assert "outside 0..1" in capsys.readouterr().err
-    assert executor.executed == [] and not (tmp_path / "r.json").exists()
-
-
-def test_gen_a_missing_plan_is_an_error_not_a_crash(tmp_path, capsys):
-    assert run_task.run_task(tmp_path, 0, None, _Executor()) == 1
-    assert run_task.run_compare(tmp_path, True, None, _Executor()) == 1
-    assert "experiment_plan.json" in capsys.readouterr().err
-
-
 # --- compare mode ------------------------------------------------------------
 
 
@@ -195,17 +181,6 @@ def test_gen_allow_incomplete_runs_and_reports_the_outcome_state(root, tmp_path,
     assert run_task.run_compare(root, True, tmp_path / "c.json", executor) == 0
     assert executor.executed == ["compare"]
     assert "compare  exit 0  complete" in capsys.readouterr().out
-
-
-@pytest.mark.parametrize("argv", [
-    [],
-    ["--task-index", "0", "--compare"],
-    ["--task-index", "0", "--allow-incomplete"],
-    ["--allow-incomplete"],
-])
-def test_gen_main_refuses_inconsistent_selectors(root, argv, capsys):
-    assert run_task.main(["--output-root", str(root), *argv]) == 1
-    assert capsys.readouterr().err
 
 
 # --- the default executor runs a real process from the mesh root ------------

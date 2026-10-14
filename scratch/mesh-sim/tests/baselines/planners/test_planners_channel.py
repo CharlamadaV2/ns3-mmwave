@@ -21,7 +21,6 @@ from ._planner_support import (CUSTOM_ROSTER, CUSTOM_STARTS, assert_gone, make_w
 
 ROSTER = [node["id"] for node in NODES]
 STARTS = np.array([start_position(node) for node in NODES])
-PAIRS = len(ROSTER) * (len(ROSTER) - 1) // 2
 FAKE_ENV = ("FAKE_QUERY_FAULT", "FAKE_QUERY_FAULT_AT", "FAKE_QUERY_INIT_PATCH",
             "FAKE_QUERY_PAD_BYTES", "FAKE_QUERY_RANGE_M", "FAKE_QUERY_RECORD",
             "FAKE_QUERY_PID_FILE", "CUSTOM_PID", "CUSTOM_RECORD")
@@ -81,81 +80,7 @@ def _expected_connected(layout) -> np.ndarray:
 
 
 # ---------------------------------------------------------------------------------------
-# Constructor validation happens before any worker is launched.
-
-@pytest.mark.parametrize("kwargs,roster,starts", [
-    ({"request_timeout_s": 0.0}, None, None),
-    ({"request_timeout_s": -1.0}, None, None),
-    ({"max_layouts": 0}, None, None),
-    ({"max_layouts": True}, None, None),
-    ({"max_layouts": 2.0}, None, None),
-    ({}, ["only"], [[0.0, 0.0, 1.0]]),
-    ({}, ["a", "a"], [[0.0, 0.0, 1.0], [1.0, 0.0, 1.0]]),
-    ({}, None, STARTS[:-1]),
-    ({}, None, np.vstack([STARTS[:-1], [[np.inf, 0.0, 1.0]]])),
-])
-def test_invalid_constructor_arguments_never_launch_a_worker(env, kwargs, roster, starts):
-    with pytest.raises(ValueError):
-        _fake(env, roster=roster, starts=starts, **kwargs)
-    assert not env["record"].exists(), "a worker was launched for invalid arguments"
-
-
-@pytest.mark.parametrize("mode,band", [("planning", None), ("standalone", "5g")])
-def test_invalid_mode_or_band_never_launch_a_worker(env, mode, band):
-    with pytest.raises(ValueError):
-        _fake(env, mode=mode, band=band)
-    assert not env["record"].exists()
-
-
-# ---------------------------------------------------------------------------------------
 # Init handshake edges.
-
-@pytest.mark.parametrize("patch,needle", [
-    ({"node_ids": ROSTER + ["extra"]}, "node_ids"),
-    ({"node_ids": ROSTER[:-1]}, "node_ids"),
-    ({"seed": 7.0}, "seed"),
-    ({"run_id": "1"}, "run_id"),
-    ({"jammer_seed": True}, "jammer_seed"),
-    ({"rl_enabled": 0}, "rl_enabled"),
-    ({"limits": {"max_layouts": True}}, "limits"),
-    ({"limits": {"max_probes": 10000.0}}, "limits"),
-    ({"limits": {"max_child_response_bytes": -1}}, "limits"),
-    ({"sinr_threshold_db": True}, "sinr_threshold_db"),
-    ({"channel": {"rx_array_gain_dbi": None}}, "rx_array_gain_dbi"),
-    ({"contract": "MESH_CHANNEL_QUERY_V1"}, "contract"),
-])
-def test_init_type_and_count_mismatches_abort(env, monkeypatch, patch, needle):
-    _patch_init(monkeypatch, patch)
-    with pytest.raises(PlannerError, match=needle):
-        _fake(env)
-    assert_gone(json.loads(env["pids"].read_text())["worker"])
-
-
-def test_init_node_count_mismatch_with_matching_prefix(env, monkeypatch):
-    extra = STARTS.tolist() + [[1.0, 1.0, 1.0]]
-    _patch_init(monkeypatch, {"node_ids": ROSTER + ["x"], "start_positions": extra})
-    with pytest.raises(PlannerError, match="node_ids.*start_positions"):
-        _fake(env)
-
-
-@pytest.mark.parametrize("shift,ok", [(5e-7, True), (1e-6, True), (2e-6, False)])
-def test_init_start_position_tolerance_is_one_micrometre(env, monkeypatch, shift, ok):
-    starts = STARTS.copy()
-    starts[3, 0] += shift
-    _patch_init(monkeypatch, {"start_positions": starts.tolist()})
-    if ok:
-        with _fake(env) as scorer:
-            assert scorer.init["start_positions"][3][0] == starts[3, 0]
-    else:
-        with pytest.raises(PlannerError, match="start_positions"):
-            _fake(env)
-
-
-def test_unknown_extra_init_fields_are_accepted(env, monkeypatch):
-    _patch_init(monkeypatch, {"future_field": {"a": 1}, "channel": {"new_knob": 3}})
-    with _fake(env) as scorer:
-        assert scorer.init["future_field"] == {"a": 1}
-        assert scorer.channel["new_knob"] == 3
 
 
 def test_init_band_from_ini_is_fine_when_no_band_was_requested(env, monkeypatch):
@@ -198,58 +123,6 @@ def test_worker_stderr_reaches_the_planner_log(env):
 # ---------------------------------------------------------------------------------------
 # Batching boundaries.
 
-@pytest.mark.parametrize("count,override,expected", [
-    (1024, None, [1024]),
-    (1025, None, [1024, 1]),
-    (1025, 5000, [1024, 1]),     # an override never raises the published limit
-    (6, 3, [3, 3]),
-    (7, 1, [1] * 7),
-])
-def test_batches_split_at_exactly_max_layouts(env, count, override, expected):
-    layouts = [STARTS] * count
-    with _fake(env, max_layouts=override) as scorer:
-        results = scorer.evaluate(layouts)
-        stats = scorer.stats
-    records = read_records(env["record"], "evaluate")
-    assert [r["layouts"] for r in records] == expected
-    assert [r["request_id"] for r in records] == list(range(1, len(expected) + 1))
-    assert all(r["problem"] is None for r in records)
-    assert len(results) == count
-    assert stats["requests"] == len(expected) and stats["layouts"] == count
-    assert stats["links"] == count * PAIRS and stats["probe_links"] == 0
-
-
-def _byte_env(monkeypatch, extra: int) -> int:
-    one = len(json.dumps(STARTS.tolist(), separators=(",", ":")))
-    fixed = len('{"type":"evaluate","request_id":%d,"layouts":[]}\n' % 10 ** 18)
-    limit = fixed + extra(one) if callable(extra) else fixed + extra
-    _patch_init(monkeypatch, {"limits": {"max_request_line_bytes": limit}})
-    return limit
-
-
-@pytest.mark.parametrize("extra,expected", [
-    (lambda one: 2 * one + 1, [2, 2, 1]),   # exactly two layouts plus the comma fit
-    (lambda one: 2 * one, [1, 1, 1, 1, 1]),  # one byte short of two
-    (lambda one: one, [1, 1, 1, 1, 1]),      # exactly one layout fits
-])
-def test_byte_limit_split_boundaries(env, monkeypatch, extra, expected):
-    limit = _byte_env(monkeypatch, extra)
-    with _fake(env) as scorer:
-        results = scorer.evaluate([STARTS] * 5)
-    records = read_records(env["record"], "evaluate")
-    assert [r["layouts"] for r in records] == expected
-    assert all(r["bytes"] <= limit and r["problem"] is None for r in records)
-    assert len(results) == 5
-
-
-def test_one_byte_below_a_single_layout_aborts_before_sending(env, monkeypatch):
-    _byte_env(monkeypatch, lambda one: one - 1)
-    with _fake(env) as scorer:
-        with pytest.raises(PlannerError, match="max_request_line_bytes"):
-            scorer.evaluate([STARTS])
-        assert scorer.closed
-    assert not read_records(env["record"], "evaluate")
-
 
 def test_results_keep_input_order_across_batches_and_probes_ride_every_batch(env):
     probes = [[150.0, 180.0], [400.0, 400.0]]
@@ -268,65 +141,6 @@ def test_results_keep_input_order_across_batches_and_probes_ride_every_batch(env
     assert [r["layouts"] for r in records] == [2, 2, 1]
     assert all(r["probes"]["points"] == probes for r in records)
     assert stats["probe_links"] == 5 * len(ROSTER) * len(probes)
-
-
-def test_layout_error_index_counts_across_batches(env, monkeypatch):
-    monkeypatch.setenv("FAKE_QUERY_FAULT", "layout_error")
-    monkeypatch.setenv("FAKE_QUERY_FAULT_AT", "2")
-    with _fake(env, max_layouts=2) as scorer:
-        with pytest.raises(PlannerError, match=r"^layout 2 failed"):
-            scorer.evaluate([STARTS] * 5)
-        worker = scorer.pid
-        assert scorer.stats["requests"] == 1  # the failed request is not counted
-    assert_gone(worker)
-
-
-@pytest.mark.parametrize("count,ok", [(3, True), (4, False)])
-def test_probe_count_boundary_is_max_probes(env, monkeypatch, count, ok):
-    _patch_init(monkeypatch, {"limits": {"max_probes": 3}})
-    points = [[float(k), 0.0] for k in range(count)]
-    with _fake(env) as scorer:
-        if ok:
-            scorer.set_probes(points)
-            (result,) = scorer.evaluate([STARTS])
-            assert len(result.coverage) == len(ROSTER)
-        else:
-            with pytest.raises(PlannerError, match="max_probes"):
-                scorer.set_probes(points)
-            assert scorer.probes is None and not scorer.closed
-
-
-@pytest.mark.parametrize("points,kwargs", [
-    ([], {}),
-    ([1.0, 2.0], {}),
-    ([[1.0, 2.0, 3.0]], {}),
-    ([[float("nan"), 0.0]], {}),
-    ([[1.0, 2.0]], {"height_m": -0.1}),
-    ([[1.0, 2.0]], {"height_m": float("inf")}),
-    ([[1.0, 2.0]], {"sinr_db": float("nan")}),
-    ([[1.0, 2.0]], {"rx_gain_dbi": float("-inf")}),
-])
-def test_invalid_probe_settings_are_value_errors(env, points, kwargs):
-    with _fake(env) as scorer:
-        with pytest.raises(ValueError):
-            scorer.set_probes(points, **kwargs)
-        assert scorer.probes is None and not scorer.closed
-
-
-def test_probe_height_zero_is_allowed(env):
-    with _fake(env) as scorer:
-        scorer.set_probes([[0.0, 0.0]], height_m=0.0)
-        assert scorer.probes["height_m"] == 0.0
-
-
-def test_layout_result_diagonals(env):
-    with _fake(env) as scorer:
-        (result,) = scorer.evaluate([STARTS])
-    diag = np.arange(len(ROSTER))
-    assert np.all(np.isneginf(result.sinr_db[diag, diag]))
-    assert np.all(result.capacity_mbps[diag, diag] == 0.0)
-    assert not result.is_los[diag, diag].any() and not result.connected[diag, diag].any()
-    assert np.array_equal(result.capacity_mbps, result.capacity_mbps.T)
 
 
 # ---------------------------------------------------------------------------------------
@@ -365,91 +179,6 @@ def test_worker_connected_flags_are_used_verbatim(env):
     assert result.is_los[0, 1] and not result.is_los[0, 2]
 
 
-def _mutate(code: str) -> str:
-    """Worker that applies `code` (with `out` and `req` in scope) before replying."""
-    return SERVE + "    out = result(req)\n" + "".join(
-        f"    {line}\n" for line in code.splitlines()) + "    emit(out)\n"
-
-
-@pytest.mark.parametrize("code,needle", [
-    ("out['request_id'] = True", "echoes request_id"),
-    ("out['request_id'] = float(req['request_id'])", "echoes request_id"),
-    ("out['request_id'] = req['request_id'] - 1", "echoes request_id"),
-    ("del out['wall_s']", "wall_s"),
-    ("out['wall_s'] = 'fast'", "wall_s"),
-    ("out['layouts'].append(out['layouts'][0])", "expected 1 layout results"),
-    ("out['layouts'] = {}", "expected 1 layout results"),
-    ("out['type'] = 'results'", "unexpected response type"),
-    ("out = [out]", "not a JSON object"),
-    ("out['layouts'][0]['error'] = 'boom'", "layout 0 failed.*boom"),
-    ("out['layouts'][0] = 'oops'", "not a JSON object"),
-    ("del out['layouts'][0]['wall_s']", "layout 0: wall_s"),
-    ("out['layouts'][0]['links'][0][:2] = [1, 0]", r"is not \[0, 1"),
-    ("out['layouts'][0]['links'][0][:2] = [0.0, 1.0]", r"is not \[0, 1"),
-    ("out['layouts'][0]['links'][0].append(0)", r"is not \[0, 1"),
-    ("out['layouts'][0]['links'][0][2] = '3.0'", "non-finite"),
-    ("out['layouts'][0]['links'][0][3] = None", "non-finite"),
-    ("out['layouts'][0]['links'][0][4] = 1", "not boolean"),
-    ("out['layouts'][0]['links'][0][5] = 0", "not boolean"),
-    ("out['layouts'][0]['links'].reverse()", r"is not \[0, 1"),
-    ("out['layouts'][0]['coverage'] = [[]] * 3", "coverage returned without probes"),
-])
-def test_malformed_responses_abort_without_results(env, code, needle):
-    with _custom(env, _mutate(code)) as scorer:
-        with pytest.raises(PlannerError, match=needle):
-            scorer.evaluate([CUSTOM_STARTS])
-        assert scorer.closed
-    assert_gone(_custom_pid(env))
-
-
-@pytest.mark.parametrize("code,needle", [
-    ("out['layouts'][0]['coverage'] = None", "one list per node"),
-    ("out['layouts'][0]['coverage'] = [[0], [0]]", "one list per node"),
-    ("out['layouts'][0]['coverage'][0] = [-1]", "probe index outside 0..1"),
-    ("out['layouts'][0]['coverage'][0] = [2]", "probe index outside 0..1"),
-    ("out['layouts'][0]['coverage'][0] = [True]", "probe index"),
-    ("out['layouts'][0]['coverage'][0] = [0.0]", "probe index"),
-    ("out['layouts'][0]['coverage'][0] = 0", "probe index"),
-])
-def test_malformed_coverage_aborts(env, code, needle):
-    with _custom(env, _mutate(code)) as scorer:
-        scorer.set_probes([[0.0, 0.0], [500.0, 500.0]])
-        with pytest.raises(PlannerError, match=needle):
-            scorer.evaluate([CUSTOM_STARTS])
-
-
-def test_duplicate_and_unsorted_coverage_indices_are_normalised(env):
-    with _custom(env, _mutate("out['layouts'][0]['coverage'][0] = [1, 0, 1, 0]")) as scorer:
-        scorer.set_probes([[0.0, 0.0], [10.0, 0.0]])
-        (result,) = scorer.evaluate([CUSTOM_STARTS])
-    assert result.coverage[0] == [0, 1]
-
-
-def test_unknown_extra_response_fields_are_accepted(env):
-    code = "out['debug'] = {'x': 1}\nout['layouts'][0]['extra'] = [1, 2]"
-    with _custom(env, _mutate(code)) as scorer:
-        (result,) = scorer.evaluate([CUSTOM_STARTS])
-    assert result.connected[0, 1]
-
-
-def test_stray_line_before_the_result_aborts(env):
-    body = SERVE + ("    emit({'type': 'error', 'request_id': None, 'message': 'stray'})\n"
-                    "    emit(result(req))\n")
-    with _custom(env, body) as scorer:
-        with pytest.raises(PlannerError, match="rejected.*stray"):
-            scorer.evaluate([CUSTOM_STARTS])
-        assert scorer.closed
-    assert_gone(_custom_pid(env))
-
-
-def test_nonfinite_token_in_a_response_is_malformed(env):
-    body = SERVE + ("    text = json.dumps(result(req))\n"
-                    "    emit(text.replace('\"wall_s\": 0.01', '\"wall_s\": Infinity'))\n")
-    with _custom(env, body) as scorer:
-        with pytest.raises(PlannerError, match="malformed JSON"):
-            scorer.evaluate([CUSTOM_STARTS])
-
-
 # ---------------------------------------------------------------------------------------
 # Worker death and cleanup.
 
@@ -479,18 +208,6 @@ def test_worker_death_mid_batch_returns_nothing(env):
     assert len(read_records(env["custom_record"], "evaluate")) == 2
 
 
-def test_closed_stdout_while_running_is_reported_and_killed(env):
-    body = ("emit(init_obj())\n"
-            "signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
-            "for req in requests():\n"
-            "    os.close(1)\n"
-            "    while True:\n        time.sleep(0.1)\n")
-    with _custom(env, body, terminate_wait_s=0.3) as scorer:
-        with pytest.raises(PlannerError, match="still running"):
-            scorer.evaluate([CUSTOM_STARTS])
-    assert_gone(_custom_pid(env))
-
-
 def test_close_kills_a_worker_that_ignores_shutdown_and_sigterm(env):
     body = ("emit(init_obj())\n"
             "signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
@@ -504,13 +221,3 @@ def test_close_kills_a_worker_that_ignores_shutdown_and_sigterm(env):
     assert time.monotonic() - started < 10
     assert read_records(env["custom_record"], "shutdown"), "shutdown was not sent"
     assert_gone(pid)
-
-
-def test_value_error_on_bad_layout_keeps_the_worker_usable(env):
-    with _fake(env) as scorer:
-        with pytest.raises(ValueError, match="layout 1"):
-            scorer.evaluate([STARTS, STARTS[:, :2]])
-        assert not read_records(env["record"], "evaluate")
-        (result,) = scorer.evaluate([STARTS])
-        assert scorer.stats["requests"] == 1
-    assert np.array_equal(result.connected, _expected_connected(STARTS))

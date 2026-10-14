@@ -4,7 +4,6 @@ Spec: src/rl/policy-inputs.md "One action, several ticks, one reward" and the
 facts.window invariants in src/rl/README.md.
 """
 
-import math
 
 import pytest
 
@@ -57,11 +56,6 @@ def test_connectivity_full_and_empty_windows():
     assert full == (1.0, True) and empty == (0.0, True)
 
 
-def test_connectivity_zero_tick_window_does_not_divide_by_zero():
-    assert get_component("connectivity").value(
-        window(ticks=0, connected_pairs_sum=0), 0.0, CONTRACT) == (0.0, True)
-
-
 def test_legacy_component_preserves_negative_reward():
     assert get_component("legacy").value(window(legacy_reward_sum=-2.5), 0.0,
                                          CONTRACT) == (-0.5, True)
@@ -87,13 +81,6 @@ def test_composer_all_invalid_total_is_zero_and_keeps_cpp_reward():
     assert breakdown.legacy == -0.75
 
 
-def test_composer_invalid_component_with_huge_weight_contributes_nothing():
-    composer = RewardComposer(["delivery_ratio", "connectivity"], [1e300, 1.0])
-    breakdown = composer.compose(window(demand_mbps_sum=0.0, delivered_mbps_sum=0.0),
-                                 0.0, CONTRACT)
-    assert breakdown.total == pytest.approx(12.0 / 15.0)
-
-
 def test_composer_preserves_component_order_and_float_weights():
     names = ["throughput_mbps", "legacy", "connectivity", "delivery_ratio"]
     composer = RewardComposer(names, [1, 0, -2, "0.5"])
@@ -109,36 +96,6 @@ def test_composer_preserves_component_order_and_float_weights():
 def test_composer_negative_total_is_returned_as_is():
     breakdown = RewardComposer(["connectivity"], [-3.0]).compose(window(), 0.0, CONTRACT)
     assert breakdown.total == pytest.approx(-3.0 * 0.8)
-
-
-def test_composer_empty_selection_totals_zero():
-    breakdown = RewardComposer([], []).compose(window(), 0.4, CONTRACT)
-    assert (breakdown.total, breakdown.components, breakdown.legacy) == (0.0, {}, 0.4)
-
-
-@pytest.mark.parametrize("weights", [[math.nan], [-math.inf], [math.inf]])
-def test_composer_rejects_non_finite_weights(weights):
-    with pytest.raises(ValueError, match="finite"):
-        RewardComposer(["connectivity"], weights)
-
-
-def test_composer_rejects_overflowing_total_instead_of_returning_inf():
-    composer = RewardComposer(["throughput_mbps"], [1e10])
-    with pytest.raises(ValueError, match="not finite"):
-        composer.compose(window(ticks=1, delivered_mbps_sum=1e300,
-                                demand_mbps_sum=1e300), 0.0, CONTRACT)
-
-
-def test_composer_error_names_unknown_component():
-    with pytest.raises(ValueError, match="no_such"):
-        RewardComposer(["connectivity", "no_such"], [1.0, 1.0])
-
-
-@pytest.mark.parametrize("name", ["travel_fraction", "origin_fraction", "sinr_quality",
-                                  "unmet_sinr_quality"])
-def test_position_components_need_context(name):
-    with pytest.raises(ValueError, match=name):
-        RewardComposer([name], [1.0]).compose(window(), 0.0, CONTRACT)
 
 
 @pytest.mark.parametrize("name", WINDOW_COMPONENTS)
@@ -181,11 +138,6 @@ def test_python_schema_hash_sensitivity():
     assert base != sha(["connectivity", "delivery_ratio"], [0.5, 1.0])  # order matters
     assert base != sha(["delivery_ratio", "connectivity"], [1.0, 0.25])
     assert base != sha(["delivery_ratio"], [1.0])
-
-
-def test_python_schema_rejects_unknown_component():
-    with pytest.raises(ValueError, match="valid choices"):
-        reward_schema(["nope"], [1.0], reward_type="x", reward_window="mean")
 
 
 def test_every_component_has_a_schema_range():

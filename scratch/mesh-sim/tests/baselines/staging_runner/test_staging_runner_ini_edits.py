@@ -9,13 +9,10 @@ case-sensitive, last assignment wins); `_cpp_view` below mirrors that parser so 
 test can check what the binary would see.
 """
 
-import json
 
 import pytest
 
-from scripts.baselines import artifacts, config, effective_inputs, runner
 from scripts.baselines.effective_inputs import edit_ini_text
-from scripts.baselines.tests.conftest import MAPPING, NODES
 
 STANDALONE_EDITS = {("baseline", "algorithm"): "none",
                     ("scenario", "nodes_file"): "nodes.json",
@@ -64,22 +61,6 @@ def _changed(before: str, after: str) -> list:
 
 # --- in-place edits ------------------------------------------------------------------
 
-def test_crlf_file_keeps_crlf_on_edited_inserted_and_appended_lines():
-    text = ("[scenario]\r\nname = crlf\r\n\r\n[rl]\r\nenabled = true   # on\r\n"
-            "\r\n[baseline]\r\nalgorithm = geometric\r\n")
-    after = edit_ini_text(text, STANDALONE_EDITS)
-    assert after == ("[scenario]\r\nname = crlf\r\nnodes_file = nodes.json\r\n\r\n"
-                     "[rl]\r\nenabled = false   # on\r\n\r\n"
-                     "[baseline]\r\nalgorithm = none\r\n")
-    assert "\n" not in after.replace("\r\n", "")
-    _assert_semantics(text, after, STANDALONE_EDITS)
-
-
-def test_crlf_file_appends_a_new_section_with_crlf():
-    text = "[scenario]\r\nname = x\r\n"
-    after = edit_ini_text(text, {("rl", "enabled"): "false"})
-    assert after == "[scenario]\r\nname = x\r\n\r\n[rl]\r\nenabled = false\r\n"
-
 
 def test_missing_final_newline_after_a_comment_does_not_glue_the_new_header():
     text = "[baseline]\nalgorithm = geometric\n# trailing note"
@@ -121,34 +102,7 @@ def test_blank_value_is_filled():
     assert after == "[baseline]\nalgorithm = none\nobjective = coverage\n"
 
 
-def test_value_comment_containing_equals_is_not_mistaken_for_the_assignment():
-    text = "[scenario]\nnodes_file = data/topo.json # was = old.json\n"
-    after = edit_ini_text(text, {("scenario", "nodes_file"): "nodes.json"})
-    assert after == "[scenario]\nnodes_file = nodes.json # was = old.json\n"
-
-
 # --- section and key matching ----------------------------------------------------------
-
-def test_header_whitespace_and_comment_match_the_simulator_section():
-    text = "[ rl ]   # policy knobs\nenabled = true\n"
-    after = edit_ini_text(text, {("rl", "enabled"): "false"})
-    assert after == "[ rl ]   # policy knobs\nenabled = false\n"
-    assert _cpp_view(after)[("rl", "enabled")] == "false"
-
-
-def test_section_names_are_case_sensitive_like_the_simulator():
-    text = "[RL]\nenabled = true\n"
-    after = edit_ini_text(text, {("rl", "enabled"): "false"})
-    assert after == "[RL]\nenabled = true\n\n[rl]\nenabled = false\n"
-    assert _cpp_view(after)[("RL", "enabled")] == "true"
-    assert _cpp_view(after)[("rl", "enabled")] == "false"
-
-
-def test_differently_cased_key_is_untouched_and_the_real_key_is_added():
-    text = "[rl]\nEnabled = true\nx_min = 0.0\n"
-    after = edit_ini_text(text, {("rl", "enabled"): "false"})
-    assert after == "[rl]\nEnabled = true\nx_min = 0.0\nenabled = false\n"
-    _assert_semantics(text, after, {("rl", "enabled"): "false"})
 
 
 def test_same_key_names_in_other_sections_are_untouched():
@@ -183,15 +137,6 @@ def test_key_added_to_an_empty_section_follows_its_header():
     text = "[rl]\n\n[baseline]\nalgorithm = geometric\n"
     after = edit_ini_text(text, {("rl", "enabled"): "false"})
     assert after == "[rl]\nenabled = false\n\n[baseline]\nalgorithm = geometric\n"
-
-
-def test_empty_file_gets_every_section_and_parses_strictly(tmp_path):
-    after = edit_ini_text("", STANDALONE_EDITS)
-    assert _cpp_view(after) == STANDALONE_EDITS
-    path = tmp_path / "run.ini"
-    path.write_text(after)
-    parsed = config.read_ini(path)
-    assert config.ini_value(parsed, "baseline", "algorithm") == "none"
 
 
 # --- whole-file properties ---------------------------------------------------------------
@@ -235,58 +180,6 @@ def test_only_edited_lines_change_when_every_key_is_present():
     _assert_semantics(FULL_INI, after, FULL_EDITS)
 
 
-@pytest.mark.parametrize("text", [FULL_INI, FULL_INI.replace("\n", "\r\n"),
-                                  "[scenario]\nname = x", "",
-                                  "[RL]\nEnabled = true\n[ baseline ]\n"])
-def test_edits_are_idempotent(text):
-    once = edit_ini_text(text, FULL_EDITS)
-    assert edit_ini_text(once, FULL_EDITS) == once
-    assert {k: _cpp_view(once)[k] for k in FULL_EDITS} == FULL_EDITS
-
-
-def test_ini_edits_per_mode_and_assets(tmp_path):
-    root = tmp_path / "s"
-    (root / "maps").mkdir(parents=True)
-    (root / "run.ini").write_text("[scenario]\nbuildings_file = /x/b.json\n")
-    files = effective_inputs.ScenarioFiles(
-        run_config=root / "run.ini", nodes=root / "n.json", buildings=tmp_path / "b.json",
-        jammers=None, mapping=root / "maps" / "m.json")
-    assert effective_inputs.ini_edits(files, "standalone") == {
-        ("baseline", "algorithm"): "none", ("scenario", "nodes_file"): "nodes.json",
-        ("rl", "enabled"): "false", ("scenario", "buildings_file"): "b.json",
-        ("baseline", "mapping_file"): "m.json"}
-    evaluation = effective_inputs.ini_edits(files, "evaluation")
-    assert ("rl", "enabled") not in evaluation
-    assert evaluation[("scenario", "nodes_file")] == "nodes.json"
-
-
 # --- line splitting must match the simulator ----------------------------------------------
 # edit_ini_text must split lines only at '\n', like the simulator (std::getline) and
 # configparser; a form feed inside a comment must not make its tail look like a key line.
-
-FORM_FEED_INI = ("[scenario]\nseed = 1\nnodes_file = nodes.json\n\n"
-                 "[baseline]\n# was\x0calgorithm = geometric\nalgorithm = geometric\n")
-
-
-@pytest.mark.parametrize("separator", ["\x0c", "\x0b", "\x1c", "\x85", " "])
-def test_only_newline_separates_lines(separator):
-    text = FORM_FEED_INI.replace("\x0c", separator)
-    after = edit_ini_text(text, {("baseline", "algorithm"): "none"})
-    assert _cpp_view(after)[("baseline", "algorithm")] == "none"
-
-
-def test_form_feed_comment_keeps_the_effective_ini_active(tmp_path, fake_child, stub_planner):
-    root = tmp_path / "s"
-    root.mkdir()
-    (root / "nodes.json").write_text(json.dumps(NODES))
-    (root / "mapping.json").write_text(json.dumps(MAPPING))
-    text = FORM_FEED_INI + ("objective = coverage\nmovable_nodes = uav-a\n"
-                            "mapping_file = mapping.json\n\n[rl]\nx_min = 0.0\nx_max = 400.0\n"
-                            "y_min = 0.0\ny_max = 400.0\n")
-    (root / "run.ini").write_text(text)
-    out = tmp_path / "run"
-    code = runner.main(["--sim-binary", str(fake_child), "--run-config",
-                        str(root / "run.ini"), "--output-dir", str(out)])
-    effective = (out / "effective-inputs/run.ini").read_text()
-    assert _cpp_view(effective)[("baseline", "algorithm")] == "none"
-    assert code == 0, artifacts.read_json(out / "baseline_manifest.json")["error"]

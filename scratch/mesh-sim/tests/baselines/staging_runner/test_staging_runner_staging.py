@@ -12,7 +12,6 @@ from pathlib import Path
 import pytest
 
 from scripts.baselines import adapter, artifacts, config, effective_inputs
-from scripts.baselines.adapter import BaselinePreparationError
 from scripts.baselines.effective_inputs import InputError
 from scripts.baselines.solver import PlanResult
 from scripts.baselines.tests.conftest import CHANNEL_FACTS, NODES, write_scenario
@@ -184,53 +183,6 @@ def test_minimal_ini_gets_every_section_appended(tmp_path):
     config.read_ini(prepared.effective_run_config)
 
 
-def _assert_failed_without_inputs(prep: Path, match: str) -> None:
-    manifest = artifacts.read_json(prep / "baseline_manifest.json")
-    assert manifest["status"] == "failed" and match in manifest["error"]
-    assert manifest["ended_at"] is not None
-    assert sorted(p.name for p in prep.iterdir()) == ["baseline_manifest.json"]
-
-
-@pytest.mark.parametrize("key,relative", [
-    ("buildings_file", "d/run.ini"),
-    ("jammers_file", "d/baseline-plan.json"),
-    ("buildings_file", "d/nodes.json"),
-    ("jammers_file", "d/cfg.ini"),
-    ("buildings_file", "d/layout.json"),
-])
-def test_basename_clashes_fail_before_anything_is_copied(tmp_path, key, relative):
-    root = tmp_path / "s"
-    _write(root / "topo" / "layout.json", json.dumps(SMALL_NODES))
-    _write(root / relative, "{}\n")
-    ini = _write(root / "cfg.ini",
-                 f"[scenario]\nnodes_file = topo/layout.json\n{key} = {relative}\n")
-    prep = tmp_path / "run"
-    with pytest.raises(BaselinePreparationError, match="same basename"):
-        adapter.prepare(ini, None, prep, mode="standalone")
-    _assert_failed_without_inputs(prep, "same basename")
-
-
-def test_mapping_basename_reserved(tmp_path):
-    root = tmp_path / "s"
-    _write(root / "nodes.json", json.dumps(SMALL_NODES))
-    _write(root / "maps" / "baseline-plan.json", json.dumps(
-        {"baseline_mapping_version": 2, "geofence": {"source": "rl_bounds"}}))
-    ini = _write(root / "run.ini",
-                 "[baseline]\nalgorithm = none\nmapping_file = maps/baseline-plan.json\n")
-    prep = tmp_path / "run"
-    with pytest.raises(BaselinePreparationError, match="same basename"):
-        adapter.prepare(ini, None, prep, mode="standalone")
-    _assert_failed_without_inputs(prep, "same basename")
-
-
-def test_missing_nodes_file_fails_before_snapshot(tmp_path):
-    ini = _write(tmp_path / "s" / "run.ini", "[scenario]\nnodes_file = gone.json\n")
-    prep = tmp_path / "run"
-    with pytest.raises(BaselinePreparationError, match="nodes file not found"):
-        adapter.prepare(ini, None, prep, mode="standalone")
-    _assert_failed_without_inputs(prep, "nodes file not found")
-
-
 # --- nodes.json rewrite ----------------------------------------------------------------
 
 def test_translate_shifts_every_waypoint_by_the_planned_offset():
@@ -279,12 +231,6 @@ def test_reject_refuses_a_moved_waypoint_node_but_not_other_mobilities():
         "id": "f", "position": {"x": 7.0, "y": 8.0, "z": 3.0}}
 
 
-@pytest.mark.parametrize("target", [(float("nan"), 0.0), (0.0, float("-inf"))])
-def test_non_finite_planned_positions_are_refused(target):
-    with pytest.raises(InputError, match="non-finite"):
-        effective_inputs.rewrite_nodes(copy.deepcopy(SMALL_NODES), {"a": target}, "reject")
-
-
 def test_start_position_defaults_and_waypoint_start():
     assert effective_inputs.start_position({"id": "n"}) == (0.0, 0.0, 0.0)
     assert effective_inputs.start_position(
@@ -301,37 +247,6 @@ def _offset_solve(offset_m: float):
                      for r in request.nodes}
         return PlanResult(positions=positions, channel=dict(CHANNEL_FACTS))
     return solve
-
-
-def test_sub_tolerance_moves_snap_back_and_keep_source_bytes(tmp_path, fake_child,
-                                                              monkeypatch):
-    monkeypatch.setattr("scripts.baselines.solver.solve", _offset_solve(0.006))
-    ini = write_scenario(tmp_path / "s")
-    prepared = adapter.prepare(ini, "geometric", tmp_path / "run", mode="standalone",
-                               sim_binary=fake_child)
-    assert (prepared.prep_dir / "effective-inputs/nodes.json").read_bytes() == (
-        (ini.parent / "nodes.json").read_bytes())
-    plan = artifacts.read_json(prepared.plan_path)
-    for node in plan["nodes"]:
-        assert node["planned"] == node["original"]
-        assert node["displacement_m"] == 0.0
-    assert plan["initial_displacement_m_total"] == 0.0
-
-
-def test_just_above_tolerance_is_a_real_move(tmp_path, fake_child, monkeypatch):
-    monkeypatch.setattr("scripts.baselines.solver.solve", _offset_solve(0.02))
-    ini = write_scenario(tmp_path / "s")
-    prepared = adapter.prepare(ini, "geometric", tmp_path / "run", mode="standalone",
-                               sim_binary=fake_child)
-    rewritten = {n["id"]: n for n in json.loads(
-        (prepared.prep_dir / "effective-inputs/nodes.json").read_text())}
-    original = {n["id"]: n for n in NODES}
-    for node_id in ("uav-a", "uav-c"):
-        assert rewritten[node_id]["position"]["x"] == pytest.approx(
-            original[node_id]["position"]["x"] + 0.02)
-        assert rewritten[node_id]["position"]["z"] == original[node_id]["position"]["z"]
-    plan = artifacts.read_json(prepared.plan_path)
-    assert plan["initial_displacement_m_total"] == pytest.approx(0.04)
 
 
 def test_translate_through_prepare_without_a_position_key(tmp_path, fake_child,

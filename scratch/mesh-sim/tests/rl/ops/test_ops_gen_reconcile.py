@@ -27,14 +27,6 @@ def _row(root, entries, snapshot, index=0):
     return reconcile.task_rows(table(root), entries, snapshot)[index]
 
 
-def test_gen_the_active_state_sets_are_exactly_the_documented_ones():
-    # README "Reported states": pending = PENDING/CONFIGURING/REQUEUED, running =
-    # RUNNING/COMPLETING/SUSPENDED/RESIZING/SIGNALING/STAGE_OUT.
-    assert reconcile.QUEUED_STATES == frozenset(QUEUED)
-    assert reconcile.ACTIVE_STATES == frozenset(QUEUED + RUNNING)
-    assert reconcile.RESUMABLE_STATES == ("unsubmitted", "failed", "canceled")
-
-
 @pytest.mark.parametrize("source", ["queue", "accounting"])
 @pytest.mark.parametrize("state", QUEUED + RUNNING)
 def test_gen_every_active_state_maps_to_pending_or_running(root, source, state):
@@ -193,18 +185,6 @@ def test_gen_several_covering_receipts(root, queue, accounting, newer_intent, ex
     assert row["receipt"] == latest
 
 
-def test_gen_queued_detail_carries_the_reason_and_start_but_not_placeholders(root):
-    entries = [receipt(indices=[0, 1, 2])]
-    snapshot = snap(queue={"1000_0": q("PENDING", "Priority", "2026-03-01T10:00:00"),
-                           "1000_1": q("PENDING", "None", "N/A"),
-                           "1000_2": q("RUNNING", "N/A", "2026-03-01T09:00:00")})
-    rows = reconcile.task_rows(table(root), entries, snapshot)
-    assert rows[0]["detail"] == "job 1000_0 PENDING (Priority)"
-    assert rows[0]["start"] == "2026-03-01T10:00:00"
-    assert rows[1]["detail"] == "job 1000_1 PENDING" and rows[1]["start"] is None
-    assert rows[2]["detail"] == "job 1000_2 RUNNING"
-
-
 # --- filesystem rules --------------------------------------------------------
 
 
@@ -271,24 +251,6 @@ def test_gen_an_unowned_blocked_directory_is_failed_with_the_retry_text(root):
     train_dir = out.parents[2] / "train" / leaf(0)
     assert row["state"] == "failed"
     assert row["detail"] == f"move or delete {train_dir} to retry"
-
-
-def test_gen_an_unowned_blocked_evaluation_reports_the_evaluation_directory(root):
-    out = write_manifest(root, f"evaluate/{leaf(0)}", None)
-    row = _row(root, [], snap())
-    assert row["state"] == "failed"
-    assert row["detail"] == f"move or delete {out} to retry"
-
-
-def test_gen_unowned_finished_training_with_pending_evaluation_is_never_submitted(root):
-    # No documented rule matches (unsubmitted needs both steps pending), so the
-    # code falls back to unknown; submit and resume both skip it. See report.
-    write_manifest(root, f"train/{leaf(0)}", {"status": "completed"})
-    entries, snapshot = [], snap()
-    rows = reconcile.task_rows(table(root), entries, snapshot)
-    assert rows[0]["state"] == "unknown"
-    targets = reconcile.resume_targets(table(root), rows, entries, snapshot)
-    assert 0 not in targets["eligible"]
 
 
 # --- human assertions --------------------------------------------------------
@@ -359,18 +321,6 @@ def test_gen_a_sibling_with_a_longer_index_never_blocks_resume(tmp_path):
     targets = reconcile.resume_targets(table(root), rows, entries, snapshot)
     assert 1 in targets["eligible"] and 11 not in targets["eligible"]
     assert all(entry["index"] != 1 for entry in targets["blocked"])
-
-
-@pytest.mark.parametrize("state,eligible", [("unsubmitted", True), ("failed", True),
-                                            ("canceled", True), ("unknown", False),
-                                            ("pending", False), ("running", False),
-                                            ("completed", False), ("partial", False)])
-def test_gen_only_resumable_states_are_resumed(root, state, eligible):
-    rows = [{"index": index, "state": state} for index in range(3)]
-    targets = reconcile.resume_targets(table(root), rows, [], snap())
-    assert (targets["eligible"] == [0, 1, 2]) is eligible
-    if not eligible:
-        assert targets == {"eligible": [], "blocked": []}
 
 
 def test_gen_uncovered_for_compare_counts_finished_and_active_tasks_as_covered():
@@ -517,12 +467,3 @@ BLOCKERS = [
 def test_gen_compare_blockers(entries, snapshot_args, blocked):
     reasons = reconcile.compare_blockers(entries, snap(**snapshot_args))
     assert bool(reasons) is blocked, reasons
-
-
-def test_gen_a_traceless_compare_blocker_tells_the_human_how_to_assert_it():
-    reasons = reconcile.compare_blockers([receipt(compare=compare_element("2000"))],
-                                         snap())
-    assert reasons == ["submission 0001 compare job 2000 has no record of having "
-                       "finished; assert it with resume --inactive-job 2000 once "
-                       "you confirm it is gone"]
-

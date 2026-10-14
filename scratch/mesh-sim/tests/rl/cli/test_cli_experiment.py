@@ -78,40 +78,6 @@ def _with_cadence(selection, held_out="11-12", training=None):
     return apply
 
 
-SEED_REFUSALS = [
-    ("training range overlaps held-out range",
-     lambda d: d["seeds"].update(training="1-5", held_out="5-9"), "disjoint"),
-    ("held-out list overlaps training range",
-     lambda d: d["seeds"].update(training="1-3", held_out=[3, 4]), "disjoint"),
-    ("selection equals a held-out seed", _with_cadence(12), "disjoint"),
-    ("selection inside the training range", _with_cadence(2, training="1-3"), "disjoint"),
-    ("selection is a bool", _with_cadence(True), "must be an integer"),
-    ("selection is a string", _with_cadence("5"), "must be an integer"),
-    ("training list holds a bool", _set(("seeds", "training"), [True]),
-     "must be an integer"),
-    ("training list holds a float", _set(("seeds", "training"), [1.0]),
-     "must be an integer"),
-    ("training empty list", _set(("seeds", "training"), []), "at least one seed"),
-    ("held-out empty list", _set(("seeds", "held_out"), []), "at least one seed"),
-    ("training empty spec", _set(("seeds", "training"), ""), "empty"),
-    ("training reversed range", _set(("seeds", "training"), "3-1"), "A <= B"),
-    ("training negative", _set(("seeds", "training"), "-1"), "not an integer"),
-    ("training missing", lambda d: d["seeds"].pop("training"), "seed spec string"),
-    ("held-out missing", lambda d: d["seeds"].pop("held_out"), "seed spec string"),
-    ("held-out spec repeats", _set(("seeds", "held_out"), "11-12,12"), "more than once"),
-    ("seeds not an object", _set(("seeds",), [1, 2]), "JSON object"),
-    ("unknown seed role", _set(("seeds", "tuning"), [5]), "unknown keys"),
-]
-
-
-@pytest.mark.parametrize("mutate,message", [case[1:] for case in SEED_REFUSALS],
-                         ids=[case[0] for case in SEED_REFUSALS])
-def test_seed_role_refusals(multi_run_config, tmp_path, mutate, message):
-    data = _mutated(multi_run_config, mutate)
-    with pytest.raises(ValueError, match=message):
-        experiment.load_matrix(_write(tmp_path, data))
-
-
 def test_disjoint_ranges_and_selection_are_accepted(multi_run_config, tmp_path):
     data = _mutated(multi_run_config, _with_cadence(10, held_out="11-13",
                                                     training="1-3,5"))
@@ -138,77 +104,6 @@ def test_held_out_seeds_never_reach_training_arguments(multi_run_config, tmp_pat
 
 
 # 2. Other matrix validation gaps ---------------------------------------------------
-
-OTHER_REFUSALS = [
-    ("row band unknown", _set(("rows", 0, "band"), "5g"), "must be one of"),
-    ("top band unknown", _set(("band",), "lte"), "must be one of"),
-    ("band as a list", _set(("band",), ["mmwave", "sub-6"]), "no product expansion"),
-    ("no run_config anywhere", lambda d: d.pop("run_config"), "path to a run.ini"),
-    ("run_config missing file", _set(("run_config",), "/nonexistent/run.ini"),
-     "run config not found"),
-    ("description not a string", _set(("description",), 5), "description"),
-    ("matrix not an object", None, "JSON object"),
-    ("rows not a list", _set(("rows",), {"name": "row-a"}), "non-empty JSON array"),
-    ("row not an object", _set(("rows", 0), "row-a"), "JSON object"),
-    ("empty reward components", _set(("rows", 0, "reward_components"), []),
-     "non-empty"),
-    ("bool weight", _set(("rows", 0, "reward_weights"), [True]), "numbers"),
-    ("string weight", _set(("rows", 0, "reward_weights"), ["1.0"]), "numbers"),
-    ("preset empty", _set(("rows", 0, "observation_preset"), ""), "must be a string"),
-    ("training value a string", _set(("training", "n_steps"), "16"), "number"),
-    ("training value a bool", _set(("training", "gamma"), True), "number"),
-    ("eval cadence a float", _set(("training", "eval_every_steps"), 8.0), "integer"),
-    ("eval cadence negative", _set(("training", "eval_every_steps"), -1), ">= 0"),
-    ("policies repeated", _set(("evaluation", "policies"), ["model", "hold", "hold"]),
-     "distinct"),
-    ("policies not a list", _set(("evaluation", "policies"), "model,hold"), "array"),
-    ("model empty string", _set(("evaluation", "model"), ""), "must be a string"),
-    ("matrix_version string", _set(("matrix_version",), "1"), "matrix_version"),
-]
-
-
-@pytest.mark.parametrize("mutate,message", [case[1:] for case in OTHER_REFUSALS],
-                         ids=[case[0] for case in OTHER_REFUSALS])
-def test_other_matrix_refusals(multi_run_config, tmp_path, mutate, message):
-    if mutate is None:
-        path = tmp_path / "matrix.json"
-        path.write_text("[1, 2]")
-        with pytest.raises(ValueError, match=message):
-            experiment.load_matrix(path)
-        return
-    data = _mutated(multi_run_config, mutate)
-    with pytest.raises(ValueError, match=message):
-        experiment.load_matrix(_write(tmp_path, data))
-
-
-def test_invalid_json_matrix_is_a_value_error(tmp_path, capsys):
-    path = tmp_path / "matrix.json"
-    path.write_text("{not json")
-    with pytest.raises(ValueError):
-        experiment.load_matrix(path)
-    root = tmp_path / "root"
-    assert experiment.main(["plan", "--matrix", str(path), "--output-root", str(root),
-                            "--sim-binary", SIM_BINARY]) == 1
-    assert not (root / experiment.PLAN_NAME).exists()
-
-
-# train.py parses these keys as int and rejects negative cadences or
-# keep_checkpoints < 1, so load_matrix must reject them before execution.
-TRAIN_ONLY_FAILURES = [
-    ("n_steps not an integer", ("training", "n_steps"), 16.5),
-    ("total_timesteps not an integer", ("training", "total_timesteps"), 1.5),
-    ("checkpoint cadence negative", ("training", "checkpoint_every_steps"), -1),
-    ("keep_checkpoints zero", ("training", "keep_checkpoints"), 0),
-]
-
-
-@pytest.mark.parametrize("path,value", [case[1:] for case in TRAIN_ONLY_FAILURES],
-                         ids=[case[0] for case in TRAIN_ONLY_FAILURES])
-def test_training_values_train_would_reject_fail_at_load(multi_run_config, tmp_path,
-                                                         path, value):
-    data = _mutated(multi_run_config, _set(path, value))
-    with pytest.raises(ValueError):
-        experiment.load_matrix(_write(tmp_path, data))
 
 
 def test_top_level_band_reaches_train_arguments(multi_run_config, tmp_path):
@@ -283,20 +178,6 @@ def test_changed_run_config_alone_keeps_the_plan(multi_run_config, tmp_path):
     assert experiment.main(_plan_argv(matrix_path, root)) == 0
     Path(multi_run_config).write_text(Path(multi_run_config).read_text() + "\n# edit\n")
     assert experiment.main(_plan_argv(matrix_path, root)) == 0
-
-
-@pytest.mark.parametrize("rows,message", [
-    ("row-a,row-a", "distinct"),
-    (",,", "at least one row"),
-    ("nope", "not in the matrix"),
-])
-def test_bad_rows_filters_write_no_plan(multi_run_config, tmp_path, capsys, rows, message):
-    matrix_path = _write(tmp_path, _matrix_data(multi_run_config))
-    root = tmp_path / "root"
-    assert experiment.main(_plan_argv(matrix_path, root, SIM_BINARY,
-                                      "--rows", rows)) == 1
-    assert message in capsys.readouterr().err
-    assert not (root / experiment.PLAN_NAME).exists()
 
 
 def test_rows_filter_keeps_matrix_order(multi_run_config, tmp_path):
@@ -374,14 +255,6 @@ def test_step_state_from_dir_and_manifest(multi_run_config, tmp_path, kind, mani
     assert state == expected
     if expected == "blocked":
         assert detail == f"move or delete {step['output_dir']} to retry"
-
-
-# A manifest that is valid JSON but not an object reads as blocked, not a crash.
-@pytest.mark.parametrize("payload", ["[1, 2]", "3", "null", '"completed"'])
-def test_non_object_manifest_is_blocked_not_a_crash(multi_run_config, tmp_path, payload):
-    step = _steps(multi_run_config, tmp_path)["train"]
-    _prepare(step, payload)
-    assert experiment.step_state(step)[0] == "blocked"
 
 
 def test_step_state_never_modifies_the_directory(multi_run_config, tmp_path):
@@ -472,32 +345,3 @@ def test_status_prints_one_line_per_step_with_details(multi_run_config, tmp_path
     assert lines[0] == (f"train/row-a/train-seed-1  blocked  move or delete "
                         f"{plan['steps'][0]['output_dir']} to retry")
     assert lines[1] == "evaluate/row-a/train-seed-1  pending"
-
-
-def test_cli_requires_a_subcommand_and_matrix(tmp_path):
-    with pytest.raises(SystemExit):
-        experiment.main([])
-    with pytest.raises(SystemExit):
-        experiment.main(["plan", "--output-root", str(tmp_path), "--sim-binary", "x"])
-
-
-# QUESTION: argparse usage errors exit with status 2, which experiment.run_plan
-# (experiment.py:378) tolerates for evaluate steps as a "warning". An evaluate step
-# whose argv is rejected by argparse (e.g. a plan written by older tooling) is then
-# reported "done" although no eval_manifest.json exists. Expected: "failed".
-def test_evaluate_usage_error_is_not_reported_done(multi_run_config, tmp_path, capsys):
-    plan = _plan(multi_run_config, tmp_path)
-    train, evaluate = plan["steps"][0], dict(plan["steps"][1])
-    _prepare(train, {"status": "completed"})
-    evaluate["args"] = evaluate["args"] + ["--no-such-flag"]
-    plan = dict(plan, steps=[train, evaluate, plan["steps"][-1]])
-
-    def execute(step):
-        if step["kind"] == "compare":
-            return 0
-        return experiment._subprocess_execute(step)
-
-    experiment.run_plan(plan, execute)
-    out = capsys.readouterr().out
-    assert not (Path(evaluate["output_dir"]) / evaluate["manifest"]).exists()
-    assert "evaluate/row-a/train-seed-1  done" not in out

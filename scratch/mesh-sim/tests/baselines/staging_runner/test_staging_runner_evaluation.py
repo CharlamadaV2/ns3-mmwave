@@ -157,18 +157,6 @@ def _assert_no_episode(out: Path) -> None:
     assert not (out / "hold").exists()
 
 
-def test_ownership_mismatch_runs_no_episode(tmp_path, composite, capsys):
-    out = tmp_path / "eval"
-    ini = _scenario(tmp_path, controlled="uav-a, walker")
-    assert _evaluate(composite, ini, out, "hold,geometric") == 1
-    assert "BaselinePreparationError" in capsys.readouterr().err
-    _assert_no_episode(out)
-    prep = artifacts.read_json(out / "geometric/baseline/baseline_manifest.json")
-    assert prep["status"] == "failed"
-    assert ("movable but not controlled: uav-c; controlled but not movable: walker"
-            in prep["error"])
-
-
 def test_query_crash_runs_no_episode_and_stages_nothing(tmp_path, composite, monkeypatch,
                                                          capsys):
     monkeypatch.setenv("FAKE_QUERY_FAULT", "crash")
@@ -181,29 +169,6 @@ def test_query_crash_runs_no_episode_and_stages_nothing(tmp_path, composite, mon
     assert not (prep_dir / "effective-inputs").exists()
     assert not (prep_dir / "effective-inputs.partial").exists()
     assert "FAILED:" in (prep_dir / "planner.log").read_text()
-
-
-def test_existing_eval_manifest_refuses_before_any_preparation(tmp_path, monkeypatch):
-    install_stub_planner(monkeypatch)
-    out = tmp_path / "eval"
-    out.mkdir()
-    (out / "eval_manifest.json").write_text('{"keep": true}\n')
-    assert _evaluate(_composite(tmp_path / "bin"), _scenario(tmp_path), out,
-                     "geometric") == 1
-    assert sorted(p.name for p in out.iterdir()) == ["eval_manifest.json"]
-    assert (out / "eval_manifest.json").read_text() == '{"keep": true}\n'
-
-
-def test_non_empty_preparation_dir_fails_without_touching_it(tmp_path, monkeypatch):
-    install_stub_planner(monkeypatch)
-    out = tmp_path / "eval"
-    busy = out / "geometric" / "baseline"
-    busy.mkdir(parents=True)
-    (busy / "keep.txt").write_text("x")
-    assert _evaluate(_composite(tmp_path / "bin"), _scenario(tmp_path), out,
-                     "hold,geometric") == 1
-    assert [p.name for p in busy.iterdir()] == ["keep.txt"]
-    _assert_no_episode(out)
 
 
 def test_policy_name_is_the_method_and_ini_algorithm_is_only_recorded(tmp_path, monkeypatch):

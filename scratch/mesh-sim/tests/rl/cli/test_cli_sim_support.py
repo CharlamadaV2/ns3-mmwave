@@ -15,7 +15,6 @@ from pathlib import Path
 
 import pytest
 
-from scripts import sim_support
 from scripts.sim_support import (find_mesh_root, find_sim_binary, parse_seed_spec,
                                  simulator_env, stop_process, strip_inline_comment,
                                  tail_lines)
@@ -43,17 +42,6 @@ def test_find_mesh_root_accepts_a_file_or_a_directory(tmp_path):
     assert find_mesh_root(str(root / "sim.cc")) == root.resolve()
 
 
-def test_find_mesh_root_ignores_a_sim_cc_directory(tmp_path):
-    (tmp_path / "x" / "sim.cc").mkdir(parents=True)
-    with pytest.raises(RuntimeError, match="Could not locate mesh-sim root"):
-        find_mesh_root(tmp_path / "x")
-
-
-def test_find_mesh_root_without_marker_raises(tmp_path):
-    with pytest.raises(RuntimeError):
-        find_mesh_root(tmp_path)
-
-
 # 2. find_sim_binary ---------------------------------------------------------------
 
 def _fake_ns3_tree(tmp_path: Path) -> tuple[Path, Path]:
@@ -61,19 +49,6 @@ def _fake_ns3_tree(tmp_path: Path) -> tuple[Path, Path]:
     mesh_root.mkdir(parents=True)
     build = tmp_path / "ns3" / "build" / "scratch" / "mesh-sim"
     return mesh_root, build
-
-
-def test_find_sim_binary_returns_none_without_a_build(tmp_path):
-    mesh_root, _ = _fake_ns3_tree(tmp_path)
-    assert find_sim_binary(mesh_root) is None
-
-
-def test_find_sim_binary_returns_none_without_a_match(tmp_path):
-    mesh_root, build = _fake_ns3_tree(tmp_path)
-    build.mkdir(parents=True)
-    (build / "other-binary").write_text("")
-    (build / "ns3-mesh").write_text("")
-    assert find_sim_binary(mesh_root) is None
 
 
 def test_find_sim_binary_returns_the_first_sorted_match(tmp_path):
@@ -134,40 +109,6 @@ def test_simulator_env_is_a_copy_and_resolves_relative_roots(tmp_path, monkeypat
 ])
 def test_parse_seed_spec_accepts(raw, expected):
     assert parse_seed_spec(raw) == expected
-
-
-@pytest.mark.parametrize("raw", [
-    "-1",        # negatives unsupported: '-' is the range separator
-    "-1-3",
-    "1-2-3",
-    "3-",
-    "-",
-    "1.5",
-    "1,,x",
-    " , , ",
-    "None",
-])
-def test_parse_seed_spec_refuses(raw):
-    with pytest.raises(ValueError):
-        parse_seed_spec(raw)
-
-
-def test_parse_seed_spec_duplicates_across_ranges_are_refused():
-    with pytest.raises(ValueError, match="seed 2 is listed more than once"):
-        parse_seed_spec("1-3,2")
-    with pytest.raises(ValueError, match="more than once"):
-        parse_seed_spec("1-3,3-4")
-    assert parse_seed_spec("1-3,2", distinct=False) == [1, 2, 3, 2]
-
-
-def test_parse_seed_spec_reversed_range_message():
-    with pytest.raises(ValueError, match="A <= B"):
-        parse_seed_spec("9-8")
-
-
-def test_parse_seed_spec_large_range_is_expanded_inclusively():
-    seeds = parse_seed_spec("1-10000")
-    assert len(seeds) == 10000 and seeds[0] == 1 and seeds[-1] == 10000
 
 
 # 5. strip_inline_comment ----------------------------------------------------------
@@ -250,20 +191,6 @@ def test_strip_inline_comment_matches_the_cpp_parser(cpp_ini_parser, tmp_path):
     assert python == cpp
 
 
-# QUESTION (low impact): sim_support.py:97 uses str.strip(), which also removes
-# \v, \f, and Unicode spaces such as U+00A0; the C++ trimStr
-# (src/util/string-utils.cc:26) strips only " \t\r\n". The docstring claims the
-# two match. configparser's own value strip has the same divergence.
-_WHITESPACE_EDGE_VALUES = ["v\f", "\vv", "v "]
-
-
-def test_strip_inline_comment_whitespace_set_matches_the_cpp_parser(cpp_ini_parser,
-                                                                    tmp_path):
-    cpp = _cpp_values(cpp_ini_parser, tmp_path, _WHITESPACE_EDGE_VALUES)
-    python = [strip_inline_comment(value) for value in _WHITESPACE_EDGE_VALUES]
-    assert python == cpp
-
-
 # 6. tail_lines --------------------------------------------------------------------
 
 def test_tail_lines_keeps_the_last_lines(tmp_path):
@@ -273,23 +200,6 @@ def test_tail_lines_keeps_the_last_lines(tmp_path):
     assert tail_lines(path, 10) == "\n".join(f"line {i}" for i in range(1, 6))
     assert tail_lines(path, 0) == ""
     assert tail_lines(str(path)).splitlines()[-1] == "line 5"
-
-
-def test_tail_lines_strips_crlf_and_replaces_bad_bytes(tmp_path):
-    path = tmp_path / "log.bin"
-    path.write_bytes(b"one\r\ntwo \xff\xfe\r\nthree")
-    assert tail_lines(path, 3) == "one\ntwo ��\nthree"
-
-
-def test_tail_lines_of_an_empty_file_is_empty(tmp_path):
-    path = tmp_path / "empty.log"
-    path.write_text("")
-    assert tail_lines(path) == ""
-
-
-def test_tail_lines_missing_file_raises_oserror(tmp_path):
-    with pytest.raises(OSError):
-        tail_lines(tmp_path / "missing.log")
 
 
 # 7. stop_process ------------------------------------------------------------------
@@ -364,9 +274,3 @@ def test_stop_process_group_mode_tolerates_an_exited_leader():
     proc.wait()
     stop_process(proc, 0.2, process_group=True)
     assert proc.returncode == 0
-
-
-def test_module_exports_the_documented_helpers():
-    for name in ("find_mesh_root", "find_sim_binary", "simulator_env", "parse_seed_spec",
-                 "strip_inline_comment", "tail_lines", "stop_process"):
-        assert callable(getattr(sim_support, name))

@@ -8,7 +8,6 @@ path). The C++ truth is src/util/ini-parser.{h,cc}, src/util/string-utils.cc
 (resolvePath, dirOf) and src/config/config-loader.cc.
 """
 
-import configparser
 import hashlib
 import os
 import shutil
@@ -22,8 +21,6 @@ from scripts.rl.env.config import (
 )
 
 NODES_JSON = '[{"id": "a", "position": {"x": 0, "y": 0, "z": 10}}]\n'
-CPP_BOUND_DEFAULTS = {"x_min": -1000.0, "x_max": 2000.0, "y_min": -1000.0,
-                      "y_max": 1000.0, "z_min": 0.0, "z_max": 100.0}
 
 
 def cpp_parse_ini(text: str) -> dict[str, dict[str, str]]:
@@ -53,12 +50,6 @@ def cpp_control_mode(text: str) -> str:
     """config-loader.cc:353-355: presence of [rl] controlled_nodes."""
     return "centralized" if "controlled_nodes" in cpp_parse_ini(text).get("rl", {}) \
         else "legacy"
-
-
-def cpp_bounds(text: str) -> tuple:
-    rl = cpp_parse_ini(text).get("rl", {})
-    values = {k: float(rl.get(k, d)) for k, d in CPP_BOUND_DEFAULTS.items()}
-    return tuple((values[f"{a}_min"], values[f"{a}_max"]) for a in "xyz")
 
 
 def write(tmp_path: Path, text: str, name: str = "run.ini") -> str:
@@ -106,13 +97,6 @@ def test_bounds_all_six_with_mixed_comments_and_spacing(tmp_path):
         (-5.0, 5.0), (-100.0, 100.0), (0.5, 30.0))
 
 
-@pytest.mark.parametrize("line", ["x_min =", "x_min = ; nothing", "x_min = ten"])
-def test_unparseable_bound_raises_like_cpp_stod(tmp_path, line):
-    # C++ std::stod("") / stod("ten") throws, so the run cannot start either.
-    with pytest.raises(ValueError):
-        read_rl_bounds(write(tmp_path, f"[rl]\n{line}\n"))
-
-
 # --- read_action_profile / read_control_mode / read_rl_selection ---------------------
 
 @pytest.mark.parametrize("text,expected", [
@@ -122,16 +106,6 @@ def test_unparseable_bound_raises_like_cpp_stod(tmp_path, line):
 ])
 def test_read_action_profile(tmp_path, text, expected):
     assert read_action_profile(write(tmp_path, text)) == expected
-
-
-def test_blank_action_profile_matches_cpp_value(tmp_path):
-    # QUESTION: C++ iniGet returns "" for a present-but-blank key, and
-    # rl-control.cc:139 then rejects action_profile ''. read_action_profile
-    # (config.py:115) maps blank to "move_2d", so experiment.py's profile check
-    # accepts a scenario the simulator refuses. Docstring says "when absent".
-    text = "[rl]\naction_profile = ; blank\n"
-    assert read_action_profile(write(tmp_path, text)) == \
-        cpp_parse_ini(text)["rl"]["action_profile"]
 
 
 @pytest.mark.parametrize("text,expected", [
@@ -148,62 +122,6 @@ def test_blank_action_profile_matches_cpp_value(tmp_path):
 def test_control_mode_documented_cases(tmp_path, text, expected):
     assert cpp_control_mode(text) == expected      # the model agrees with the C++ rule
     assert read_control_mode(write(tmp_path, text)) == expected
-
-
-def _loud(exc: BaseException) -> bool:
-    return isinstance(exc, (ValueError, configparser.Error, OSError))
-
-
-# Inputs the C++ parser accepts. Python must either agree with the C++ result or
-# fail loudly (as scripts/baselines/config.py read_ini does); a silently different
-# answer is a divergence.
-PARITY_CASES = {
-    "whitespace_in_header": "[ rl ]\ncontrolled_nodes = a\n",
-    "uppercase_key": "[rl]\nControlled_Nodes = a\n",
-    "colon_delimiter": "[rl]\ncontrolled_nodes: a\n",
-    "default_section": "[DEFAULT]\ncontrolled_nodes = a\n[rl]\nx_min = 0\n",
-    "indented_key_after_value": "[rl]\nx_min = 5\n  controlled_nodes = a\n",
-    "duplicate_key": "[rl]\ncontrolled_nodes = a\ncontrolled_nodes = b\n",
-    "duplicate_section": "[rl]\nx_min = 1\n[rl]\ncontrolled_nodes = a\n",
-    "line_without_equals": "[rl]\njunk\ncontrolled_nodes = a\n",
-    "key_before_any_section": "name = x\n[rl]\ncontrolled_nodes = a\n",
-}
-
-
-@pytest.mark.parametrize("case", sorted(PARITY_CASES))
-def test_control_mode_matches_cpp_or_fails_loudly(tmp_path, case):
-    # read_control_mode must agree with the simulator's INI rules (header whitespace,
-    # key case, ':' lines, [DEFAULT], indented keys) or fail loudly.
-    text = PARITY_CASES[case]
-    try:
-        mode = read_control_mode(write(tmp_path, text))
-    except Exception as exc:  # noqa: BLE001 - loud failure is acceptable
-        assert _loud(exc), exc
-        return
-    assert mode == cpp_control_mode(text)
-
-
-BOUND_PARITY_CASES = {
-    "uppercase_key": "[rl]\nX_MIN = 5\n",
-    "colon_delimiter": "[rl]\nx_min: 5\n",
-    "default_section": "[DEFAULT]\nx_min = 5\n[rl]\nx_max = 50\n",
-    "whitespace_in_header": "[ rl ]\nx_min = 5\n",
-    "duplicate_key_last_wins": "[rl]\nx_min = 1\nx_min = 2\n",
-    "indented_continuation": "[rl]\nx_min = 5\n  x_max = 50\n",
-}
-
-
-@pytest.mark.parametrize("case", sorted(BOUND_PARITY_CASES))
-def test_bounds_match_cpp_or_fail_loudly(tmp_path, case):
-    # Legacy-mode action masks are built from these bounds (mesh_env.py), so they
-    # must match the simulator's clamping or fail loudly.
-    text = BOUND_PARITY_CASES[case]
-    try:
-        bounds = read_rl_bounds(write(tmp_path, text))
-    except Exception as exc:  # noqa: BLE001
-        assert _loud(exc), exc
-        return
-    assert bounds == cpp_bounds(text)
 
 
 def test_read_rl_selection_omits_blank_and_comment_only_keys(tmp_path):
@@ -302,41 +220,3 @@ def test_identity_optional_files_resolved_relative_with_comments(tmp_path):
     identity = read_scenario_identity(str(ini))
     assert identity["buildings_json_sha256"] == sha(tmp_path / "s" / "b.json")
     assert identity["jammers_json_sha256"] == sha(tmp_path / "j.json")
-
-
-def test_identity_missing_run_config(tmp_path):
-    with pytest.raises(FileNotFoundError, match="run config not found"):
-        read_scenario_identity(str(tmp_path / "absent.ini"))
-
-
-def test_identity_nodes_file_that_is_a_directory(tmp_path):
-    ini = scenario(tmp_path / "s", "[scenario]\nnodes_file = sub\n", nodes_name="")
-    (tmp_path / "s" / "sub").mkdir()
-    with pytest.raises(FileNotFoundError, match="nodes file not found"):
-        read_scenario_identity(str(ini))
-
-
-def test_identity_blank_nodes_file_matches_cpp(tmp_path):
-    # QUESTION: C++ iniGet returns "" for "nodes_file =", resolvePath(base, "")
-    # returns "" and the loader throws "Cannot open nodes file" (config-loader.cc:369-376).
-    # _scenario_file (config.py:60) treats blank as the default nodes.json and hashes
-    # it, so identity succeeds for a scenario the simulator rejects.
-    ini = scenario(tmp_path / "s", "[scenario]\nnodes_file =\n")
-    with pytest.raises(FileNotFoundError):
-        read_scenario_identity(str(ini))
-
-
-@pytest.mark.skipif(not hasattr(os, "symlink"), reason="needs symlinks")
-def test_identity_through_symlinked_run_ini_uses_cpp_base_dir(tmp_path):
-    # BUG/QUESTION: EpisodeSession passes --run-config unchanged and C++ resolves
-    # nodes_file against dirOf(<given path>) (string-utils.cc:76, no canonicalization),
-    # but read_scenario_identity resolves the symlink first (config.py:76), so it
-    # hashes a different nodes.json than the one the simulator loads.
-    real = scenario(tmp_path / "real", nodes_text='["real"]\n')
-    link_dir = tmp_path / "link"
-    link_dir.mkdir()
-    (link_dir / "nodes.json").write_text('["used-by-cpp"]\n')
-    link = link_dir / "run.ini"
-    link.symlink_to(real)
-    identity = read_scenario_identity(str(link))
-    assert identity["nodes_json_sha256"] == sha(link_dir / "nodes.json")

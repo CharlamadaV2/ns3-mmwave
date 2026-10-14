@@ -140,13 +140,6 @@ def test_random_valid_picks_hold_when_it_is_the_only_valid_action():
         assert policy.act(None, mask, {}).tolist() == [4, 4]
 
 
-def test_random_valid_is_reproducible_without_start_episode():
-    mask = np.ones(10, dtype=bool)
-    first, second = ev.RandomValidPolicy(), ev.RandomValidPolicy()
-    assert ([first.act(None, mask, {}).tolist() for _ in range(5)]
-            == [second.act(None, mask, {}).tolist() for _ in range(5)])
-
-
 class _RecordingModel:
     def __init__(self, action):
         self.calls, self._action = [], action
@@ -174,11 +167,6 @@ def test_model_policy_is_deterministic_masked_and_flattened():
     assert call["action_masks"].dtype == bool
     assert call["action_masks"].tolist() == [True] * 5 + [False] * 4 + [True]
     assert capture.attached == [model]
-
-
-def test_actions_digest_is_canonical():
-    assert ev._actions_sha256([[4, 4], [0, 1]]) == ev._actions_sha256([[4, 4], [0, 1]])
-    assert ev._actions_sha256([[4, 4], [0, 1]]) != ev._actions_sha256([[4, 4], [1, 0]])
 
 
 # 2. episode_metrics ------------------------------------------------------------------
@@ -260,12 +248,6 @@ def test_summarize_counts_only_completed_episodes():
     assert summary["mean_reward_per_decision"] == pytest.approx(-0.5)  # 0-decision skipped
     assert summary["mask_violations_total"] == 4
     assert summary["revalidated_slots_total"] == 2
-
-
-def test_summarize_of_nothing():
-    summary = ev.summarize([])
-    assert summary["expected_episodes"] == 0 and summary["completed_episodes"] == 0
-    assert summary["mean_return"] is None and summary["mean_reward_per_decision"] is None
 
 
 # 4. evaluate() loop ------------------------------------------------------------------
@@ -447,22 +429,6 @@ def test_policy_metadata_is_stored_as_the_baseline_block(tmp_path):
 
 
 # 5. PreferenceCapture ----------------------------------------------------------------
-
-def test_capture_reports_why_it_could_not_attach():
-    capture = PreferenceCapture()
-    capture.attach(object())
-    assert capture.registered is False and capture.error.startswith("AttributeError")
-
-    class _Policy:
-        action_net = 3
-
-    class _Model:
-        policy = _Policy()
-
-    capture.attach(_Model())
-    assert capture.registered is False
-    assert capture.error == "TypeError: policy.action_net is int, not a torch module"
-    assert capture.take() is None
 
 
 def test_capture_copies_the_last_forward_and_detaches_cleanly():

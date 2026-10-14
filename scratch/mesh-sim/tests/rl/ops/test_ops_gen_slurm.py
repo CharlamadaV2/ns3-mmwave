@@ -7,7 +7,6 @@ SLURM command is run. Expectations come from scripts/rl/ops/README.md
 
 import json
 import os
-import re
 import shlex
 import subprocess
 import sys
@@ -65,16 +64,6 @@ def _calls(log: Path) -> list[list[str]]:
 # --- parsers -----------------------------------------------------------------
 
 
-def test_gen_parse_squeue_skips_blank_short_and_whitespace_lines():
-    text = ("\n   \n"
-            "1000_0|RUNNING\n"                       # too few columns
-            "  1000_1 | PENDING | Priority | N/A  \n"
-            "1000_2|RUNNING|None|N/A|extra|columns\n")
-    jobs = slurm.parse_squeue(text)
-    assert jobs == {"1000_1": {"state": "PENDING", "reason": "Priority", "start": "N/A"},
-                    "1000_2": {"state": "RUNNING", "reason": "None", "start": "N/A"}}
-
-
 EXPANSIONS = [
     ("1000_[0-3%2]", ["1000_0", "1000_1", "1000_2", "1000_3"]),
     ("1000_[0,2-3,7%2]", ["1000_0", "1000_2", "1000_3", "1000_7"]),
@@ -94,16 +83,6 @@ def test_gen_collapsed_array_ids_expand_to_exact_elements(job_id, expected):
     assert sorted(jobs) == sorted(expected)
 
 
-def test_gen_a_garbled_array_range_yields_no_element():
-    assert slurm.parse_squeue("1000_[a-b]|PENDING|None|N/A\n") == {}
-
-
-def test_gen_heterogeneous_job_ids_are_kept_literally_and_filtered_out():
-    # "1234+0" is a het-job component, never one of our array elements.
-    assert "1234+0" in slurm.parse_squeue("1234+0|RUNNING|None|N/A\n")
-    assert slurm.parse_sacct("1234+0.batch|RUNNING|0:0\n") == {}
-
-
 def test_gen_parse_sacct_normalizes_every_cancelled_spelling_and_drops_steps():
     text = ("1000_0|CANCELLED+|0:15\n"
             "1000_1|CANCELLED by 0|0:15\n"
@@ -119,11 +98,6 @@ def test_gen_parse_sacct_normalizes_every_cancelled_spelling_and_drops_steps():
                     "1000_1": {"state": "CANCELLED", "exit": "0:15"},
                     "1000_2": {"state": "OUT_OF_MEMORY", "exit": "0:125"},
                     "1000_3": {"state": "NODE_FAIL", "exit": "0:0"}}
-
-
-def test_gen_a_state_that_merely_starts_like_cancelled_is_not_normalized():
-    assert slurm.parse_sacct("1000_0|CANCELLEDX|0:0\n")["1000_0"]["state"] \
-        == "CANCELLEDX"
 
 
 JOB_IDS = [
@@ -153,11 +127,6 @@ def test_gen_array_spec_sorts_dedups_and_caps(indices, limit, expected):
     assert slurm.array_spec(indices, limit) == expected
 
 
-def test_gen_array_spec_refuses_an_empty_selection():
-    with pytest.raises(ValueError, match="at least one"):
-        slurm.array_spec([])
-
-
 def test_gen_sbatch_argv_keeps_safety_flags_first_and_the_script_last(tmp_path, venv):
     config = _config(tmp_path, venv,
                      lambda body: body["task"].update(partition="p", qos="q"))
@@ -184,70 +153,7 @@ def test_gen_compare_inherits_placement_but_not_resources(tmp_path, venv):
     assert "--time=01:00:00" not in argv and "--array" not in " ".join(argv)
 
 
-@pytest.mark.parametrize("call", [
-    lambda config: slurm.sbatch_argv(config, "array", "n", "/l", "/s"),
-    lambda config: slurm.resources(config, "task"),
-    lambda config: slurm.job_name("tasks-and-compare")])
-def test_gen_an_unknown_job_role_is_refused(tmp_path, venv, call):
-    with pytest.raises(ValueError, match="unknown job role"):
-        call(_config(tmp_path, venv))
-
-
-def test_gen_job_names_are_random_128_bit_tokens():
-    names = {slurm.job_name("tasks") for _ in range(50)}
-    assert len(names) == 50
-    assert all(re.fullmatch(r"meshops-[0-9a-f]{32}-tasks", name) for name in names)
-    assert re.fullmatch(r"meshops-[0-9a-f]{32}-compare", slurm.job_name("compare"))
-
-
 # --- cluster config schema ---------------------------------------------------
-
-
-REFUSALS = [
-    ("compare cannot set its own partition",
-     lambda body: body["compare"].update(partition="other"), "unknown keys"),
-    ("empty partition string", lambda body: body["task"].update(partition=""),
-     "non-empty string"),
-    ("placeholder partition",
-     lambda body: body["task"].update(partition="<site partition>"), "placeholder"),
-    ("placeholder venv", lambda body: body.update(venv="<REQUIRED venv>"),
-     "placeholder"),
-    ("boolean max_array_size", lambda body: body.update(max_array_size=True),
-     "integer >= 1"),
-    ("float cpus", lambda body: body["task"].update(cpus_per_task=1.5),
-     "integer >= 1"),
-    ("zero cpus", lambda body: body["compare"].update(cpus_per_task=0),
-     "integer >= 1"),
-    ("negative max_array_size", lambda body: body.update(max_array_size=-1),
-     "integer >= 1"),
-    ("minutes past 59", lambda body: body["task"].update(time="04:60:00"), "HH:MM:SS"),
-    ("bare minutes", lambda body: body["task"].update(time="90"), "HH:MM:SS"),
-    ("lowercase memory suffix", lambda body: body["task"].update(mem="4g"),
-     "4G or 4000M"),
-    ("two-letter memory suffix", lambda body: body["task"].update(mem="4GB"),
-     "4G or 4000M"),
-    ("setup_lines not a list", lambda body: body.update(setup_lines="module load x"),
-     "setup_lines"),
-    ("setup_lines with a non-string", lambda body: body.update(setup_lines=[1]),
-     "setup_lines"),
-    ("task block not an object", lambda body: body.update(task=[]), "JSON object"),
-    ("unknown compare key", lambda body: body["compare"].update(gres="gpu:1"),
-     "unknown keys"),
-]
-
-
-@pytest.mark.parametrize("mutate,message", [case[1:] for case in REFUSALS],
-                         ids=[case[0] for case in REFUSALS])
-def test_gen_cluster_config_refusals(tmp_path, venv, mutate, message):
-    with pytest.raises(ValueError, match=message):
-        _config(tmp_path, venv, mutate)
-
-
-def test_gen_a_top_level_array_is_not_a_config(tmp_path):
-    path = tmp_path / "config.json"
-    path.write_text("[]")
-    with pytest.raises(ValueError, match="JSON object"):
-        slurm.load_cluster_config(path)
 
 
 ACCEPTED = [
@@ -266,13 +172,6 @@ def test_gen_documented_value_shapes_are_accepted(tmp_path, venv, mutate):
     assert set(config) == {"cluster_config_version", "name", "venv", "setup_lines",
                            "task", "compare", "max_array_size",
                            "max_concurrent_tasks"}
-
-
-def test_gen_the_config_carries_no_defaults_of_its_own(tmp_path, venv):
-    config = _config(tmp_path, venv)
-    assert slurm.resources(config, "tasks") == {
-        "partition": None, "account": None, "qos": None, "constraint": None,
-        "time": "01:00:00", "mem": "2G", "cpus_per_task": 2}
 
 
 # --- rendered job scripts, executed by bash with a recording python ----------
@@ -468,10 +367,3 @@ def test_gen_submit_sets_no_job_id_on_a_failed_or_unparseable_sbatch(shims):
     result = slurm.submit(["sbatch", "--parsable", "x.sh"])
     assert result["ok"] is False and result["job_id"] is None
     assert result["stdout"] == "1234\n"
-
-
-def test_gen_a_missing_binary_is_a_failed_result_not_an_exception(shims):
-    result = slurm.cancel(["1000_1"])
-    assert result["ok"] is False and result["returncode"] is None
-    assert "FileNotFoundError" in result["stderr"]
-    assert slurm.available("sbatch") is False

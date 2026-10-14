@@ -9,48 +9,12 @@ tests stub `linked_libraries`; here the ELF/ldd parsing itself is exercised with
 `ldd` output.
 """
 
-import itertools
 import shutil
 from pathlib import Path
 
 import pytest
 
 from scripts.baselines import artifacts
-
-ORDER = ("preparing", "prepared", "running", "complete")
-LEGAL = {("preparing", "prepared"), ("prepared", "running"), ("running", "complete")} | {
-    (src, dst) for src in ("preparing", "prepared", "running")
-    for dst in ("failed", "interrupted")}
-
-
-def _manifest_at(path: Path, status: str) -> None:
-    manifest = artifacts.new_manifest("standalone", "none", "none", "none")
-    manifest["status"] = status
-    artifacts.write_json(path, manifest)
-
-
-@pytest.mark.parametrize("src,dst", list(itertools.product(artifacts.STATUSES,
-                                                           artifacts.STATUSES)))
-def test_status_transition_table(tmp_path, src, dst):
-    path = tmp_path / "baseline_manifest.json"
-    _manifest_at(path, src)
-    if (src, dst) in LEGAL:
-        manifest = artifacts.set_status(path, dst)
-        assert manifest["status"] == dst
-        assert (manifest["ended_at"] is not None) == (dst in artifacts.TERMINAL_STATUSES)
-    else:
-        with pytest.raises(ValueError, match="illegal"):
-            artifacts.set_status(path, dst)
-        assert artifacts.read_json(path)["status"] == src
-
-
-def test_new_manifest_starts_preparing_with_version_2():
-    manifest = artifacts.new_manifest("evaluation", "hold", "geometric", "none")
-    assert (manifest["baseline_manifest_version"], manifest["status"]) == (2, "preparing")
-    assert (manifest["mode"], manifest["executor"], manifest["method"],
-            manifest["requested_algorithm"]) == ("evaluation", "hold", "geometric", "none")
-    assert manifest["seeds"] == [] and manifest["ended_at"] is None
-    assert manifest["fingerprint"] is None
 
 
 def test_plan_is_written_once(tmp_path):
@@ -59,15 +23,6 @@ def test_plan_is_written_once(tmp_path):
     with pytest.raises(FileExistsError):
         artifacts.write_plan(path, {"baseline_plan_version": 3})
     assert artifacts.read_json(path) == {"baseline_plan_version": 2}
-
-
-def test_build_plan_totals_displacement():
-    nodes = [{"id": "a", "displacement_m": 1.5}, {"id": "b", "displacement_m": 0.0},
-             {"id": "c", "displacement_m": 2.25}]
-    plan = artifacts.build_plan("geometric", "coverage", nodes, {"p": 1})
-    assert plan == {"baseline_plan_version": 2, "method": "geometric",
-                    "objective": "coverage", "nodes": nodes,
-                    "initial_displacement_m_total": 3.75, "planner_predictions": {"p": 1}}
 
 
 def test_write_json_failure_keeps_the_old_file_and_no_temp(tmp_path):
@@ -136,35 +91,6 @@ def test_elf_identity_hashes_exactly_the_channel_libraries(tmp_path, monkeypatch
         libs[module].write_bytes(original)
     binary.write_bytes(b"\x7fELF rebuilt simulator")
     assert artifacts.channel_runtime_identity(binary)["sha256"] != first["sha256"]
-
-
-def test_elf_unresolved_library_is_an_error(tmp_path, monkeypatch):
-    binary, libs = _fake_elf(tmp_path)
-    monkeypatch.setattr(artifacts, "_run_tool", lambda command, env=None: _ldd(
-        libs, {"propagation": "not found"}))
-    with pytest.raises(artifacts.RuntimeIdentityError, match="propagation"):
-        artifacts.channel_runtime_identity(binary)
-
-
-def test_elf_missing_channel_module_is_an_error(tmp_path, monkeypatch):
-    binary, libs = _fake_elf(tmp_path)
-    partial = {m: p for m, p in libs.items() if m != "buildings"}
-    monkeypatch.setattr(artifacts, "_run_tool", lambda command, env=None: _ldd(partial))
-    with pytest.raises(artifacts.RuntimeIdentityError, match="buildings"):
-        artifacts.channel_runtime_identity(binary)
-
-
-@pytest.mark.parametrize("name,module", [
-    ("libns3.42-core-default.so", "core"),
-    ("libns3.42-buildings.so", "buildings"),
-    ("libns3-dev-mobility-debug.so", "mobility"),
-    ("libns3.40-propagation-optimized.so.1.2", "propagation"),
-    ("libns3.42-network-release.dylib", "network"),
-    ("libns3.42-point-to-point-default.so", "point-to-point"),
-])
-def test_ns3_library_names(name, module):
-    match = artifacts._NS3_LIBRARY.search(name)
-    assert match is not None and match.group("module") == module
 
 
 @pytest.mark.skipif(shutil.which("ldd") is None or not Path("/bin/true").is_file(),

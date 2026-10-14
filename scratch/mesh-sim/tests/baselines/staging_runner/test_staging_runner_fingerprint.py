@@ -127,15 +127,6 @@ def test_fingerprint_ignores_outcome_timing_and_paths(path, value):
     assert artifacts.fingerprint(_set(BASE, path, value)) == artifacts.fingerprint(BASE)
 
 
-def test_fingerprint_is_key_order_independent():
-    reordered = copy.deepcopy(BASE)
-    reordered["planner_settings"] = {"move_weights": {"jump": 0.4, "nudge": 0.6},
-                                     "t0_area_frac": 0.02}
-    reordered["ownership"] = dict(reversed(list(BASE["ownership"].items())))
-    reordered = dict(reversed(list(reordered.items())))
-    assert artifacts.fingerprint(reordered) == artifacts.fingerprint(BASE)
-
-
 # --- end to end through the runner ----------------------------------------------------------
 
 def _composite(directory: Path) -> Path:

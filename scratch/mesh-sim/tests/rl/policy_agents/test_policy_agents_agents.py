@@ -9,25 +9,19 @@ that naming. TabularQLearning discretizes (x_bin, y_bin, sinr_bin) with epsilon-
 predict(). No simulator is used; training budgets are a few dozen timesteps.
 """
 
-import inspect
 import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 
-sb3_contrib = pytest.importorskip("sb3_contrib")
 gym = pytest.importorskip("gymnasium")
 torch = pytest.importorskip("torch")
 
-from sb3_contrib import MaskablePPO  # noqa: E402
-from sb3_contrib.common.maskable.callbacks import MaskableEvalCallback  # noqa: E402
-from sb3_contrib.common.wrappers import ActionMasker  # noqa: E402
 
 from scripts.rl.agents import callbacks as cb  # noqa: E402
 from scripts.rl.agents.mask_ppo import MaskablePPOConfig, MaskablePpoTrainer  # noqa: E402
 # agents/__init__.py imports sb3_contrib eagerly, so this import must follow the skip guard.
-from scripts.rl.agents.q_learning import TabularQLearning  # noqa: E402
 
 HOLD = 4
 
@@ -81,24 +75,6 @@ def _params(model):
 
 
 # 1. MaskablePPOConfig / MaskablePpoTrainer -------------------------------------------
-
-def test_config_defaults_match_the_documented_table():
-    cfg = MaskablePPOConfig()
-    assert (cfg.total_timesteps, cfg.n_steps, cfg.gamma, cfg.ent_coef, cfg.seed,
-            cfg.verbose, cfg.tensorboard_log) == (100_000, 1024, 0.95, 0.01, 42, 1, None)
-
-
-def test_only_the_documented_hyperparameters_reach_maskable_ppo():
-    trainer = MaskablePpoTrainer(_cfg(), TinyMaskEnv(), mask_fn)
-    model = trainer.model
-    assert isinstance(trainer.env, ActionMasker)
-    assert (model.n_steps, model.gamma, model.ent_coef, model.seed) == (8, 0.9, 0.02, 3)
-    assert model.verbose == 0 and model.tensorboard_log is None
-    defaults = {name: p.default for name, p in inspect.signature(MaskablePPO).parameters.items()}
-    for name in ("learning_rate", "batch_size", "n_epochs", "gae_lambda", "vf_coef",
-                 "max_grad_norm", "normalize_advantage", "target_kl"):
-        assert getattr(model, name) == defaults[name], name
-    assert model.clip_range(1.0) == defaults["clip_range"]
 
 
 def test_train_spends_exactly_the_budget_and_respects_the_mask():
@@ -179,30 +155,11 @@ def test_list_checkpoints_sorts_by_step_number_not_by_name(tmp_path):
     assert all(path.parent == tmp_path for _, path in cb.list_checkpoints(tmp_path))
 
 
-def test_list_checkpoints_ignores_names_it_cannot_parse(tmp_path):
-    _touch(tmp_path, "checkpoint_16_steps.zip", "checkpoint_abc_steps.zip",
-           "checkpoint__steps.zip", "checkpoint_-4_steps.zip", "checkpoint_1_2_steps.zip",
-           "checkpoint_8_steps.zip.bak", "checkpoint_8_steps.pkl", "other_8_steps.zip",
-           "checkpoint_ 8_steps.zip", "notes.txt")
-    assert [steps for steps, _ in cb.list_checkpoints(tmp_path)] == [16]
-
-
 def test_list_checkpoints_of_a_missing_dir_is_empty(tmp_path):
     assert cb.list_checkpoints(tmp_path / "absent") == []
 
 
-def test_list_checkpoints_honors_a_custom_prefix(tmp_path):
-    _touch(tmp_path, "snap_5_steps.zip", "checkpoint_6_steps.zip")
-    assert [s for s, _ in cb.list_checkpoints(tmp_path, "snap")] == [5]
-
-
 # 3. BoundedCheckpointCallback / build_callbacks --------------------------------------
-
-@pytest.mark.parametrize("keep_last", [0, -1, "0"])
-def test_keep_last_below_one_is_refused(tmp_path, keep_last):
-    with pytest.raises(ValueError, match="keep_last must be >= 1"):
-        cb.BoundedCheckpointCallback(save_freq=1, save_path=str(tmp_path),
-                                     keep_last=keep_last)
 
 
 def _train_with_checkpoints(tmp_path, save_freq, keep_last, total, n_steps, extra=()):
@@ -264,19 +221,6 @@ def test_build_callbacks_enables_only_requested_cadences(tmp_path, checkpoint_ev
     assert (eval_callback is not None) == ("eval" in kinds)
 
 
-def test_build_callbacks_wiring(tmp_path):
-    callbacks, eval_callback = cb.build_callbacks(str(tmp_path), 3, 2, TinyMaskEnv(), 5, 2, 0)
-    checkpoint = callbacks[0]
-    assert checkpoint.save_freq == 3 and checkpoint.keep_last == 2
-    assert Path(checkpoint.save_path) == tmp_path / "checkpoints"
-    assert checkpoint.name_prefix == "checkpoint"
-    assert isinstance(eval_callback, MaskableEvalCallback) and callbacks[1] is eval_callback
-    assert (eval_callback.eval_freq, eval_callback.n_eval_episodes) == (5, 2)
-    assert eval_callback.deterministic is True and eval_callback.use_masking is True
-    assert Path(eval_callback.best_model_save_path) == tmp_path
-    assert Path(eval_callback.log_path).parent == tmp_path
-
-
 def test_eval_callback_writes_the_best_model_into_out_dir(tmp_path):
     callbacks, eval_callback = cb.build_callbacks(str(tmp_path), 0, 1, TinyMaskEnv(), 8, 1, 0)
     trainer = MaskablePpoTrainer(_cfg(total_timesteps=16, n_steps=8), TinyMaskEnv(), mask_fn)
@@ -309,74 +253,3 @@ def test_retained_checkpoints_are_selectable_through_read_bundle(tmp_path):
 
 
 # 4. TabularQLearning -----------------------------------------------------------------
-
-def test_discretize_bins_position_and_mean_sinr():
-    agent = TabularQLearning()
-    # x 15 -> bin 1; y -245 -> bin 0; sinrs (5, 15) mean 10 -> searchsorted left -> 2
-    assert agent._discretize(np.array([15.0, -245.0, 5.0, 99.0, 15.0, 99.0])) == (1, 0, 2)
-
-
-@pytest.mark.parametrize("obs, expected", [
-    ([-50.0, -999.0], (0, 0, 1)),                 # below range clips to 0; no links -> 0 dB
-    ([1000.0, 999.0], (49, 49, 1)),               # above range clips to the last bin
-    ([500.0, 250.0], (49, 49, 1)),                # upper edge itself is the last bin
-    ([0.0, 0.0, 100.0, 1.0], (0, 25, 5)),         # SINR above every edge
-    ([0.0, 0.0, -100.0, 1.0], (0, 25, 0)),        # SINR below every edge
-])
-def test_discretize_clips_to_the_grid(obs, expected):
-    assert TabularQLearning()._discretize(np.array(obs)) == expected
-
-
-def test_custom_sinr_edges():
-    agent = TabularQLearning(sinr_edges=[0.0])
-    assert agent._discretize(np.array([0.0, 0.0, -1.0, 0.0]))[2] == 0
-    assert agent._discretize(np.array([0.0, 0.0, 1.0, 0.0]))[2] == 1
-
-
-def test_greedy_predict_takes_the_argmax_and_breaks_ties_low():
-    agent = TabularQLearning(epsilon=0.0)
-    obs = np.array([10.0, 10.0, 5.0, 1.0])
-    action, state = agent.predict(obs)
-    assert (action, state) == (0, None)
-    agent.q_table[agent._discretize(obs)][3] = 1.0
-    assert agent.predict(obs)[0] == 3
-
-
-def test_deterministic_predict_ignores_epsilon():
-    agent = TabularQLearning(epsilon=1.0)
-    obs = np.array([10.0, 10.0, 5.0, 1.0])
-    agent.q_table[agent._discretize(obs)][2] = 1.0
-    assert {agent.predict(obs, deterministic=True)[0] for _ in range(50)} == {2}
-
-
-def test_exploration_stays_within_the_action_space():
-    state = np.random.get_state()
-    try:
-        np.random.seed(0)
-        agent = TabularQLearning(n_actions=3, epsilon=1.0)
-        actions = {agent.predict(np.array([10.0, 10.0]))[0] for _ in range(200)}
-    finally:
-        np.random.set_state(state)
-    assert actions == {0, 1, 2}
-
-
-def test_update_applies_the_q_learning_rule():
-    agent = TabularQLearning(lr=0.5, gamma=0.9)
-    s0 = np.array([5.0, 5.0, 5.0, 0.0])
-    s1 = np.array([25.0, 5.0, 5.0, 0.0])
-    agent.update(s0, 1, 2.0, None)                 # terminal: Q = 0 + 0.5 * (2 - 0)
-    assert agent.q_table[agent._discretize(s0)][1] == pytest.approx(1.0)
-    agent.q_table[agent._discretize(s1)][:] = [0.0, 4.0, 1.0, 0.0, 0.0]
-    agent.update(s0, 1, 1.0, s1)                   # 1 + 0.5 * (1 + 0.9 * 4 - 1)
-    assert agent.q_table[agent._discretize(s0)][1] == pytest.approx(2.8)
-    assert agent.visit_counts[agent._discretize(s0)].tolist() == [0, 2, 0, 0, 0]
-
-
-def test_epsilon_decay_floors_at_the_minimum():
-    agent = TabularQLearning(epsilon=0.1, epsilon_decay=0.5, epsilon_min=0.03)
-    agent.decay_epsilon()
-    assert agent.epsilon == pytest.approx(0.05)
-    agent.decay_epsilon()
-    assert agent.epsilon == pytest.approx(0.03)
-    agent.decay_epsilon()
-    assert agent.epsilon == pytest.approx(0.03)

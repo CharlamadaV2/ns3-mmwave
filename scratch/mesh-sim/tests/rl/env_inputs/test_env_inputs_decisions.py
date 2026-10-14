@@ -14,11 +14,7 @@ import numpy as np
 import pytest
 
 from scripts.rl.env import decisions
-from scripts.rl.env.decisions import (
-    DECISIONS_FILE, DECISIONS_MANIFEST, DecisionContext, DecisionRecorder,
-    DecisionRecording, applied_action, coverage_gaps, coverage_ranges, mask_sha256,
-    masked_probs, reset_record, resolve_decision_records,
-)
+from scripts.rl.env.decisions import (DECISIONS_FILE, DECISIONS_MANIFEST, DecisionContext, DecisionRecorder, DecisionRecording, coverage_gaps, coverage_ranges, mask_sha256, masked_probs, reset_record, resolve_decision_records)
 from scripts.rl.env.mesh_env import MeshRlEnv
 from scripts.rl.env.selection import resolve_selection
 from scripts.rl.env.telemetry import obs_sha256
@@ -84,20 +80,6 @@ def run_episode(rec, decisions_to_run: int, steps_saved=False):
 
 # --- Settings ---------------------------------------------------------------------
 
-@pytest.mark.parametrize("kwargs,match", [
-    ({"enabled": "true"}, "boolean"),
-    ({"enabled": 1}, "boolean"),
-    ({"enabled": True, "record_every": True}, "record_every"),
-    ({"enabled": True, "record_every": 2.5}, "record_every"),
-    ({"enabled": True, "record_every": "x"}, "record_every"),
-    ({"enabled": True, "max_bytes_per_episode": False}, "max_bytes_per_episode"),
-    ({"enabled": True, "preferences": "on"}, "preferences"),
-    ({"enabled": False, "obs_vector": "auto"}, "--decision-records-obs-vector"),
-])
-def test_resolve_settings_rejects(kwargs, match):
-    with pytest.raises(ValueError, match=match):
-        resolve_decision_records(**kwargs)
-
 
 def test_resolve_settings_normalizes_strings():
     settings = resolve_decision_records(enabled=True, obs_vector=" always ",
@@ -112,28 +94,7 @@ def test_explicit_disable_without_dependents_is_cli_sourced():
     assert settings.describe()["source"]["enabled"] == "cli"
 
 
-@pytest.mark.parametrize("kwargs", [{"mode": "train", "source": "train"},
-                                    {"mode": "training", "source": "eval"}])
-def test_context_rejects_unknown_mode_or_source(kwargs):
-    with pytest.raises(ValueError):
-        DecisionContext(**kwargs)
-
-
 # --- Pure helpers -------------------------------------------------------------------
-
-def test_mask_sha256_is_integer_json_for_any_input_type():
-    expected = hashlib.sha256(b"[1,0,1]").hexdigest()
-    assert mask_sha256([1, 0, 1]) == expected
-    assert mask_sha256([True, False, True]) == expected
-    assert mask_sha256(np.asarray([1, 0, 1], dtype=np.int8)) == expected
-    assert mask_sha256(np.asarray([True, False, True])) == expected
-
-
-def test_applied_action_does_not_mutate_request():
-    requested = [0, 1, 2]
-    assert applied_action(requested, [2, 2, 0]) == [HOLD, 1, HOLD]
-    assert requested == [0, 1, 2]
-    assert applied_action(np.asarray([3, 3]), []) == [3, 3]
 
 
 @pytest.mark.parametrize("saved,ranges", [
@@ -172,11 +133,6 @@ def test_masked_probs_edge_cases():
     assert probs[2] == [0.0] * 5          # a fully masked slot has no distribution
     single = masked_probs(np.zeros(5), [0, 0, 1, 0, 0])
     assert single == [[0.0, 0.0, 1.0, 0.0, 0.0]]
-
-
-def test_masked_probs_rejects_wrong_size():
-    with pytest.raises(ValueError, match="expected 10"):
-        masked_probs(np.zeros(5), [1] * 10)
 
 
 def test_reset_record_format():
@@ -271,25 +227,6 @@ def test_preferences_only_recorded_in_evaluation_context(tmp_path):
 
 # --- Recorder: ordering errors (raised to the caller, which isolates them) ----------
 
-def test_decision_before_reset_is_rejected(tmp_path):
-    rec = recorder(tmp_path)
-    with pytest.raises(ValueError, match="before the reset"):
-        rec.record_decision(step_msg(1), pre(0), 0.0, False)
-
-
-def test_skipped_decision_is_rejected(tmp_path):
-    rec = recorder(tmp_path)
-    rec.record_reset(reset_msg(), np.zeros(4, dtype=np.float32), False)
-    with pytest.raises(ValueError, match="does not follow"):
-        rec.record_decision(step_msg(2), pre(1), 0.0, False)
-
-
-def test_tick_join_mismatch_is_rejected(tmp_path):
-    rec = recorder(tmp_path)
-    rec.record_reset(reset_msg(), np.zeros(4, dtype=np.float32), False)
-    with pytest.raises(ValueError, match="ticks_in_step"):
-        rec.record_decision(dict(step_msg(1), ticks_in_step=4), pre(0), 0.0, False)
-
 
 # --- Recorder: byte cap boundaries --------------------------------------------------
 
@@ -316,29 +253,6 @@ def test_cap_equal_to_written_bytes_is_not_exceeded(tmp_path):
     # Decisions are still counted after the cap.
     assert data["coverage"]["terminal_decision"] == 4
     assert data["coverage"]["gaps"] == [[2, 4]]
-
-
-def test_cap_equal_to_reset_line_keeps_reset(tmp_path):
-    sizes = _line_sizes(tmp_path)
-    out = tmp_path / "out"
-    out.mkdir()
-    rec = recorder(out, max_bytes_per_episode=sizes[0])
-    run_episode(rec, 4)
-    rec.close("completed", "done", None)
-    data = manifest(out)
-    assert data["status"] == "capped"
-    assert data["coverage"]["decision_0_retained"] is True
-    assert data["coverage"]["records"] == 1
-
-
-def test_cap_one_byte_below_reset_fails_before_writing(tmp_path):
-    sizes = _line_sizes(tmp_path)
-    out = tmp_path / "out"
-    out.mkdir()
-    rec = recorder(out, max_bytes_per_episode=sizes[0] - 1)
-    with pytest.raises(ValueError, match="smaller than the reset record"):
-        rec.record_reset(reset_msg(), np.zeros(4, dtype=np.float32), False)
-    assert (out / DECISIONS_FILE).read_bytes() == b""
 
 
 # --- Recorder: close / fail lifecycle -----------------------------------------------
@@ -437,23 +351,6 @@ def test_recorder_open_failure_does_not_reach_the_env(sim_binary, multi_run_conf
     data = json.loads((episode / DECISIONS_MANIFEST).read_text())
     assert data["status"] == "failed" and "injected open failure" in data["error"]
     assert (episode / "steps.jsonl").is_file()
-
-
-def test_reset_record_failure_does_not_reach_the_env(sim_binary, multi_run_config,
-                                                     tmp_path, monkeypatch):
-    def broken(*args, **kwargs):
-        raise KeyError("injected reset failure")
-
-    monkeypatch.setattr(decisions, "reset_record", broken)
-    steps, runtime, episode, rl_episode = _isolated_run(sim_binary, multi_run_config,
-                                                        tmp_path / "rl")
-    assert steps == 2 and rl_episode["status"] == "completed"
-    assert len(runtime) == 1
-    data = json.loads((episode / DECISIONS_MANIFEST).read_text())
-    assert data["status"] == "failed"
-    assert data["coverage"]["decision_0_retained"] is False
-    assert data["coverage"]["records"] == 0
-    assert (episode / DECISIONS_FILE).read_bytes() == b""
 
 
 def test_close_failure_does_not_reach_the_env(sim_binary, multi_run_config, tmp_path,

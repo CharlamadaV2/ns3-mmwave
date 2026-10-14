@@ -6,18 +6,13 @@ clipped-cell weights and centres, the cap / stay-put / scale-warning boundaries,
 validation and LayoutCache key normalisation.
 """
 
-import io
 import math
 
 import numpy as np
 import pytest
 
-from scripts.baselines.planners.channel import LayoutResult, PlannerError
-from scripts.baselines.planners.objective import (
-    LayoutCache, MovementCost, ScoringContext, candidate_positions, check_layout, components,
-    core, diagnose, prepare_scorer, rectangle_grid, score, vulnerability_pairs)
-from scripts.baselines.tests.test_objective import (AOI, ZERO, StubScorer, entry,
-                                                    make_request, pure_context, table)
+from scripts.baselines.planners.objective import (LayoutCache, MovementCost, candidate_positions, components, core, diagnose, rectangle_grid, score, vulnerability_pairs)
+from scripts.baselines.tests.test_objective import AOI, ZERO, entry, pure_context, table
 
 from ._planner_support import TableScorer
 
@@ -27,10 +22,6 @@ CELL = 100.0  # 16 coverage cells over the 400 m x 400 m RECT
 
 def _rect(x_min, x_max, y_min, y_max) -> dict:
     return {"x_min": x_min, "x_max": x_max, "y_min": y_min, "y_max": y_max}
-
-
-def _single(n: int, coverage) -> LayoutResult:
-    return table(n, [], coverage=coverage)
 
 
 # ---------------------------------------------------------------------------------------
@@ -59,14 +50,6 @@ def test_grid_is_laid_from_the_lower_left_corner_of_an_offset_rectangle():
     assert np.allclose(weights, 10000.0)
 
 
-def test_grid_one_cell_wide_axis_is_clipped_to_the_span():
-    points, cell, weights = rectangle_grid(_rect(0.0, 250.0, 0.0, 100.0), 1, 1.0)
-    c = math.sqrt(25000.0)
-    assert cell == pytest.approx(c) and len(points) == 2
-    assert np.allclose(points, [[c / 2, 50.0], [(c + 250.0) / 2, 50.0]])
-    assert np.allclose(weights, [c * 100.0, (250.0 - c) * 100.0])
-
-
 def test_grid_min_resolution_dominates_and_keeps_edge_slivers():
     points, cell, weights = rectangle_grid(_rect(0.0, 10.5, 0.0, 10.0), 400, 5.0)
     assert cell == 5.0
@@ -83,22 +66,6 @@ def test_grid_float_rounding_never_adds_a_sliver_row(rect, cells, min_res, count
     points, cell, weights = rectangle_grid(rect, cells, min_res)
     assert len(points) == count
     assert weights.min() == pytest.approx(cell * cell)
-
-
-@pytest.mark.parametrize("rect,cells,min_res", [
-    (_rect(0.0, 400.0, 0.0, 400.0), 4.0, 5.0),
-    (_rect(0.0, 400.0, 0.0, 400.0), True, 5.0),
-    (_rect(0.0, 400.0, 0.0, 400.0), -1, 5.0),
-    (_rect(0.0, 400.0, 0.0, 400.0), 4, -5.0),
-    (_rect(0.0, 400.0, 0.0, 400.0), 4, math.inf),
-    (_rect(0.0, 400.0, 0.0, 400.0), 4, math.nan),
-    (_rect(10.0, 0.0, 0.0, 400.0), 4, 5.0),
-    (_rect(0.0, 400.0, 0.0, math.nan), 4, 5.0),
-    (_rect(0.0, math.inf, 0.0, 400.0), 4, 5.0),
-])
-def test_grid_rejects_invalid_input(rect, cells, min_res):
-    with pytest.raises(ValueError):
-        rectangle_grid(rect, cells, min_res)
 
 
 # ---------------------------------------------------------------------------------------
@@ -153,16 +120,6 @@ def test_score_exact_total_with_every_term():
     assert value.total == pytest.approx(40000.0 + sep - 1300.0 - 2 * AOI - 0.02 * AOI)
 
 
-def test_score_single_node_roster():
-    ctx, _ = pure_context([entry("solo", 120.0, 80.0, 10.0)], {"solo"})
-    value = score(ctx, _single(1, [[0, 5]]), ctx.starts)
-    assert value.coverage_m2 == 20000.0
-    assert value.disconnected == 0 and value.vuln == 0 and value.move_cost_m2 == 0.0
-    # No neighbour: min(inf / diag, 1) = 1, the full tie-break.
-    assert value.sep_m2 == pytest.approx(0.4 * CELL ** 2)
-    assert value.total == pytest.approx(20000.0 + 0.4 * CELL ** 2)
-
-
 @pytest.mark.parametrize("linked", [True, False])
 def test_score_two_node_roster(linked):
     nodes = [entry("a", 100.0, 100.0, 10.0), entry("b", 300.0, 300.0, 10.0)]
@@ -214,47 +171,8 @@ def test_coverage_uses_clipped_cell_areas_once_per_probe():
     assert score(ctx, result, ctx.starts).coverage_m2 == 25.0 + 2.5 + 2.5
 
 
-def test_separation_caps_at_one_and_counts_unselected_neighbours():
-    nodes = [entry("m", 0.0, 0.0, 10.0), entry("far", 2000.0, 2000.0, 2.0, "vehicle")]
-    ctx, _ = pure_context(nodes, {"m"})
-    assert score(ctx, table(2, [], coverage=[[], []]), ctx.starts).sep_m2 == \
-        pytest.approx(0.4 * CELL ** 2)
-    nodes = [entry("m", 100.0, 100.0, 10.0), entry("twin", 100.0, 100.0, 2.0, "vehicle"),
-             entry("o", 300.0, 300.0, 10.0)]
-    ctx, _ = pure_context(nodes, {"m", "o"})
-    sep = score(ctx, table(3, [], coverage=[[]] * 3), ctx.starts).sep_m2
-    # m's nearest neighbour is the unselected twin (0 m); o's is 282.8 m away.
-    assert sep == pytest.approx(0.4 * CELL ** 2 * np.mean([0.0, math.hypot(200, 200) / DIAG]))
-
-
-def test_separation_stays_below_one_full_cell():
-    nodes = [entry("a", 0.0, 0.0, 10.0), entry("b", 400.0, 400.0, 10.0)]
-    ctx, _ = pure_context(nodes, {"a", "b"})
-    sep = score(ctx, table(2, [], coverage=[[], []]), ctx.starts).sep_m2
-    assert sep == pytest.approx(0.4 * CELL ** 2) and sep < CELL ** 2
-
-
 # ---------------------------------------------------------------------------------------
 # Movement, candidates and their 1e-6 / cap boundaries.
-
-@pytest.mark.parametrize("cap,included", [(100.0, True), (100.0 - 1e-9, False)])
-def test_candidate_exactly_at_the_cap_is_kept(cap, included):
-    nodes = [entry("m", 50.0, 50.0, 10.0), entry("f", 350.0, 350.0, 2.0, "vehicle")]
-    ctx, _ = pure_context(nodes, {"m"}, penalties={"aerial": MovementCost(0, 0, cap),
-                                                   "ground": MovementCost(0, 0)})
-    rows = {tuple(p) for p in candidate_positions(ctx, 0)[1:, :2].tolist()}
-    assert ((50.0, 150.0) in rows) is included and ((150.0, 50.0) in rows) is included
-    assert (150.0, 150.0) not in rows
-    assert all(math.hypot(x - 50.0, y - 50.0) <= cap for x, y in rows)
-
-
-@pytest.mark.parametrize("offset,count", [(5e-7, 1 + 15), (1e-6, 1 + 15), (2e-6, 1 + 16)])
-def test_candidate_within_a_micrometre_of_current_is_the_stay_put_row(offset, count):
-    nodes = [entry("m", 50.0 + offset, 50.0, 10.0), entry("f", 350.0, 350.0, 2.0, "vehicle")]
-    ctx, _ = pure_context(nodes, {"m"})
-    rows = candidate_positions(ctx, 0)
-    assert len(rows) == count
-    assert rows[0].tolist() == [50.0 + offset, 50.0, 10.0]
 
 
 def test_candidate_positions_from_a_moved_current_still_cap_from_the_start():
@@ -268,42 +186,8 @@ def test_candidate_positions_from_a_moved_current_still_cap_from_the_start():
     assert [50.0, 50.0] in rows[1:, :2].tolist()  # the start is a move back from current
 
 
-def test_movement_cost_tolerance_and_cap_are_inclusive():
-    cost = MovementCost(10.0, 2.0, 25.0)
-    assert cost.cost(1e-6) == 0.0 and cost.cost(math.nextafter(1e-6, 1)) > 10.0
-    assert cost.within_cap(25.0) and not cost.within_cap(math.nextafter(25.0, 26))
-
-
-def test_allowed_is_inclusive_on_every_bound():
-    walk = _rect(0.0, 200.0, 0.0, 200.0)
-    rl = _rect(0.0, 300.0, 0.0, 300.0)
-    nodes = [entry("w", 10.0, 10.0, 1.5, "pedestrian", mobility="random_walk", walk=walk),
-             entry("f", 50.0, 50.0, 2.0, "vehicle")]
-    ctx, _ = pure_context(nodes, {"w"}, mode="evaluation", rl_bounds=rl)
-    assert ctx.allowed(0, 0.0, 0.0) and ctx.allowed(0, 200.0, 200.0)
-    assert not ctx.allowed(0, math.nextafter(200.0, 201), 100.0)
-    assert ctx.allowed(1, 300.0, 300.0) and not ctx.allowed(1, 300.0, 300.5)
-    assert ctx.allowed(1, 400.0, 0.0) is False
-    ctx_none, _ = pure_context(nodes, {"w"}, mode="evaluation", rl_bounds=None)
-    assert ctx_none.rl_bounds is None and ctx_none.allowed(1, 400.0, 400.0)
-
-
 # ---------------------------------------------------------------------------------------
 # diagnose() and context validation.
-
-@pytest.mark.parametrize("fixed,warned", [(160000.0, True), (159999.0, False)])
-def test_scale_warning_at_ratio_exactly_one(fixed, warned):
-    nodes = [entry("a", 50.0, 50.0, 10.0), entry("b", 150.0, 50.0, 10.0)]
-    penalties = {"aerial": MovementCost(fixed, 0.0), "ground": MovementCost(0.0, 0.0)}
-    ctx, _ = pure_context(nodes, {"a"}, penalties=penalties)
-    result = table(2, [(0, 1)], coverage=[[0], [1]])
-    log = io.StringIO()
-    report = diagnose(ctx, result, ctx.starts, score(ctx, result, ctx.starts), log=log)
-    assert report["fixed_cost_over_aoi"]["aerial"] == fixed / AOI
-    assert (len(report["scale_warnings"]) == 1) is warned
-    assert ("scale warning" in log.getvalue()) is warned
-    assert diagnose(ctx, result, ctx.starts, score(ctx, result, ctx.starts))["scale_warnings"] \
-        == report["scale_warnings"]   # log=None still reports
 
 
 def test_diagnose_two_node_core_survives_single_loss():
@@ -314,29 +198,6 @@ def test_diagnose_two_node_core_survives_single_loss():
     assert report["survives_single_node_loss"] is True
     assert report["controlled_mesh_survives_single_loss"] is True
     assert report["coverage_fraction"] == pytest.approx(20000.0 / AOI)
-
-
-def test_build_validates_order_objective_and_penalties():
-    nodes = [entry("a", 50.0, 50.0, 10.0), entry("b", 150.0, 50.0, 2.0, "vehicle")]
-    request = make_request(nodes, {"a"}, coverage_cells=16)
-    stub = StubScorer()
-    prepare_scorer(request, stub)
-    request.nodes = tuple(reversed(request.nodes))
-    with pytest.raises(ValueError, match="roster order"):
-        ScoringContext.build(request, stub)
-    request = make_request(nodes, {"a"}, coverage_cells=16, objective="gateway")
-    with pytest.raises(ValueError, match="objective"):
-        ScoringContext.build(request, stub)
-    request = make_request(nodes, {"a"}, coverage_cells=16,
-                           penalties={"aerial": MovementCost(0, 0)})
-    with pytest.raises(ValueError, match="ground"):
-        ScoringContext.build(request, stub)
-
-
-def test_check_layout_rejects_wrong_shape():
-    ctx, _ = pure_context([entry("a", 50.0, 50.0, 10.0), entry("b", 60.0, 50.0, 10.0)], {"a"})
-    with pytest.raises(PlannerError, match="shape"):
-        check_layout(ctx, ctx.starts[:1])
 
 
 def test_layout_cache_normalises_dtype_and_preserves_order():

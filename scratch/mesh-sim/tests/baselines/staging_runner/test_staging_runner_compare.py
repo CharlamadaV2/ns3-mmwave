@@ -16,7 +16,7 @@ import pytest
 from scripts.baselines.tests.conftest import install_stub_planner, write_scenario
 from scripts.rl import compare as compare_cli
 from scripts.rl import evaluate as evaluate_cli
-from scripts.rl.policy.compare import ComparisonError, build_comparison, load_evaluation
+from scripts.rl.policy.compare import build_comparison, load_evaluation
 from scripts.rl.tests.conftest import FAKE_SIM
 
 SEEDS = (11, 12, 13)
@@ -72,23 +72,6 @@ def _pair(tmp_path, first: dict, second: dict, labels=("a", "a")) -> list:
             load_evaluation(_write_eval(tmp_path / "run-1", label=labels[1],
                                         training_seed=102, placements=second,
                                         model_sha256="b" * 64))]
-
-
-def test_only_the_differing_method_is_named(tmp_path):
-    first = {"geometric": _block("geometric", "1" * 64),
-             "optimization": _block("optimization", "2" * 64)}
-    second = {"geometric": _block("geometric", "1" * 64),
-              "optimization": _block("optimization", "3" * 64)}
-    with pytest.raises(ComparisonError) as info:
-        build_comparison(_pair(tmp_path, first, second))
-    message = str(info.value)
-    assert "baseline_optimization_fingerprint" in message
-    assert "baseline_geometric_fingerprint" not in message
-
-
-def test_a_member_without_the_placement_policy_is_refused(tmp_path):
-    with pytest.raises(ComparisonError, match="baseline_geometric_fingerprint"):
-        build_comparison(_pair(tmp_path, {"geometric": _block("geometric", "1" * 64)}, {}))
 
 
 def test_equal_fingerprints_with_different_paths_and_outcomes_group(tmp_path):

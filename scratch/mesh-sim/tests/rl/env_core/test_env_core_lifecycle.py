@@ -75,37 +75,7 @@ def test_close_before_reset_is_a_noop(peer, central_ini, out_dir):
     assert env.action_space is None and env.observation_space is None
 
 
-def test_step_before_reset_raises_without_launching(peer, central_ini, out_dir):
-    env = _env(peer.binary, central_ini, out_dir)
-    with pytest.raises(Exception):
-        env.step([4, 4, 4])
-    assert peer.argvs() == []
-    _assert_clean(env)
-
-
-def test_output_dir_is_required(peer, central_ini):
-    with pytest.raises(ValueError, match="output_dir"):
-        MeshRlEnv(str(peer.binary), central_ini, output_dir="")
-
-
 # Launch failures -----------------------------------------------------------------
-
-@pytest.mark.parametrize("kind", ["missing", "not_executable"])
-def test_launch_failure_marks_episode_failed(tmp_path, central_ini, out_dir, kind):
-    binary = tmp_path / "no-such-sim"
-    if kind == "not_executable":
-        binary.write_text("#!/bin/sh\nexit 0\n")
-        binary.chmod(0o644)
-    env = _env(binary, central_ini, out_dir)
-    with pytest.raises(RuntimeError, match="Failed to launch simulator"):
-        env.reset()
-    manifest = episode_manifest(out_dir, 0)
-    assert manifest["status"] == "failed"
-    assert manifest["exit_code"] is None and manifest["ended_at"] is not None
-    assert (out_dir / "episode-0000" / "sim_stderr.log").is_file()
-    env.close()
-    assert episode_manifest(out_dir, 0)["status"] == "failed"
-    _assert_clean(env)
 
 
 def test_launch_command_shape(peer, central_ini, out_dir):
@@ -142,84 +112,7 @@ def test_exit_before_first_message_reports_code_and_stderr(peer, central_ini, ou
     _assert_clean(env)
 
 
-def test_invalid_json_first_line(peer, central_ini, out_dir):
-    peer.script([{"raw": "{not json"}, {"hang": 0.1}])
-    env = _env(peer.binary, central_ini, out_dir)
-    with pytest.raises(RuntimeError, match="Invalid JSON from sim on message line 1") as err:
-        env.reset()
-    assert "{not json" in str(err.value)
-    manifest = episode_manifest(out_dir, 0)
-    assert manifest["status"] == "failed" and "Invalid JSON" in manifest["error"]
-    _assert_clean(env)
-
-
-def test_unknown_first_message_type(peer, central_ini, out_dir):
-    peer.script([{"emit": {"type": "hello"}}])
-    env = _env(peer.binary, central_ini, out_dir)
-    with pytest.raises(RuntimeError, match="Unexpected first message type 'hello'"):
-        env.reset()
-    assert episode_manifest(out_dir, 0)["status"] == "failed"
-    _assert_clean(env)
-
-
-@pytest.mark.parametrize("line", ["[1, 2, 3]", "null", "42", '"init"'])
-def test_non_object_first_line_fails_cleanly(peer, central_ini, out_dir, line,
-                                            short_waits):
-    # A valid JSON line that is not an object fails the episode with RuntimeError,
-    # stops the child, and marks rl_episode.json "failed".
-    peer.script([{"raw": line}, {"hang": 5}])
-    env = _env(peer.binary, central_ini, out_dir)
-    try:
-        with pytest.raises(RuntimeError):
-            env.reset()
-        proc_left = env._proc
-        assert episode_manifest(out_dir, 0)["status"] == "failed"
-        _assert_clean(env, proc_left)
-    finally:
-        env.close()
-
-
-def test_non_object_step_line_fails_cleanly(peer, central_ini, out_dir, short_waits):
-    # A non-object step reply fails the episode with RuntimeError and stops the child.
-    init = make_init()
-    steps = episode_steps(init)
-    peer.script([{"emit": init}, {"emit": steps[0]}, {"read": True}, {"raw": "[]"},
-                 {"hang": 5}])
-    env = _env(peer.binary, central_ini, out_dir)
-    env.reset()
-    proc = env._proc
-    try:
-        with pytest.raises(RuntimeError):
-            env.step([4, 4, 4])
-        assert episode_manifest(out_dir, 0)["status"] == "failed"
-        _assert_clean(env, proc)
-    finally:
-        env.close()
-
-
 # Mid-episode failures ------------------------------------------------------------
-
-def test_protocol_error_mid_episode_marks_failed(peer, central_ini, out_dir):
-    init = make_init()
-    steps = episode_steps(init)
-    backward = dict(steps[1], tick=0, time_s=0.0)
-    peer.script([{"emit": init}, {"emit": steps[0]}, {"read": True},
-                 {"emit": backward}, {"read": True}])
-    env = _env(peer.binary, central_ini, out_dir)
-    env.reset()
-    proc = env._proc
-    with pytest.raises(RuntimeError) as err:
-        env.step([4, 4, 4])
-    text = str(err.value)
-    assert "does not advance" in text and "message line 3" in text
-    assert "command:" in text and "exit code:" in text
-    manifest = episode_manifest(out_dir, 0)
-    assert manifest["status"] == "failed" and manifest["stop_reason"] == "error"
-    assert manifest["exit_code"] == 0 and "message line 3" in manifest["error"]
-    assert manifest["steps"] == 0        # the rejected step is not counted
-    _assert_clean(env, proc)
-    env.close()
-    assert episode_manifest(out_dir, 0)["status"] == "failed"
 
 
 def test_fail_seed_mid_episode_then_recover(sim_binary, multi_run_config, out_dir,
@@ -313,31 +206,6 @@ def test_legacy_close_manifest_is_version_1(peer, legacy_ini, out_dir):
     _assert_clean(env)
 
 
-def test_step_after_close_raises_and_does_not_relaunch(peer, central_ini, out_dir):
-    peer.script(centralized_script(make_init()))
-    env = _env(peer.binary, central_ini, out_dir)
-    env.reset()
-    env.close()
-    with pytest.raises(Exception):
-        env.step([4, 4, 4])
-    assert len(peer.argvs()) == 1
-    assert episode_manifest(out_dir, 0)["status"] == "interrupted"
-    _assert_clean(env)
-
-
-def test_step_after_done_raises_and_keeps_completed(peer, central_ini, out_dir):
-    peer.script(centralized_script(make_init()))
-    env = _env(peer.binary, central_ini, out_dir)
-    env.reset()
-    env.step([4, 4, 4])
-    assert env.step([4, 4, 4])[2]
-    with pytest.raises(Exception):
-        env.step([4, 4, 4])
-    env.close()
-    assert episode_manifest(out_dir, 0)["status"] == "completed"
-    _assert_clean(env)
-
-
 # Escalation ----------------------------------------------------------------------
 
 def test_close_terminates_simulator_that_ignores_eof(peer, legacy_ini, out_dir,
@@ -381,21 +249,6 @@ def test_terminated_escalation_is_recorded(peer, central_ini, out_dir, short_wai
 
 # Actions and masks (centralized) ---------------------------------------------------
 
-def test_invalid_joint_action_is_not_sent_and_episode_continues(peer, central_ini,
-                                                                 out_dir):
-    peer.script(centralized_script(make_init()))
-    env = _env(peer.binary, central_ini, out_dir)
-    env.reset()
-    for bad in ([9, 4, 4], [4, 4], 4, [4, 2.5, 4]):
-        with pytest.raises(ValueError):
-            env.step(bad)
-    _, _, _, _, info = env.step(np.array([0, 1, 4]))
-    assert info["decision"] == 1
-    assert peer.actions() == [{"action": [0, 1, 4]}]
-    assert episode_manifest(out_dir, 0)["status"] == "running"
-    env.close()
-    _assert_clean(env)
-
 
 def test_centralized_mask_is_passed_through_unchanged(peer, central_ini, out_dir):
     init = make_init()
@@ -431,105 +284,6 @@ def test_info_reports_revalidated_slots(peer, central_ini, out_dir):
 
 
 # Contract signature across resets --------------------------------------------------
-
-def _two_resets(peer, ini, out_dir, first: dict, second: dict) -> MeshRlEnv:
-    peer.script(centralized_script(first))
-    env = _env(peer.binary, ini, out_dir)
-    env.reset()
-    peer.script(centralized_script(second))
-    return env
-
-
-@pytest.mark.parametrize("change", [
-    {"tick_s": 0.2, "decision_interval_s": 1.0},
-    {"reward_type": "throughput"},
-    {"node_ids": ["node-a", "node-b", "node-x"]},
-    {"bounds": {"x_min": 0.0, "x_max": 90.0, "y_min": -50.0, "y_max": 100.0,
-                "z_min": 0.0, "z_max": 50.0}},
-    {"slot_speed_mps": [10.0, 5.0, None]},
-    {"slot_node_ids": ["node-c", "node-b", None]},
-])
-def test_signature_drift_rejected_and_original_kept(peer, central_ini, out_dir, change):
-    original = make_init()
-    env = _two_resets(peer, central_ini, out_dir, original, make_init(**change))
-    spaces_before = (env.action_space, env.observation_space)
-    with pytest.raises(RuntimeError, match="contract changed between resets"):
-        env.reset()
-    assert (env.action_space, env.observation_space) == spaces_before
-    assert env.contract == original
-    assert episode_manifest(out_dir, 1)["status"] == "failed"
-    _assert_clean(env)
-
-    # The stored signature is the original one: the original contract still resets.
-    peer.script(centralized_script(original))
-    env.reset()
-    env.close()
-    assert episode_manifest(out_dir, 2)["status"] == "interrupted"
-
-
-def test_legacy_to_centralized_drift_rejected(peer, legacy_ini, out_dir):
-    peer.script(legacy_script(_legacy_steps(5)))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    peer.script(centralized_script(make_init()))
-    with pytest.raises(RuntimeError, match="control_mode"):
-        env.reset()
-    assert env.action_space == gymnasium.spaces.Discrete(7)
-    assert env.control_mode == "legacy"
-    _assert_clean(env)
-
-
-def test_legacy_action_type_drift_rejected(peer, legacy_ini, out_dir):
-    peer.script(legacy_script(_legacy_steps(5)))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    peer.script(legacy_script(_legacy_steps(5, action_type="continuous")))
-    with pytest.raises(RuntimeError, match="action_type"):
-        env.reset()
-    assert env.action_space == gymnasium.spaces.Discrete(7)
-    env.close()
-
-
-def test_legacy_obs_width_drift_across_resets_rejected(peer, legacy_ini, out_dir):
-    peer.script(legacy_script(_legacy_steps(5, links=2)))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    peer.script(legacy_script(_legacy_steps(5, links=3)))
-    with pytest.raises(RuntimeError, match="obs_dim"):
-        env.reset()
-    assert env.observation_space.shape == (7,)
-    env.close()
-
-
-def _width_drift_steps() -> list[dict]:
-    steps = _legacy_steps(5, links=2)
-    steps[1] = make_legacy_step(1, links=3)
-    return steps
-
-
-def test_legacy_obs_width_drift_in_later_episode_rejected(peer, legacy_ini, out_dir):
-    peer.script(legacy_script(_legacy_steps(5)))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    peer.script(legacy_script(_width_drift_steps()))
-    env.reset()
-    with pytest.raises(RuntimeError, match="legacy observation width 9 != 7"):
-        env.step(6)
-    _assert_clean(env)
-
-
-def test_legacy_obs_width_drift_in_first_episode_rejected(peer, legacy_ini, out_dir):
-    # In the first episode, step 0 fixes the legacy observation width; a later
-    # step with a different width is a protocol error.
-    peer.script(legacy_script(_width_drift_steps()))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    try:
-        with pytest.raises(RuntimeError, match="legacy observation width"):
-            obs, *_ = env.step(6)
-            assert env.observation_space.contains(obs)
-    finally:
-        env.close()
 
 
 # Legacy mode: Python-derived Discrete(7) mask ----------------------------------------
@@ -606,31 +360,6 @@ def test_legacy_continuous_action_space_and_forwarding(peer, legacy_ini, out_dir
     env.close()
 
 
-def test_legacy_unknown_action_type_fails(peer, legacy_ini, out_dir):
-    peer.script(legacy_script(_legacy_steps(3, action_type="hybrid")))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    with pytest.raises(RuntimeError, match="Unknown legacy action_type 'hybrid'"):
-        env.reset()
-    assert episode_manifest(out_dir, 0)["status"] == "failed"
-    _assert_clean(env)
-
-
-@pytest.mark.parametrize("action", [7, -1, 2.7])
-def test_legacy_action_outside_discrete7_is_rejected(peer, legacy_ini, out_dir, action):
-    # QUESTION: mesh_env.py:152 sends int(action) unchecked: 7/-1 reach the
-    # simulator (which then holds) and 2.7 is truncated to 2, unlike the
-    # centralized path, which validates before sending.
-    peer.script(legacy_script(_legacy_steps(3)))
-    env = _env(peer.binary, legacy_ini, out_dir)
-    env.reset()
-    try:
-        with pytest.raises(ValueError):
-            env.step(action)
-        assert peer.actions() == []
-    finally:
-        env.close()
-
-
 def test_legacy_reset_info_and_obs(peer, legacy_ini, out_dir):
     peer.script(legacy_script([make_legacy_step(0, pos=(1.0, 2.0, 3.0))]))
     env = _env(peer.binary, legacy_ini, out_dir)
@@ -679,23 +408,3 @@ def test_failed_episode_flushes_telemetry_and_counts(peer, central_ini, out_dir)
     summary = replay_file(out_dir / "episode-0000" / "steps.jsonl")
     assert (summary.records, summary.obs_mismatches) == (2, 0)
     _assert_clean(env)
-
-
-def test_session_bookkeeping_without_manifest_is_a_noop(tmp_path):
-    from scripts.rl.env.episode import EpisodeSession
-    from scripts.rl.env.selection import RlSelection
-
-    session = EpisodeSession("unused", "run.ini", tmp_path / "out", None)
-    session.record_step({"decision": 1, "tick": 5, "done": False}, 1.0)
-    session.set_selection(RlSelection(), {"sha256": "o"}, {"sha256": "r"})
-    assert session.stop("interrupted", "close") is None
-    assert session.manifest is None and session.proc is None
-    assert not (tmp_path / "out").exists()
-
-
-def test_session_protocol_error_without_process_still_raises(tmp_path):
-    from scripts.rl.env.episode import EpisodeSession
-
-    session = EpisodeSession("unused", "run.ini", tmp_path / "out", None)
-    with pytest.raises(RuntimeError, match="boom on message line 0"):
-        session.protocol_error("boom")

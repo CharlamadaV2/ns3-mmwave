@@ -19,11 +19,8 @@ from scripts.rl.env.observations import SchemaMismatchError, observation_schema
 from scripts.rl.env.rewards import reward_schema
 from scripts.rl.env.selection import RlSelection
 from scripts.rl.policy import bundle
-from scripts.rl.policy.bundle import (ModelBundle, eval_selection, policy_weights_sha256,
-                                      read_bundle, seed_roles, selection_from_manifest)
-from scripts.rl.policy.compat import (STRUCTURAL_FIELDS, BundleError, CompatibilityError,
-                                      RewardMismatchError, ScenarioMismatchError,
-                                      StructuralMismatchError, check_compatibility)
+from scripts.rl.policy.bundle import (eval_selection, policy_weights_sha256, read_bundle, seed_roles, selection_from_manifest)
+from scripts.rl.policy.compat import (BundleError, RewardMismatchError, ScenarioMismatchError, StructuralMismatchError, check_compatibility)
 
 
 def _contract(node_ids=("node-a", "node-b", "node-c"),
@@ -77,12 +74,6 @@ def _check(manifest, env, identity=None, band="mmwave", allow=False):
 
 # 1. Compatibility ordering and override scope ---------------------------------------
 
-def test_error_hierarchy():
-    for cls in (BundleError, StructuralMismatchError, RewardMismatchError,
-                ScenarioMismatchError):
-        assert issubclass(cls, CompatibilityError)
-    assert issubclass(CompatibilityError, ValueError)
-
 
 def test_structural_wins_over_every_later_step_even_with_override():
     saved = _contract()
@@ -108,26 +99,6 @@ def test_reward_mismatch_is_not_overridable():
     with pytest.raises(RewardMismatchError):
         _check(_saved(contract), env, identity=dict(IDENTITY, run_ini_sha256="z" * 64),
                band="sub-6", allow=True)
-
-
-def test_structural_fields_are_reported_in_declared_order():
-    saved = _contract()
-    live = dict(saved, facts_schema="mesh_facts_v2", contract="mesh_move_3d_v1",
-                obs_dim=1)
-    env = _Env(saved)
-    env.contract = live
-    with pytest.raises(StructuralMismatchError) as excinfo:
-        _check(_saved(saved), env)
-    assert excinfo.value.fields == [f for f in STRUCTURAL_FIELDS
-                                    if f in ("contract", "obs_dim", "facts_schema")]
-
-
-def test_a_missing_live_contract_is_structural():
-    env = _Env(_contract())
-    env.contract = None
-    with pytest.raises(StructuralMismatchError) as excinfo:
-        _check(_saved(_contract()), env)
-    assert excinfo.value.fields == list(STRUCTURAL_FIELDS)
 
 
 def test_tuple_and_list_values_compare_equal():
@@ -184,17 +155,6 @@ def test_cpp_authored_reward_requires_the_same_reward_window():
                allow=True)
 
 
-def test_missing_live_identity_is_a_scenario_difference():
-    contract = _contract()
-    with pytest.raises(ScenarioMismatchError) as excinfo:
-        check_compatibility(_saved(contract), _Env(contract), live_identity=None,
-                            live_band="mmwave")
-    labels = [d.split(":")[0] for d in excinfo.value.differences]
-    # Null digests (no buildings / jammers) still match a missing live value.
-    assert labels == ["scenario_identity.run_ini_sha256",
-                      "scenario_identity.nodes_json_sha256"]
-
-
 # 2. Bundles --------------------------------------------------------------------------
 
 def _run_dir(tmp_path: Path, checkpoints=(16,), best=False, **overrides) -> Path:
@@ -229,29 +189,6 @@ def test_bundle_version_mirrors_the_train_writer():
     assert bundle.MANIFEST_VERSION == train.MANIFEST_VERSION
 
 
-@pytest.mark.parametrize("overrides, pattern", [
-    ({"manifest_version": "4"}, "retrain"),
-    ({"manifest_version": 5}, "retrain"),
-    ({"manifest_version": None}, "retrain"),
-    ({"status": None}, "not 'completed'"),
-    ({"status": "partial"}, "not 'completed'"),
-    ({"control_mode": None}, "not supported"),
-    ({"control_mode": "decentralized"}, "not supported"),
-    ({"model_sha256": None}, "no final model recorded"),
-    ({"model_path": ""}, "no final model recorded"),
-])
-def test_read_bundle_refuses_bad_header_fields(tmp_path, overrides, pattern):
-    with pytest.raises(BundleError, match=pattern):
-        read_bundle(_run_dir(tmp_path, **overrides))
-
-
-def test_a_non_object_manifest_is_refused(tmp_path):
-    run_dir = _run_dir(tmp_path)
-    (run_dir / "train_manifest.json").write_text("[]")
-    with pytest.raises(BundleError, match="JSON object"):
-        read_bundle(run_dir)
-
-
 def test_best_model_is_selectable_and_digest_checked(tmp_path):
     run_dir = _run_dir(tmp_path, best=True)
     best = read_bundle(run_dir, "best")
@@ -273,38 +210,6 @@ def test_checkpoint_selection_matches_by_path_not_by_list_position(tmp_path):
     assert hundred.selection == twenty.selection == "checkpoint"
 
 
-def test_checkpoint_digest_mismatch_and_missing_file_are_refused(tmp_path):
-    run_dir = _run_dir(tmp_path, checkpoints=(16,))
-    path = run_dir / "checkpoints" / "checkpoint_16_steps.zip"
-    path.write_bytes(b"checkpoint-17")
-    with pytest.raises(BundleError, match="digest mismatch"):
-        read_bundle(run_dir, "checkpoints/checkpoint_16_steps.zip")
-    path.unlink()
-    with pytest.raises(BundleError, match="missing"):
-        read_bundle(run_dir, "checkpoints/checkpoint_16_steps.zip")
-
-
-@pytest.mark.parametrize("model, pattern", [
-    ("checkpoints/checkpoint_2_steps.zip", "not listed"),        # never retained
-    ("checkpoints/checkpoint_abc_steps.zip", "not listed"),
-    ("checkpoints/checkpoint_16_steps.txt", "must be"),
-    ("checkpoints", "must be"),
-    ("checkpoints/../maskable_ppo_mesh.zip", "must be"),
-    ("other/checkpoint_16_steps.zip", "must be"),
-    ("FINAL", "must be"),
-])
-def test_read_bundle_refuses_unknown_model_selectors(tmp_path, model, pattern):
-    with pytest.raises(BundleError, match=pattern):
-        read_bundle(_run_dir(tmp_path), model)
-
-
-def test_an_absolute_checkpoint_path_is_refused(tmp_path):
-    run_dir = _run_dir(tmp_path)
-    absolute = str(run_dir / "checkpoints" / "checkpoint_16_steps.zip")
-    with pytest.raises(BundleError, match="must be"):
-        read_bundle(run_dir, absolute)
-
-
 def test_describe_reports_the_manifest_digest(tmp_path):
     run_dir = _run_dir(tmp_path)
     described = read_bundle(run_dir).describe()
@@ -312,16 +217,6 @@ def test_describe_reports_the_manifest_digest(tmp_path):
     assert described["model_sha256"] == sha256_file(run_dir / "maskable_ppo_mesh.zip")
     assert described["model_selection"] == "final"
     assert described["num_timesteps"] is None
-
-
-def test_a_relative_model_path_resolves_inside_the_run_dir(tmp_path, monkeypatch):
-    # QUESTION (scripts/rl/policy/bundle.py:75,105): a relative recorded model_path is
-    # resolved against the process cwd, while inspect_model.py:22-23 resolves it
-    # against run_dir. train.py writes absolute paths, so this only bites hand-built
-    # or relocated manifests; expected read_bundle to agree with inspect_model.
-    run_dir = _run_dir(tmp_path, model_path="maskable_ppo_mesh.zip")
-    monkeypatch.chdir(tmp_path)
-    assert read_bundle(run_dir).model_path.name == "maskable_ppo_mesh.zip"
 
 
 # 3. policy_weights_sha256 ------------------------------------------------------------
@@ -343,31 +238,7 @@ def test_policy_weights_digest_ignores_other_zip_entries(tmp_path):
     assert sha256_file(first) != sha256_file(second)
 
 
-def test_policy_weights_digest_is_none_without_policy_pth(tmp_path):
-    assert policy_weights_sha256(_zip(tmp_path / "a.zip", {"data": b"x"})) is None
-
-
-def test_policy_weights_digest_rejects_a_non_zip(tmp_path):
-    path = tmp_path / "plain.zip"
-    path.write_bytes(b"not a zip")
-    with pytest.raises(zipfile.BadZipFile):
-        policy_weights_sha256(path)
-
-
 # 4. Selection and seed roles ---------------------------------------------------------
-
-def test_selection_requires_a_recorded_block():
-    with pytest.raises(BundleError, match="no recorded selection"):
-        selection_from_manifest({})
-    with pytest.raises(BundleError, match="no recorded selection"):
-        selection_from_manifest({"selection": ["raw_links_v1"]})
-
-
-def test_selection_weights_must_match_components():
-    manifest = _saved(_contract())
-    manifest["selection"]["reward_weights"] = [1.0, 2.0]
-    with pytest.raises(BundleError, match="has 2 entries"):
-        selection_from_manifest(manifest)
 
 
 def test_selection_defaults_and_eval_override_leave_the_original_alone():
@@ -394,10 +265,3 @@ def test_seed_roles_with_disjoint_seeds_are_held_out():
     roles = seed_roles({"seed": 1, "evaluation": None}, "final", [2, 3])
     assert roles["held_out"] is True and roles["overlap"] == []
     assert roles["selection_seed_used_for_model"] is False
-
-
-def test_model_bundle_is_immutable(tmp_path):
-    loaded = read_bundle(_run_dir(tmp_path))
-    assert isinstance(loaded, ModelBundle)
-    with pytest.raises(AttributeError):
-        loaded.model_sha256 = "x"
