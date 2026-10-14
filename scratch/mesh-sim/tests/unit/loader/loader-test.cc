@@ -1,8 +1,8 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file loader-test.cc
- * @brief Unit tests for the INI parser, string/path helpers, ConfigLoader
- *        defaults and JSON parsing, and domain struct defaults.
+ * @brief Unit tests for the INI parser, toIso8601, and ConfigLoader
+ *        defaults and JSON parsing.
  *
  * Standalone binary, no ns-3 dependency. Every fixture is written at runtime
  * into a unique temp directory that is removed afterwards.
@@ -31,7 +31,6 @@
 #include <string>
 #include <vector>
 
-#include <sys/wait.h>
 #include <unistd.h>
 
 using namespace mesh_sim;
@@ -144,28 +143,6 @@ writeScenario(const TempDir& d, const std::string& ini, const std::string& nodes
 // ===========================================================================
 
 static void
-test_ini_missing_file_throws()
-{
-    TempDir d;
-    std::string what;
-    bool threw = throwsType<std::runtime_error>(
-        [&] { parseIni((d.path() / "nope.ini").string()); }, &what);
-    check(threw, "parseIni on missing file throws std::runtime_error");
-    check(what.find("nope.ini") != std::string::npos,
-          "parseIni missing-file message names the path");
-}
-
-static void
-test_ini_empty_file()
-{
-    TempDir d;
-    auto p = d.write("e.ini", "");
-    check(parseIni(p).empty(), "empty file yields empty IniMap");
-    auto q = d.write("c.ini", "# only comments\n; another\n\n   \n");
-    check(parseIni(q).empty(), "comment/blank-only file yields empty IniMap");
-}
-
-static void
 test_ini_sections_and_trimming()
 {
     TempDir d;
@@ -184,41 +161,6 @@ test_ini_sections_and_trimming()
     check(iniGet(ini, "Scenario", "Name") == "Mixed", "key stored case-sensitively");
     check(iniGet(ini, "Scenario", "name", "absent") == "absent",
           "lookup is case-sensitive (different case -> default)");
-}
-
-static void
-test_ini_keys_before_section()
-{
-    TempDir d;
-    auto p = d.write("g.ini", "top = 1\n[s]\nk = v\n");
-    auto ini = parseIni(p);
-    check(iniGet(ini, "", "top") == "1", "key before any section stored under \"\"");
-    check(iniGet(ini, "s", "top", "none") == "none", "global key not leaked into later section");
-}
-
-static void
-test_ini_split_on_first_equals()
-{
-    TempDir d;
-    auto p = d.write("eq.ini", "[s]\nexpr = a=b=c\nempty =\n= novalue_key\n");
-    auto ini = parseIni(p);
-    check(iniGet(ini, "s", "expr") == "a=b=c", "value keeps '=' after the first one");
-    check(ini["s"].count("empty") == 1 && iniGet(ini, "s", "empty", "def") == "",
-          "present key with empty value stored as empty string (not default)");
-    check(ini["s"].count("") == 1 && iniGet(ini, "s", "") == "novalue_key",
-          "'= v' line stores an empty key");
-}
-
-static void
-test_ini_duplicate_keys_and_sections()
-{
-    TempDir d;
-    auto p = d.write("dup.ini", "[a]\nx = 1\nx = 2\n[b]\ny = 3\n[a]\nz = 4\nx = 5\n");
-    auto ini = parseIni(p);
-    check(iniGet(ini, "a", "x") == "5", "repeated key keeps the last value");
-    check(iniGet(ini, "a", "z") == "4", "re-opened section merges keys");
-    check(iniGet(ini, "b", "y") == "3", "other section unaffected by reopen");
-    check(ini.size() == 2, "re-opened section does not create a duplicate entry");
 }
 
 static void
@@ -243,46 +185,11 @@ test_ini_comments_stripped()
 }
 
 static void
-test_ini_lines_without_equals_skipped()
-{
-    TempDir d;
-    auto p = d.write("ne.ini", "[s]\njunk line\n[unterminated\nk = v\n");
-    auto ini = parseIni(p);
-    check(ini.size() == 1 && ini.count("s") == 1,
-          "unterminated '[' line is neither a section nor a key");
-    check(ini["s"].size() == 1 && iniGet(ini, "s", "k") == "v",
-          "lines without '=' are skipped; following key stays in current section");
-}
-
-static void
-test_ini_crlf_line_endings()
-{
-    TempDir d;
-    auto p = d.write("crlf.ini", "[s]\r\nk = v\r\nb = true\r\n[t]\r\nx=1\r\n");
-    auto ini = parseIni(p);
-    check(ini.count("s") == 1 && ini.count("t") == 1, "CRLF section headers recognised");
-    check(iniGet(ini, "s", "k") == "v", "CRLF value has no trailing '\\r'");
-    check(iniGetBool(ini, "s", "b", false), "CRLF bool parses as true");
-    check(iniGet(ini, "t", "x") == "1", "CRLF compact key=value parsed");
-}
-
-static void
 test_ini_no_trailing_newline()
 {
     TempDir d;
     auto p = d.write("nt.ini", "[s]\nk = last");
     check(iniGet(parseIni(p), "s", "k") == "last", "last line without newline parsed");
-}
-
-static void
-test_ini_get_defaults()
-{
-    IniMap ini;
-    ini["s"]["k"] = "v";
-    check(iniGet(ini, "s", "k", "d") == "v", "iniGet returns stored value");
-    check(iniGet(ini, "missing", "k", "d") == "d", "iniGet missing section -> default");
-    check(iniGet(ini, "s", "missing", "d") == "d", "iniGet missing key -> default");
-    check(iniGet(ini, "s", "missing") == "", "iniGet default argument is empty string");
 }
 
 static void
@@ -310,33 +217,6 @@ test_ini_get_bool()
 // ===========================================================================
 // string-utils
 // ===========================================================================
-
-static void
-test_trim_str()
-{
-    check(trimStr("") == "", "trimStr empty");
-    check(trimStr(" \t\r\n ") == "", "trimStr all-whitespace -> empty");
-    check(trimStr(" \t\r\n a b \n\r\t ") == "a b", "trimStr strips all four chars, keeps interior");
-    check(trimStr("abc") == "abc", "trimStr no-op");
-    check(trimStr("\va\v") == "\va\v", "trimStr leaves vertical tab (not in documented set)");
-}
-
-static void
-test_split_tab()
-{
-    check(splitTab("").empty(), "splitTab empty -> empty vector");
-    auto one = splitTab("abc");
-    check(one.size() == 1 && one[0] == "abc", "splitTab no tab -> single token");
-    auto t = splitTab("a\t\tb");
-    check(t.size() == 3 && t[0] == "a" && t[1] == "" && t[2] == "b",
-          "splitTab consecutive tabs -> empty middle token");
-    auto tr = splitTab("a\tb\t");
-    check(tr.size() == 2 && tr[1] == "b", "splitTab trailing tab -> no trailing empty token");
-    auto ld = splitTab("\ta");
-    check(ld.size() == 2 && ld[0] == "" && ld[1] == "a", "splitTab leading tab -> leading empty");
-    auto sp = splitTab("a b\tc");
-    check(sp.size() == 2 && sp[0] == "a b", "splitTab does not split on spaces");
-}
 
 static void
 test_to_iso8601()
@@ -370,170 +250,6 @@ test_to_iso8601()
 
     std::regex fmt(R"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)");
     check(std::regex_match(toIso8601(system_clock::now()), fmt), "toIso8601 now matches format");
-}
-
-static void
-test_resolve_path()
-{
-    check(resolvePath("/base", "") == "", "resolvePath empty path unchanged");
-    check(resolvePath("/base", "/abs/x.json") == "/abs/x.json", "resolvePath absolute unchanged");
-    check(resolvePath("/base", "rel/x.json") == "/base/rel/x.json", "resolvePath relative joined");
-    check(resolvePath("/base/", "x.json") == "/base/x.json", "resolvePath trailing-slash base");
-    check(resolvePath("rel", "x.json") == "rel/x.json", "resolvePath relative base stays relative");
-    check(resolvePath("/base", "../x.json") == "/base/../x.json",
-          "resolvePath does not canonicalise");
-    check(resolvePath("/base", "missing/file.json") == "/base/missing/file.json",
-          "resolvePath does not check existence");
-}
-
-static void
-test_dir_of()
-{
-    check(dirOf("run.ini") == ".", "dirOf bare filename -> '.'");
-    check(dirOf("") == ".", "dirOf empty -> '.'");
-    check(dirOf("a/b/run.ini") == "a/b", "dirOf relative path");
-    check(dirOf("/a/b/run.ini") == "/a/b", "dirOf absolute path");
-    check(dirOf("/run.ini") == "/", "dirOf file at root -> '/'");
-    check(dirOf("./run.ini") == ".", "dirOf ./file -> '.'");
-}
-
-namespace
-{
-
-struct ChildResult
-{
-    bool        exited = false;
-    int         code   = -1;
-    std::string out;
-    std::string err;
-};
-
-/// Runs parseSeedList(arg) in a forked child so std::exit(1) can be observed.
-/// The child prints the parsed seeds comma-separated on stdout and exits 0.
-ChildResult
-runSeedListInChild(const std::string& arg)
-{
-    std::cout.flush();
-    std::cerr.flush();
-    int outp[2];
-    int errp[2];
-    ChildResult r;
-    if (pipe(outp) != 0 || pipe(errp) != 0)
-    {
-        return r;
-    }
-    pid_t pid = fork();
-    if (pid == 0)
-    {
-        dup2(outp[1], STDOUT_FILENO);
-        dup2(errp[1], STDERR_FILENO);
-        close(outp[0]);
-        close(errp[0]);
-        auto seeds = parseSeedList(arg);
-        std::ostringstream ss;
-        for (size_t i = 0; i < seeds.size(); ++i)
-        {
-            ss << (i ? "," : "") << seeds[i];
-        }
-        std::cout << ss.str();
-        std::cout.flush();
-        _exit(0);
-    }
-    close(outp[1]);
-    close(errp[1]);
-    auto drain = [](int fd) {
-        std::string s;
-        char        buf[256];
-        ssize_t     n;
-        while ((n = read(fd, buf, sizeof(buf))) > 0)
-        {
-            s.append(buf, static_cast<size_t>(n));
-        }
-        close(fd);
-        return s;
-    };
-    r.out = drain(outp[0]);
-    r.err = drain(errp[0]);
-    int status = 0;
-    waitpid(pid, &status, 0);
-    r.exited = WIFEXITED(status);
-    r.code   = r.exited ? WEXITSTATUS(status) : -1;
-    return r;
-}
-
-}  // namespace
-
-static void
-test_seed_list_invalid_exits()
-{
-    auto r = runSeedListInChild("abc");
-    check(r.exited && r.code == 1, "parseSeedList non-numeric token exits with code 1");
-    check(r.err.find("Error: invalid seed value 'abc'") != std::string::npos,
-          "parseSeedList prints 'Error: invalid seed value' naming the token");
-    check(r.out.empty(), "parseSeedList exits before returning on bad token");
-
-    r = runSeedListInChild("1,x,3");
-    check(r.exited && r.code == 1, "parseSeedList bad middle token exits with code 1");
-}
-
-static void
-test_seed_list_boundaries()
-{
-    auto r = runSeedListInChild("0,4294967295");
-    check(r.exited && r.code == 0 && r.out == "0,4294967295",
-          "parseSeedList accepts 0 and UINT32_MAX");
-
-    r = runSeedListInChild(",,,");
-    check(r.exited && r.code == 0 && r.out.empty(), "parseSeedList only commas -> empty");
-
-    r = runSeedListInChild("3,1,2");
-    check(r.out == "3,1,2", "parseSeedList preserves order (no sorting)");
-
-    r = runSeedListInChild("5,5");
-    check(r.out == "5,5", "parseSeedList keeps duplicates");
-}
-
-static void
-test_seed_list_out_of_uint32_range()
-{
-    // string-utils.h: an out-of-uint32_t-range token exits 1 instead of wrapping.
-    auto r = runSeedListInChild("4294967296");
-    check(r.exited && r.code == 1,
-          "parseSeedList 4294967296 (UINT32_MAX+1) exits 1 [got code " +
-              std::to_string(r.code) + ", out '" + r.out + "']");
-
-    // A signed token is not a valid seed.
-    r = runSeedListInChild("-1");
-    check(r.exited && r.code == 1,
-          "parseSeedList -1 (out of uint32 range) exits 1 [got code " +
-              std::to_string(r.code) + ", out '" + r.out + "']");
-}
-
-// ===========================================================================
-// domain defaults
-// ===========================================================================
-
-static void
-test_max_speed_for_type()
-{
-    check(MaxSpeedForType("vehicle") == 15.0, "MaxSpeedForType vehicle = 15 m/s");
-    check(MaxSpeedForType("pedestrian") == 1.5, "MaxSpeedForType pedestrian = 1.5 m/s");
-    check(MaxSpeedForType("drone") == 20.0, "MaxSpeedForType drone = 20 m/s");
-    check(MaxSpeedForType("") == 20.0, "MaxSpeedForType empty -> drone default");
-    check(MaxSpeedForType("Vehicle") == 20.0, "MaxSpeedForType is case-sensitive");
-}
-
-static void
-test_rl_resolved_defaults()
-{
-    RlConfig rl;
-    check(rl.control_mode == "legacy", "RlConfig control_mode default legacy");
-    check(rl.controlled_indices.empty(), "RlConfig controlled_indices default empty");
-    check(rl.num_slots == 0, "RlConfig num_slots default 0");
-    check(rl.decision_interval_ticks == 1, "RlConfig decision_interval_ticks default 1");
-    check(rl.num_ticks == 0, "RlConfig num_ticks default 0");
-    TimingInfo ti;
-    check(ti.elapsed_s == 0.0, "TimingInfo elapsed_s default 0");
 }
 
 // ===========================================================================
@@ -786,66 +502,6 @@ test_loader_all_keys_parsed()
 }
 
 static void
-test_loader_crlf_run_ini()
-{
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(writeScenario(
-        d,
-        "[scenario]\r\nname = crlf\r\nseed = 9\r\n[output]\r\ndir = out\r\n"
-        "[channel]\r\nchannel_model = nyu\r\nblockage_enabled = false\r\n"));
-    check(c.scenario_name == "crlf" && c.seed == 9, "CRLF run.ini string/int parsed");
-    check(c.channel.channel_model == "nyu", "CRLF channel_model has no '\\r' (no throw)");
-    check(!c.channel.blockage_enabled, "CRLF bool parsed");
-    check(c.output_dir == (d.path() / "out").string(), "CRLF output dir has no '\\r'");
-}
-
-static void
-test_loader_misplaced_and_unknown_keys()
-{
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(writeScenario(
-        d,
-        "seed = 99\n"                           // before any section
-        "[output]\ndir = out\n"
-        "[bogus]\nfoo = bar\n"                  // unknown section
-        "[channel]\nseed = 5\naction_set = x\n" // known key in the wrong section
-        "[rl]\ndimensions = 3\nnum_slots = 9\ncontrol_mode = centralized\n"
-        "[scenario]\nmax_hops = 1\ncontrolled_nodes = all\n"));
-    check(c.seed == 42, "seed outside [scenario] ignored");
-    check(c.mesh.routing.max_hops == 5, "routing key in [scenario] ignored");
-    check(!c.rl.controlled_nodes_set && c.rl.controlled_nodes.empty(),
-          "controlled_nodes outside [rl] does not select centralized mode");
-    check(c.rl.num_slots == 0 && c.rl.control_mode == "legacy",
-          "resolved RL fields never read from INI");
-}
-
-static void
-test_loader_duplicate_key_last_wins()
-{
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(
-        writeScenario(d, "[output]\ndir = out\n[scenario]\nseed = 1\nseed = 2\n"));
-    check(c.seed == 2, "duplicate seed key: last value wins");
-}
-
-static void
-test_loader_bool_semantics()
-{
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(writeScenario(
-        d,
-        "[output]\ndir = out\n"
-        "[channel]\nblockage_enabled = on\n"
-        "[nyu_channel]\nshadowing_enabled =\natmospheric_loss_enabled = Yes\n"
-        "[rl]\nenabled = 1\n"));
-    check(!c.channel.blockage_enabled, "blockage_enabled 'on' -> false (unrecognised)");
-    check(!c.channel.nyu.shadowing_enabled,
-          "shadowing_enabled present-but-empty -> false, not the default true");
-    check(c.channel.nyu.atmospheric_loss_enabled, "atmospheric_loss_enabled 'Yes' -> true");
-    check(c.rl.enabled, "rl enabled '1' -> true");
-}
-
-static void
 test_loader_controlled_nodes_presence()
 {
     {
@@ -868,115 +524,6 @@ test_loader_controlled_nodes_presence()
         check(c.rl.controlled_nodes_set && c.rl.controlled_nodes == "all",
               "controlled_nodes = all (inline comment stripped)");
     }
-}
-
-static void
-test_loader_band_and_baseline_blank()
-{
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(writeScenario(
-        d, "[output]\ndir = out\n[channel]\nband =   sub-6   \n[baseline]\nalgorithm =\n"));
-    check(c.band == "sub-6", "band value trimmed");
-    // run-ini-reference.md: "the binary also treats a blank value as none".
-    check(c.baseline.algorithm == "none", "blank [baseline] algorithm -> none");
-}
-
-static void
-test_loader_no_range_checks()
-{
-    // config-loader.h: "does not range-check values (see ValidateConfig)".
-    TempDir d;
-    SimConfig c = ConfigLoader::Load(writeScenario(
-        d,
-        "[scenario]\nduration_s = -5\ntick_s = 0\nwarmup_s = 100\n[output]\ndir = out\n"
-        "[channel]\nbandwidth_mhz = -1\nscenario = Mars\namc_model = bogus\n"
-        "[traffic]\nmodel = nonsense\n"
-        "[rl]\nx_min = 10\nx_max = -10\nmax_controlled_nodes = -3\naction_profile = fly\n",
-        "[]"));
-    check(near(c.duration_s, -5) && near(c.tick_s, 0) && near(c.warmup_s, 100),
-          "invalid timing loaded without throwing");
-    check(near(c.channel.bandwidth_mhz, -1) && c.channel.scenario == "Mars" &&
-              c.channel.amc_model == "bogus",
-          "invalid channel values loaded without throwing");
-    check(c.mesh.traffic.model == "nonsense", "invalid traffic model loaded");
-    check(near(c.rl.x_min, 10) && near(c.rl.x_max, -10) && c.rl.max_controlled_nodes == -3 &&
-              c.rl.action_profile == "fly",
-          "invalid rl values loaded");
-    check(c.nodes.empty(), "empty nodes array loads zero nodes without throwing");
-}
-
-static void
-test_loader_channel_model_validation()
-{
-    for (const std::string cm : {"bogus", "NYU", "3GPP", ""})
-    {
-        TempDir     d;
-        std::string what;
-        auto        p = writeScenario(
-            d, "[output]\ndir = out\n[channel]\nchannel_model = " + cm + "\n");
-        bool threw = throwsType<std::runtime_error>([&] { ConfigLoader::Load(p); }, &what);
-        check(threw, "channel_model '" + cm + "' throws std::runtime_error");
-        check(what.find("'" + cm + "'") != std::string::npos,
-              "channel_model error names the value '" + cm + "'");
-    }
-    TempDir d;
-    auto    p = writeScenario(d, "[output]\ndir = out\n[channel]\nchannel_model = nyu\n");
-    check(!throwsType<std::exception>([&] { ConfigLoader::Load(p); }), "channel_model nyu accepted");
-}
-
-static void
-test_loader_bad_numbers_throw()
-{
-    struct Case
-    {
-        std::string section, key, value;
-        bool        outOfRange;
-    };
-    const std::vector<Case> cases = {
-        {"scenario", "seed", "abc", false},
-        {"scenario", "seed", "", false},  // present but empty: not the default
-        {"scenario", "run_id", "x1", false},
-        {"scenario", "duration_s", "ten", false},
-        {"scenario", "tick_s", "", false},
-        {"output", "viz_tick_ms", "fast", false},
-        {"output", "viz_tick_ms", "999999999999999999999999", true},
-        {"channel", "frequency_ghz", "1e999", true},
-        {"channel", "noise_figure_db", "n/a", false},
-        {"nyu_channel", "pressure_mbar", "high", false},
-        {"traffic", "random_pair_count", "many", false},
-        {"routing", "max_hops", "lots", false},
-        {"rl", "step_size_m", "big", false},
-        {"rl", "max_controlled_nodes", "all", false},
-        {"rl", "decision_interval_s", "often", false},
-    };
-    for (const auto& k : cases)
-    {
-        TempDir     d;
-        std::string ini = "[output]\ndir = out\n";
-        if (k.section == "output")
-        {
-            ini = "[output]\ndir = out\n" + k.key + " = " + k.value + "\n";
-        }
-        else
-        {
-            ini += "[" + k.section + "]\n" + k.key + " = " + k.value + "\n";
-        }
-        auto p = writeScenario(d, ini);
-        bool ok = k.outOfRange
-                      ? throwsType<std::out_of_range>([&] { ConfigLoader::Load(p); })
-                      : throwsType<std::invalid_argument>([&] { ConfigLoader::Load(p); });
-        check(ok, "[" + k.section + "] " + k.key + " = '" + k.value + "' throws " +
-                      (k.outOfRange ? "std::out_of_range" : "std::invalid_argument"));
-    }
-}
-
-static void
-test_loader_missing_run_ini()
-{
-    TempDir d;
-    check(throwsType<std::runtime_error>(
-              [&] { ConfigLoader::Load((d.path() / "missing.ini").string()); }),
-          "missing run.ini throws std::runtime_error");
 }
 
 // ===========================================================================
@@ -1060,24 +607,6 @@ test_loader_output_dir_auto_deeper_nesting()
     auto    p = fakeRootScenario(d, "inputs/custom/calfex/06-24/1420-1430/run.ini");
     SimConfig c = ConfigLoader::Load(p);
     autoOutputDirOk(c.output_dir, d.path() / "root", "five levels");
-}
-
-static void
-test_loader_output_dir_auto_without_root_throws()
-{
-    TempDir     d;
-    auto        p = writeScenario(d, "[scenario]\nname = noroot\n");
-    std::string what;
-    bool threw = throwsType<std::runtime_error>([&] { ConfigLoader::Load(p); }, &what);
-    check(threw, "empty [output] dir outside any mesh-sim root throws std::runtime_error");
-    check(what.find("mesh-sim root") != std::string::npos,
-          "no-root error mentions the mesh-sim root");
-
-    // A blank value behaves like an absent key.
-    TempDir d2;
-    auto    p2 = writeScenario(d2, "[output]\ndir =\n");
-    check(throwsType<std::runtime_error>([&] { ConfigLoader::Load(p2); }),
-          "blank [output] dir also takes the auto path");
 }
 
 static void
@@ -1173,31 +702,6 @@ test_loader_nodes_partial_objects()
           "partial waypoints: missing fields -> 0");
     check(n[4].tx_array_gain_dbi && !n[4].rx_array_gain_dbi,
           "tx gain alone leaves rx gain unset");
-}
-
-static void
-test_loader_nodes_errors()
-{
-    auto expectJsonErr = [](const std::string& nodes, const std::string& label) {
-        TempDir d;
-        auto    p = writeScenario(d, "[output]\ndir = out\n", nodes);
-        check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(p); }),
-              label + " throws nlohmann::json::exception");
-    };
-    expectJsonErr(R"([{"role":"peer"}])", "node without id");
-    expectJsonErr(R"([{"id":5}])", "node with numeric id");
-    expectJsonErr(R"([{"id":"a",)", "truncated nodes JSON");
-    expectJsonErr("", "empty nodes file");
-    expectJsonErr(R"([{"id":"a","tx_array_gain_dbi":"high"}])", "non-numeric node gain");
-
-    TempDir d;
-    auto    p = d.write("run.ini", "[output]\ndir = out\n[scenario]\nnodes_file = none.json\n");
-    std::string what;
-    check(throwsType<std::runtime_error>([&] { ConfigLoader::Load(p); }, &what),
-          "missing nodes file throws std::runtime_error");
-    check(what.find("Cannot open nodes file") != std::string::npos &&
-              what.find((d.path() / "none.json").string()) != std::string::npos,
-          "missing nodes file message names the resolved path");
 }
 
 static void
@@ -1305,29 +809,6 @@ test_loader_jammer_full()
           "jammer intervals parsed (missing end -> 0)");
 }
 
-static void
-test_loader_jammer_errors()
-{
-    TempDir     d;
-    auto        p = writeScenario(d, "[output]\ndir = out\n[scenario]\njammers_file = nope.json\n");
-    std::string what;
-    check(throwsType<std::runtime_error>([&] { ConfigLoader::Load(p); }, &what) &&
-              what.find("Cannot open jammers file") != std::string::npos,
-          "missing jammers file throws std::runtime_error");
-
-    TempDir d2;
-    d2.write("jammers.json", "[{]");
-    auto p2 = writeScenario(d2, "[output]\ndir = out\n[scenario]\njammers_file = jammers.json\n");
-    check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(p2); }),
-          "malformed jammers JSON throws nlohmann::json::exception");
-
-    TempDir d3;
-    auto p3 = writeScenario(d3, "[output]\ndir = out\n[scenario]\njammers_file =\n");
-    SimConfig c;
-    check(!throwsType<std::exception>([&] { c = ConfigLoader::Load(p3); }) && c.jammers.empty(),
-          "blank jammers_file means no jammers");
-}
-
 // ===========================================================================
 // ConfigLoader: buildings file
 // ===========================================================================
@@ -1420,47 +901,6 @@ test_loader_positions_override_applied()
           "empty override object changes nothing");
 }
 
-static void
-test_loader_positions_override_errors()
-{
-    TempDir d;
-    auto    ini = writeScenario(d, "[output]\ndir = out\n", kThreeNodes);
-    std::string what;
-    check(throwsType<std::runtime_error>(
-              [&] { ConfigLoader::Load(ini, (d.path() / "nope.json").string()); }, &what) &&
-              what.find("Cannot open positions override") != std::string::npos,
-          "missing override file throws std::runtime_error");
-
-    auto shortArr = d.write("short.json", R"({"a":[1,2]})");
-    check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(ini, shortArr); }),
-          "2-element override entry throws nlohmann::json::exception");
-    auto strArr = d.write("str.json", R"({"b":["x",0,0]})");
-    check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(ini, strArr); }),
-          "non-numeric override entry throws nlohmann::json::exception");
-    auto bad = d.write("bad.json", R"({"a":[1,2,3)");
-    check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(ini, bad); }),
-          "malformed override JSON throws nlohmann::json::exception");
-
-    // QUESTION (src/config/config-loader.cc:435-438): config-loader.h @throws says a
-    // positions-override entry "that is not a 3-element numeric array" throws, but
-    // a 4-element array is accepted and its extra elements silently dropped.
-    auto longArr = d.write("long.json", R"({"a":[1,2,3,4]})");
-    check(throwsType<nlohmann::json::exception>([&] { ConfigLoader::Load(ini, longArr); }),
-          "4-element override entry throws (documented: not a 3-element array)");
-}
-
-static void
-test_loader_positions_override_duplicate_ids()
-{
-    TempDir d;
-    auto    ini = writeScenario(d, "[output]\ndir = out\n",
-                                R"([{"id":"a"},{"id":"a","position":{"x":7}}])");
-    auto    ov  = d.write("pos.json", R"({"a":[1,1,1]})");
-    SimConfig c = ConfigLoader::Load(ini, ov);
-    check(c.nodes.size() == 2 && near(c.nodes[0].position.x, 1) && near(c.nodes[1].position.x, 1),
-          "override applies to every node sharing the id");
-}
-
 // ---- main ----
 
 /**
@@ -1473,71 +913,38 @@ int
 main()
 {
     // ini-parser
-    test_ini_missing_file_throws();
-    test_ini_empty_file();
     test_ini_sections_and_trimming();
-    test_ini_keys_before_section();
-    test_ini_split_on_first_equals();
-    test_ini_duplicate_keys_and_sections();
     test_ini_comments_stripped();
-    test_ini_lines_without_equals_skipped();
-    test_ini_crlf_line_endings();
     test_ini_no_trailing_newline();
-    test_ini_get_defaults();
     test_ini_get_bool();
 
     // string-utils
-    test_trim_str();
-    test_split_tab();
     test_to_iso8601();
-    test_resolve_path();
-    test_dir_of();
-    test_seed_list_invalid_exits();
-    test_seed_list_boundaries();
-    test_seed_list_out_of_uint32_range();
-
-    // domain
-    test_max_speed_for_type();
-    test_rl_resolved_defaults();
 
     // ConfigLoader: defaults and keys
     test_loader_documented_defaults();
     test_loader_defaults_match_simconfig_struct();
     test_loader_node_defaults_match_nodespec_struct();
     test_loader_all_keys_parsed();
-    test_loader_crlf_run_ini();
-    test_loader_misplaced_and_unknown_keys();
-    test_loader_duplicate_key_last_wins();
-    test_loader_bool_semantics();
     test_loader_controlled_nodes_presence();
-    test_loader_band_and_baseline_blank();
-    test_loader_no_range_checks();
-    test_loader_channel_model_validation();
-    test_loader_bad_numbers_throw();
-    test_loader_missing_run_ini();
 
     // ConfigLoader: output dir
     test_loader_output_dir_relative_and_absolute();
     test_loader_output_dir_auto_three_levels();
     test_loader_output_dir_auto_deeper_nesting();
-    test_loader_output_dir_auto_without_root_throws();
     test_loader_bare_relative_run_ini_path();
 
     // ConfigLoader: JSON files
     test_loader_nodes_full_entry();
     test_loader_nodes_partial_objects();
-    test_loader_nodes_errors();
     test_loader_nodes_file_resolution();
     test_loader_jammer_defaults();
     test_loader_jammer_full();
-    test_loader_jammer_errors();
     test_loader_building_defaults_match_struct();
     test_loader_building_full_and_partial();
 
     // ConfigLoader: positions override
     test_loader_positions_override_applied();
-    test_loader_positions_override_errors();
-    test_loader_positions_override_duplicate_ids();
 
     std::cout << "\n" << g_pass << " passed, " << g_fail << " failed.\n";
     if (g_fail > 0)

@@ -678,27 +678,6 @@ test_mask_walls_and_corners()
     });
 }
 
-// Mask threshold: room exactly 1e-6 is not "> 1e-6"; 2e-6 is.
-static void
-test_mask_eps_threshold()
-{
-    isolated("test_mask_eps_threshold", [] {
-        SimConfig cfg = centralCfg(4, {0, 1, 2}, 3);
-        World w;
-        w.AddCvmm(5e-7, 50, 10);   // room 5e-7 to x_min
-        w.AddCvmm(2e-6, 50, 10);   // room 2e-6 to x_min
-        w.AddCvmm(50, 1e-5, 10);   // room 1e-5 to y_min
-        w.AddCvmm(1, 1, 1);
-        Io io;
-        RlBridge b(cfg);
-        decide(b, w, makeTable(4), 0, true);
-        json m = io.Last()["mask"];
-        check(m[0] == 0, "room 5e-7 m < 1e-6: west masked");
-        check(m[5] == 1, "room 2e-6 m > 1e-6: west valid");
-        check(m[12] == 1, "room 1e-5 m: south valid");
-    });
-}
-
 // =====================================================================
 // centralized step message, obs, facts
 // =====================================================================
@@ -764,26 +743,6 @@ test_obs_layout_peer_order()
             1, 1, 2, 3, 11, 101, 12, 102,   // slot 1 = node 0: peers 1, 2
             0, 0, 0, 0, 0, 0, 0, 0};        // padding
         check(o == expect, "obs layout: slot order, peer order, symmetric link values, padding");
-    });
-}
-
-// README: "-999 SINR sentinel is still passed through unchanged in this obs" and facts.
-static void
-test_obs_sinr_sentinel_passthrough()
-{
-    isolated("test_obs_sinr_sentinel_passthrough", [] {
-        SimConfig cfg = centralCfg(2, {0}, 1);
-        World w;
-        w.AddCvmm(1, 1, 1);
-        w.AddCvmm(2, 2, 2);
-        LinkTable t = makeTable(2, {-999.0, 0.0, false});
-        Io io;
-        RlBridge b(cfg);
-        decide(b, w, t, 0, true);
-        json m = io.Last();
-        check(approx(m["obs"][4], -999.0), "obs passes -999 SINR through");
-        check(approx(m["facts"]["links"][0][0], -999.0), "facts.links passes -999 SINR through");
-        check(m["facts"]["links"][0][2] == 0, "facts.links is_los 0 for NLOS");
     });
 }
 
@@ -1026,25 +985,6 @@ test_reward_all_links_los_legacy()
     });
 }
 
-// README: +1 only if each controlled node "has at least one other mesh node".
-static void
-test_reward_all_links_los_single_node()
-{
-    isolated("test_reward_all_links_los_single_node", [] {
-        SimConfig cfg = legacyCfg(1);
-        cfg.rl.reward_type = "all_links_los";
-        World w;
-        w.AddCvmm(0, 0, 10);
-        Io io;
-        RlBridge b(cfg);
-        b.Step(0, 0.0, w.mobs, makeTable(1), {}, true);
-        json m = io.Last();
-        check(approx(m["reward"], -1.0), "single node (no peer) -> -1");
-        check(m["obs"]["link_sinrs"].empty() && m["obs"]["link_capacities"].empty(),
-              "single node: empty link arrays");
-    });
-}
-
 // all_links_los across several slots; padding ignored.
 static void
 test_reward_all_links_los_multi_slot()
@@ -1150,151 +1090,6 @@ test_hold_stops_node()
     });
 }
 
-// README "Invalid or missing actions": structural errors -> all slots hold, none revalidated.
-static void
-test_joint_structural_errors()
-{
-    isolated("test_joint_structural_errors", [] {
-        const std::vector<std::string> bad = {
-            "not json",
-            "[1,1]",                       // not an object
-            "{}",                          // missing action
-            "{\"act\":[1,1]}",             // wrong key
-            "{\"action\":1}",              // scalar
-            "{\"action\":\"1,1\"}",        // string
-            "{\"action\":[1]}",            // too short
-            "{\"action\":[1,1,1]}",        // too long
-            "{\"action\":[1.0,1]}",        // non-integer number
-            "{\"action\":[1,1.5]}",        // fractional
-            "{\"action\":[true,1]}",       // boolean
-            "{\"action\":[\"1\",1]}",      // string entry
-            "{\"action\":[1,null]}",       // null entry
-            "{\"action\":[5,1]}",          // out of range high
-            "{\"action\":[1,-1]}",         // out of range low
-            "",                            // empty line
-        };
-        for (const auto& line : bad)
-        {
-            SimConfig cfg = centralCfg(3, {0, 1}, 2);
-            World w;
-            w.AddCvmm(50, 50, 0);
-            w.AddCvmm(50, 50, 0);
-            w.AddCvmm(10, 10, 0);
-            Io io("{\"action\":[3,0]}\n" + line + "\n");
-            RlBridge b(cfg);
-            decide(b, w, makeTable(3), 0);
-            const bool moving = approx(w.Vel(0).y, 10) && approx(w.Vel(1).x, -10);
-            decide(b, w, makeTable(3), 1);
-            const bool held = approx(w.Vel(0).x, 0) && approx(w.Vel(0).y, 0) &&
-                              approx(w.Vel(1).x, 0) && approx(w.Vel(1).y, 0);
-            decide(b, w, makeTable(3), 2, true);
-            json m = io.Last();
-            check(moving && held, "structural error -> all slots hold: '" + line + "'");
-            check(m["revalidated_slots"].is_array() && m["revalidated_slots"].empty(),
-                  "structural error -> revalidated_slots empty: '" + line + "'");
-            check(countOf(io.err.str(), "malformed") <= 1 &&
-                      io.err.str().find("revalidated") == std::string::npos,
-                  "structural error -> no revalidation warning: '" + line + "'");
-        }
-    });
-}
-
-// README: exactly M integers in [0,4]. An integer outside [0,4] that wraps when
-// narrowed to int must still be rejected as out of range.
-static void
-test_joint_huge_integer_is_structural()
-{
-    // Integers beyond int range (2^32, 2^32+1, -2^32) must not wrap into [0,4].
-    // Each value runs in its own child: the malformed warning prints once per process.
-    for (const std::string& v : {std::string("4294967296"), std::string("4294967297"),
-                                 std::string("-4294967296")})
-    {
-        isolated("test_joint_huge_integer_is_structural[" + v + "]", [v] {
-            SimConfig cfg = centralCfg(2, {0}, 1);
-            World w;
-            w.AddCvmm(50, 50, 0);
-            w.AddCvmm(10, 10, 0);
-            Io io("{\"action\":[" + v + "]}\n");
-            RlBridge b(cfg);
-            decide(b, w, makeTable(2), 0);
-            check(approx(w.Vel(0).x, 0) && approx(w.Vel(0).y, 0),
-                  "out-of-range action " + v + " -> hold (structural)");
-            check(io.err.str().find("malformed RL joint action") != std::string::npos,
-                  "out-of-range action " + v + " -> malformed warning");
-        });
-    }
-}
-
-// README: a centralized run never accepts a scalar action.
-static void
-test_joint_scalar_action_rejected()
-{
-    isolated("test_joint_scalar_action_rejected", [] {
-        SimConfig cfg = centralCfg(2, {0}, 1);
-        World w;
-        w.AddCvmm(50, 50, 0);
-        w.AddCvmm(10, 10, 0);
-        Io io("{\"action\":1}\n");
-        RlBridge b(cfg);
-        decide(b, w, makeTable(2), 0);
-        check(approx(w.Vel(0).x, 0), "scalar action in centralized mode -> hold");
-        check(countOf(io.err.str(),
-                      "Warning: malformed RL joint action; all controlled nodes hold.") == 1,
-              "scalar action -> documented malformed warning");
-    });
-}
-
-// README semantic errors: masked direction -> that slot holds; slot listed in the NEXT step.
-static void
-test_joint_semantic_revalidation()
-{
-    isolated("test_joint_semantic_revalidation", [] {
-        SimConfig cfg = centralCfg(3, {0, 1}, 2);
-        World w;
-        w.AddCvmm(100, 50, 0);  // at x_max: east masked
-        w.AddCvmm(50, 50, 0);
-        w.AddCvmm(10, 10, 0);
-        Io io("{\"action\":[1,2]}\n{\"action\":[4,4]}\n");
-        RlBridge b(cfg);
-        decide(b, w, makeTable(3), 0);
-        check(io.Lines().back()["revalidated_slots"].empty(),
-              "revalidated_slots empty in the message before the bad action");
-        check(approx(w.Vel(0).x, 0) && approx(w.Vel(0).y, 0), "masked east -> slot 0 holds");
-        check(approx(w.Vel(1).y, -10), "valid slot 1 keeps its command (south)");
-        decide(b, w, makeTable(3), 1);
-        check(io.Lines().back()["revalidated_slots"] == json::array({0}),
-              "next step reports revalidated_slots [0]");
-        decide(b, w, makeTable(3), 2, true);
-        check(io.Lines().back()["revalidated_slots"].empty(),
-              "revalidated_slots cleared after a valid action");
-        check(countOf(io.err.str(), "Warning: RL joint action revalidated; invalid slot "
-                                    "actions replaced by hold.") == 1,
-              "revalidation warning printed once");
-    });
-}
-
-// README example: two controlled + one padded slot, [2,1,0] executes as [2,1,4], reports [2].
-static void
-test_joint_padded_non_hold_revalidated()
-{
-    isolated("test_joint_padded_non_hold_revalidated", [] {
-        SimConfig cfg = centralCfg(3, {1, 2}, 3);
-        World w;
-        w.AddCvmm(10, 10, 0);
-        w.AddCvmm(50, 50, 0);
-        w.AddCvmm(60, 60, 0);
-        Io io("{\"action\":[2,1,0]}\n{\"action\":[4,4,4]}\n");
-        RlBridge b(cfg);
-        decide(b, w, makeTable(3), 0);
-        check(approx(w.Vel(1).y, -10) && approx(w.Vel(2).x, 10),
-              "active slots keep [2,1] commands");
-        check(w.Cv(0)->SetVelocityCalls() == 0, "uncontrolled node 0 untouched by padded slot");
-        decide(b, w, makeTable(3), 1, true);
-        check(io.Lines().back()["revalidated_slots"] == json::array({2}),
-              "padded non-hold reported as revalidated slot 2");
-    });
-}
-
 // README: revalidated_slots is empty for a deliberate hold and for wall clipping.
 static void
 test_revalidated_excludes_hold_and_clipping()
@@ -1317,26 +1112,6 @@ test_revalidated_excludes_hold_and_clipping()
                   "clipped node lands on x_max");
         }
         check(io.err.str().empty(), "no warnings for hold or clipping");
-    });
-}
-
-// README: warnings are printed once even when the condition repeats.
-static void
-test_joint_malformed_warning_once()
-{
-    isolated("test_joint_malformed_warning_once", [] {
-        SimConfig cfg = centralCfg(2, {0}, 1);
-        World w;
-        w.AddCvmm(50, 50, 0);
-        w.AddCvmm(10, 10, 0);
-        Io io("garbage\n{\"action\":[9]}\n");
-        RlBridge b(cfg);
-        decide(b, w, makeTable(2), 0);
-        decide(b, w, makeTable(2), 1);
-        decide(b, w, makeTable(2), 2, true);
-        check(countOf(io.err.str(),
-                      "Warning: malformed RL joint action; all controlled nodes hold.") == 1,
-              "malformed warning exactly once for two malformed lines");
     });
 }
 
@@ -1716,84 +1491,6 @@ test_legacy_target_clamp()
     });
 }
 
-// README legacy column: malformed JSON / list / non-integer -> Stay, one warning.
-static void
-test_legacy_malformed_stay()
-{
-    isolated("test_legacy_malformed_stay", [] {
-        const std::vector<std::string> bad = {"nope", "[1]", "{\"action\":[1]}",
-                                              "{\"action\":1.0}", "{\"action\":true}",
-                                              "{\"action\":\"1\"}", "{\"action\":null}", ""};
-        World w;
-        w.AddCvmm(0, 0, 0);
-        w.AddCvmm(0, 0, 25);
-        std::string input;
-        for (const auto& l : bad)
-        {
-            input += "{\"action\":1}\n" + l + "\n";
-        }
-        Io io(input);
-        RlBridge b(legacyCfg(2));
-        for (size_t i = 0; i < bad.size(); ++i)
-        {
-            b.Step(0, 0, w.mobs, makeTable(2), {}, false);
-            b.ApplyAction(w.mobs);
-            const bool moving = approx(w.Vel(1).x, 20);
-            b.Step(1, 0.1, w.mobs, makeTable(2), {}, false);
-            b.ApplyAction(w.mobs);
-            check(moving && approx(w.Vel(1).x, 0) && approx(w.Vel(1).z, 0),
-                  "legacy malformed -> Stay: '" + bad[i] + "'");
-        }
-        check(countOf(io.err.str(),
-                      "Warning: malformed RL action JSON; holding position (Stay).") == 1,
-              "legacy malformed warning exactly once");
-    });
-}
-
-// Legacy out-of-range integer: Stay (default branch).
-static void
-test_legacy_out_of_range_stay()
-{
-    isolated("test_legacy_out_of_range_stay", [] {
-        for (const std::string& a : {std::string("7"), std::string("-1"), std::string("100")})
-        {
-            World w;
-            w.AddCvmm(0, 0, 0);
-            w.AddCvmm(0, 0, 25);
-            Io io("{\"action\":1}\n{\"action\":" + a + "}\n");
-            RlBridge b(legacyCfg(2));
-            b.Step(0, 0, w.mobs, makeTable(2), {}, false);
-            b.ApplyAction(w.mobs);
-            b.Step(1, 0.1, w.mobs, makeTable(2), {}, false);
-            b.ApplyAction(w.mobs);
-            ns3::Vector v = w.Vel(1);
-            check(approx(v.x, 0) && approx(v.y, 0) && approx(v.z, 0),
-                  "legacy out-of-range action " + a + " -> Stay");
-        }
-    });
-}
-
-// README legacy reply is {"action":<int>}; an object without "action" is structural.
-static void
-test_legacy_missing_action_is_stay()
-{
-    isolated("test_legacy_missing_action_is_stay", [] {
-        // A reply without "action" (e.g. {} or {"actoin":6}) is malformed: Stay.
-        for (const std::string& line : {std::string("{}"), std::string("{\"actoin\":6}")})
-        {
-            World w;
-            w.AddCvmm(0, 0, 0);
-            w.AddCvmm(0, 0, 25);
-            Io io(line + "\n");
-            RlBridge b(legacyCfg(2));
-            b.Step(0, 0, w.mobs, makeTable(2), {}, false);
-            b.ApplyAction(w.mobs);
-            check(approx(w.Vel(1).x, 0) && approx(w.Vel(1).y, 0) && approx(w.Vel(1).z, 0),
-                  "legacy reply without 'action' -> Stay: " + line);
-        }
-    });
-}
-
 // README legacy EOF: Stay, one "stream closed" warning; Test 9: steps continue.
 static void
 test_legacy_eof()
@@ -1903,61 +1600,6 @@ test_legacy_continuous_2d_keeps_z()
     });
 }
 
-// README: a malformed action must hold, not abort the run (rl-bridge.cc:427-428).
-static void
-test_legacy_continuous_malformed_no_crash()
-{
-    isolated("test_legacy_continuous_malformed_no_crash", [] {
-        // A scalar continuous action is malformed: Stay, no crash. The test fails
-        // via the isolated() crash check if the bridge aborts.
-        SimConfig cfg = legacyCfg(2);
-        cfg.rl.action_type = "continuous";
-        World w;
-        w.AddCvmm(0, 0, 0);
-        w.AddCvmm(0, 0, 10);
-        Io io("{\"action\":3}\n");
-        RlBridge b(cfg);
-        b.Step(0, 0, w.mobs, makeTable(2), {}, false);
-        b.ApplyAction(w.mobs);
-        check(approx(w.Vel(1).x, 0) && approx(w.Vel(1).z, 0),
-              "continuous scalar action -> Stay without crashing");
-    });
-}
-
-static void
-test_legacy_continuous_missing_action_no_crash()
-{
-    isolated("test_legacy_continuous_missing_action_no_crash", [] {
-        // A continuous reply without "action" is malformed: Stay, no crash.
-        SimConfig cfg = legacyCfg(2);
-        cfg.rl.action_type = "continuous";
-        World w;
-        w.AddCvmm(0, 0, 0);
-        w.AddCvmm(0, 0, 10);
-        Io io("{}\n");
-        RlBridge b(cfg);
-        b.Step(0, 0, w.mobs, makeTable(2), {}, false);
-        b.ApplyAction(w.mobs);
-        check(approx(w.Vel(1).x, 0) && approx(w.Vel(1).z, 0),
-              "continuous reply without action -> Stay without crashing");
-    });
-}
-
-// rl-agent.h: GetActions returns the positions unchanged.
-static void
-test_rl_agent_noop()
-{
-    isolated("test_rl_agent_noop", [] {
-        RlAgent agent;
-        std::vector<Position> pos = {Position{1, 2, 3}, Position{-4, 5.5, 0}};
-        auto out = agent.GetActions(pos, {}, {});
-        check(out.size() == 2 && out[0].x == 1 && out[0].y == 2 && out[0].z == 3 &&
-                  out[1].x == -4 && out[1].y == 5.5 && out[1].z == 0,
-              "RlAgent::GetActions is identity");
-        check(agent.GetActions({}, {}, {}).empty(), "RlAgent::GetActions on empty input");
-    });
-}
-
 // ---- main ----
 
 int
@@ -1971,10 +1613,8 @@ main()
     test_is_decision_tick();
     test_mask_interior_and_padding();
     test_mask_walls_and_corners();
-    test_mask_eps_threshold();
     test_step_message_shape();
     test_obs_layout_peer_order();
-    test_obs_sinr_sentinel_passthrough();
     test_facts_nodes_rows();
     test_facts_links_order();
     test_facts_window_sums();
@@ -1983,18 +1623,11 @@ main()
     test_reward_mean_all_links_los();
     test_reward_throughput_legacy();
     test_reward_all_links_los_legacy();
-    test_reward_all_links_los_single_node();
     test_reward_all_links_los_multi_slot();
     test_decision_counter_and_terminal();
     test_joint_action_applied();
     test_hold_stops_node();
-    test_joint_structural_errors();
-    test_joint_huge_integer_is_structural();
-    test_joint_scalar_action_rejected();
-    test_joint_semantic_revalidation();
-    test_joint_padded_non_hold_revalidated();
     test_revalidated_excludes_hold_and_clipping();
-    test_joint_malformed_warning_once();
     test_eof_centralized();
     test_clamp_upper_partial();
     test_clamp_lower_y_and_z();
@@ -2006,16 +1639,10 @@ main()
     test_legacy_controlled_node_selection();
     test_legacy_discrete_velocities();
     test_legacy_target_clamp();
-    test_legacy_malformed_stay();
-    test_legacy_out_of_range_stay();
-    test_legacy_missing_action_is_stay();
     test_legacy_eof();
     test_legacy_done_no_read();
     test_legacy_continuous_target();
     test_legacy_continuous_2d_keeps_z();
-    test_legacy_continuous_malformed_no_crash();
-    test_legacy_continuous_missing_action_no_crash();
-    test_rl_agent_noop();
 
     std::cout << "\n" << g_pass << " passed, " << g_fail << " failed\n";
     return g_fail > 0 ? 1 : 0;

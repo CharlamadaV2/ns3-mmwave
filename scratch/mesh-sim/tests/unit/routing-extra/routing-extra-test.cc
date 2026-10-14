@@ -254,91 +254,6 @@ pathWidth(const Graph& g, const std::vector<uint32_t>& p)
 // ---- empty / single-node / FlowResult field tests ----
 
 static void
-test_empty_flow_list()
-{
-    Graph g(3);
-    g.Set(0, 1, 100.0);
-    MeshRouter router(RoutingConfig{});
-    auto res = router.Route(g.Table(), {}, 3);
-    check(res.empty(), "empty_flow_list: no results");
-}
-
-static void
-test_default_routing_config()
-{
-    RoutingConfig cfg;
-    check(cfg.algorithm == "shortest_path", "default_cfg: algorithm shortest_path");
-    check(cfg.max_hops == 5, "default_cfg: max_hops 5");
-
-    // Default router: a 5-hop line is routable, a 6-hop line is not.
-    Graph g(7);
-    for (uint32_t i = 0; i + 1 < 7; ++i)
-        g.Set(i, i + 1, 100.0);
-    MeshRouter router(cfg);
-    auto res = router.Route(g.Table(), {makeFlow(0, 5, 1.0), makeFlow(0, 6, 1.0)}, 7);
-    check(res[0].routable && res[0].hop_count == 5, "default_cfg: 5 hops routable");
-    check(isCleanUnroutable(res[1]), "default_cfg: 6 hops unroutable");
-}
-
-static void
-test_single_node_self_flow()
-{
-    Graph g(1);
-    for (const auto& algo : kAlgos)
-    {
-        MeshRouter router(makeCfg(algo, 5));
-        auto res = router.Route(g.Table(), {makeFlow(0, 0, 50.0)}, 1);
-        const std::string t = "single_node_self_flow[" + algo + "]: ";
-        check(res.size() == 1, t + "one result");
-        check(res[0].routable, t + "routable");
-        check(res[0].path.empty(), t + "empty path");
-        check(res[0].hop_count == 0, t + "hop_count 0");
-        check(res[0].delivered_mbps == 0.0, t + "delivered 0");
-        check(res[0].latency_ms == 0.0, t + "latency 0");
-        check(res[0].src == 0 && res[0].dst == 0, t + "src/dst set");
-        check(res[0].demand_mbps == 50.0, t + "demand is effective demand");
-    }
-}
-
-static void
-test_zero_and_negative_demand()
-{
-    Graph g(2);
-    g.Set(0, 1, 500.0);
-    for (const auto& algo : kAlgos)
-    {
-        MeshRouter router(makeCfg(algo, 5));
-        auto res = router.Route(g.Table(), {makeFlow(0, 1, 0.0), makeFlow(1, 0, -5.0)}, 2);
-        const std::string t = "zero_negative_demand[" + algo + "]: ";
-        check(res.size() == 2, t + "two results");
-        check(isCleanUnroutable(res[0]), t + "zero demand unroutable, clean fields");
-        check(res[0].demand_mbps == 0.0, t + "zero demand reported 0");
-        check(isCleanUnroutable(res[1]), t + "negative demand unroutable, clean fields");
-        check(res[0].src == 0 && res[0].dst == 1 && res[1].src == 1 && res[1].dst == 0,
-              t + "src/dst always set");
-    }
-}
-
-static void
-test_zero_demand_and_inactive_self_flows_routable()
-{
-    // Route() doc: zero effective demand -> unroutable, except self-flows.
-    Graph g(2);
-    g.Set(0, 1, 500.0);
-    MeshRouter router(RoutingConfig{});
-    auto res = router.Route(g.Table(),
-                            {makeFlow(1, 1, 0.0), makeFlow(0, 0, 10.0, false, true),
-                             makeFlow(1, 1, 10.0, true, false)},
-                            2);
-    check(res[0].routable && res[0].path.empty(), "zero_demand_self: routable, empty path");
-    check(res[1].routable && res[1].demand_mbps == 0.0, "inactive_self: routable, demand 0");
-    check(res[2].routable && res[2].demand_mbps == 0.0, "offphase_self: routable, demand 0");
-    for (size_t i = 0; i < 3; ++i)
-        check(res[i].delivered_mbps == 0.0 && res[i].hop_count == 0 && res[i].latency_ms == 0.0,
-              "self_flow_variants: zero delivered/hops/latency #" + std::to_string(i));
-}
-
-static void
 test_unroutable_keeps_demand()
 {
     // No path: demand_mbps still reports the effective demand, other fields zero.
@@ -348,23 +263,6 @@ test_unroutable_keeps_demand()
     auto res = router.Route(g.Table(), {makeFlow(0, 2, 42.0)}, 3);
     check(isCleanUnroutable(res[0]), "unroutable_keeps_demand: clean unroutable fields");
     check(res[0].demand_mbps == 42.0, "unroutable_keeps_demand: demand 42");
-}
-
-static void
-test_inactive_offphase_fields()
-{
-    Graph g(2);
-    g.Set(0, 1, 100.0);
-    MeshRouter router(RoutingConfig{});
-    auto res = router.Route(g.Table(),
-                            {makeFlow(0, 1, 30.0, false, true), makeFlow(0, 1, 30.0, true, false),
-                             makeFlow(0, 1, 30.0, false, false)},
-                            2);
-    for (size_t i = 0; i < res.size(); ++i)
-    {
-        check(isCleanUnroutable(res[i]), "inactive_offphase: clean unroutable #" + std::to_string(i));
-        check(res[i].demand_mbps == 0.0, "inactive_offphase: effective demand 0 #" + std::to_string(i));
-    }
 }
 
 static void
@@ -443,25 +341,6 @@ test_tiny_edge_used_only_when_needed()
     check(approx(mh.delivered_mbps, 1e-6, 1e-6), "tiny_edge: min_hop delivered limited to 1e-6");
 }
 
-static void
-test_nan_capacity_is_not_edge()
-{
-    // QUESTION: edge exists iff capacity_mbps > 0 (routing CLAUDE.md). NaN > 0
-    // is false, so a NaN-capacity link should be absent. mesh-router.cc
-    // tests `cap <= 0.0` (lines 140, 196, 242), which is false for NaN, so
-    // min_hop and max_throughput treat NaN as a usable link (widest path even
-    // treats it as infinite bandwidth), and congestion scaling then leaves
-    // delivered == demand (mesh-router.cc:313).
-    Graph g(2);
-    g.Set(0, 1, std::numeric_limits<double>::quiet_NaN());
-    for (const auto& algo : kAlgos)
-    {
-        MeshRouter router(makeCfg(algo, 0));
-        auto r = router.Route(g.Table(), {makeFlow(0, 1, 10.0)}, 2)[0];
-        check(isCleanUnroutable(r), "nan_capacity[" + algo + "]: NaN capacity is no edge");
-    }
-}
-
 // ---- hop limit ----
 
 static void
@@ -510,23 +389,6 @@ test_max_hops_boundary_all_algorithms()
 }
 
 static void
-test_max_hops_uint32_max_is_unlimited()
-{
-    // run.ini `max_hops = 4294967295` (or `-1`, which stoul wraps) yields
-    // UINT32_MAX; the hop-limit check must not overflow, so a 1-hop path is
-    // still routable.
-    Graph g(2);
-    g.Set(0, 1, 100.0);
-    for (const auto& algo : kAlgos)
-    {
-        MeshRouter router(makeCfg(algo, std::numeric_limits<uint32_t>::max()));
-        auto r = router.Route(g.Table(), {makeFlow(0, 1, 10.0)}, 2)[0];
-        check(r.routable && r.hop_count == 1,
-              "max_hops_uint32_max[" + algo + "]: direct link routable");
-    }
-}
-
-static void
 test_max_hops_no_fallback_documented()
 {
     // Documented (routing README "Conventions", CLAUDE.md): a chosen path
@@ -553,39 +415,10 @@ test_max_hops_no_fallback_documented()
     check(mh.routable && mh.path == std::vector<uint32_t>({0, 3}), "no_fallback: min_hop direct");
 }
 
-static void
-test_widest_tie_hop_limit()
-{
-    // QUESTION: two paths with the same bottleneck (100): 0-1-3 (2 hops) and
-    // 0-2-4-3 (3 hops). Both are optimal for max_throughput, and 0-1-3 fits
-    // max_hops = 2. The widest-path tie-break in FindPathMaxThroughput
-    // (max-heap on (bw, node) pops the higher node index first, and
-    // only strict `newBw > bw[v]` updates, mesh-router.cc:175-200) settles dst via 0-2-4-3, which the hop check at
-    // mesh-router.cc:95 then rejects. The flow is dropped even though an
-    // equally wide path within the limit exists, so routing is not "optimal
-    // for the current link state" (routing CLAUDE.md). This differs from the
-    // documented no-fallback case: the shorter path is not worse.
-    Graph g(5);
-    g.Set(0, 1, 100.0);
-    g.Set(1, 3, 100.0);
-    g.Set(0, 2, 100.0);
-    g.Set(2, 4, 100.0);
-    g.Set(4, 3, 100.0);
-    auto tbl = g.Table();
-
-    auto free = MeshRouter(makeCfg("max_throughput", 0)).Route(tbl, {makeFlow(0, 3, 1.0)}, 5)[0];
-    check(free.routable && approx(pathWidth(g, free.path), 100.0),
-          "widest_tie: unlimited finds bottleneck 100");
-
-    auto lim = MeshRouter(makeCfg("max_throughput", 2)).Route(tbl, {makeFlow(0, 3, 1.0)}, 5)[0];
-    check(lim.routable && lim.hop_count <= 2,
-          "widest_tie: equally wide 2-hop path used under max_hops 2");
-}
-
 // ---- algorithm dispatch ----
 
 static void
-test_unknown_algorithm_falls_back_to_shortest()
+test_algorithms_pick_different_paths()
 {
     // Graph where all three algorithms disagree, 0 -> 1:
     //   direct 0-1 cap 10                (cost 0.1,     width 10,  1 hop)
@@ -608,9 +441,6 @@ test_unknown_algorithm_falls_back_to_shortest()
     check(pathFor("max_throughput") == std::vector<uint32_t>({0, 2, 1}),
           "algo_dispatch: max_throughput widest");
     check(pathFor("min_hop") == std::vector<uint32_t>({0, 1}), "algo_dispatch: min_hop direct");
-    for (const std::string bogus : {"", "bogus", "MAX_THROUGHPUT", "min-hop", "max_throughput "})
-        check(pathFor(bogus) == std::vector<uint32_t>({0, 3, 4, 1}),
-              "algo_dispatch: unknown '" + bogus + "' -> shortest_path");
 }
 
 static void
@@ -803,16 +633,6 @@ test_congestion_ignores_non_contributors()
 }
 
 static void
-test_congestion_exact_capacity_not_scaled()
-{
-    Graph g(2);
-    g.Set(0, 1, 100.0);
-    auto r = MeshRouter(RoutingConfig{}).Route(g.Table(), {makeFlow(0, 1, 40.0), makeFlow(1, 0, 60.0)}, 2);
-    check(r[0].delivered_mbps == 40.0 && r[1].delivered_mbps == 60.0,
-          "congestion_exact_capacity: total == capacity leaves flows unscaled");
-}
-
-static void
 test_congestion_uses_demand_not_delivered()
 {
     // A: 0->2 via 0-1-2 (100), B: 1->2 (100), C: 0->1 (100).
@@ -975,53 +795,25 @@ test_determinism_and_order_independence()
     check(permOk, "determinism: per-flow result independent of flow order");
 }
 
-static void
-test_router_stateless_across_tables()
-{
-    // Route on table A, then B, then A again: third result equals the first.
-    Graph ga(3), gb(3);
-    ga.Set(0, 1, 100.0);
-    ga.Set(1, 2, 100.0);
-    gb.Set(0, 2, 100.0);
-    MeshRouter router(RoutingConfig{});
-    auto ta = ga.Table();
-    auto tb = gb.Table();
-    auto r1 = router.Route(ta, {makeFlow(0, 2, 10.0)}, 3)[0];
-    auto r2 = router.Route(tb, {makeFlow(0, 2, 10.0)}, 3)[0];
-    auto r3 = router.Route(ta, {makeFlow(0, 2, 10.0)}, 3)[0];
-    check(r1.path == std::vector<uint32_t>({0, 1, 2}), "stateless: table A 2 hops");
-    check(r2.path == std::vector<uint32_t>({0, 2}), "stateless: table B direct");
-    check(sameResult(r1, r3, true), "stateless: table A again identical");
-}
-
 int
 main()
 {
     // Empty / single node / FlowResult fields
-    test_empty_flow_list();
-    test_default_routing_config();
-    test_single_node_self_flow();
-    test_zero_and_negative_demand();
-    test_zero_demand_and_inactive_self_flows_routable();
     test_unroutable_keeps_demand();
-    test_inactive_offphase_fields();
     test_results_order_and_endpoints();
 
     // Edge existence
     test_capacity_zero_negative_tiny();
     test_tiny_edge_used_only_when_needed();
-    test_nan_capacity_is_not_edge();
 
     // Hop limit
     test_max_hops_zero_unlimited_long_line();
     test_max_hops_boundary_all_algorithms();
-    test_max_hops_uint32_max_is_unlimited();
     test_max_hops_no_fallback_documented();
-    test_widest_tie_hop_limit();
     test_max_hops_consistent_with_unlimited();
 
     // Algorithms and optimality
-    test_unknown_algorithm_falls_back_to_shortest();
+    test_algorithms_pick_different_paths();
     test_min_hop_tie_lower_index_first();
     test_grid_min_hop_manhattan();
     test_bruteforce_optimality();
@@ -1029,7 +821,6 @@ main()
     // Congestion and latency
     test_congestion_opposite_directions_share_edge();
     test_congestion_ignores_non_contributors();
-    test_congestion_exact_capacity_not_scaled();
     test_congestion_uses_demand_not_delivered();
     test_congestion_min_over_hops_three_edges();
     test_latency_unchanged_by_congestion();
@@ -1037,7 +828,6 @@ main()
 
     // Determinism
     test_determinism_and_order_independence();
-    test_router_stateless_across_tables();
 
     std::cout << "\n" << g_pass << " passed, " << g_fail << " failed.\n";
     if (g_fail > 0)

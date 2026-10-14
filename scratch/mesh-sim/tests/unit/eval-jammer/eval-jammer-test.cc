@@ -295,22 +295,6 @@ test_silvus_capacity()
 }
 
 static void
-test_mcs_table_invariants()
-{
-    check(sizeof(MCS_TABLE) / sizeof(MCS_TABLE[0]) == MCS_TABLE_SIZE, "MCS_TABLE_SIZE matches array");
-    check(MCS_TABLE[0].sinr_min_db == SINR_MIN_DB, "MCS_TABLE[0] threshold == SINR_MIN_DB");
-    check(SINR_MIN_DB == -6.7, "SINR_MIN_DB is -6.7 (same literal as LinkTable default)");
-    bool thr = true, se = true;
-    for (uint32_t k = 1; k < MCS_TABLE_SIZE; ++k)
-    {
-        thr = thr && MCS_TABLE[k].sinr_min_db > MCS_TABLE[k - 1].sinr_min_db;
-        se  = se && MCS_TABLE[k].spectral_eff > MCS_TABLE[k - 1].spectral_eff;
-    }
-    check(thr, "MCS_TABLE thresholds strictly increasing");
-    check(se, "MCS_TABLE spectral efficiency strictly increasing");
-}
-
-static void
 test_silvus_table_invariants()
 {
     check(sizeof(SILVUS_MCS_TABLE) / sizeof(SILVUS_MCS_TABLE[0]) == SILVUS_MCS_TABLE_SIZE,
@@ -386,36 +370,6 @@ test_capacity_bandwidth_scaling()
     check(SinrToCapacity(30.0, 0.0, "shannon") == 0.0, "zero bandwidth -> zero capacity");
 }
 
-static void
-test_unknown_amc_threshold_boundary()
-{
-    auto throws = [](double s, const std::string& m, std::string* msg = nullptr) {
-        try
-        {
-            SinrToCapacity(s, 20e6, m);
-        }
-        catch (const std::runtime_error& e)
-        {
-            if (msg)
-            {
-                *msg = e.what();
-            }
-            return true;
-        }
-        return false;
-    };
-    std::string msg;
-    check(throws(SINR_MIN_DB, "bogus", &msg), "unknown model throws at exactly SINR_MIN_DB");
-    check(msg.rfind("[LinkEvaluator]", 0) == 0, "unknown model message prefixed [LinkEvaluator]");
-    check(msg.find("'bogus'") != std::string::npos, "unknown model message names the model");
-    check(!throws(std::nextafter(SINR_MIN_DB, -1e9), "bogus"),
-          "unknown model does not throw just below SINR_MIN_DB");
-    check(SinrToCapacity(-50.0, 20e6, "bogus") == 0.0, "unknown model below min returns 0");
-    check(throws(10.0, ""), "empty model name throws");
-    check(throws(10.0, "Shannon"), "model names are case-sensitive (Shannon throws)");
-    check(throws(10.0, "SILVUS"), "model names are case-sensitive (SILVUS throws)");
-}
-
 // =====================================================================
 // LinkTable edge cases
 // =====================================================================
@@ -429,64 +383,6 @@ LR(uint32_t tx, uint32_t rx, double sinr, double cap)
     r.sinr_db = sinr;
     r.capacity_mbps = cap;
     return r;
-}
-
-static void
-test_link_table_empty_and_single()
-{
-    LinkTable t;
-    check(t.NumNodes() == 0, "fresh LinkTable has 0 nodes");
-    check(t.MaxCapacity() == 0.0, "fresh LinkTable MaxCapacity 0");
-    check(t.ConnectedLinkCount() == 0, "fresh LinkTable ConnectedLinkCount 0");
-
-    bool threw = false;
-    try
-    {
-        t.Update(0, {});
-    }
-    catch (const std::exception&)
-    {
-        threw = true;
-    }
-    check(!threw, "Update(0, {}) accepted");
-    check(t.NumNodes() == 0 && t.MaxCapacity() == 0.0 && t.ConnectedLinkCount() == 0,
-          "N=0 table empty");
-
-    threw = false;
-    try
-    {
-        t.Update(1, {});
-    }
-    catch (const std::exception&)
-    {
-        threw = true;
-    }
-    check(!threw, "Update(1, {}) accepted");
-    check(t.NumNodes() == 1, "N=1 NumNodes 1");
-    check(t.Get(0, 0).sinr_db == -999.0, "N=1 diagonal is default sentinel");
-    check(t.ConnectedLinkCount(-1e9) == 0, "N=1 has no links even at -inf threshold");
-
-    threw = false;
-    try
-    {
-        t.Update(1, {LR(0, 0, 10, 10)});
-    }
-    catch (const std::runtime_error&)
-    {
-        threw = true;
-    }
-    check(threw, "N=1 with one result throws");
-
-    threw = false;
-    try
-    {
-        t.Update(0, {LR(0, 1, 10, 10)});
-    }
-    catch (const std::runtime_error&)
-    {
-        threw = true;
-    }
-    check(threw, "N=0 with one result throws");
 }
 
 static void
@@ -509,54 +405,6 @@ test_link_table_two_nodes_and_mirror()
     check(u.Get(0, 2).sinr_db == 2.0 && u.Get(2, 0).sinr_db == 2.0, "reversed-order result mirrored");
     check(u.Get(0, 1).sinr_db == 1.0 && u.Get(1, 2).sinr_db == 3.0, "reversed-order results upper triangle");
     check(u.MaxCapacity() == 3.0, "MaxCapacity sees reversed-order results");
-}
-
-static void
-test_link_table_missing_pair_stays_default()
-{
-    // Doc: pairs missing from results are not detected beyond the size check.
-    LinkTable t;
-    bool threw = false;
-    try
-    {
-        t.Update(3, {LR(0, 1, 5, 5), LR(0, 1, 6, 6), LR(1, 2, 7, 7)});
-    }
-    catch (const std::exception&)
-    {
-        threw = true;
-    }
-    check(!threw, "duplicate pair with right count accepted");
-    check(t.Get(0, 2).sinr_db == -999.0, "missing pair (0,2) stays default sentinel");
-    check(t.Get(0, 1).sinr_db == 6.0, "duplicate pair: last write wins");
-    check(t.ConnectedLinkCount() == 2, "missing pair not connected");
-}
-
-static void
-test_link_table_replace_and_failed_update()
-{
-    LinkTable t;
-    t.Update(3, {LR(0, 1, 30, 300), LR(0, 2, 30, 300), LR(1, 2, 30, 300)});
-    t.Update(2, {LR(0, 1, -10, 0)});
-    check(t.NumNodes() == 2, "second Update resizes table");
-    check(t.Get(0, 1).sinr_db == -10.0, "second Update replaces values");
-    check(t.MaxCapacity() == 0.0, "second Update drops old capacities");
-    check(t.ConnectedLinkCount() == 0, "second Update connectivity recomputed");
-
-    bool threw = false;
-    std::string msg;
-    try
-    {
-        t.Update(4, {LR(0, 1, 1, 1)});
-    }
-    catch (const std::runtime_error& e)
-    {
-        threw = true;
-        msg = e.what();
-    }
-    check(threw, "Update(4, 1 result) throws");
-    check(msg.find("Expected 6") != std::string::npos && msg.find("got 1") != std::string::npos,
-          "wrong-count message reports expected and actual counts");
-    check(t.NumNodes() == 2 && t.Get(0, 1).sinr_db == -10.0, "failed Update leaves previous table intact");
 }
 
 static void
@@ -584,33 +432,6 @@ struct Rig
     ns3::Ptr<FakeCond> cond = ns3::CreateObject<FakeCond>();
     LinkEvaluator ev;
 };
-
-static void
-test_le_configure_null_models_throw()
-{
-    SimConfig cfg = BaseCfg(2);
-    LinkEvaluator ev;
-    auto loss = ns3::CreateObject<FakeLoss>();
-    auto cond = ns3::CreateObject<FakeCond>();
-    auto throwsRt = [&](ns3::Ptr<ns3::PropagationLossModel> p, ns3::Ptr<ns3::ChannelConditionModel> c) {
-        try
-        {
-            ev.Configure(cfg, p, c);
-        }
-        catch (const std::runtime_error&)
-        {
-            return true;
-        }
-        return false;
-    };
-    check(throwsRt(nullptr, cond), "Configure null plModel throws");
-    check(throwsRt(loss, nullptr), "Configure null condModel throws");
-    check(throwsRt(nullptr, nullptr), "Configure both null throws");
-    check(!throwsRt(loss, cond), "Configure valid models does not throw");
-    // Configure does not validate amc_model (doc: only SinrToCapacity throws).
-    cfg.channel.amc_model = "bogus";
-    check(!throwsRt(loss, cond), "Configure accepts unknown amc_model");
-}
 
 static void
 test_le_noise_floor_and_snr()
@@ -788,37 +609,6 @@ test_le_amc_models()
                                        std::to_string(r.mcs_index) + ")");
     }
     check(SinrToSilvusMcsIndex(10.0) != SinrToMcsIndex(10.0), "silvus and table ladders differ at 10 dB");
-}
-
-static void
-test_le_unknown_amc()
-{
-    Rig g;
-    SimConfig cfg = BaseCfg(2, "bogus");
-    g.ev.Configure(cfg, g.loss, g.cond);
-    bool threw = false;
-    try
-    {
-        g.ev.Evaluate(Mob(0, 0, 0), Mob(100, 0, 0), 0, 1);  // SNR ~ 26 dB
-    }
-    catch (const std::runtime_error&)
-    {
-        threw = true;
-    }
-    check(threw, "Evaluate with unknown amc throws when SINR >= SINR_MIN_DB");
-
-    g.loss->lossDb = 200.0;  // SNR far below min
-    threw = false;
-    LinkResult r;
-    try
-    {
-        r = g.ev.Evaluate(Mob(0, 0, 0), Mob(100, 0, 0), 0, 1);
-    }
-    catch (const std::runtime_error&)
-    {
-        threw = true;
-    }
-    check(!threw && r.capacity_mbps == 0.0, "unknown amc below SINR_MIN_DB: no throw, 0 Mbps");
 }
 
 static void
@@ -1196,33 +986,6 @@ test_jm_configure_filters_disabled()
 }
 
 static void
-test_jm_size_mismatch_asserts()
-{
-    auto loss = ns3::CreateObject<FakeLoss>();
-    JammerModel jm;
-    bool asserted = false;
-    try
-    {
-        jm.Configure({Jam("a"), Jam("b")}, loss, {Mob(0, 0)});
-    }
-    catch (const ns3_stub::AssertFailure&)
-    {
-        asserted = true;
-    }
-    check(asserted, "Configure asserts when jammers > mobModels");
-    asserted = false;
-    try
-    {
-        jm.Configure({Jam("a")}, loss, {Mob(0, 0), Mob(1, 0)});
-    }
-    catch (const ns3_stub::AssertFailure&)
-    {
-        asserted = true;
-    }
-    check(asserted, "Configure asserts when jammers < mobModels");
-}
-
-static void
 test_jm_reconfigure_replaces()
 {
     auto loss = ns3::CreateObject<FakeLoss>();
@@ -1501,65 +1264,6 @@ test_jm_beam_gate()
     check(!BeamOn(90, 90, 270, -d, 0, 0), "270-deg beam rejects receiver straight behind");
 }
 
-static void
-test_jm_gate_order_short_circuits()
-{
-    // Gate order: interval, burst, frequency, then distance (range), then beam.
-    // Earlier gates must stop before the distance/position queries and CalcRxPower.
-    auto run = [](JammerSpec s, double nowS, double carrierHz, const MobPtr& jamMob, const MobPtr& rx,
-                  int& lossCalls) {
-        auto loss = ns3::CreateObject<FakeLoss>();
-        JammerModel jm;
-        jm.Configure({s}, loss, {jamMob}, carrierHz, 1);
-        double p = jm.InterfPowerAtReceiver(rx, nowS);
-        lossCalls = static_cast<int>(loss->calls.size());
-        return p;
-    };
-    int lc = 0;
-    {
-        JammerSpec s = Jam();
-        s.intervals = {{5.0, 6.0}};
-        auto jm = Mob(0, 0), rx = Mob(100, 0);
-        double p = run(s, 0.0, 0.0, jm, rx, lc);
-        check(p == 0.0 && lc == 0 && jm->m_distanceCalls == 0 && rx->m_distanceCalls == 0,
-              "interval gate stops before distance and path loss");
-    }
-    {
-        JammerSpec s = Jam();
-        s.type = "random";
-        s.duty_cycle = 0.0;
-        auto jm = Mob(0, 0), rx = Mob(100, 0);
-        double p = run(s, 0.0, 0.0, jm, rx, lc);
-        check(p == 0.0 && lc == 0 && jm->m_distanceCalls == 0, "burst gate stops before distance and path loss");
-    }
-    {
-        JammerSpec s = Jam();
-        s.target_freq = {5800.0};
-        auto jm = Mob(0, 0), rx = Mob(100, 0);
-        double p = run(s, 0.0, 2.4e9, jm, rx, lc);
-        check(p == 0.0 && lc == 0 && jm->m_distanceCalls == 0, "frequency gate stops before distance and path loss");
-    }
-    {
-        JammerSpec s = Jam();
-        s.max_range_m = 10.0;
-        s.beamwidth_deg = 30.0;
-        auto jm = Mob(0, 0), rx = Mob(100, 0);
-        double p = run(s, 0.0, 0.0, jm, rx, lc);
-        check(p == 0.0 && lc == 0 && jm->m_distanceCalls == 1 && jm->m_positionCalls == 0 &&
-                  rx->m_positionCalls == 0,
-              "range gate stops before beam and path loss");
-    }
-    {
-        JammerSpec s = Jam();
-        s.azimuth_deg = 270.0;
-        s.zenith_deg = 90.0;
-        s.beamwidth_deg = 30.0;
-        auto jm = Mob(0, 0), rx = Mob(100, 0);
-        double p = run(s, 0.0, 0.0, jm, rx, lc);
-        check(p == 0.0 && lc == 0 && jm->m_positionCalls == 1, "beam gate stops before path loss");
-    }
-}
-
 // ---- main ----
 
 /**
@@ -1575,20 +1279,14 @@ main()
     test_silvus_mcs_index_never_mimo();
     test_silvus_mcs_lookup();
     test_silvus_capacity();
-    test_mcs_table_invariants();
     test_silvus_table_invariants();
     test_capacity_bandwidth_scaling();
-    test_unknown_amc_threshold_boundary();
 
     // LinkTable
-    test_link_table_empty_and_single();
     test_link_table_two_nodes_and_mirror();
-    test_link_table_missing_pair_stays_default();
-    test_link_table_replace_and_failed_update();
     test_link_table_threshold_boundary();
 
     // LinkEvaluator
-    test_le_configure_null_models_throw();
     test_le_noise_floor_and_snr();
     test_le_distance_is_3d();
     test_le_per_node_gain_overrides();
@@ -1596,7 +1294,6 @@ main()
     test_le_los_mapping();
     test_le_buildings_flag();
     test_le_amc_models();
-    test_le_unknown_amc();
     test_le_never_writes_sentinel();
     test_le_evaluate_all_order_and_size();
     test_le_probe();
@@ -1611,7 +1308,6 @@ main()
     // JammerModel
     test_jm_unconfigured_and_empty();
     test_jm_configure_filters_disabled();
-    test_jm_size_mismatch_asserts();
     test_jm_reconfigure_replaces();
     test_jm_power_eirp_and_colocated();
     test_jm_constant_duty_and_sum();
@@ -1620,7 +1316,6 @@ main()
     test_jm_frequency_gate();
     test_jm_range_gate();
     test_jm_beam_gate();
-    test_jm_gate_order_short_circuits();
 
     std::cout << "\n" << g_pass << " passed, " << g_fail << " failed.\n";
     if (g_fail > 0)

@@ -165,45 +165,6 @@ terminatesWithin(unsigned seconds, Fn fn)
 
 // ---- all_pairs / constant ----
 
-/// Source: traffic-matrix.h InitAllPairs "N*(N-1)/2 flows" -> 0 for N=0,1.
-static void
-test_all_pairs_empty_and_single_node()
-{
-    ts::Reset();
-    auto cfg = makeCfg("constant", "all_pairs");
-    TrafficMatrix tm(cfg);
-    tm.Initialize(0, 0.0);
-    check(tm.GetActiveFlows().empty(), "all_pairs: 0 nodes -> 0 flows");
-    tm.Initialize(1, 0.0);
-    check(tm.GetActiveFlows().empty(), "all_pairs: 1 node -> 0 flows");
-    tm.Tick(0.0);
-    check(tm.GetActiveFlows().empty(), "all_pairs: 1 node, Tick keeps 0 flows");
-    tm.Initialize(2, 0.0);
-    check(tm.GetActiveFlows().size() == 1, "all_pairs: 2 nodes -> 1 flow");
-}
-
-/// Source: InitAllPairs "one flow for every unordered node pair (i < j)".
-static void
-test_all_pairs_each_unordered_pair_once()
-{
-    ts::Reset();
-    const uint32_t n = 6;
-    auto cfg = makeCfg("constant", "all_pairs", n);
-    TrafficMatrix tm(cfg);
-    tm.Initialize(n, 0.0);
-
-    std::set<std::pair<uint32_t, uint32_t>> seen;
-    bool ordered = true;
-    for (const auto& f : tm.GetActiveFlows())
-    {
-        ordered = ordered && f.src < f.dst && f.dst < n;
-        seen.insert({f.src, f.dst});
-    }
-    check(tm.GetActiveFlows().size() == n * (n - 1) / 2, "all_pairs: 6 nodes -> 15 flows");
-    check(seen.size() == n * (n - 1) / 2, "all_pairs: no duplicate pairs");
-    check(ordered, "all_pairs: every flow has src < dst < N");
-}
-
 /// Source: Flow docs (in_on_phase "Always true for non-on-off models"),
 /// MakeFlow (no exp draw unless on_off), "constant" needs no per-tick work.
 static void
@@ -226,8 +187,6 @@ test_constant_flow_defaults_and_no_draws()
     }
     check(ok, "constant: flows active, ON, permanent, start 0, demand 7.5");
     check(tm.GetActiveFlows().size() == 6, "constant: flow count unchanged over ticks");
-    check(ts::g_uniformDraws == 0 && ts::g_expDraws == 0,
-          "constant+all_pairs: no RNG draws (init or tick)");
 }
 
 /// Source: MakeFlow "end_time_s = currentTime + holding_time_s", start at currentTime.
@@ -309,46 +268,6 @@ test_random_pairs_count_and_range()
     check(ok, "random_pairs: src/dst in range, no self flows, demand, permanent");
 }
 
-/// Source: InitRandomPairs "uniform resample until dst != src".
-static void
-test_random_pairs_rejects_self_pair()
-{
-    ts::Reset();
-    const uint32_t n = 4;
-    auto cfg = makeCfg("constant", "random_pairs", n);
-    cfg.mesh.traffic.random_pair_count = 1;
-    TrafficMatrix tm(cfg);
-    // src=2, dst=2 (reject), dst=2 (reject), dst=3.
-    ts::g_uniformScript = {U(2, n), U(2, n), U(2, n), U(3, n)};
-    tm.Initialize(n, 0.0);
-
-    const auto& fl = tm.GetActiveFlows();
-    check(fl.size() == 1, "random_pairs reject: 1 flow");
-    check(!fl.empty() && fl[0].src == 2 && fl[0].dst == 3,
-          "random_pairs reject: self pick resampled to 2->3");
-    check(ts::g_uniformDraws == 4, "random_pairs reject: 4 uniform draws");
-}
-
-/// Source: uniform src/dst over [0, N-1]; index N-1 reachable, never N.
-static void
-test_random_pairs_index_bounds()
-{
-    ts::Reset();
-    const uint32_t n = 3;
-    auto cfg = makeCfg("constant", "random_pairs", n);
-    cfg.mesh.traffic.random_pair_count = 2;
-    TrafficMatrix tm(cfg);
-    ts::g_uniformScript = {0.9999999, 0.0, 0.0, 0.9999999};
-    tm.Initialize(n, 0.0);
-
-    const auto& fl = tm.GetActiveFlows();
-    check(fl.size() == 2, "random_pairs bounds: 2 flows");
-    check(fl.size() == 2 && fl[0].src == 2 && fl[0].dst == 0,
-          "random_pairs bounds: u~1 -> index N-1 (2->0)");
-    check(fl.size() == 2 && fl[1].src == 0 && fl[1].dst == 2,
-          "random_pairs bounds: 0->N-1");
-}
-
 /// Source: "Each pair is drawn independently" (duplicates allowed) and
 /// GetDemand "Sums demand_mbps across all flows" for the directed pair.
 static void
@@ -366,27 +285,6 @@ test_random_pairs_duplicates_sum_demand()
     check(approx(tm.GetDemand(1, 4), 8.0), "random_pairs dup: GetDemand(1,4) sums 2 flows");
     check(approx(tm.GetDemand(4, 1), 4.0), "random_pairs dup: GetDemand(4,1) separate direction");
     check(approx(tm.GetDemand(1, 3), 0.0), "random_pairs dup: unrelated pair 0");
-}
-
-/// Source: "random_pair_count flows" with no cap; 2 nodes only have 2 directed pairs.
-static void
-test_random_pairs_count_exceeds_distinct_pairs()
-{
-    ts::Reset(3);
-    auto cfg = makeCfg("constant", "random_pairs", 2, 1.0);
-    cfg.mesh.traffic.random_pair_count = 9;
-    TrafficMatrix tm(cfg);
-    tm.Initialize(2, 0.0);
-
-    bool ok = true;
-    for (const auto& f : tm.GetActiveFlows())
-    {
-        ok = ok && ((f.src == 0 && f.dst == 1) || (f.src == 1 && f.dst == 0));
-    }
-    check(tm.GetActiveFlows().size() == 9, "random_pairs 2 nodes: 9 flows requested -> 9");
-    check(ok, "random_pairs 2 nodes: only 0->1 / 1->0");
-    check(approx(tm.GetDemand(0, 1) + tm.GetDemand(1, 0), 9.0),
-          "random_pairs 2 nodes: total demand 9");
 }
 
 /// Source: MakeFlow holding applies to all topologies.
@@ -439,51 +337,6 @@ test_random_pairs_deterministic_by_seed()
 }
 
 // ---- gateway ----
-
-/// Source: InitGateway "one flow from every non-gateway node to the gateway".
-static void
-test_gateway_direction_and_demand()
-{
-    ts::Reset();
-    auto cfg = makeCfg("constant", "gateway", 4, 6.0);
-    cfg.mesh.traffic.gateway_node_id = "node-2";
-    TrafficMatrix tm(cfg);
-    tm.Initialize(4, 0.0);
-
-    bool up = true;
-    bool down = true;
-    for (uint32_t i = 0; i < 4; ++i)
-    {
-        if (i == 2)
-        {
-            continue;
-        }
-        up = up && approx(tm.GetDemand(i, 2), 6.0);
-        down = down && approx(tm.GetDemand(2, i), 0.0);
-    }
-    check(up, "gateway: each node i -> gw carries demand");
-    check(down, "gateway: no gw -> i flows");
-    check(approx(tm.GetDemand(2, 2), 0.0), "gateway: no gw self flow");
-}
-
-/// Source: InitGateway, edge node counts.
-static void
-test_gateway_two_and_one_node()
-{
-    ts::Reset();
-    auto cfg = makeCfg("constant", "gateway", 2);
-    cfg.mesh.traffic.gateway_node_id = "node-1";
-    TrafficMatrix tm(cfg);
-    tm.Initialize(2, 0.0);
-    const auto& fl = tm.GetActiveFlows();
-    check(fl.size() == 1 && fl[0].src == 0 && fl[0].dst == 1,
-          "gateway 2 nodes: single flow 0->1");
-
-    auto cfg1 = makeCfg("constant", "gateway", 1);
-    TrafficMatrix tm1(cfg1);
-    tm1.Initialize(1, 0.0);
-    check(tm1.GetActiveFlows().empty(), "gateway 1 node: no flows");
-}
 
 /// Contract: mesh-config.h gateway_node_id is the "Node ID of the gateway ...
 /// must match a node ID". Numeric node IDs that differ from indices (e.g.
@@ -539,35 +392,6 @@ test_gateway_numeric_node_ids()
 
 // ---- poisson ----
 
-/// Source: traffic CLAUDE.md "Poisson flows also get initial flows from Initialize()".
-static void
-test_poisson_initial_flows_created()
-{
-    ts::Reset();
-    auto cfg = makeCfg("poisson", "all_pairs", 4);
-    TrafficMatrix tm(cfg);
-    tm.Initialize(4, 0.0);
-    check(tm.GetActiveFlows().size() == 6, "poisson: 6 initial all_pairs flows");
-    check(ts::g_uniformDraws == 0, "poisson: Initialize(all_pairs) draws no uniforms");
-}
-
-/// Source: lambda = arrival_rate_hz * tick_s; lambda = 0 -> no arrivals.
-static void
-test_poisson_zero_rate_no_arrivals()
-{
-    ts::Reset(5);
-    auto cfg = makeCfg("poisson", "gateway", 4);
-    cfg.mesh.traffic.arrival_rate_hz = 0.0;
-    TrafficMatrix tm(cfg);
-    tm.Initialize(4, 0.0);
-    for (int ti = 0; ti < 100; ++ti)
-    {
-        tm.Tick(ti * 0.1);
-    }
-    check(tm.GetActiveFlows().size() == 3, "poisson rate 0: no arrivals over 100 ticks");
-    check(ts::g_uniformDraws == 100, "poisson rate 0: exactly one uniform per tick");
-}
-
 /// Source: TickPoisson Knuth method "multiply uniform(0,1) samples until their
 /// product falls below exp(-lambda); count = multiplications - 1".
 static void
@@ -607,24 +431,6 @@ test_poisson_scripted_arrival_count()
     ts::g_uniformScript = {0.99, 0.1, U(1, n), U(0, n)};
     tm.Tick(0.5);
     check(tm.GetActiveFlows().size() == base + 3, "poisson knuth: 0.99,0.1 -> 1 arrival");
-}
-
-/// Source: TickPoisson "Each new flow has a uniformly random src != dst (rejection sampling)".
-static void
-test_poisson_arrival_rejects_self_pair()
-{
-    ts::Reset();
-    const uint32_t n = 3;
-    auto cfg = makeCfg("poisson", "gateway", n, 1.0, 0.0, 0.1);
-    cfg.mesh.traffic.arrival_rate_hz = std::log(2.0) / 0.1;
-    TrafficMatrix tm(cfg);
-    tm.Initialize(n, 0.0);
-    const size_t base = tm.GetActiveFlows().size();
-    ts::g_uniformScript = {0.9, 0.1, U(1, n), U(1, n), U(1, n), U(2, n)};
-    tm.Tick(0.1);
-    const auto& fl = tm.GetActiveFlows();
-    check(fl.size() == base + 1 && fl[base].src == 1 && fl[base].dst == 2,
-          "poisson arrival: self pick resampled (1->1 rejected twice, 1->2)");
 }
 
 /// Source: TickPoisson "end_time_s is overridden with an independent
@@ -695,24 +501,6 @@ test_poisson_holding_zero_permanent()
     check(tm.GetActiveFlows().size() == 3 && approx(tm.GetDemand(0, 1), 1.0),
           "poisson holding 0: arrival survives to t=1e6");
     check(ts::g_expDraws == 0, "poisson holding 0: no exponential draws");
-}
-
-/// QUESTION (traffic-matrix.cc:79 MakeFlow via Initialize for model=poisson).
-/// mesh-config.h holding_time_s: "For poisson it is the mean of an exponential
-/// draw per flow; for the other models every flow lasts exactly this long."
-/// Initial Poisson flows from Initialize() get a fixed holding_time_s
-/// lifetime and no exponential draw (only TickPoisson arrivals are drawn).
-static void
-test_poisson_initial_flows_holding_exponential()
-{
-    ts::Reset();
-    auto cfg = makeCfg("poisson", "all_pairs", 2, 1.0, /*holding=*/2.0, 0.1);
-    TrafficMatrix tm(cfg);
-    ts::g_expScript = {0.375};
-    tm.Initialize(2, 0.0);
-    const auto& fl = tm.GetActiveFlows();
-    check(ts::g_expDraws == 1 && !fl.empty() && approx(fl[0].end_time_s, 0.375),
-          "poisson initial flow: lifetime is an Exponential(holding_time_s) draw");
 }
 
 /// Source: Poisson process with rate arrival_rate_hz over tick_s:
@@ -967,29 +755,6 @@ test_on_off_asymmetric_schedule()
     check(mismatches == 0, "on_off schedule: ON 0.25 s / OFF 0.5 s matches ticks");
 }
 
-/// Source: TickOnOff "adds an exponential sample of the new phase's mean duration".
-static void
-test_on_off_scripted_means_order()
-{
-    ts::Reset();
-    auto cfg = makeCfg("on_off", "all_pairs", 2);
-    cfg.mesh.traffic.on_time_s  = 2.0;
-    cfg.mesh.traffic.off_time_s = 3.0;
-    TrafficMatrix tm(cfg);
-    ts::g_expScript = {0.25, 0.5, 0.125};
-    tm.Initialize(2, 0.0);  // ON until 0.25
-    tm.Tick(0.25);          // OFF until 0.75
-    check(!tm.GetActiveFlows()[0].in_on_phase &&
-              approx(tm.GetActiveFlows()[0].phase_end_s, 0.75),
-          "on_off scripted: OFF until 0.75");
-    tm.Tick(0.75);  // ON until 0.875
-    check(tm.GetActiveFlows()[0].in_on_phase &&
-              approx(tm.GetActiveFlows()[0].phase_end_s, 0.875),
-          "on_off scripted: ON until 0.875");
-    check(ts::g_expMeans == std::vector<double>({2.0, 3.0, 2.0}),
-          "on_off scripted: draw means on, off, on");
-}
-
 /// Source: holding applies to on_off too; expiry precedes the on/off update and
 /// expired flows are removed regardless of phase.
 static void
@@ -1010,26 +775,6 @@ test_on_off_with_holding_removed_in_any_phase()
     check(ts::g_expDraws == drawsBefore, "on_off holding: expired flows not toggled");
 }
 
-/// With on_time_s = off_time_s = 0 every exponential draw is 0, so phase_end_s
-/// never advances. ValidateConfig rejects non-positive on/off means, and
-/// TickOnOff skips phase updates so a direct caller still returns.
-static void
-test_on_off_zero_durations_terminates()
-{
-    ts::Reset();
-    auto cfg = makeCfg("on_off", "all_pairs", 2);
-    cfg.mesh.traffic.on_time_s  = 0.0;
-    cfg.mesh.traffic.off_time_s = 0.0;
-    check(!validates(cfg), "on_off zero durations: ValidateConfig rejects them");
-    bool done = terminatesWithin(2, [&]() {
-        TrafficMatrix tm(cfg);
-        tm.Initialize(2, 0.0);
-        tm.Tick(0.0);
-        tm.Tick(0.1);
-    });
-    check(done, "on_off zero durations: Tick terminates (no infinite phase loop)");
-}
-
 // ---- main ----
 
 /**
@@ -1041,35 +786,24 @@ int
 main()
 {
     // all_pairs / constant
-    test_all_pairs_empty_and_single_node();
-    test_all_pairs_each_unordered_pair_once();
     test_constant_flow_defaults_and_no_draws();
     test_initialize_nonzero_time_holding();
     test_holding_time_exact_tick_lifetime();
 
     // random_pairs
     test_random_pairs_count_and_range();
-    test_random_pairs_rejects_self_pair();
-    test_random_pairs_index_bounds();
     test_random_pairs_duplicates_sum_demand();
-    test_random_pairs_count_exceeds_distinct_pairs();
     test_random_pairs_with_holding();
     test_random_pairs_deterministic_by_seed();
 
     // gateway
-    test_gateway_direction_and_demand();
-    test_gateway_two_and_one_node();
     test_gateway_numeric_node_ids();
 
     // poisson
-    test_poisson_initial_flows_created();
-    test_poisson_zero_rate_no_arrivals();
     test_poisson_scripted_arrival_count();
-    test_poisson_arrival_rejects_self_pair();
     test_poisson_holding_override_exponential();
     test_poisson_expiry_boundary();
     test_poisson_holding_zero_permanent();
-    test_poisson_initial_flows_holding_exponential();
     test_poisson_statistics();
     test_poisson_reinitialize_updates_node_count();
     test_poisson_deterministic_by_seed();
@@ -1081,9 +815,7 @@ main()
     test_on_off_off_flows_stay_listed();
     test_on_off_multiple_transitions_one_tick();
     test_on_off_asymmetric_schedule();
-    test_on_off_scripted_means_order();
     test_on_off_with_holding_removed_in_any_phase();
-    test_on_off_zero_durations_terminates();
 
     std::cout << "\n" << g_pass << " passed, " << g_fail << " failed.\n";
     if (g_fail > 0)

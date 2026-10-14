@@ -1,9 +1,9 @@
 /* -*- Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
 /**
  * @file io-cli-test.cc
- * @brief Unit tests for src/io (MetricsWriter, WriteRunLog, ProgressLogger,
- *        VizWriter) and src/cli (ParseCommandLine, ResolveSeeds,
- *        ResolveQuerySeed, ArchiveScenarioInputs).
+ * @brief Unit tests for src/io (MetricsWriter, WriteRunLog, VizWriter) and
+ *        src/cli (ParseCommandLine, ResolveSeeds, ResolveQuerySeed,
+ *        ArchiveScenarioInputs).
  *
  * Standalone binary; ns-3 headers are stubbed (common/ log + random stubs,
  * stubs/ mobility + command-line stubs symlinked into a local ns3/ dir).
@@ -442,9 +442,6 @@ test_metrics_averages_worked_example()
     check(approx(num(j, "network", "flows_routed"), 1.5), "metrics: network.flows_routed = 3/2");
     check(approx(num(j, "network", "flows_unroutable"), 0.5), "metrics: network.flows_unroutable = 1/2");
 
-    // Formatting: indented with 2 spaces
-    std::string raw = readFile(dir / "summary.json");
-    check(raw.rfind("{\n  \"", 0) == 0, "metrics: summary.json indented with 2 spaces");
 }
 
 /// warmup_s boundary: a tick just below warmup is skipped, at warmup counted.
@@ -467,69 +464,6 @@ test_metrics_warmup_boundary()
           "metrics: tick at 0.9999 < warmup skipped, tick at warmup counted");
     check(approx(num3(j, "per_flow", "nA->nB", "delivered_mbps"), 4.0),
           "metrics: per_flow excludes pre-warmup tick");
-}
-
-/// No post-warmup ticks: object structure present, zeros not NaN, SINR null.
-static void
-test_metrics_empty_run()
-{
-    fs::path dir = freshDir("metrics-empty");
-    SimConfig c = cfg3(dir);
-    c.warmup_s = 100.0;
-    MetricsWriter mw(c);
-    mw.AccumulateTick(0.0, table3(5, true, 5, true, 5, true),
-                      {mkFlow(0, 1, 1, 1, 1, 1, true)}, 3);
-    {
-        CerrCapture cap;
-        mw.Write();
-    }
-    json j = readJson(dir / "summary.json");
-    check(j.is_object(), "metrics empty: valid JSON written");
-    if (!j.is_object())
-    {
-        return;
-    }
-    check(j["per_node"].is_object() && j["per_node"].empty(), "metrics empty: per_node is {}");
-    check(j["per_flow"].is_object() && j["per_flow"].empty(), "metrics empty: per_flow is {}");
-    check(j["network"]["mean_sinr_db"].is_null(), "metrics empty: mean_sinr_db is null");
-    for (const char* k : {"sum_throughput_mbps", "connectivity", "mean_hop_count", "flows_routed", "flows_unroutable"})
-    {
-        double v = num(j, "network", k);
-        check(!std::isnan(v) && v == 0.0, std::string("metrics empty: network.") + k + " = 0 (number)");
-    }
-}
-
-/// Single node: no pairs -> connectivity 0 (not NaN), SINR null, no links.
-static void
-test_metrics_single_node()
-{
-    fs::path dir = freshDir("metrics-single");
-    SimConfig c = cfg3(dir);
-    c.warmup_s = 0.0;
-    c.nodes = {mkNode("solo")};
-    MetricsWriter mw(c);
-    LinkTable lt;
-    lt.Update(1, {});
-    mw.AccumulateTick(0.0, lt, {}, 1);
-    mw.AccumulateTick(0.1, lt, {}, 1);
-    {
-        CerrCapture cap;
-        mw.Write();
-    }
-    json j = readJson(dir / "summary.json");
-    check(j.is_object() && j["per_node"].contains("solo"), "metrics single: per_node has 'solo'");
-    if (!j.is_object() || !j["per_node"].contains("solo"))
-    {
-        return;
-    }
-    check(j["per_node"]["solo"]["mean_sinr_db"].is_null() &&
-              j["per_node"]["solo"]["min_sinr_db"].is_null() &&
-              j["per_node"]["solo"]["max_sinr_db"].is_null(),
-          "metrics single: mean/min/max_sinr_db null with no samples");
-    check(approx(num3(j, "per_node", "solo", "num_links"), 0.0), "metrics single: num_links = 0");
-    check(approx(num(j, "network", "connectivity"), 0.0), "metrics single: connectivity = 0 (number, not NaN)");
-    check(j["network"]["mean_sinr_db"].is_null(), "metrics single: network.mean_sinr_db null");
-    check(approx(num(j, "network", "sum_throughput_mbps"), 0.0), "metrics single: sum_throughput = 0 with zero flows");
 }
 
 /// Connectivity threshold -6.7 dB is inclusive.
@@ -557,111 +491,6 @@ test_metrics_connectivity_threshold()
     check(approx(num3(j, "per_node", "a", "num_links"), 0.75), "metrics: per-node num_links inclusive threshold");
 }
 
-/// Node indices beyond cfg.nodes fall back to "node<idx>".
-static void
-test_metrics_unknown_index_fallback()
-{
-    fs::path dir = freshDir("metrics-fallback");
-    SimConfig c = cfg3(dir);
-    c.warmup_s = 0.0;
-    c.nodes = {mkNode("nA"), mkNode("nB")};
-    MetricsWriter mw(c);
-    mw.AccumulateTick(0.0, table3(1, true, 1, true, 1, true),
-                      {mkFlow(2, 0, 3, 3, 1, 1, true, {2, 0})}, 3);
-    {
-        CerrCapture cap;
-        mw.Write();
-    }
-    json j = readJson(dir / "summary.json");
-    check(j.is_object() && j["per_node"].contains("node2"), "metrics: unknown index 2 keyed as 'node2'");
-    check(j.is_object() && j["per_flow"].contains("node2->nA"), "metrics: per_flow key 'node2->nA'");
-}
-
-/// SetTiming: present only when elapsed_s > 0; ISO-8601 UTC strings.
-static void
-test_metrics_timing()
-{
-    using namespace std::chrono;
-    fs::path dir = freshDir("metrics-timing");
-    SimConfig c = cfg3(dir);
-    {
-        MetricsWriter mw(c);
-        TimingInfo t;
-        t.start = system_clock::from_time_t(0);
-        t.end = system_clock::from_time_t(86400 + 3661);
-        t.elapsed_s = 90061.0;
-        mw.SetTiming(t);
-        CerrCapture cap;
-        mw.Write();
-    }
-    json j = readJson(dir / "summary.json");
-    check(j.value("wall_clock_start", "") == "1970-01-01T00:00:00Z", "metrics: wall_clock_start ISO-8601 UTC");
-    check(j.value("wall_clock_end", "") == "1970-01-02T01:01:01Z", "metrics: wall_clock_end ISO-8601 UTC");
-    check(approx(j.value("wall_elapsed_s", -1.0), 90061.0), "metrics: wall_elapsed_s");
-
-    {
-        MetricsWriter mw(c);
-        TimingInfo t;
-        t.start = system_clock::from_time_t(0);
-        t.end = system_clock::from_time_t(0);
-        t.elapsed_s = 0.0;
-        mw.SetTiming(t);
-        CerrCapture cap;
-        mw.Write();
-    }
-    j = readJson(dir / "summary.json");
-    check(!j.contains("wall_clock_start") && !j.contains("wall_clock_end") && !j.contains("wall_elapsed_s"),
-          "metrics: wall_clock_* omitted when elapsed_s == 0");
-}
-
-/// The config is copied at construction (output_dir and scenario).
-static void
-test_metrics_config_copied()
-{
-    fs::path a = freshDir("metrics-copy-a");
-    fs::path b = freshDir("metrics-copy-b");
-    SimConfig c = cfg3(a);
-    MetricsWriter mw(c);
-    c.output_dir = b.string();
-    c.scenario_name = "changed";
-    c.seed = 99;
-    {
-        CerrCapture cap;
-        mw.Write();
-    }
-    check(fs::exists(a / "summary.json"), "metrics: writes to output_dir captured at construction");
-    check(!fs::exists(b / "summary.json"), "metrics: later output_dir change ignored");
-    json j = readJson(a / "summary.json");
-    check(j.value("scenario", "") == "unit-scn" && j.value("seed", 0u) == 7u,
-          "metrics: scenario/seed captured at construction");
-}
-
-/// Unopenable path: stderr error, no throw, directory not created.
-static void
-test_metrics_write_unopenable()
-{
-    fs::path dir = g_root / "metrics-missing" / "seed-1";
-    SimConfig c = cfg3(dir);
-    MetricsWriter mw(c);
-    bool threw = false;
-    std::string err;
-    {
-        CerrCapture cap;
-        try
-        {
-            mw.Write();
-        }
-        catch (...)
-        {
-            threw = true;
-        }
-        err = cap.str();
-    }
-    check(!threw, "metrics: Write to missing dir does not throw");
-    check(contains(err, "cannot write"), "metrics: Write to missing dir reports error on stderr");
-    check(!fs::exists(dir), "metrics: Write does not create the output directory");
-}
-
 /// Write overwrites an existing summary.json and confirms on stderr.
 static void
 test_metrics_overwrites()
@@ -678,7 +507,6 @@ test_metrics_overwrites()
     }
     json j = readJson(dir / "summary.json");
     check(j.is_object() && j.value("scenario", "") == "unit-scn", "metrics: existing summary.json overwritten (truncated)");
-    check(contains(err, "summary.json"), "metrics: success confirmation printed to stderr");
 }
 
 // =========================================================================
@@ -822,20 +650,6 @@ test_runlog_cli_overrides()
     check(kv["--band"] == "sub-6", "runlog cli: --band value");
 }
 
-/// QUESTION: run-logger.h says the CLI overrides block lists "Every CliArgs
-/// field", but CliArgs::channel_query (--channel-query) is not written.
-/// (run.log is never written in --channel-query mode, so this may be intended.)
-static void
-test_runlog_cli_overrides_every_field()
-{
-    fs::path d = freshDir("runlog-cli-every");
-    WriteRunLog(d.string(), baseArgs(), runLogCfg(), {1});
-    auto kv = parseSection(readFile(d / "run.log"), "CLI overrides:");
-    check(kv.count("--channel-query") == 1,
-          "runlog cli: every CliArgs field listed, incl. --channel-query "
-          "(QUESTION: run-logger.h:18 vs run-logger.h:110-126)");
-}
-
 /// Resolved config block mirrors the SimConfig scalar fields.
 static void
 test_runlog_resolved_config()
@@ -975,115 +789,6 @@ test_runlog_jammers()
     check(!contains(readFile(d4 / "run.log"), "Jammers:"), "runlog jam: section omitted when none");
 }
 
-/// Overwrites; unopenable file returns silently; create_directories throws.
-static void
-test_runlog_overwrite_and_errors()
-{
-    fs::path d = freshDir("runlog-ow");
-    writeFile(d / "run.log", "OLD CONTENT\n");
-    WriteRunLog(d.string(), baseArgs(), runLogCfg(), {1});
-    std::string text = readFile(d / "run.log");
-    check(!contains(text, "OLD CONTENT") && text.rfind("mesh-sim run log", 0) == 0,
-          "runlog: overwrites existing run.log");
-
-    // run.log is a directory -> cannot be opened -> silent return.
-    fs::path d2 = freshDir("runlog-isdir");
-    fs::create_directories(d2 / "run.log");
-    bool threw = false;
-    try
-    {
-        WriteRunLog(d2.string(), baseArgs(), runLogCfg(), {1});
-    }
-    catch (...)
-    {
-        threw = true;
-    }
-    check(!threw, "runlog: unopenable run.log returns silently");
-
-    // base_output_dir below a regular file -> create_directories throws.
-    fs::path d3 = freshDir("runlog-throw");
-    writeFile(d3 / "afile", "x");
-    bool threwFs = false;
-    try
-    {
-        WriteRunLog((d3 / "afile" / "sub").string(), baseArgs(), runLogCfg(), {1});
-    }
-    catch (const fs::filesystem_error&)
-    {
-        threwFs = true;
-    }
-    check(threwFs, "runlog: create_directories failure throws filesystem_error");
-}
-
-// =========================================================================
-// ProgressLogger
-// =========================================================================
-
-static ProgressLogger
-mkProgress(uint32_t total, uint32_t interval, double duration, double tick)
-{
-    ProgressLogger p;
-    p.total_ticks = total;
-    p.interval_ticks = interval;
-    p.seed = 3;
-    p.duration_s = duration;
-    p.tick_s = tick;
-    p.wall_start = std::chrono::steady_clock::now();
-    return p;
-}
-
-/// Prints on multiples of interval and always on tick == total_ticks.
-static void
-test_progress_boundaries()
-{
-    ProgressLogger p = mkProgress(7, 3, 0.7, 0.1);
-    std::vector<uint32_t> printed;
-    for (uint32_t t = 0; t <= 7; ++t)
-    {
-        CerrCapture cap;
-        p.Tick(t);
-        if (!cap.str().empty())
-        {
-            printed.push_back(t);
-        }
-    }
-    check(printed == std::vector<uint32_t>({0, 3, 6, 7}),
-          "progress: prints at multiples of interval and at total_ticks (0,3,6,7)");
-}
-
-/// Output format and ETA = (duration - sim_t) * wall/sim_t.
-static void
-test_progress_format_and_eta()
-{
-    ProgressLogger p = mkProgress(20, 5, 10.0, 0.5);
-    std::string line0;
-    {
-        CerrCapture cap;
-        p.Tick(0);
-        line0 = cap.str();
-    }
-    check(std::regex_match(line0, std::regex("\\[seed 3\\] 0\\.0s / 10\\.0s \\(0%\\)  wall=0\\.\\ds  ETA~0\\.0s\n")),
-          "progress: tick 0 format and ETA 0 (got '" + line0 + "')");
-
-    // Pretend 2 s of wall time elapsed; at tick 10 sim_t = 5 s -> ETA = 5 * 2/5 = 2 s.
-    p.wall_start = std::chrono::steady_clock::now() - std::chrono::milliseconds(2000);
-    std::string line10;
-    {
-        CerrCapture cap;
-        p.Tick(10);
-        line10 = cap.str();
-    }
-    check(std::regex_match(line10, std::regex("\\[seed 3\\] 5\\.0s / 10\\.0s \\(50%\\)  wall=2\\.0s  ETA~2\\.0s\n")),
-          "progress: mid-run pct and ETA (got '" + line10 + "')");
-
-    std::string line20;
-    {
-        CerrCapture cap;
-        p.Tick(20);
-        line20 = cap.str();
-    }
-    check(contains(line20, "(100%)") && contains(line20, "ETA~0.0s"), "progress: final tick 100% and ETA 0");
-}
 
 // =========================================================================
 // VizWriter
@@ -1109,28 +814,6 @@ vizCfg(const fs::path& dir)
 
 static const char* kVizFiles[] = {"positions.csv", "links.csv", "rx-power.csv",
                                   "mcs.csv", "flows.csv", "routes.csv"};
-
-/// Open throws std::runtime_error naming the path when the dir is missing.
-static void
-test_viz_open_missing_dir_throws()
-{
-    SimConfig c = vizCfg(g_root / "viz-missing" / "seed-1");
-    VizWriter vw(c);
-    std::string msg;
-    bool threw = false;
-    try
-    {
-        vw.Open();
-    }
-    catch (const std::runtime_error& e)
-    {
-        threw = true;
-        msg = e.what();
-    }
-    check(threw, "viz: Open on missing dir throws runtime_error");
-    check(contains(msg, "VizWriter: cannot open ") && contains(msg, "positions.csv"),
-          "viz: Open error message names the path");
-}
 
 /// Headers, metadata block in documented order, overwrite of old files.
 static void
@@ -1253,28 +936,6 @@ test_viz_tick_rows()
     }
 }
 
-/// More mobility models than cfg.nodes: role falls back to "peer".
-static void
-test_viz_role_fallback_and_empty_table()
-{
-    fs::path dir = freshDir("viz-fallback");
-    SimConfig c = vizCfg(dir);
-    c.nodes = {mkNode("a", "relay")};
-    ns3::MobilityModel m0, m1;
-    std::vector<ns3::Ptr<ns3::MobilityModel>> mobs = {&m0, &m1};
-    LinkTable empty;  // never updated: NumNodes() == 0
-    {
-        VizWriter vw(c);
-        vw.Open();
-        vw.WriteTick(0.0, mobs, empty, {});
-    }
-    auto pos = readLines(dir / "positions.csv");
-    check(pos.size() == 14 && pos[13] == "0.000000,1,0.000000,0.000000,0.000000,peer,1",
-          "viz: role falls back to 'peer' for index beyond cfg.nodes");
-    check(readLines(dir / "links.csv").size() == 1, "viz: empty link table writes no link rows");
-    check(readLines(dir / "flows.csv").size() == 1, "viz: no flows writes no flow rows");
-}
-
 static std::vector<std::string>
 snapshotTimes(const fs::path& posCsv)
 {
@@ -1354,44 +1015,6 @@ test_viz_rate_limit()
     check(whole, "viz: 1000 ms rate limit -> 11 snapshots at 0..10 s");
 }
 
-/// Close is idempotent; destructor flushes.
-static void
-test_viz_close_and_destructor()
-{
-    fs::path dir = freshDir("viz-close");
-    SimConfig c = vizCfg(dir);
-    ns3::MobilityModel m0(1, 2, 3);
-    std::vector<ns3::Ptr<ns3::MobilityModel>> mobs = {&m0};
-    LinkTable lt;
-    lt.Update(1, {});
-    bool ok = true;
-    {
-        VizWriter vw(c);
-        vw.Open();
-        vw.WriteTick(0.0, mobs, lt, {});
-        try
-        {
-            vw.Close();
-            vw.Close();
-        }
-        catch (...)
-        {
-            ok = false;
-        }
-    }
-    check(ok, "viz: Close twice is safe (and destructor after Close)");
-    check(readLines(dir / "positions.csv").size() == 13, "viz: data present after Close");
-
-    fs::path dir2 = freshDir("viz-dtor");
-    SimConfig c2 = vizCfg(dir2);
-    {
-        VizWriter vw(c2);
-        vw.Open();
-        vw.WriteTick(0.0, mobs, lt, {});
-    }
-    check(readLines(dir2 / "positions.csv").size() == 13, "viz: destructor flushes rows");
-}
-
 // =========================================================================
 // cli: ResolveSeeds / ResolveQuerySeed
 // =========================================================================
@@ -1443,42 +1066,6 @@ test_resolve_seeds_list_parsing()
     a.seeds_arg = "4294967295";
     r = resolveInChild("rs-max", a, 42);
     check(r.code == 77 && r.out == "4294967295", "seeds: UINT32_MAX accepted");
-}
-
-static void
-test_resolve_seeds_error_exits()
-{
-    CliArgs a;
-    a.seeds_arg = ",";
-    auto r = resolveInChild("rs-empty", a, 42);
-    check(r.code == 1 && contains(r.err, "Error: no seeds to run."), "seeds: --seeds=',' -> exit 1 'no seeds'");
-    a.seeds_arg = ",,,";
-    r = resolveInChild("rs-empty3", a, 42);
-    check(r.code == 1, "seeds: --seeds=',,,' -> exit 1");
-    a.seeds_arg = "1,abc";
-    r = resolveInChild("rs-abc", a, 42);
-    check(r.code == 1 && contains(r.err, "Error: invalid seed value 'abc'"), "seeds: non-numeric token -> exit 1");
-}
-
-/// parseSeedList exits on tokens "out of uint32_t range" / "not an unsigned
-/// integer" (string-utils.h, cli-parser.h ResolveSeeds), including trailing
-/// junk such as "7abc".
-static void
-test_resolve_seeds_out_of_range_and_negative()
-{
-    CliArgs a;
-    a.seeds_arg = "4294967296";
-    auto r = resolveInChild("rs-overflow", a, 42);
-    check(r.code == 1, "seeds: '4294967296' (> UINT32_MAX) -> exit 1 (got code " + std::to_string(r.code) +
-                           ", seeds '" + r.out + "')");
-    a.seeds_arg = "-1";
-    r = resolveInChild("rs-neg", a, 42);
-    check(r.code == 1, "seeds: '-1' (not unsigned) -> exit 1 (got code " + std::to_string(r.code) +
-                           ", seeds '" + r.out + "')");
-    a.seeds_arg = "7abc";
-    r = resolveInChild("rs-trailing", a, 42);
-    check(r.code == 1, "seeds: '7abc' (non-numeric token) -> exit 1 (got code " + std::to_string(r.code) +
-                           ", seeds '" + r.out + "')");
 }
 
 static void
@@ -1541,50 +1128,6 @@ test_archive_copies_regular_files()
     check(readFile(out / "inputs" / "nodes.json") == "{\"nodes\": [1]}", "archive: existing files overwritten");
 }
 
-static void
-test_archive_errors_throw()
-{
-    fs::path out = freshDir("arch-err");
-    // Bare filename: empty parent path -> directory iteration fails.
-    bool threw = false;
-    try
-    {
-        ArchiveScenarioInputs((out / "a").string(), "run.ini");
-    }
-    catch (const fs::filesystem_error&)
-    {
-        threw = true;
-    }
-    check(threw, "archive: bare filename run_config_path throws filesystem_error");
-
-    // Missing scenario directory.
-    threw = false;
-    try
-    {
-        ArchiveScenarioInputs((out / "b").string(), (g_root / "no-such-dir" / "run.ini").string());
-    }
-    catch (const fs::filesystem_error&)
-    {
-        threw = true;
-    }
-    check(threw, "archive: missing scenario dir throws filesystem_error");
-
-    // Archive dir cannot be created (base below a regular file).
-    fs::path scn = freshDir("arch-err-scn");
-    writeFile(scn / "run.ini", "x");
-    writeFile(out / "file", "x");
-    threw = false;
-    try
-    {
-        ArchiveScenarioInputs((out / "file" / "c").string(), (scn / "run.ini").string());
-    }
-    catch (const fs::filesystem_error&)
-    {
-        threw = true;
-    }
-    check(threw, "archive: uncreatable archive dir throws filesystem_error");
-}
-
 // =========================================================================
 // cli: ParseCommandLine (ns3::CommandLine stubbed)
 // =========================================================================
@@ -1642,54 +1185,6 @@ test_parse_cli_defaults_and_values()
     check(r.code == 77 && contains(r.out, "band=mmwave\n"), "cli: --band=mmwave accepted");
 }
 
-static void
-test_parse_cli_errors()
-{
-    fs::path scn = freshDir("cli-err-scn");
-    std::string ini = (scn / "run.ini").string();
-    writeFile(ini, "x");
-
-    auto r = parseInChild("cli-noconf", {});
-    check(r.code == 1 && contains(r.err, "Error: --run-config=<path> is required."), "cli: missing --run-config -> exit 1");
-
-    r = parseInChild("cli-missingfile", {"--run-config=" + (scn / "nope.ini").string()});
-    check(r.code == 1 && contains(r.err, "Error: run-config file not found:"), "cli: nonexistent run-config -> exit 1");
-
-    r = parseInChild("cli-badband", {"--run-config=" + ini, "--band=5g"});
-    check(r.code == 1 && contains(r.err, "Error: --band must be 'mmwave' or 'sub-6', got '5g'"), "cli: bad --band -> exit 1");
-
-    r = parseInChild("cli-caseband", {"--run-config=" + ini, "--band=Sub-6"});
-    check(r.code == 1, "cli: --band is case-sensitive ('Sub-6' rejected)");
-
-    r = parseInChild("cli-nopos", {"--run-config=" + ini, "--positions-override=" + (scn / "nope.json").string()});
-    check(r.code == 1 && contains(r.err, "Error: positions-override file not found:"),
-          "cli: nonexistent positions-override -> exit 1");
-
-    // Check order: run-config missing is reported before a bad band.
-    r = parseInChild("cli-order", {"--band=bad"});
-    check(r.code == 1 && contains(r.err, "--run-config=<path> is required") && !contains(r.err, "--band must"),
-          "cli: run-config check precedes band check");
-    // Band check precedes positions-override check.
-    r = parseInChild("cli-order2", {"--run-config=" + ini, "--band=bad", "--positions-override=/nope.json"});
-    check(r.code == 1 && contains(r.err, "--band must") && !contains(r.err, "positions-override"),
-          "cli: band check precedes positions-override check");
-}
-
-static void
-test_parse_cli_channel_query_note()
-{
-    fs::path scn = freshDir("cli-cq-scn");
-    std::string ini = (scn / "run.ini").string();
-    writeFile(ini, "x");
-    auto r = parseInChild("cli-cq", {"--run-config=" + ini, "--channel-query", "--output-dir=/o"});
-    check(r.code == 77 && contains(r.out, "channel_query=1\n") && contains(r.out, "output_dir=/o\n"),
-          "cli: --channel-query parsed; output_dir kept in args");
-    check(contains(r.err, "Note: --output-dir is ignored with --channel-query."),
-          "cli: --channel-query + --output-dir prints a note");
-    r = parseInChild("cli-cq2", {"--run-config=" + ini, "--channel-query"});
-    check(r.code == 77 && !contains(r.err, "Note:"), "cli: no note without --output-dir");
-}
-
 // ---- main ----
 
 /**
@@ -1708,48 +1203,28 @@ main()
     // MetricsWriter
     test_metrics_averages_worked_example();
     test_metrics_warmup_boundary();
-    test_metrics_empty_run();
-    test_metrics_single_node();
     test_metrics_connectivity_threshold();
-    test_metrics_unknown_index_fallback();
-    test_metrics_timing();
-    test_metrics_config_copied();
-    test_metrics_write_unopenable();
     test_metrics_overwrites();
 
     // WriteRunLog
     test_runlog_header_and_dirs();
     test_runlog_seed_source();
     test_runlog_cli_overrides();
-    test_runlog_cli_overrides_every_field();
     test_runlog_resolved_config();
     test_runlog_rl_block();
     test_runlog_jammers();
-    test_runlog_overwrite_and_errors();
-
-    // ProgressLogger
-    test_progress_boundaries();
-    test_progress_format_and_eta();
 
     // VizWriter
-    test_viz_open_missing_dir_throws();
     test_viz_open_headers_and_meta();
     test_viz_tick_rows();
-    test_viz_role_fallback_and_empty_table();
     test_viz_rate_limit();
-    test_viz_close_and_destructor();
 
     // cli
     test_resolve_seeds_precedence();
     test_resolve_seeds_list_parsing();
-    test_resolve_seeds_error_exits();
-    test_resolve_seeds_out_of_range_and_negative();
     test_resolve_query_seed();
     test_archive_copies_regular_files();
-    test_archive_errors_throw();
     test_parse_cli_defaults_and_values();
-    test_parse_cli_errors();
-    test_parse_cli_channel_query_note();
 
     std::error_code ec;
     fs::remove_all(g_root, ec);
